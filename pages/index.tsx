@@ -7,10 +7,10 @@ const Home: NextPage = () => {
   return (
     <div>
       <Input />
-      {/* <h1 tw="text-lg">Erin Lindford</h1>
-      <h2 tw="text-purple">Customer Support</h2>
-      <p tw="text-gray">erinlindford@example.com</p>
-      <p tw="text-gray">(555) 765-4321</p> */}
+      <h1 tw="text-purple-50">Erin Lindford</h1>
+      <h2 tw="text-purple-50">Customer Support</h2>
+      <p tw="text-purple-500">erinlindford@example.com</p>
+      <p tw="text-purple-900">(555) 765-4321</p>
     </div>
   );
 }
