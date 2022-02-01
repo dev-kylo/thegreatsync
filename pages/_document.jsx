@@ -41,27 +41,3 @@ export default class MyDocument extends Document {
     }
 }
 
-// export default class MyDocument extends Document {
-
-//     static async getInitialProps(ctx: DocumentContext) {
-//         const initialProps = await Document.getInitialProps(ctx)
-//         const sheet = new ServerStyleSheet();
-//         const page = ctx.renderPage((App) => (props) =>
-//             sheet.collectStyles(<App {...props} />)
-//         );
-//         const styleTags = sheet.getStyleElement();
-//         return { ...initialProps, ...page, styleTags };
-//     }
-
-//     render() {
-//         return (
-//             <Html lang="en">
-//                 <Head />
-//                 <body>
-//                     <Main />
-//                     <NextScript />
-//                 </body>
-//             </Html>
-//         );
-//     }
-// }
