@@ -1,14 +1,12 @@
+import Navbar from "../ui/Navbar";
 import ColumnArea from "./ColumnArea";
 
 export default function ThreeColumns() {
     return (
         <>
-            {/* Background color split screen for large screens */}
-            <div className="fixed top-0 left-0 h-full w-1/2 bg-white" aria-hidden="true" />
-            <div className="fixed top-0 right-0 h-full w-1/2 bg-gray-50" aria-hidden="true" />
             <div className="relative flex min-h-screen flex-col">
-                {/* Navb
-        {/* 3 column wrapper */}
+                <Navbar />
+                {/* 3 column wrapper */}
                 <div className="h-16 w-full bg-gray-800"> Nav</div>
                 <div className="mx-auto w-full max-w-7xl flex-grow lg:flex xl:px-8">
                     {/* Left sidebar & main wrapper */}

@@ -1,6 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import { Bars3CenterLeftIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
+
 const Burger = ({ open }: { open: boolean }) => (
     <div className="flex">
         {/* Mobile menu button */}
