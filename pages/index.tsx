@@ -1,12 +1,12 @@
-import type { NextPage } from 'next';
+import PageContainer from '../components/layout/PageContainer';
+import ThreeColumns from '../components/layout/ThreeColumns';
 
-import Background from './components/layout/Background';
-
-
-const Home: NextPage = () => {
-  return (
-    <Background></ Background>
-  );
+const Home = () => {
+    return (
+        <PageContainer>
+            <ThreeColumns />
+        </PageContainer>
+    );
 }
 
 export default Home

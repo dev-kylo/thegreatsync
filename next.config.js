@@ -1,8 +1,14 @@
-module.exports = {
-  webpack5: true,
-  webpack: (config) => {
-    config.resolve.fallback = { fs: false, process: false, fn: false };
-
-    return config;
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    domains: [
+      'localhost',
+      'next-kylo-reddit.s3.eu-central-1.amazonaws.com',
+      'next-kylo-reddit.s3.amazonaws.com',
+      'placeimg.com'
+    ],
   },
-};
+}
+
+module.exports = nextConfig

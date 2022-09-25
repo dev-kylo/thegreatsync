@@ -9,19 +9,15 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@emotion/css": "^11.7.1",
-    "@emotion/react": "^11.7.1",
-    "@emotion/server": "^11.4.0",
-    "@emotion/styled": "^11.6.0",
-    "next": "12.0.8",
+    "next": "12.3.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-resizable": "^3.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
-    "@emotion/babel-plugin": "^11.7.2",
     "@types/node": "^16.11.25",
     "@types/react": "17.0.38",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
@@ -41,7 +37,6 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^2.5.1",
     "tailwindcss": "^3.0.18",
-    "twin.macro": "^2.8.2",
     "typescript": "^4.5.5"
   }
 }
