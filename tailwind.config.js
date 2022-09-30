@@ -1,3 +1,5 @@
+// const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -16,9 +18,9 @@ module.exports = {
         secondary_pink: '#FFC0CB',
       },
       fontFamily: {
-        sans: ['Graphik', 'sans-serif'],
-        serif: ['Merriweather', 'serif'],
-        primary: ['Graphik', 'sans-serif'],
+        sans: ['Utopia Std', 'sans-serif'],
+        serif: ['Poppins', 'sans-serif'],
+        primary: ['Utopia Std', 'sans-serif'],
         secondary: ['Poppins', 'sans-serif']
       },
     },
