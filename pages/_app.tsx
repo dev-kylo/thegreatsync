@@ -12,7 +12,9 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 
             </Head>
-            <Component {...pageProps} />
+            <main style={{ background: 'linear-gradient(38.92deg, #03143F 10.77%, #008579 115.98%);' }}>
+                <Component {...pageProps} />
+            </main>
         </>
 
     )

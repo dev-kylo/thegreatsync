@@ -16,6 +16,7 @@ export default function ThreeColumns() {
                             layout="responsive"
                             width={2000}
                             height={2000}
+                            className="overflow-hidden"
                         />
                     </Column>
                     <Column> Grid 3</Column>

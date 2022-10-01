@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
+import { Disclosure } from '@headlessui/react'
 
 const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
 
@@ -55,10 +56,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                         {({ active }) => (
                             <a
                                 href="#"
-                                className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                )}
+                                className={`${active ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
                             >
                                 View Profile
                             </a>
@@ -68,10 +66,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                         {({ active }) => (
                             <a
                                 href="#"
-                                className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                )}
+                                className={`${active ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
                             >
                                 Settings
                             </a>
@@ -81,10 +76,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                         {({ active }) => (
                             <a
                                 href="#"
-                                className={classNames(
-                                    active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-sm text-gray-700'
-                                )}
+                                className={`${active ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
                             >
                                 Logout
                             </a>
