@@ -4,8 +4,8 @@ type ColumnAreaProps = {
 }
 
 const ColumnArea = ({ children }: ColumnAreaProps) => (
-    <div className="relative h-full" style={{ minHeight: '36rem' }}>
-        <div className="absolute inset-0 rounded-lg border-2 border-dashed border-gray-200">
+    <div className="h-full" style={{ minHeight: '86vh' }}>
+        <div className="rounded-lg h-full border-2 border-dashed border-gray-200">
             {children}
         </div>
     </div>
