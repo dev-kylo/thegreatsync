@@ -1,13 +1,16 @@
 import Navbar from "../ui/Navbar";
 import Column from "./Column";
 import Image from 'next/image'
+import NextPrev from "../ui/NextPrev";
+import TitleStrip from "../ui/TitleStrip";
 
 export default function ThreeColumns() {
     return (
         <>
             <div className="relative flex w-full min-h-screen flex-col">
                 <Navbar />
-                <div className="mx-auto w-full grid grid-cols-[28%,44%,28%] xl:px-8">
+                <TitleStrip />
+                <div className="mx-auto w-full grid grid-cols-[28%,44%,28%] xl:px-8 ">
                     <Column> Grid 1</Column>
                     <Column>
                         <Image
@@ -21,6 +24,7 @@ export default function ThreeColumns() {
                     </Column>
                     <Column> Grid 3</Column>
                 </div>
+                <NextPrev />
             </div>
         </>
     )
