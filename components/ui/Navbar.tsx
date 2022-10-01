@@ -3,7 +3,8 @@ import { Disclosure } from '@headlessui/react'
 import { useState } from 'react'
 import Burger from './Burger'
 import ProfileDropDown from './ProfileDropdown'
-import { Bars3CenterLeftIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon } from '@heroicons/react/24/outline'
+import SlideOver from './SlideOver'
 
 
 export default function Navbar() {
@@ -13,15 +14,15 @@ export default function Navbar() {
 
     return (
         <>
-            <Disclosure as="nav" className="flex-shrink-0 bg-indigo-600">
+            <Disclosure as="nav" className="flex-shrink-0 bg-primary_blue">
                 {({ open }: { open: boolean }) => (
                     <>
                         {/* Desktop */}
-                        <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
+                        <div className="mx-auto max-w-8xl px-2 sm:px-4 lg:px-8">
                             <div className="relative flex h-16 items-center justify-between">
 
                                 {/* Course Menu Button */}
-                                <Bars3CenterLeftIcon onClick={() => setOpenMenu(true)} className="block h-6 w-6" aria-hidden="true" />
+                                <Bars3Icon onClick={() => setOpenMenu(true)} className="block h-8 w-8 xl:h-10 xl:w-10 text-white hover:cursor-pointer hover:text-primary_green focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary_blue" aria-hidden="true" />
 
                                 <div className="hidden lg:block lg:w-80">
                                     <div className="flex items-center justify-end">
@@ -54,6 +55,7 @@ export default function Navbar() {
                     </>
                 )}
             </Disclosure>
+            <SlideOver open={openMenu} setOpen={setOpenMenu}> Content goes over here </SlideOver>
         </>
     )
 }

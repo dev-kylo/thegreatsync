@@ -6,7 +6,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 type SlideOverProps = {
     children: React.ReactNode;
     open: boolean;
-    setOpen: (open: boolean) => boolean
+    setOpen: (open: boolean) => void;
 }
 
 function SlideOver({ children, open, setOpen }: SlideOverProps) {
