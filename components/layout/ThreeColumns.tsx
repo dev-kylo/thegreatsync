@@ -3,15 +3,18 @@ import Column from "./Column";
 import Image from 'next/image'
 import NextPrev from "../ui/NextPrev";
 import TitleStrip from "../ui/TitleStrip";
+import CodeSnippet from "../ui/CodeSnippet";
 
-export default function ThreeColumns() {
+export default function ThreeColumns({ md }: { md: string }) {
     return (
         <>
             <div className="relative flex w-full min-h-screen flex-col">
                 <Navbar />
                 <TitleStrip />
                 <div className="mx-auto w-full grid grid-cols-[28%,44%,28%] xl:px-8 ">
-                    <Column> Grid 1</Column>
+                    <Column>
+                        <CodeSnippet md={md} />
+                    </Column>
                     <Column>
                         <Image
                             alt="Mountains"
