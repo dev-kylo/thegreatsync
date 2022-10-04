@@ -7,6 +7,28 @@ module.exports = {
   ],
   theme: {
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            'h1, h2, h3': {
+              color: '#BDD5E9'
+            },
+            h1: {
+              fontSize: '32px'
+            }, 
+            h2: {
+              fontSize: '28px',
+              margin: '1em 0'
+            }, 
+            h3: {
+              fontSize: '22px'
+            }, 
+            'pre > h2, pre > h3': {
+              marginBottom: '1.5em!important'
+            }
+          }
+        }
+      },
       colors: {
         primary_green: '#008579',
         primary_blue: '#03143F',
@@ -21,11 +43,13 @@ module.exports = {
         sans: ['Utopia Std', 'sans-serif'],
         serif: ['Poppins', 'sans-serif'],
         primary: ['Utopia Std', 'sans-serif'],
-        secondary: ['Poppins', 'sans-serif']
+        secondary: ['Poppins', 'sans-serif'],
       },
     },
   },
   plugins: [
     require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('tailwind-scrollbar'),
   ],
 }

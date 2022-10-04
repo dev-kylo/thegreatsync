@@ -3,7 +3,8 @@ import Column from "./Column";
 import Image from 'next/image'
 import NextPrev from "../ui/NextPrev";
 import TitleStrip from "../ui/TitleStrip";
-import CodeSnippet from "../ui/CodeSnippet";
+// import CodeSnippet from "../ui/CodeSnippet";
+import ContentBlock from "./ContentBlock";
 
 export default function ThreeColumns({ md }: { md: string }) {
     return (
@@ -13,7 +14,7 @@ export default function ThreeColumns({ md }: { md: string }) {
                 <TitleStrip />
                 <div className="mx-auto w-full grid grid-cols-[28%,44%,28%] xl:px-8 ">
                     <Column>
-                        <CodeSnippet md={md} />
+                        {/* <CodeSnippet md={md} /> */}
                     </Column>
                     <Column>
                         <Image
@@ -25,7 +26,9 @@ export default function ThreeColumns({ md }: { md: string }) {
                             className="overflow-hidden"
                         />
                     </Column>
-                    <Column> Grid 3</Column>
+                    <Column>
+                        <ContentBlock md={md} />
+                    </Column>
                 </div>
                 <NextPrev />
             </div>

@@ -5,6 +5,7 @@ import Burger from './Burger'
 import ProfileDropDown from './ProfileDropdown'
 import { Bars3Icon } from '@heroicons/react/24/outline'
 import SlideOver from './SlideOver'
+// import TitleStrip from './TitleStrip'
 
 
 export default function Navbar() {
@@ -20,7 +21,7 @@ export default function Navbar() {
 
                         {/* Course Menu Button */}
                         <Bars3Icon onClick={() => setOpenMenu(true)} className="block h-8 w-8 xl:h-10 xl:w-10 text-white hover:cursor-pointer hover:text-primary_green focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary_blue" aria-hidden="true" />
-
+                        {/* <TitleStrip /> */}
                         <div className="hidden lg:block lg:w-80">
                             <div className="flex items-center justify-end">
                                 <ProfileDropDown />
