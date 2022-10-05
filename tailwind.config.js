@@ -9,22 +9,25 @@ module.exports = {
     extend: {
       typography: {
         DEFAULT: {
-          css: {
-            'h1, h2, h3': {
-              color: '#BDD5E9'
+          css: { 
+            h1 : {
+              fontSize: '36px!important',
+              paddingTop: '1rem'
             },
-            h1: {
-              fontSize: '32px'
-            }, 
             h2: {
-              fontSize: '28px',
-              margin: '1em 0'
+              fontSize: '32px!important',
+              margin: '1.2rem 0!important',
+              lineHeight: '1!important',
+              fontWeight: '800',
             }, 
             h3: {
               fontSize: '22px'
             }, 
             'pre > h2, pre > h3': {
               marginBottom: '1.5em!important'
+            },
+            'code:before': {
+              content: 'l!important'
             }
           }
         }
