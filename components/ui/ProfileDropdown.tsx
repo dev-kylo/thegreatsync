@@ -31,7 +31,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
     )
 
     return (
-        <Menu as="div" className="relative ml-4 flex-shrink-0">
+        <Menu as="div" className="relative flex-shrink-0">
             <div>
                 <Menu.Button className="flex rounded-full bg-indigo-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700">
                     <span className="sr-only">Open user menu</span>
