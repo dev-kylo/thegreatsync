@@ -1,3 +1,4 @@
+
 # It's a story of a girl, cried a river and drowned the whole world.
 
 It's the story of a user named **Omer Barnir** who reported a bug in 2005 on the MySQL [bug report platform](https://bugs.mysql.com/)

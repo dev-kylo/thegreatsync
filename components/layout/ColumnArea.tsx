@@ -9,7 +9,7 @@ const ColumnArea = ({ children }: ColumnAreaProps) => (
     // <div className=" max-h-full rounded-lg bg-[#111111] border-2 border-r-2 border-secondary_lightblue ">
     //     {children}
     // </div>
-    <div className="block w-full relative h-[70vh] rounded-lg bg-[#111111] border-2 border-r-2 border-secondary_lightblue scrollbar-thin scrollbar-thumb-primary_green overflow-y-scroll ">
+    <div className="block relative">
         {children}
     </div>
     // <div className="h-full">

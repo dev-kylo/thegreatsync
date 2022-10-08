@@ -41,6 +41,7 @@ module.exports = {
         secondary_blue: '#0B349E',
         secondary_red: '#AC3428',
         secondary_pink: '#FFC0CB',
+        code_bg: '#011627'
       },
       fontFamily: {
         sans: ['Utopia Std', 'sans-serif'],
