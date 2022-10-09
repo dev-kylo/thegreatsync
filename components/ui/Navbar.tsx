@@ -6,6 +6,7 @@ import ProfileDropDown from './ProfileDropdown'
 import { Bars3Icon } from '@heroicons/react/24/outline'
 import SlideOver from './SlideOver'
 import TitleStrip from './TitleStrip'
+import Menu from './Menu'
 
 
 export default function Navbar() {
@@ -30,7 +31,9 @@ export default function Navbar() {
                     </div>
                 </div>
             </Disclosure>
-            <SlideOver open={openMenu} setOpen={setOpenMenu}> Content goes over here </SlideOver>
+            <SlideOver open={openMenu} setOpen={setOpenMenu}>
+                <Menu />
+            </SlideOver>
         </>
     )
 }

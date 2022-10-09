@@ -54,9 +54,9 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                                        <div className="relative mt-6 flex-1">
                                             {/* slide content */}
-                                            <div className="absolute inset-0 px-4 sm:px-6">
+                                            <div className="absolute inset-0">
 
                                                 {children}
 
