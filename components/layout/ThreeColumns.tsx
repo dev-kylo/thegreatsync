@@ -17,7 +17,7 @@ export default function Experimental({ md }: { md: string }) {
                     <Block image outerClasses="w-full">
                         <Image
                             alt="Mountains"
-                            src="https://placeimg.com/2000/2000/any"
+                            src="https://placeimg.com/2000/2000/tech"
                             layout="responsive"
                             width={2000}
                             height={2000}

@@ -1,20 +1,51 @@
 import { Disclosure } from '@headlessui/react'
-import { CalendarIcon, ChartBarIcon, FolderIcon, HomeIcon, InboxIcon, UsersIcon } from '@heroicons/react/24/outline'
-
-type MenuItem = {
-    name: string;
-    current?: boolean;
-    level: number,
-    href?: string;
-    children?: MenuItem[]
-}
-
+import { VideoCameraIcon, ChartBarIcon, FolderIcon, HomeIcon, InboxIcon, UsersIcon } from '@heroicons/react/24/outline'
+import type { MenuItem } from '../../types'
+import MenuIcon from './MenuIcon'
+import ProgressIcon from './ProgressIcon'
 
 const navigation: MenuItem[] = [
-    { name: 'Course Structure and Setup', current: false, href: '#', level: 1, children: [{ name: 'The Environment', href: '#', level: 2 }] },
+    {
+        name: 'Course Structure and Setup',
+        current: false,
+        href: '#', level: 1,
+        progress: 100,
+        completed: true,
+        children: [
+            {
+                name: 'Learning Strategy',
+                completed: true,
+                level: 2,
+                children: [
+                    {
+                        name: 'The benefits of testing',
+                        completed: true,
+                        href: '#',
+                        level: 3,
+                        type: 'watch'
+                    },
+                    {
+                        name: 'Mnemonics applied to programming',
+                        completed: true,
+                        href: '#',
+                        level: 3,
+                        type: 'read'
+                    },
+                    {
+                        name: 'What to memorise',
+                        completed: true,
+                        href: '#',
+                        level: 3,
+                        type: 'read'
+                    },
+                ]
+            },
+        ]
+    },
     {
         name: 'Step Inside a Program',
         level: 1,
+        progress: 10,
         current: false,
         children: [
             {
@@ -25,6 +56,13 @@ const navigation: MenuItem[] = [
                         name: 'Investigation Video',
                         href: '#',
                         level: 3,
+                        type: 'watch'
+                    },
+                    {
+                        name: 'Instructions',
+                        href: '#',
+                        level: 3,
+                        type: 'draw'
                     },
                 ]
             },
@@ -142,15 +180,17 @@ function createMenuLink(item: MenuItem) {
 
 function createMenuDropDownLink(children: MenuItem[]) {
     return children.map((subItem) => {
-        if (!subItem.children) {
+        const { level, type, name, completed, children, href, current } = subItem;
+        if (!children) {
             return (
                 <Disclosure.Button
-                    key={subItem.name}
+                    key={name}
                     as="a"
-                    href={subItem.href}
-                    className={`group flex w-full items-center rounded-md py-2 ${subItem.level === 2 ? 'pl-8' : subItem.level === 3 ? 'pl-16' : 'pl-1'} pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900`}
+                    href={href}
+                    className={`group flex w-full items-center rounded-md py-3 ${level === 2 ? 'pl-8' : level === 3 ? 'pl-20' : 'pl-4'} pr-2 text-md font-medium text-white hover:bg-gray-50 hover:text-gray-900`}
                 >
-                    {subItem.name}
+                    {type && <MenuIcon type={type} completed={!!completed} active={!!current} />}
+                    {name}
                 </Disclosure.Button>
             )
         }
@@ -160,23 +200,25 @@ function createMenuDropDownLink(children: MenuItem[]) {
 
 function createMenuDropDown(item: MenuItem) {
     return (
-        <Disclosure as="div" key={item.name} className="space-y-1 ">
+        <Disclosure as="div" key={item.name} className="space-y-1">
             {({ open }) => (
                 <>
                     <Disclosure.Button
                         className={classNames(
                             item.current
-                                ? `bg-gray-100 text-gray-900 pl-[${item.level}rem]`
-                                : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                            'group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'
-                            , `${item.level === 2 ? 'pl-8' : item.level === 3 ? 'pl-16' : 'pl-1'}`)}
+                                ? `py-3 bg-gray-100 text-white pl-[${item.level}rem]`
+                                : 'py-3 bg-transparent text-white hover:bg-gray-50 hover:text-gray-900',
+                            'group w-full flex items-center pl-2 pr-1 py-2 text-left text-md font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                            , `${item.level === 2 ? 'pl-8' : item.level === 3 ? 'pl-20' : 'pl-4'}`)}
                     >
-                        Icon.
+                        <div className='pl-2 mr-8 w-6'>
+                            <ProgressIcon amount={item.progress} completed={!!item.completed} />
+                        </div>
                         <span className="flex-1">{item.name}</span>
                         <svg
                             className={classNames(
-                                open ? 'text-gray-400 rotate-90' : 'text-gray-300',
-                                'ml-3 h-5 w-5 flex-shrink-0 transform transition-colors duration-150 ease-in-out group-hover:text-gray-400'
+                                open ? 'text-white rotate-90' : 'text-gray-300',
+                                'ml-3 mr-4 h-6 w-6 flex-shrink-0 transform transition-colors duration-150 ease-in-out group-hover:text-gray-400'
                             )}
                             viewBox="0 0 20 20"
                             aria-hidden="true"
