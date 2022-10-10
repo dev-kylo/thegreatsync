@@ -5,6 +5,7 @@ import PageContainer from '../components/layout/PageContainer';
 import ContentBlock from '../components/layout/ContentBlock';
 import FlexGrid from '../components/layout/FlexGrid';
 import Experimental from '../components/layout/Experimental';
+import ProgressIcon from '../components/ui/ProgressIcon';
 const Home = ({ md }: { md: string }) => {
 
     return (
@@ -13,6 +14,7 @@ const Home = ({ md }: { md: string }) => {
         //     <ContentBlock md={md} />
         // </PageContainer>
         <ThreeColumns md={md} />
+        // <ProgressIcon amount={60} />
         // <FlexGrid md={md} />
         // <Experimental md={md} />
     );

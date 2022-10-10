@@ -50,6 +50,7 @@ const navigation: MenuItem[] = [
         children: [
             {
                 name: 'Investigation',
+                progress: 40,
                 level: 2,
                 children: [
                     {
