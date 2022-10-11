@@ -1,4 +1,4 @@
-export type MenuType = 'watch' | 'code' | 'read' | 'draw' | 'imagine' | 'listen';
+export type MenuType = 'watch' | 'code' | 'read' | 'draw' | 'imagine' | 'listen' | 'play';
 
 export type MenuItem = {
     name: string;

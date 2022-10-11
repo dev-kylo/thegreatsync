@@ -1,22 +1,26 @@
 
 import type { MenuType } from "../../types";
-import { VideoCameraIcon, BookOpenIcon, CodeBracketIcon, PencilSquareIcon, PhotoIcon, SpeakerWaveIcon, ShieldCheckIcon } from '@heroicons/react/24/outline'
+import { VideoCameraIcon, BookOpenIcon, CodeBracketIcon, PencilSquareIcon, PhotoIcon, SpeakerWaveIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { SVGProps } from "react";
 
-const iconLookup: { [key in MenuType]: React.ReactNode } = {
+type IconType = ((props: SVGProps<SVGSVGElement>) => JSX.Element);
+
+const iconLookup: { [key in MenuType]: React.ReactNode | IconType } = {
     watch: VideoCameraIcon,
     read: BookOpenIcon,
     code: CodeBracketIcon,
     draw: PencilSquareIcon,
     imagine: PhotoIcon,
     listen: SpeakerWaveIcon,
+    play: MagnifyingGlassIcon
 }
 
 
 const MenuIcon = ({ type, completed, active = false }: { type: MenuType, completed: boolean, active: boolean }) => {
-    let Icon = ShieldCheckIcon;
+    let Icon = MagnifyingGlassIcon
     if (completed) Icon = CheckCircleIcon;
-    else if (iconLookup[type]) Icon = iconLookup[type]
+    else if (iconLookup[type]) Icon = iconLookup[type] as IconType;
     return (
         <div className='pl-2 mr-8'>
             <div className="flex items-center">
