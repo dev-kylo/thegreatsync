@@ -1,9 +1,9 @@
 
 import Image from 'next/image'
-import ContentBlock from "./ContentBlock";
-import Block from "./Block";
+import ContentBlock from "../ContentBlock";
+import Block from "../Block";
 
-export default function Experimental({ md }: { md: string }) {
+export default function Text_Image_Code({ md }: { md: string }) {
     return (
         <>
 
