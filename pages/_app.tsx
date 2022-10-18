@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app'
 import '../styles/global.css';
 import '../styles/duotone_prism.css';
+import '../styles/line_numbers_prism.css';
 import Head from 'next/head'
 import Layout from '../components/layout'
 import Navbar from '../components/ui/Navbar';

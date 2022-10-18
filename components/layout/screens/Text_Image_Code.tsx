@@ -3,7 +3,7 @@ import Image from 'next/image'
 import ContentBlock from "../ContentBlock";
 import Block from "../Block";
 
-export default function Text_Image_Code({ md }: { md: string }) {
+export default function Text_Image_Code({ text, code }: { text: string, code: string }) {
     return (
         <>
 
@@ -11,7 +11,7 @@ export default function Text_Image_Code({ md }: { md: string }) {
                 <div className="mx-auto w-full grid grid-cols-[1fr,1.5fr,1fr] gap-1 xl:px-2 self-center ">
 
                     <Block outerClasses="bg-code_bg" enableScroll>
-                        <ContentBlock md={md} />
+                        <ContentBlock md={code} numbered />
                     </Block>
 
                     <Block image outerClasses="w-full">
@@ -26,7 +26,7 @@ export default function Text_Image_Code({ md }: { md: string }) {
                     </Block>
 
                     <Block outerClasses="bg-[#111111]" innerClasses="p-4" enableScroll>
-                        <ContentBlock md={md} />
+                        <ContentBlock md={text} />
                     </Block>
 
 

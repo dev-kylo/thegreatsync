@@ -3,6 +3,8 @@ import Image from 'next/image'
 import ContentBlock from "../ContentBlock";
 import Block from "../Block";
 
+// To add line numbers in code, use the numbered prop in ContentBlock
+
 export default function Text_Image({ md }: { md: string }) {
     return (
         <>

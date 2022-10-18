@@ -1,10 +1,10 @@
 import ReactMarkdown from 'react-markdown'
 import ContainsCodeSnippet from '../ui/ContainsCodeSnippet';
 
-const ContentBlock = ({ md }: { md: string }) => {
+const ContentBlock = ({ md, numbered = false }: { md: string, numbered?: boolean }) => {
     return (
-        <article className="line-numbers prose dark:prose-invert prose-lg prose-headings:text-secondary_lightblue mx-auto">
-            <ContainsCodeSnippet>
+        <article className="prose dark:prose-invert prose-lg prose-headings:text-secondary_lightblue mx-auto">
+            <ContainsCodeSnippet numbered={numbered}>
                 <ReactMarkdown children={md} />
             </ContainsCodeSnippet>
         </article >
