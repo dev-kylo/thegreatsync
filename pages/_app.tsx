@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Layout>
                 <Navbar />
                 <Component {...pageProps} />
-                <NextPrev />
+
             </Layout>
         </>
 

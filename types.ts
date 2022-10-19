@@ -10,3 +10,10 @@ export type MenuItem = {
     href?: string;
     children?: MenuItem[]
 }
+
+
+export type ImageStep = {
+    id: number,
+    name: string,
+    status: 'current' | 'complete' | 'default'
+}

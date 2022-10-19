@@ -1,9 +1,17 @@
 import { ChevronLeftIcon } from '@heroicons/react/20/solid'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import Steps from './Steps';
+
+
 
 const NextPrev = () => (
     <div className="relative bg-[#03143fad] flex flex-col justify-center">
-        <div className="flex items-center justify-end z-10 mr-8">
+        <div className="absolute left-1/2 transform -translate-x-1/2">
+            <Steps />
+        </div>
+
+        <div className="flex items-center justify-end mr-8">
+
             <button
                 type="button"
                 className="w-32 mx-4 inline-flex items-center justify-center rounded-md border border-secondary_lightblue bg-primary_blue  px-4 py-1 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
