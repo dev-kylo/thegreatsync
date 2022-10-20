@@ -2,15 +2,14 @@ import type { ImageStep } from "../../types";
 import { CheckIcon } from '@heroicons/react/20/solid'
 
 type StepProps = ImageStep & {
-    completed: boolean,
     setCurrent: (id: number) => void
 }
 
 const Step = ({ name, status, id, setCurrent }: StepProps) => {
 
     const linkStyles = {
-        default: "group relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-gray-400",
-        current: "relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-secondary_red bg-white",
+        default: "group relative flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-gray-400",
+        current: "relative flex h-6 w-6 items-center justify-center rounded-full border-2 border-secondary_red bg-white",
         complete: "relative flex h-7 w-7 items-center justify-center rounded-full bg-secondary_red hover:bg-indigo-900",
     };
 

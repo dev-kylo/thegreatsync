@@ -14,6 +14,7 @@ export type MenuItem = {
 
 export type ImageStep = {
     id: number,
+    orderNumber: number,
     name: string,
     status: 'current' | 'complete' | 'default'
 }
