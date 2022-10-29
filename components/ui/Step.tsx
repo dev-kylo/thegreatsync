@@ -5,12 +5,12 @@ type StepProps = ImageStep & {
     setCurrent: (id: number) => void
 }
 
-const Step = ({ name, status, id, setCurrent }: StepProps) => {
+const Step = ({ name, status, id, orderNumber, setCurrent }: StepProps) => {
 
     const linkStyles = {
-        default: "group relative flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-gray-400",
-        current: "relative flex h-6 w-6 items-center justify-center rounded-full border-2 border-secondary_red bg-white",
-        complete: "relative flex h-7 w-7 items-center justify-center rounded-full bg-secondary_red hover:bg-indigo-900",
+        default: "group h-6 w-6 border-2 border-gray-300 bg-white hover:border-gray-400  hover:bg-primary_green  hover:text-white hover:scale-110",
+        current: "h-9 w-9 border-2 border-secondary_red bg-white",
+        complete: "h-7 w-7 bg-secondary_red hover:bg-primary_green",
     };
 
     return (
@@ -20,15 +20,17 @@ const Step = ({ name, status, id, setCurrent }: StepProps) => {
             </div>
             <div
                 onClick={() => setCurrent(id)}
-                className={linkStyles[status]}
+                className={`relative flex items-center justify-center rounded-full  hover:cursor-pointer ${linkStyles[status]}`}
             >
-                {status === 'current' && <span className="h-2.5 w-2.5 rounded-full bg-secondary_red" aria-hidden="true" />}
+                {status === 'current' && <div className="h-8 w-8 rounded-full flex justify-center items-center p-0 m-0" aria-hidden="true" >{orderNumber}</div>}
                 {status === 'complete' && < CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />}
-                {status === 'default' && <span className="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300" aria-hidden="true" />}
+                {status === 'default' && <div className="h-5 w-5 rounded-full flex justify-center items-center p-0 m-0" aria-hidden="true" >{orderNumber}</div>}
                 <span className="sr-only">{name}</span>
             </div>
         </>
     )
 }
+
+<span className="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300" aria-hidden="true" />
 
 export default Step;
