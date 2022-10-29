@@ -6,7 +6,7 @@ import Step from './Step'
 const stepsD: ImageStep[] = [
     { name: 'Step 1', orderNumber: 1, id: 1, status: 'complete' },
     { name: 'Step 2', orderNumber: 2, id: 2, status: 'complete' },
-    { name: 'Step 3', orderNumber: 3, id: 3, status: 'current' },
+    { name: 'Step 3', orderNumber: 3, id: 3, status: 'default' },
     { name: 'Step 4', orderNumber: 4, id: 4, status: 'default' },
     { name: 'Step 4', orderNumber: 5, id: 5, status: 'default' },
     { name: 'Step 4', orderNumber: 6, id: 6, status: 'default' },
@@ -18,16 +18,24 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-function getLastFiltered<T extends ImageStep>(ar: T[], filterFn: (item: T) => boolean): number {
-    const filtered = ar.filter(filterFn);
-    const last = filtered[filtered.length - 1];
-    if (last && 'orderNumber' in last) return last.orderNumber
-    return 1;
+// function nextStepAfterLastCompleted<T extends ImageStep>(ar: T[], filterFn: (item: T) => boolean): number {
+//     const filtered = ar.filter(filterFn);
+//     const last = filtered[filtered.length - 1];
+//     if (last && 'orderNumber' in last) return last.orderNumber
+//     return 1;
+// }
+
+function nextStepAfterLastCompleted(ar: ImageStep[] = []): number {
+    const filtered = ar.filter((stp => stp.status === 'complete'));
+    if (filtered.length < 1) return 1;
+    if (filtered.length === ar.length) return filtered[filtered.length - 1].orderNumber;
+    return filtered[filtered.length - 1].orderNumber + 1
 }
+
 
 export default function Steps() {
 
-    const [current, setCurrent] = useState(getLastFiltered<ImageStep>(stepsD, (stp => stp.status === 'complete')));
+    const [current, setCurrent] = useState(nextStepAfterLastCompleted(stepsD));
     const stepsContainer = useRef<HTMLOListElement>(null);
 
     function getNextIndex(index: number, max: number, direction: 'left' | 'right') {
@@ -55,7 +63,7 @@ export default function Steps() {
             <ol role="list" ref={stepsContainer} className="flex items-center">
                 {stepsD.map((step: ImageStep, stepIdx: number) => (
                     <li key={step.id} id={`step_${stepIdx}`} className={classNames(stepIdx !== stepsD.length - 1 ? 'pr-8 sm:pr-10' : '', 'relative')}>
-                        <Step  {...step} setCurrent={handleClick} status={step.status} />
+                        <Step  {...step} setCurrent={handleClick} status={step.id === current ? 'current' : step.status} />
                     </li>
                 ))}
             </ol>
