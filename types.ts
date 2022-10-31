@@ -12,7 +12,10 @@ export type MenuItem = {
 }
 
 
-export type ImageStep = {
+export type TopicStepT = {
+    image: string;
+    code?: string;
+    text: string;
     id: number,
     orderNumber: number,
     name: string,
