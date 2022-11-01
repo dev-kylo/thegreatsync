@@ -32,7 +32,7 @@ const TopicStepsPage = ({ number, string, undefinedd, boolean }: P) => {
         { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667064088/2000x2000/Boolean_m3vqro.png', id: 4, orderNumber: 4, text: boolean.boolean_text, code: boolean.boolean_code }
     ];
     const title = 'Statements and declarations';
-    const completed = [1]
+    const completed = [1, 2]
 
     const topicSteps: TopicStepT[] = topics.map((topic: Partial<TopicStepT>) => {
         topic.status = completed.includes(topic.id!) ? 'complete' : 'default';

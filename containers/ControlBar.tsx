@@ -1,7 +1,6 @@
 import { ChevronLeftIcon } from '@heroicons/react/20/solid'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import React from 'react';
-import Steps from '../components/ui/Steps';
 
 
 
