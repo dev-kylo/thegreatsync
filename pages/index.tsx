@@ -11,16 +11,11 @@ import TextCode_Image from '../components/layout/screens/TextCode_Image';
 import NextPrev from '../containers/ControlBar';
 import Video from '../components/layout/screens/Video';
 import Navbar from '../components/ui/Navbar';
+import ControlBar from '../containers/ControlBar';
 const Home = ({ md, blogMd }: { md: string, blogMd: string }) => {
 
 
     const topicType = '3col';
-    const topics = [
-        { image: '', id: 1, orderNumber: 1 },
-        { image: '', id: 2, orderNumber: 1 },
-        { image: '', id: 3, orderNumber: 1 },
-        { image: '', id: 4, orderNumber: 1 }
-    ];
     const title = 'Statements and declarations';
 
 
@@ -31,8 +26,8 @@ const Home = ({ md, blogMd }: { md: string, blogMd: string }) => {
             {/* <Video /> */}
             {/* <Text_Image_Code code={md} text={blogMd} /> */}
             {/* <TextCode_Image md={md} /> */}
-            {/* <Text_Image md={md} /> */}
-            {/* <NextPrev /> */}
+            <Text_Image md={md} />
+            {/* <ControlBar /> */}
         </>
     );
 }

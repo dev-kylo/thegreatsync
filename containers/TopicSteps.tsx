@@ -12,6 +12,7 @@ type TopicStepsProps = {
     topicSteps: TopicStepT[],
     completeStep: (id: number) => void;
     title: string,
+    showNextButton: boolean
 }
 
 function nextStepAfterLastCompleted(ar: TopicStepT[] = []): number {
@@ -25,7 +26,7 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-const TopicSteps = ({ topicSteps, title, completeStep }: TopicStepsProps) => {
+const TopicSteps = ({ topicSteps, title, completeStep, showNextButton }: TopicStepsProps) => {
     const [current, setCurrent] = useState(nextStepAfterLastCompleted(topicSteps)); // Keeps Track of current Order Number
     const stepsContainer = useRef<HTMLOListElement>(null);
 
@@ -72,7 +73,7 @@ const TopicSteps = ({ topicSteps, title, completeStep }: TopicStepsProps) => {
             {currentTopicStep && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
             {/* <TextCode_Image md={md} /> */}
             {/* <Text_Image md={md} /> */}
-            <ControlBar>
+            <ControlBar showNext={showNextButton}>
                 <nav aria-label="Progress" className='w-lg flex overflow-hidden scrollbar-thin scrollbar-none relative z-50  '>
                     <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('left')}>
                         <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />

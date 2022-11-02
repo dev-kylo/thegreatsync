@@ -47,7 +47,7 @@ const TopicStepsPage = ({ number, string, undefinedd, boolean }: P) => {
 
 
     return (
-        <TopicSteps topicSteps={topicSteps} title={title} completeStep={handleViewedStep} />
+        <TopicSteps topicSteps={topicSteps} title={title} completeStep={handleViewedStep} showNextButton={viewed.length >= topics.length - 1} />
     );
 }
 
