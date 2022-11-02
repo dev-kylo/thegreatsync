@@ -1,5 +1,6 @@
 
 import fs from 'fs';
+import { useState } from 'react';
 import TopicSteps from '../containers/TopicSteps';
 import type { TopicStepT } from '../types';
 
@@ -31,17 +32,22 @@ const TopicStepsPage = ({ number, string, undefinedd, boolean }: P) => {
         { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667063268/2000x2000/Undefined_tyvsdx.png', id: 3, orderNumber: 3, text: undefinedd.undefined_text, code: undefinedd.undefined_code },
         { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667064088/2000x2000/Boolean_m3vqro.png', id: 4, orderNumber: 4, text: boolean.boolean_text, code: boolean.boolean_code }
     ];
+    const [viewed, setViewed] = useState<number[]>([])
     const title = 'Statements and declarations';
-    const completed = [1, 2]
+
+    const handleViewedStep = (id: number) => {
+        if (!viewed.includes(id)) setViewed([...viewed, id])
+    }
+
 
     const topicSteps: TopicStepT[] = topics.map((topic: Partial<TopicStepT>) => {
-        topic.status = completed.includes(topic.id!) ? 'complete' : 'default';
+        topic.status = viewed.includes(topic.id!) ? 'complete' : 'default';
         return topic
     }) as TopicStepT[]
 
 
     return (
-        <TopicSteps topicSteps={topicSteps} title={title} />
+        <TopicSteps topicSteps={topicSteps} title={title} completeStep={handleViewedStep} />
     );
 }
 

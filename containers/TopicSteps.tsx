@@ -10,6 +10,7 @@ import { ChevronDoubleLeftIcon } from '@heroicons/react/20/solid'
 
 type TopicStepsProps = {
     topicSteps: TopicStepT[],
+    completeStep: (id: number) => void;
     title: string,
 }
 
@@ -24,7 +25,7 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-const TopicSteps = ({ topicSteps, title }: TopicStepsProps) => {
+const TopicSteps = ({ topicSteps, title, completeStep }: TopicStepsProps) => {
     const [current, setCurrent] = useState(nextStepAfterLastCompleted(topicSteps)); // Keeps Track of current Order Number
     const stepsContainer = useRef<HTMLOListElement>(null);
 
@@ -40,6 +41,7 @@ const TopicSteps = ({ topicSteps, title }: TopicStepsProps) => {
     const handleClick = (id: number) => {
         const clickedStepIndex = topicSteps.findIndex(stp => stp.id === id);
         const currentStep = topicSteps.find(stp => stp.id === current);
+        completeStep(current);
         setCurrent(id);
         const isForwards = topicSteps[clickedStepIndex]!.orderNumber > currentStep!.orderNumber;
         scrollIntoView(clickedStepIndex, isForwards ? 'right' : 'left')
@@ -48,6 +50,7 @@ const TopicSteps = ({ topicSteps, title }: TopicStepsProps) => {
     const handleNext = (direction: 'left' | 'right') => {
         let currentIndex = topicSteps.findIndex(stp => stp.id === current);
         const nextStepIndex = getNextIndex(currentIndex, topicSteps.length - 1, direction, 1);
+        completeStep(current);
         setCurrent(topicSteps[nextStepIndex].id);
         scrollIntoView(nextStepIndex, direction);
     }
