@@ -29,10 +29,10 @@ const Home = ({ md, blogMd }: { md: string, blogMd: string }) => {
         <>
             <Navbar title={title} />
             {/* <Video /> */}
-            <Text_Image_Code code={md} text={blogMd} />
+            {/* <Text_Image_Code code={md} text={blogMd} /> */}
             {/* <TextCode_Image md={md} /> */}
             {/* <Text_Image md={md} /> */}
-            <NextPrev />
+            {/* <NextPrev /> */}
         </>
     );
 }

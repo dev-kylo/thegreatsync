@@ -8,20 +8,18 @@ const ControlBar = ({ children }: { children: React.ReactNode }) => {
 
     let stepsControls = (<></>)
     if (children) stepsControls = (
-        <>
-            <div className="absolute left-1/2 transform -translate-x-1/2">
-                {children}
-            </div>
-        </>
+        <div className="absolute left-1/2 transform -translate-x-1/2">
+            {children}
+        </div>
 
     );
 
     return (
-        <div className="relative bg-[#03143fad] flex flex-col justify-center">
+        <div className="relative h-full bg-[#03143f] flex flex-col justify-center">
 
             {stepsControls}
 
-            <div className="flex items-center justify-end mr-8">
+            <div className="flex items-center justify-end mr-30">
 
                 <button
                     type="button"

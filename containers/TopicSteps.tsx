@@ -1,4 +1,4 @@
-
+// @refresh reset
 import Text_Image_Code from '../components/layout/screens/Text_Image_Code';
 import Navbar from '../components/ui/Navbar';
 import type { TopicStepT } from '../types'
@@ -71,8 +71,8 @@ const TopicSteps = ({ topicSteps, title }: TopicStepsProps) => {
             {/* <Text_Image md={md} /> */}
             <ControlBar>
                 <nav aria-label="Progress" className='w-lg flex overflow-hidden scrollbar-thin scrollbar-none relative z-50  '>
-                    <button className="text-white px-4 " onClick={() => handleNext('left')}>
-                        <ChevronDoubleLeftIcon className="-mr-1 ml-3 h-8 w-8" aria-hidden="true" />
+                    <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('left')}>
+                        <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
                     </button>
                     <ol role="list" ref={stepsContainer} className="flex items-center">
                         {topicSteps.map((step: TopicStepT, stepIdx: number) => (
@@ -81,12 +81,13 @@ const TopicSteps = ({ topicSteps, title }: TopicStepsProps) => {
                             </li>
                         ))}
                     </ol>
-                    <button className="text-white px-4" onClick={() => handleNext('right')}>
-                        <ChevronDoubleRightIcon className="-mr-1 ml-3 h-8 w-8" aria-hidden="true" />
+                    <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('right')}>
+                        <ChevronDoubleRightIcon className="m-auto h-8 w-8" aria-hidden="true" />
                     </button>
                     {!isSecondLastStep && !isLastStep && topicSteps.length > 6 && <div className='fixed w-6 h-full bg-[#021e44e3] right-[-5px] top-0 blur-sm scale-y-150 '></div>}
                 </nav>
             </ControlBar>
+
         </>
     );
 }
