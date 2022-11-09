@@ -30,7 +30,14 @@ const TopicStepsPage = ({ number, string, undefinedd, boolean }: P) => {
         { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667063626/2000x2000/Number_wc1j0y.png', id: 1, orderNumber: 1, text: number.number_text, code: number.number_code },
         { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667062132/2000x2000/Rain_Island_juwyrk.png', id: 2, orderNumber: 2, text: string.string_text, code: string.string_code },
         { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667063268/2000x2000/Undefined_tyvsdx.png', id: 3, orderNumber: 3, text: undefinedd.undefined_text, code: undefinedd.undefined_code },
-        { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667064088/2000x2000/Boolean_m3vqro.png', id: 4, orderNumber: 4, text: boolean.boolean_text, code: boolean.boolean_code }
+        { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667064088/2000x2000/Boolean_m3vqro.png', id: 4, orderNumber: 4, text: boolean.boolean_text, code: boolean.boolean_code },
+        { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667062132/2000x2000/Rain_Island_juwyrk.png', id: 5, orderNumber: 5, text: string.string_text, code: string.string_code },
+        { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667064088/2000x2000/Boolean_m3vqro.png', id: 6, orderNumber: 6, text: boolean.boolean_text, code: boolean.boolean_code },
+        { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667063268/2000x2000/Undefined_tyvsdx.png', id: 7, orderNumber: 7, text: undefinedd.undefined_text, code: undefinedd.undefined_code },
+        { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667064088/2000x2000/Boolean_m3vqro.png', id: 8, orderNumber: 8, text: boolean.boolean_text, code: boolean.boolean_code },
+        { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667063268/2000x2000/Undefined_tyvsdx.png', id: 9, orderNumber: 9, text: undefinedd.undefined_text, code: undefinedd.undefined_code },
+        { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667064088/2000x2000/Boolean_m3vqro.png', id: 10, orderNumber: 10, text: boolean.boolean_text, code: boolean.boolean_code },
+        { image: 'https://res.cloudinary.com/the-great-sync/image/upload/v1667063268/2000x2000/Undefined_tyvsdx.png', id: 11, orderNumber: 11, text: undefinedd.undefined_text, code: undefinedd.undefined_code },
     ];
     const [viewed, setViewed] = useState<number[]>([])
     const title = 'Statements and declarations';

@@ -1,8 +1,6 @@
-
 import Image from 'next/image'
 import ContentBlock from "../ContentBlock";
 import Block from "../Block";
-import Steps from '../../ui/Steps';
 
 export default function Text_Image_Code({ text, code, image, id }: { text: string, code: string, image: string, id: number }) {
 
@@ -21,6 +19,7 @@ export default function Text_Image_Code({ text, code, image, id }: { text: strin
                             alt="Mountains"
                             src={image || "https://res.cloudinary.com/the-great-sync/image/upload/v1667044950/2000x2000/Whirlpool_F_a_g1mm3x.jpg"}
                             layout="responsive"
+                            placeholder="blur"
                             width={2000}
                             height={2000}
                             className="aspect-square h-auto w-full"
@@ -32,9 +31,6 @@ export default function Text_Image_Code({ text, code, image, id }: { text: strin
                         <ContentBlock md={text} id={id} />
                     </Block>
 
-                    {/* <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[-35px]">
-                        <Steps />
-                    </div> */}
                 </div>
 
 
