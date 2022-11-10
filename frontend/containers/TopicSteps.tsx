@@ -7,6 +7,7 @@ import Step from '../components/ui/Step';
 import ControlBar from './ControlBar';
 import { ChevronDoubleRightIcon } from '@heroicons/react/20/solid'
 import { ChevronDoubleLeftIcon } from '@heroicons/react/20/solid'
+import Layout from '../components/layout';
 
 type TopicStepsProps = {
     topicSteps: TopicStepT[],
@@ -69,32 +70,33 @@ const TopicSteps = ({ topicSteps, title, completeStep, showNextButton }: TopicSt
     return (
         <>
             <Navbar title={title} />
-            {/* <Video /> */}
-            {currentTopicStep && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
-            {/* <TextCode_Image md={md} /> */}
-            {/* <Text_Image md={md} /> */}
-            <ControlBar showNext={showNextButton}>
-                <nav aria-label="Progress" className='flex scrollbar-thin scrollbar-none relative z-50  '>
-                    <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('left')}>
-                        <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
-                    </button>
-                    <div className='max-w-md overflow-hidden relative'>
-                        {topicSteps.length > 6 && current > 3 && <div className='fixed w-12 h-full bg-[#021e44bc] left-[3em] top-0 blur-sm scale-y-150 z-[100]'></div>}
-                        <ol role="list" ref={stepsContainer} className="flex items-center ">
-                            {topicSteps.map((step: TopicStepT, stepIdx: number) => (
-                                <li key={step.id} id={`step_${stepIdx}`} className={classNames(stepIdx !== topicSteps.length - 1 ? 'pr-8 sm:pr-10' : '', 'relative')}>
-                                    <Step  {...step} setCurrent={handleClick} status={step.id === current ? 'current' : step.status} />
-                                </li>
-                            ))}
-                        </ol>
-                        {!isSecondLastStep && !isLastStep && topicSteps.length > 6 && <div className='fixed w-12 h-full bg-[#021e44e3] right-[3em] top-0 blur-sm scale-y-150 '></div>}
-                    </div>
-                    <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('right')}>
-                        <ChevronDoubleRightIcon className="m-auto h-8 w-8" aria-hidden="true" />
-                    </button>
-                </nav>
-            </ControlBar>
-
+            <Layout>
+                {/* <Video /> */}
+                {currentTopicStep && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
+                {/* <TextCode_Image md={md} /> */}
+                {/* <Text_Image md={md} /> */}
+                <ControlBar showNext={showNextButton}>
+                    <nav aria-label="Progress" className='flex scrollbar-thin scrollbar-none relative z-50  '>
+                        <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('left')}>
+                            <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
+                        </button>
+                        <div className='max-w-md overflow-hidden relative'>
+                            {topicSteps.length > 6 && current > 3 && <div className='fixed w-12 h-full bg-[#021e44bc] left-[3em] top-0 blur-sm scale-y-150 z-[100]'></div>}
+                            <ol role="list" ref={stepsContainer} className="flex items-center ">
+                                {topicSteps.map((step: TopicStepT, stepIdx: number) => (
+                                    <li key={step.id} id={`step_${stepIdx}`} className={classNames(stepIdx !== topicSteps.length - 1 ? 'pr-8 sm:pr-10' : '', 'relative')}>
+                                        <Step  {...step} setCurrent={handleClick} status={step.id === current ? 'current' : step.status} />
+                                    </li>
+                                ))}
+                            </ol>
+                            {!isSecondLastStep && !isLastStep && topicSteps.length > 6 && <div className='fixed w-12 h-full bg-[#021e44e3] right-[3em] top-0 blur-sm scale-y-150 '></div>}
+                        </div>
+                        <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('right')}>
+                            <ChevronDoubleRightIcon className="m-auto h-8 w-8" aria-hidden="true" />
+                        </button>
+                    </nav>
+                </ControlBar>
+            </Layout>
         </>
     );
 }

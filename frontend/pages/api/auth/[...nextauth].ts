@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { signIn } from '../../../services/auth';
+import { signIn } from '../../../services/signIn';
+
 
 export default NextAuth({
     // Configure one or more authentication providers
@@ -44,10 +45,10 @@ export default NextAuth({
             return Promise.resolve(session);
         },
         jwt: async ({ token, user }) => {
-            const isSignIn = user ? true : false;
+            const isSignIn = !!user;
             if (isSignIn) {
-                token.id = user.id;
-                token.jwt = user.jwt;
+                token.id = user?.id;
+                token.jwt = user?.jwt;
             }
             return Promise.resolve(token);
         },
