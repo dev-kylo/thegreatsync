@@ -6,30 +6,37 @@ import { useState } from 'react';
 import Alert from '../components/ui/Alert';
 
 interface Submission {
-    email: { value: string }, password: { value: string }
+    email: string, password: string
 }
 
 export default function SignIn() {
     const router = useRouter();
     const [error, setError] = useState(false);
 
-    const sendCredentials = async (data: Submission) => {
+    const sendCredentials = async ({ email, password }: Submission) => {
         const result = await signIn('credentials', {
             redirect: false,
-            email: data.email.value,
-            password: data.password.value,
+            email,
+            password
         });
-        if (result?.ok) return router.replace('/');
+        console.log('------RESULT------');
+        console.log(result);
+        const redirectUrl = router.query.redirect as string;;
+        if (result?.ok) return router.replace(redirectUrl || '/');
         setError(true);
     }
 
     const onSubmit = (e: any) => {
         e.preventDefault();
         setError(false);
-        const data = e.target as EventTarget & Submission;
-        if (!data?.email?.value || !data?.email?.value) setError(true);
-        else sendCredentials(data)
+        const form = e.target;
+        const data = Object.fromEntries(new FormData(form)) as unknown as Submission
+        if (!data?.email || !data?.password) setError(true);
+        sendCredentials(data)
     };
+
+
+    console.log(router.query)
 
     return (
         <>
@@ -53,7 +60,7 @@ export default function SignIn() {
                             <div className="mt-8">
 
                                 <div className="mt-6">
-                                    <form action="#" method="POST" className="space-y-6">
+                                    <form action="#" method="POST" className="space-y-6" onSubmit={onSubmit}>
                                         <div>
                                             <label htmlFor="email" className="block text-sm font-medium text-white">
                                                 Email address
@@ -108,7 +115,6 @@ export default function SignIn() {
 
                                         <div>
                                             <button
-                                                onClick={onSubmit}
                                                 type="submit"
                                                 className="flex w-full justify-center rounded-md border border-transparent bg-secondary_red py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                             >

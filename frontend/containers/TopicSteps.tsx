@@ -69,8 +69,8 @@ const TopicSteps = ({ topicSteps, title, completeStep, showNextButton }: TopicSt
 
     return (
         <>
-            <Navbar title={title} />
             <Layout>
+                <Navbar title={title} />
                 {/* <Video /> */}
                 {currentTopicStep && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
                 {/* <TextCode_Image md={md} /> */}

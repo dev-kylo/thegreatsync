@@ -20,7 +20,8 @@ export default NextAuth({
                  * If authenticated, the function should return an object contains the user data.
                  * If not, the function should return `null`.
                  */
-                if (credentials == null) return null;
+                // console.dir(credentials)
+                if (credentials === null || !credentials?.email || !credentials?.password) return null;
                 /**
                  * credentials is defined in the config above.
                  * We can expect it contains two properties: `email` and `password`
@@ -30,8 +31,12 @@ export default NextAuth({
                         email: credentials.email,
                         password: credentials.password,
                     });
+                    console.log('Made it here')
+                    // console.dir(jwt)
                     return { ...user, jwt };
                 } catch (error) {
+                    console.log('SIGN IN FAIL');
+                    console.dir(error)
                     // Sign In Fail
                     return null;
                 }
@@ -40,15 +45,16 @@ export default NextAuth({
     ],
     callbacks: {
         session: async ({ session, token }) => {
-            session.id = token.id;
-            session.jwt = token.jwt;
+            console.log('SESSION CALLBACK')
+            session.id = token.id as string;
+            session.jwt = token.jwt as string;
             return Promise.resolve(session);
         },
         jwt: async ({ token, user }) => {
-            const isSignIn = !!user;
+            const isSignIn = user ? true : false;
             if (isSignIn) {
-                token.id = user?.id;
-                token.jwt = user?.jwt;
+                token.id = user.id;
+                token.jwt = user.jwt;
             }
             return Promise.resolve(token);
         },

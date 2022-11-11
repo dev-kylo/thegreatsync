@@ -1,8 +1,13 @@
 
 import fs from 'fs';
+import { getSession } from 'next-auth/react';
 import { useState } from 'react';
+import Protected from '../containers/Protected';
 import TopicSteps from '../containers/TopicSteps';
+import { serverRedirectObject } from '../libs/helpers';
 import type { TopicStepT } from '../types';
+import { NextPageContext } from 'next';
+import { GetServerSideProps } from 'next';
 
 type P = {
     number: {
@@ -22,6 +27,8 @@ type P = {
         boolean_text: string
     },
 }
+
+
 
 const TopicStepsPage = ({ number, string, undefinedd, boolean }: P) => {
     const topicType = '3col';
@@ -54,13 +61,18 @@ const TopicStepsPage = ({ number, string, undefinedd, boolean }: P) => {
 
 
     return (
-        <TopicSteps topicSteps={topicSteps} title={title} completeStep={handleViewedStep} showNextButton={viewed.length >= topics.length - 1} />
+        <Protected>
+            <TopicSteps topicSteps={topicSteps} title={title} completeStep={handleViewedStep} showNextButton={viewed.length >= topics.length - 1} />
+        </Protected>
     );
 }
 
 export default TopicStepsPage;
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+
+    const session = await getSession(context);
+    if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
 
     const number_text = fs.readFileSync(`mocks/Number_text.md`, 'utf-8')
     const number_code = fs.readFileSync(`mocks/Number_code.md`, 'utf-8');

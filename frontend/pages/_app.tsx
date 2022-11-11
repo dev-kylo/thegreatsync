@@ -5,8 +5,6 @@ import '../styles/global.css';
 import '../styles/duotone_prism.css';
 import '../styles/line_numbers_prism.css';
 import Head from 'next/head'
-import NextPrev from '../containers/ControlBar';
-import Layout from '../components/layout';
 import { SessionProvider } from 'next-auth/react';
 
 function MyApp({ Component, pageProps }: AppProps) {

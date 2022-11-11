@@ -21,3 +21,27 @@ export type TopicStepT = {
     name: string,
     status: 'current' | 'complete' | 'default'
 }
+
+export type ErrorResponse = {
+    data: null,
+    error: {
+        status: number,
+        name: string,
+        message: string,
+        details?: unknown
+    }
+}
+
+export type SignInResponse = {
+    jwt: string,
+    user: {
+        id: number,
+        username: string,
+        email: string,
+        provider: string,
+        confirmed: boolean,
+        blocked: boolean,
+        createdAt: Date,
+        updatedAt: Date
+    }
+}

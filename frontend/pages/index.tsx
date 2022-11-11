@@ -15,7 +15,12 @@ import ControlBar from '../containers/ControlBar';
 import { useSession } from 'next-auth/react';
 import { NextPageContext } from 'next';
 import { getSession } from 'next-auth/react';
-
+import { redirect } from 'next/dist/server/api-utils';
+import Protected from '../containers/Protected';
+import { useRouter } from "next/router";
+import { serverRedirectObject } from '../libs/helpers';
+import { GetServerSideProps } from 'next';
+import Layout from '../components/layout';
 
 const Home = ({ md, blogMd }: { md: string, blogMd: string }) => {
 
@@ -23,35 +28,30 @@ const Home = ({ md, blogMd }: { md: string, blogMd: string }) => {
     const topicType = '3col';
     const title = 'Statements and declarations';
 
-    const { data: session, status } = useSession();
 
-    if (!session)
 
-        return (
-            <>
-                <Navbar title={title} />
-                {/* <Video /> */}
-                {/* <Text_Image_Code code={md} text={blogMd} /> */}
-                {/* <TextCode_Image md={md} /> */}
-                <Text_Image md={md} />
-                {/* <ControlBar /> */}
-            </>
-        );
+    return (
+        <>
+            <Protected>
+                <Layout>
+                    <Navbar title={title} />
+                    {/* <Video /> */}
+                    {/* <Text_Image_Code code={md} text={blogMd} /> */}
+                    {/* <TextCode_Image md={md} /> */}
+                    <Text_Image md={md} />
+                </Layout>
+            </Protected>
+            {/* <ControlBar /> */}
+        </>
+    );
 }
 
 export default Home
 
-export async function getServerSideProps(context: NextPageContext) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context);
-    // Check if session exists or not, if not, redirect
-    if (session == null) {
-        return {
-            redirect: {
-                destination: '/signin',
-                permanent: true,
-            },
-        };
-    }
+    if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
+
 
     const md = fs.readFileSync(`mocks/MockCode.md`, 'utf-8');
     const blogMd = fs.readFileSync(`mocks/MockBlog.md`, 'utf-8');

@@ -1,6 +1,8 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { Disclosure } from '@headlessui/react'
+import { signOut } from 'next-auth/react'
+
 
 const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
 
@@ -21,8 +23,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                 Settings
             </Disclosure.Button>
             <Disclosure.Button
-                as="a"
-                href="#"
+                onClick={() => signOut()}
                 className="mt-1 block rounded-md px-3 py-2 text-base font-medium text-indigo-200 hover:bg-indigo-600 hover:text-indigo-100"
             >
                 Sign out
@@ -75,7 +76,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                     <Menu.Item>
                         {({ active }) => (
                             <a
-                                href="#"
+                                onClick={() => signOut({ callbackUrl: 'http://localhost:3000/' })}
                                 className={`${active ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
                             >
                                 Logout
