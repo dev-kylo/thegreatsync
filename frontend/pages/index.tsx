@@ -21,14 +21,13 @@ import { useRouter } from "next/router";
 import { serverRedirectObject } from '../libs/helpers';
 import { GetServerSideProps } from 'next';
 import Layout from '../components/layout';
+import { getText } from '../services/queries';
+import axios from 'axios';
 
-const Home = ({ md, blogMd }: { md: string, blogMd: string }) => {
+const Home = ({ md, blogMd, text }: { md: string, blogMd: string, text: any }) => {
 
-
-    const topicType = '3col';
     const title = 'Statements and declarations';
-
-
+    console.log('--------ANNND THE DATA IN PROGRAM IS ---------', text);
 
     return (
         <>
@@ -38,7 +37,7 @@ const Home = ({ md, blogMd }: { md: string, blogMd: string }) => {
                     {/* <Video /> */}
                     {/* <Text_Image_Code code={md} text={blogMd} /> */}
                     {/* <TextCode_Image md={md} /> */}
-                    <Text_Image md={md} />
+                    <Text_Image md={text.data.attributes.text} />
                 </Layout>
             </Protected>
             {/* <ControlBar /> */}
@@ -52,13 +51,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
 
-
     const md = fs.readFileSync(`mocks/MockCode.md`, 'utf-8');
     const blogMd = fs.readFileSync(`mocks/MockBlog.md`, 'utf-8');
+    let text, error;
+    axios.interceptors.request.use(
+        (config) => {
+            if (config.headers) config.headers['Authorization'] = `Bearer ${session.jwt}`;
+            return config;
+        }
+    )
+    try {
+        text = await getText('1', axios)
+    } catch (e) {
+        console.log(e.error);
+        error = true;
+    }
+    console.log(text)
     return {
         props: {
             md,
             blogMd,
+            text: text || ''
         },
     };
 }
