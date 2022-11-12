@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_media_text_image_codes",
+  "info": {
+    "displayName": "text_image_code",
+    "icon": "broom"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "richtext",
+      "required": true
+    },
+    "image_alt": {
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    },
+    "code": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

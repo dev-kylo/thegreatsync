@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_media_text_images",
+  "info": {
+    "displayName": "text_image",
+    "icon": "photo-video"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "richtext",
+      "required": true
+    },
+    "text_image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    }
+  }
+}
