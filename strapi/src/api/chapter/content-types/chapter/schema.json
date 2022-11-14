@@ -4,7 +4,8 @@
   "info": {
     "singularName": "chapter",
     "pluralName": "chapters",
-    "displayName": "Chapter"
+    "displayName": "Chapter",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -18,6 +19,11 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::page.page"
+    },
+    "menu": {
+      "type": "component",
+      "repeatable": false,
+      "component": "menu.menu-info"
     }
   }
 }

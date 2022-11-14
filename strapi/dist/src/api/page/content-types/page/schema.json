@@ -32,6 +32,11 @@
                 "media.text-image"
             ],
             "required": true
+        },
+        "menu": {
+            "type": "component",
+            "repeatable": false,
+            "component": "menu.menu-info"
         }
     }
 }
