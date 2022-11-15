@@ -28,7 +28,7 @@ const Home = ({ md, blogMd, menu }: { md: string, blogMd: string, menu: any }) =
 
     const title = 'Statements and declarations';
     console.log('--------ANNND THE DATA IN PROGRAM IS ---------', menu);
-    const menuData = mapMenuChapters(menu);
+    const menuData = mapMenuChapters(menu, 'the-great-sync-learn-js');
 
     return (
         <>
@@ -57,6 +57,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     let menu, error;
     try {
         menu = await getChapters(axios, session);
+
     } catch (e) {
         console.log(e);
         error = true;

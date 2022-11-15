@@ -1,29 +1,31 @@
 import { Disclosure } from '@headlessui/react'
+import Link from 'next/link'
 import { mockMenu } from '../../mocks/MockMenu'
 import type { MenuItem } from '../../types'
 import MenuIcon from './MenuIcon'
 import ProgressIcon from './ProgressIcon'
-// import { mockMenu } from '../../mocks/MockMenu'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
 function createMenuLink(item: MenuItem) {
-    <div key={item.name}>
-        <a
-            href="#"
-            className={classNames(
-                item.current
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md'
-            )}
-        >
-            Icon
-            {item.name}
-        </a>
-    </div>
+    <Link href={item.href!}>
+        <div key={item.name}>
+            <a
+
+                className={classNames(
+                    item.current
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md'
+                )}
+            >
+                Icon
+                {item.name}
+            </a>
+        </div>
+    </Link>
 }
 
 function createMenuDropDownLink(children: MenuItem[]) {
