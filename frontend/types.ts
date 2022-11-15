@@ -8,6 +8,7 @@ export type MenuItem = {
     type?: MenuType
     current?: boolean;
     href?: string;
+    orderNumber: number;
     children?: MenuItem[]
 }
 
@@ -44,4 +45,71 @@ export type SignInResponse = {
         createdAt: Date,
         updatedAt: Date
     }
+}
+
+export interface StrapiResponseMetaData {
+    createdAt: Date;
+    updatedAt: Date;
+    publishedAt: Date;
+}
+
+export interface ChaptersResponse {
+    data: StrapiData[];
+    meta: Meta;
+}
+
+export interface StrapiData {
+    id: number;
+    attributes: ChaptersAttributes;
+}
+
+export interface ChaptersAttributes extends StrapiResponseMetaData {
+    title: string;
+    menu: Menu;
+    sub_chapters: {
+        data: SubChapters[]
+    };
+}
+
+export interface Menu {
+    id: number;
+    icon?: null | string;
+    orderNumber: number;
+}
+
+export interface Pages {
+    data: Page[];
+}
+
+export interface SubChapters {
+    id: number;
+    attributes: SubChapterAttributes;
+}
+
+export interface SubChapterAttributes extends StrapiResponseMetaData {
+    title: string;
+    menu: Menu | null;
+    pages?: Pages;
+}
+
+export interface Page {
+    id: number;
+    attributes: PageAttributes;
+}
+
+export interface PageAttributes extends StrapiResponseMetaData {
+    title: string;
+    type: string;
+    menu: Menu;
+}
+
+export interface Meta {
+    pagination: Pagination;
+}
+
+export interface Pagination {
+    page: number;
+    pageSize: number;
+    pageCount: number;
+    total: number;
 }

@@ -36,7 +36,7 @@ export default NextAuth({
                     return { ...user, jwt };
                 } catch (error) {
                     console.log('SIGN IN FAIL');
-                    console.dir(error)
+                    // console.dir(error)
                     // Sign In Fail
                     return null;
                 }

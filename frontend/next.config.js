@@ -4,8 +4,6 @@ const nextConfig = {
   images: {
     domains: [
       'localhost',
-      'next-kylo-reddit.s3.eu-central-1.amazonaws.com',
-      'next-kylo-reddit.s3.amazonaws.com',
       'placeimg.com',
       'res.cloudinary.com'
     ],

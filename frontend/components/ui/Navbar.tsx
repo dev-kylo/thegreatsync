@@ -7,9 +7,10 @@ import { Bars3Icon } from '@heroicons/react/24/outline'
 import SlideOver from './SlideOver'
 import TitleStrip from './TitleStrip'
 import Menu from './Menu'
+import { MenuItem } from '../../types'
 
 
-export default function Navbar({ title }: { title: string }) {
+export default function Navbar({ title, menuData }: { title: string, menuData: MenuItem[] }) {
 
     const [openMenu, setOpenMenu] = useState(false);
 
@@ -32,7 +33,7 @@ export default function Navbar({ title }: { title: string }) {
                 </div>
             </Disclosure>
             <SlideOver open={openMenu} setOpen={setOpenMenu}>
-                <Menu />
+                <Menu menuData={menuData} />
             </SlideOver>
         </>
     )

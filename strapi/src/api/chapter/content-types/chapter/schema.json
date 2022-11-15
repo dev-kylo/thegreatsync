@@ -15,15 +15,15 @@
     "title": {
       "type": "string"
     },
-    "pages": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::page.page"
-    },
     "menu": {
       "type": "component",
       "repeatable": false,
       "component": "menu.menu-info"
+    },
+    "sub_chapters": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::subchapter.subchapter"
     }
   }
 }

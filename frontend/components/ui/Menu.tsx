@@ -1,8 +1,9 @@
 import { Disclosure } from '@headlessui/react'
+import { mockMenu } from '../../mocks/MockMenu'
 import type { MenuItem } from '../../types'
 import MenuIcon from './MenuIcon'
 import ProgressIcon from './ProgressIcon'
-import { mockMenu } from '../../mocks/MockMenu'
+// import { mockMenu } from '../../mocks/MockMenu'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -82,8 +83,15 @@ function createMenuDropDown(item: MenuItem) {
     )
 }
 
-export default function Menu() {
-    return mockMenu.map((item) =>
+
+export default function Menu({ menuData }: { menuData: MenuItem[] }) {
+    console.log(menuData)
+    const menuLinks = menuData.map((item) =>
         !item.children ? createMenuLink(item) : createMenuDropDown(item)
+    );
+    return (
+        <>
+            {menuLinks}
+        </>
     )
 }
