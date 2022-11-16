@@ -8,7 +8,7 @@ exports.default = ({ env }) => ({
             port: env.int('DATABASE_PORT', 5432),
             database: env('DATABASE_NAME', 'tgs_test'),
             user: env('DATABASE_USERNAME', 'tgs_user'),
-            password: env('DATABASE_PASSWORD', 'newachilles12'),
+            password: env('DATABASE_PASSWORD'),
             ssl: env.bool('DATABASE_SSL', false),
         },
     },
