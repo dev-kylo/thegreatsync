@@ -29,3 +29,19 @@ export const getChapters = async (url?: string, session?: Session) => {
         : await axios.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/chapters?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });;
     return res.data;
 };
+
+export const getPage = async (url?: string, session?: Session) => {
+
+    const query = qs.stringify({
+        populate: ['content', 'content.image'],
+    }, {
+        encodeValuesOnly: true, // prettify URL
+    });
+
+    console.log('--------PAGE QUERY-------');
+    console.log(query);
+
+    const res = !session ? await httpClient.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}${url || '/api/pages'}?${query}`)
+        : await axios.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/pages?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });;
+    return res.data;
+};
