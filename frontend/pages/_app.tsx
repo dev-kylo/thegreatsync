@@ -6,6 +6,8 @@ import '../styles/duotone_prism.css';
 import '../styles/line_numbers_prism.css';
 import Head from 'next/head'
 import { SessionProvider } from 'next-auth/react';
+import { ChaptersResponse } from '../types';
+import NavContextProvider from '../context/nav';
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
@@ -17,7 +19,9 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
             </Head>
             <main>
-                <Component {...pageProps} />
+                <NavContextProvider>
+                    <Component {...pageProps} />
+                </NavContextProvider>
             </main>
         </SessionProvider>
 

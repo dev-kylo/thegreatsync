@@ -1,24 +1,33 @@
 import { GetServerSideProps } from 'next';
-import Link from 'next/link.js';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import Protected from '../../../../../containers/Protected';
+import Layout from '../../../../../components/layout';
+import Navbar from '../../../../../components/ui/Navbar';
+import { useContext } from 'react';
+import { NavContext } from '../../../../../context/nav';
+
+type CoursePageProps = {
+    title: string | number;
+}
 
 
-export default function Subreddit({ chapter, subchapter, pageId }: { chapter: string, subchapter: string, pageId: string }) {
+export default function CoursePage({ title }: CoursePageProps) {
     const router = useRouter();
     const { data: session, status } = useSession();
-
-    console.log('---------EXTRACTED PAARAAANS-------');
-    console.log({ chapter, subchapter, pageId })
+    const { menuData } = useContext(NavContext)
 
 
     return (
-        <>
-            <h2> Whatever</h2>
-            <p>Chapter: {chapter}</p>
-            <p>Subchapter: {subchapter}</p>
-            <p>Page: {pageId}</p>
-        </>
+        <Protected>
+            <Layout>
+                <Navbar title={`${title}`} menuData={menuData} />
+                {/* <Video /> */}
+                {/* <Text_Image_Code code={md} text={blogMd} /> */}
+                {/* <TextCode_Image md={md} /> */}
+                {/* <Text_Image md={text.data.attributes.text} /> */}
+            </Layout>
+        </Protected>
     );
 }
 
@@ -26,6 +35,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const { chapter, subchapter, pageId } = context.params as { chapter: string, subchapter: string, pageId: string };
 
     return {
-        props: { chapter, subchapter, pageId }
+        props: { title: pageId }
     };
 };

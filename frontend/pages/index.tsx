@@ -11,24 +11,20 @@ import TextCode_Image from '../components/layout/screens/TextCode_Image';
 import NextPrev from '../containers/ControlBar';
 import Video from '../components/layout/screens/Video';
 import Navbar from '../components/ui/Navbar';
-import ControlBar from '../containers/ControlBar';
-import { useSession } from 'next-auth/react';
-import { NextPageContext } from 'next';
 import { getSession } from 'next-auth/react';
-import { redirect } from 'next/dist/server/api-utils';
-import Protected from '../containers/Protected';
-import { useRouter } from "next/router";
-import { mapMenuChapters, serverRedirectObject } from '../libs/helpers';
+import { serverRedirectObject } from '../libs/helpers';
 import { GetServerSideProps } from 'next';
+import { getChapters } from '../services/queries';
+import { useContext } from 'react';
+import { NavContext } from '../context/nav';
+import Protected from '../containers/Protected';
 import Layout from '../components/layout';
-import { getChapters, getText } from '../services/queries';
-import axios from 'axios';
 
-const Home = ({ md, blogMd, menu }: { md: string, blogMd: string, menu: any }) => {
+const Home = ({ md, blogMd }: { md: string, blogMd: string }) => {
+
+    const { menuData } = useContext(NavContext)
 
     const title = 'Statements and declarations';
-    console.log('--------ANNND THE DATA IN PROGRAM IS ---------', menu);
-    const menuData = mapMenuChapters(menu, 'the-great-sync-learn-js');
 
     return (
         <>
@@ -56,10 +52,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const blogMd = fs.readFileSync(`mocks/MockBlog.md`, 'utf-8');
     let menu, error;
     try {
-        menu = await getChapters(axios, session);
-
+        menu = await getChapters('/api/chapters', session);
     } catch (e) {
-        console.log(e);
+        console.log('*******ERRRRROOORRRR**********')
         error = true;
     }
 

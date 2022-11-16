@@ -1,7 +1,8 @@
-import axios, { AxiosStatic } from "axios";
+import axios, { AxiosInstance, AxiosStatic } from "axios";
 import { ChaptersResponse } from "../types";
 const qs = require('qs');
 import type { Session } from "next-auth";
+import { httpClient } from "../libs/axios";
 
 const strapiUrl = process.env.STRAPI_URL;
 
@@ -13,7 +14,7 @@ export const getText = async (id: string, axios: AxiosStatic) => {
 
 
 
-export const getChapters = async (axios: AxiosStatic, session: Session) => {
+export const getChapters = async (url?: string, session?: Session) => {
 
     const query = qs.stringify({
         populate: ['menu', 'sub_chapters', 'sub_chapters.menu', 'sub_chapters.pages', 'sub_chapters.pages.menu'],
@@ -22,8 +23,9 @@ export const getChapters = async (axios: AxiosStatic, session: Session) => {
     });
 
     console.log('--------QUERY-------');
-    console.log(query)
+    console.log(query);
 
-    const res = await axios.get<ChaptersResponse>(`${strapiUrl}/api/chapters?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
+    const res = !session ? await httpClient.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}${url || '/api/chapters'}?${query}`)
+        : await axios.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/chapters?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });;
     return res.data;
 };
