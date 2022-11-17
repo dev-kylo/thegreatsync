@@ -6,6 +6,7 @@ import Step from '../components/ui/Step';
 import ControlBar from './ControlBar';
 import { ChevronDoubleRightIcon } from '@heroicons/react/20/solid'
 import { ChevronDoubleLeftIcon } from '@heroicons/react/20/solid'
+import Text_Image from '../components/layout/screens/Text_Image';
 
 type PageStepsProps = {
     pageSteps: PageStep[],
@@ -14,18 +15,11 @@ type PageStepsProps = {
     type: PageType
 }
 
-function nextStepAfterLastCompleted(ar: PageStep[] = []): number {
-    const filtered = ar.filter((stp => stp.status === 'complete'));
-    if (filtered.length < 1) return 1;
-    if (filtered.length === ar.length) return filtered[filtered.length - 1].orderNumber!;
-    return filtered[filtered.length - 1].orderNumber! + 1
-}
-
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-const PageSteps = ({ pageSteps, completeStep, showNextButton }: PageStepsProps) => {
+const PageSteps = ({ pageSteps, completeStep, showNextButton, type }: PageStepsProps) => {
     const [current, setCurrent] = useState(pageSteps[0].id); // Keeps Track of current id
     const stepsContainer = useRef<HTMLOListElement>(null);
 
@@ -67,10 +61,11 @@ const PageSteps = ({ pageSteps, completeStep, showNextButton }: PageStepsProps) 
 
     return (
         <>
-            {/* <Video /> */}
-            {currentTopicStep && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
-            {/* <TextCode_Image md={md} /> */}
-            {/* <Text_Image md={md} /> */}
+
+            {type === 'text_image_code' && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
+
+            {type === 'text_image' && <Text_Image id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
+
             <ControlBar showNext={showNextButton}>
                 <nav aria-label="Progress" className='flex scrollbar-thin scrollbar-none relative z-50  '>
                     <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('left')}>
