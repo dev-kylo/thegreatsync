@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosStatic } from "axios";
-import { ChaptersResponse } from "../types";
+import { ChaptersResponse, PageData, PageResponse } from "../types";
 const qs = require('qs');
 import type { Session } from "next-auth";
 import { httpClient } from "../libs/axios";
@@ -12,8 +12,6 @@ export const getText = async (id: string, axios: AxiosStatic) => {
 };
 
 
-
-
 export const getChapters = async (url?: string, session?: Session) => {
 
     const query = qs.stringify({
@@ -22,26 +20,18 @@ export const getChapters = async (url?: string, session?: Session) => {
         encodeValuesOnly: true, // prettify URL
     });
 
-    console.log('--------QUERY-------');
-    console.log(query);
-
     const res = !session ? await httpClient.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}${url || '/api/chapters'}?${query}`)
         : await axios.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/chapters?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });;
     return res.data;
 };
 
-export const getPage = async (url?: string, session?: Session) => {
+export const getPage = async (id: string | number, session: Session): Promise<PageResponse> => {
 
     const query = qs.stringify({
-        populate: ['content', 'content.image'],
+        populate: ['content', 'content.image']
     }, {
         encodeValuesOnly: true, // prettify URL
     });
-
-    console.log('--------PAGE QUERY-------');
-    console.log(query);
-
-    const res = !session ? await httpClient.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}${url || '/api/pages'}?${query}`)
-        : await axios.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/pages?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });;
+    const res = await axios.get<PageResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/pages/${id}?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
     return res.data;
 };

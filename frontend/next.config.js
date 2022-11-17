@@ -5,7 +5,8 @@ const nextConfig = {
     domains: [
       'localhost',
       'placeimg.com',
-      'res.cloudinary.com'
+      'res.cloudinary.com',
+      'the-great-sync-bucket.s3.amazonaws.com'
     ],
   },
 }

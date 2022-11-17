@@ -1,5 +1,7 @@
 export type MenuType = 'watch' | 'code' | 'read' | 'draw' | 'imagine' | 'listen' | 'play';
 
+export type PageType = 'text_image_code' | 'video' | 'text_image'
+
 export type MenuItem = {
     name: string;
     level: number,
@@ -58,9 +60,52 @@ export interface ChaptersResponse {
     meta: Meta;
 }
 
+export interface PageResponse {
+    data: PageData;
+    meta: Meta;
+}
+
 export interface StrapiData {
     id: number;
     attributes: ChaptersAttributes;
+}
+
+export interface PageData {
+    id: number;
+    attributes: PageAttributes;
+}
+
+export interface PageAttributes {
+    title: string;
+    type: PageType;
+    createdAt: Date;
+    updatedAt: Date;
+    publishedAt: Date;
+    content: PageContent[];
+}
+
+export interface PageContent {
+    id: number;
+    __component: string;
+    code: string;
+    image_alt: string;
+    text: string;
+    image: ImageComp;
+}
+
+export interface ImageComp {
+    data: ImageData;
+}
+
+export interface ImageData {
+    id: number;
+    attributes: ImageAttributes;
+}
+
+export interface ImageAttributes {
+    width: number;
+    height: number;
+    url: string;
 }
 
 export interface ChaptersAttributes extends StrapiResponseMetaData {

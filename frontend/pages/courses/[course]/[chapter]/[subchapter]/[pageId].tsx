@@ -1,43 +1,70 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import Protected from '../../../../../containers/Protected';
 import Layout from '../../../../../components/layout';
 import Navbar from '../../../../../components/ui/Navbar';
 import { useContext } from 'react';
 import { NavContext } from '../../../../../context/nav';
 import { getPage } from '../../../../../services/queries';
+import { serverRedirectObject } from '../../../../../libs/helpers';
+import { PageContent, PageType } from '../../../../../types';
+import TopicSteps from '../../../../../containers/TopicSteps';
+import Text_Image_Code from '../../../../../components/layout/screens/Text_Image_Code';
+import Text_Image from '../../../../../components/layout/screens/Text_Image';
+import Video from '../../../../../components/layout/screens/Video';
+import ControlBar from '../../../../../containers/ControlBar';
 
 type CoursePageProps = {
     title: string | number;
+    type: PageType,
+    content: PageContent[]
 }
 
 
-export default function CoursePage({ title }: CoursePageProps) {
+export default function CoursePage({ title, type, content }: CoursePageProps) {
     const router = useRouter();
     const { data: session, status } = useSession();
     const { menuData } = useContext(NavContext);
 
-    getPage();
+    const { id, code, text, image } = content[0];
+    let contentLayout = <></>
+
+    if (content.length > 1)
+        contentLayout = <Text_Image_Code code={code} text={text} image={image} id={id} />
+
+    else if (type === 'text_image_code')
+        contentLayout = <Text_Image_Code code={code} text={text} image={image} id={id} />
+
+    else if (type === 'text_image')
+        contentLayout = <Text_Image text={text} image={image} id={id} />
+
+    else if (type === 'video')
+        contentLayout = <Video />
 
     return (
         <Protected>
             <Layout>
                 <Navbar title={`${title}`} menuData={menuData} />
-                {/* <Video /> */}
-                {/* <Text_Image_Code code={md} text={blogMd} /> */}
-                {/* <TextCode_Image md={md} /> */}
-                {/* <Text_Image md={text.data.attributes.text} /> */}
+                {contentLayout}
+                <ControlBar />
             </Layout>
         </Protected>
     );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+    const session = await getSession(context);
+    if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     const { chapter, subchapter, pageId } = context.params as { chapter: string, subchapter: string, pageId: string };
-
+    const resp = (await getPage(pageId, session)).data;
+    const { title, type, content } = resp.attributes;
 
     return {
-        props: { title: pageId }
+        props: {
+            title,
+            type,
+            content,
+        }
     };
 };
