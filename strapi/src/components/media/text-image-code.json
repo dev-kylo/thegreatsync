@@ -26,6 +26,9 @@
     "code": {
       "type": "richtext",
       "required": true
+    },
+    "transparent_image": {
+      "type": "boolean"
     }
   }
 }

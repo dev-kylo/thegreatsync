@@ -62,7 +62,7 @@ const PageSteps = ({ pageSteps, completeStep, showNextButton, type }: PageStepsP
     return (
         <>
 
-            {type === 'text_image_code' && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
+            {type === 'text_image_code' && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} showImageBorder={currentTopicStep?.transparent_image} />}
 
             {type === 'text_image' && <Text_Image id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
 

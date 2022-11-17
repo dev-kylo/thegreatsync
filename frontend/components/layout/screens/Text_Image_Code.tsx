@@ -3,9 +3,9 @@ import ContentBlock from "../ContentBlock";
 import Block from "../Block";
 import { ImageComp } from '../../../types';
 
-type Text_Image_Code_Props = { text: string, code: string, image: ImageComp, id: number }
+type Text_Image_Code_Props = { text: string, code: string, image: ImageComp, id: number, showImageBorder?: boolean }
 
-export default function Text_Image_Code({ text, code, image, id }: Text_Image_Code_Props) {
+export default function Text_Image_Code({ text, code, image, id, showImageBorder }: Text_Image_Code_Props) {
 
     const { width, height, url } = image?.data?.attributes;
 
@@ -19,7 +19,7 @@ export default function Text_Image_Code({ text, code, image, id }: Text_Image_Co
                         <ContentBlock md={code} id={id} />
                     </Block>
 
-                    <Block image outerClasses="w-full relative">
+                    <Block image showBorder={showImageBorder} outerClasses="w-full relative">
                         <Image
                             alt="Mountains"
                             src={url || "https://res.cloudinary.com/the-great-sync/image/upload/v1667044950/2000x2000/Whirlpool_F_a_g1mm3x.jpg"}
