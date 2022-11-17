@@ -9,11 +9,11 @@ import { NavContext } from '../../../../../context/nav';
 import { getPage } from '../../../../../services/queries';
 import { serverRedirectObject } from '../../../../../libs/helpers';
 import { PageContent, PageType } from '../../../../../types';
-import TopicSteps from '../../../../../containers/TopicSteps';
 import Text_Image_Code from '../../../../../components/layout/screens/Text_Image_Code';
 import Text_Image from '../../../../../components/layout/screens/Text_Image';
 import Video from '../../../../../components/layout/screens/Video';
 import ControlBar from '../../../../../containers/ControlBar';
+import PageStepsController from '../../../../../containers/PageStepsController';
 
 type CoursePageProps = {
     title: string | number;
@@ -30,11 +30,13 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
     const { id, code, text, image } = content[0];
     let contentLayout = <></>
 
-    if (content.length > 1)
-        contentLayout = <Text_Image_Code code={code} text={text} image={image} id={id} />
+    const hasPageSteps = content.length > 1;
+
+    if (hasPageSteps)
+        contentLayout = <PageStepsController pageContent={content} type={type} />
 
     else if (type === 'text_image_code')
-        contentLayout = <Text_Image_Code code={code} text={text} image={image} id={id} />
+        contentLayout = <Text_Image_Code code={code!} text={text} image={image} id={id} />
 
     else if (type === 'text_image')
         contentLayout = <Text_Image text={text} image={image} id={id} />
@@ -47,7 +49,7 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
             <Layout>
                 <Navbar title={`${title}`} menuData={menuData} />
                 {contentLayout}
-                <ControlBar />
+                {!hasPageSteps && <ControlBar />}
             </Layout>
         </Protected>
     );

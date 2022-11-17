@@ -3,7 +3,7 @@ import fs from 'fs';
 import { getSession } from 'next-auth/react';
 import { useState } from 'react';
 import Protected from '../containers/Protected';
-import TopicSteps from '../containers/TopicSteps';
+import TopicSteps from '../containers/PageSteps';
 import { serverRedirectObject } from '../libs/helpers';
 import type { TopicStepT } from '../types';
 import { NextPageContext } from 'next';

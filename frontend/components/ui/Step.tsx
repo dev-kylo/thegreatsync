@@ -1,11 +1,11 @@
-import type { TopicStepT } from '../../types';
+import type { PageStep } from '../../types';
 import { CheckIcon } from '@heroicons/react/20/solid'
 
-type StepProps = TopicStepT & {
+type StepProps = PageStep & {
     setCurrent: (id: number) => void
 }
 
-const Step = ({ name, status, id, orderNumber, setCurrent }: StepProps) => {
+const Step = ({ status, id, orderNumber, setCurrent }: StepProps) => {
 
     const linkStyles = {
         default: "group h-6 w-6 border-2 border-gray-300 bg-white hover:border-gray-400  hover:bg-primary_green  hover:text-white hover:scale-110",
@@ -25,7 +25,7 @@ const Step = ({ name, status, id, orderNumber, setCurrent }: StepProps) => {
                 {status === 'current' && <div className="h-8 w-8 rounded-full flex justify-center items-center p-0 m-0" aria-hidden="true" >{orderNumber}</div>}
                 {status === 'complete' && < CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />}
                 {status === 'default' && <div className="h-5 w-5 rounded-full flex justify-center items-center p-0 m-0" aria-hidden="true" >{orderNumber}</div>}
-                <span className="sr-only">{name}</span>
+                {/* <span className="sr-only">{name}</span> */}
             </div>
         </>
     )

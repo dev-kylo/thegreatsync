@@ -15,7 +15,7 @@ export type MenuItem = {
 }
 
 
-export type TopicStepT = {
+export type PageStepT = {
     image: string;
     code?: string;
     text: string;
@@ -87,11 +87,18 @@ export interface PageAttributes {
 export interface PageContent {
     id: number;
     __component: string;
-    code: string;
+    code?: string;
     image_alt: string;
     text: string;
+    orderNumber?: number;
     image: ImageComp;
 }
+
+
+export type PageStep = PageContent & {
+    status: 'current' | 'complete' | 'default'
+}
+
 
 export interface ImageComp {
     data: ImageData;
