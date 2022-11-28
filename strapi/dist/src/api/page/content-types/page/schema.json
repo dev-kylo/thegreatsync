@@ -37,6 +37,10 @@
             "type": "component",
             "repeatable": false,
             "component": "menu.menu-info"
+        },
+        "visible": {
+            "type": "boolean",
+            "default": true
         }
     }
 }

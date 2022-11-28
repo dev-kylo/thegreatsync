@@ -78,6 +78,7 @@ export interface PageData {
 export interface PageAttributes {
     title: string;
     type: PageType;
+    visible: boolean;
     createdAt: Date;
     updatedAt: Date;
     publishedAt: Date;
@@ -118,6 +119,7 @@ export interface ImageAttributes {
 
 export interface ChaptersAttributes extends StrapiResponseMetaData {
     title: string;
+    visible: boolean;
     menu: Menu;
     sub_chapters: {
         data: SubChapters[]
@@ -141,6 +143,7 @@ export interface SubChapters {
 
 export interface SubChapterAttributes extends StrapiResponseMetaData {
     title: string;
+    visible: boolean;
     menu: Menu | null;
     pages?: Pages;
 }

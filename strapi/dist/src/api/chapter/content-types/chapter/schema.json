@@ -24,6 +24,10 @@
             "type": "relation",
             "relation": "oneToMany",
             "target": "api::subchapter.subchapter"
+        },
+        "visible": {
+            "type": "boolean",
+            "default": true
         }
     }
 }

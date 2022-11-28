@@ -4,7 +4,8 @@
     "info": {
         "singularName": "subchapter",
         "pluralName": "subchapters",
-        "displayName": "SubChapter"
+        "displayName": "SubChapter",
+        "description": ""
     },
     "options": {
         "draftAndPublish": true
@@ -24,6 +25,10 @@
             "type": "component",
             "repeatable": false,
             "component": "menu.menu-info"
+        },
+        "visible": {
+            "type": "boolean",
+            "default": true
         }
     }
 }
