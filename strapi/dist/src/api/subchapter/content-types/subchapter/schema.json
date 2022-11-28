@@ -24,7 +24,8 @@
         "menu": {
             "type": "component",
             "repeatable": false,
-            "component": "menu.menu-info"
+            "component": "menu.menu-info",
+            "required": true
         },
         "visible": {
             "type": "boolean",

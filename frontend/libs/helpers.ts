@@ -1,4 +1,4 @@
-import { ChaptersResponse, MenuItem, MenuType, Page, SubChapters } from "../types";
+import { ChaptersResponse, MenuItem, MenuType, Page, ChapterData, SubChapter } from "../types";
 
 export function serverRedirectObject(url: string, permanent: boolean = true) {
     return {
@@ -9,9 +9,16 @@ export function serverRedirectObject(url: string, permanent: boolean = true) {
     };
 }
 
+type EntityWithMenuOrder = ChapterData | SubChapter | Page
+
+function sortByOrderNumber(a: EntityWithMenuOrder, b: EntityWithMenuOrder) {
+    return +a.attributes.menu!.orderNumber - b.attributes.menu!.orderNumber;
+}
+
 function mapMenuPages(pages: Page[], prependLinkUrl: string): MenuItem[] {
     return pages
         .filter(page => page.attributes.visible)
+        .sort(sortByOrderNumber)
         .map((page) => {
             const mappedPage = {} as Partial<MenuItem>;
             mappedPage.level = 3;
@@ -25,9 +32,10 @@ function mapMenuPages(pages: Page[], prependLinkUrl: string): MenuItem[] {
         })
 }
 
-function mapMenuSubChapters(subchapters: SubChapters[], prependLinkUrl: string): MenuItem[] {
+function mapMenuSubChapters(subchapters: SubChapter[], prependLinkUrl: string): MenuItem[] {
     return subchapters
         .filter(subchapter => subchapter.attributes.visible)
+        .sort(sortByOrderNumber)
         .map((subchapter) => {
             const mappedSubChapter = {} as Partial<MenuItem>;
             const pages = subchapter.attributes.pages?.data;
@@ -44,6 +52,7 @@ export function mapMenuChapters(data: ChaptersResponse, courseUid: string): Menu
     const chapters = data.data;
     return chapters
         .filter(chapter => chapter.attributes.visible)
+        .sort(sortByOrderNumber)
         .map(chapter => {
             const { id: chapterId, attributes } = chapter;
             const chapterTitle = attributes.title;

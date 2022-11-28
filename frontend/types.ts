@@ -56,7 +56,7 @@ export interface StrapiResponseMetaData {
 }
 
 export interface ChaptersResponse {
-    data: StrapiData[];
+    data: ChapterData[];
     meta: Meta;
 }
 
@@ -65,7 +65,7 @@ export interface PageResponse {
     meta: Meta;
 }
 
-export interface StrapiData {
+export interface ChapterData {
     id: number;
     attributes: ChaptersAttributes;
 }
@@ -122,7 +122,7 @@ export interface ChaptersAttributes extends StrapiResponseMetaData {
     visible: boolean;
     menu: Menu;
     sub_chapters: {
-        data: SubChapters[]
+        data: SubChapter[]
     };
 }
 
@@ -136,7 +136,7 @@ export interface Pages {
     data: Page[];
 }
 
-export interface SubChapters {
+export interface SubChapter {
     id: number;
     attributes: SubChapterAttributes;
 }
@@ -155,7 +155,7 @@ export interface Page {
 
 export interface PageAttributes extends StrapiResponseMetaData {
     title: string;
-    type: string;
+    type: PageType;
     menu: Menu;
 }
 
