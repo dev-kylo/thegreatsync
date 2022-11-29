@@ -29,7 +29,8 @@
       "type": "dynamiczone",
       "components": [
         "media.text-image",
-        "media.text-image-code"
+        "media.text-image-code",
+        "media.video"
       ],
       "required": true
     },
