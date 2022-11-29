@@ -1,24 +1,98 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { mapMenuChapters } from "../libs/helpers";
 import { MenuItem, ChaptersResponse } from "../types";
 import useSWR from 'swr'
 import { getChapters } from "../services/queries";
+import { DoublyLinkedList, Node } from "../libs/doublyLinkedList";
+import { useRouter } from "next/router";
 
-export const NavContext = React.createContext<{ menuData: MenuItem[] }>({
-    menuData: []
+
+type NavProviderValues = {
+    menuData: MenuItem[]
+    courseSequence?: DoublyLinkedList | null
+    nextPage: () => void
+    prevPage: () => void
+    showNext: boolean
+    showPrev: boolean
+}
+
+export const NavContext = React.createContext<NavProviderValues>({
+    menuData: [],
+    courseSequence: null,
+    nextPage: () => { },
+    prevPage: () => { },
+    showNext: false,
+    showPrev: false
 });
 
+function addToList(item: MenuItem, list: DoublyLinkedList) {
+    if (item.children) item.children.forEach(itemChild => addToList(itemChild, list))
+    else list.addToTail(item)
+}
+
+function createList(menuItems: MenuItem[]) {
+    const list = new DoublyLinkedList();
+    menuItems.forEach(item => addToList(item, list));
+    console.log('-------- AND THE BIG MOMENT -------');
+    console.log(list.printList())
+    console.log('The current is:')
+    // console.log({
+    //     current: list.current?.data,
+    //     prev: list.current?.previous?.data,
+    //     next: list.current?.next?.data
+    // })
+    console.log('----------------');
+    return list
+}
 
 
 const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
 
-    const [course, setCourse] = useState(null);
-
+    const [courseUid, setCourseUid] = useState('the-great-sync-learn-js');
+    const [showNextButton, setNextButton] = useState(true);
+    const [showPrevButton, setPrevButton] = useState(true);
+    const [courseData, setCourseData] = useState<MenuItem[]>([]);
+    // const [courseSequence, setCourseSequence] = useState<DoublyLinkedList | null>(null);
+    const courseSequence = useRef<DoublyLinkedList | null>(null)
     const { data, error } = useSWR('/api/chapters', getChapters) // update so it only fetches when course is truthy
+    const router = useRouter();
 
+    const nextPage = () => {
+        if (!courseSequence.current) return;
+        const nextNode = courseSequence.current.currentPageNode?.next;
+        if (nextNode) {
+            courseSequence.current.currentPageNode = nextNode;
+            router.replace(nextNode.data.href!)
+        }
+    }
+
+    const prevPage = () => {
+        if (!courseSequence.current) return;
+        const prevNode = courseSequence.current.currentPageNode?.previous;
+        if (prevNode) {
+            courseSequence.current.currentPageNode = prevNode;
+            router.replace(prevNode.data.href!)
+        }
+    }
+
+    useEffect(() => {
+        if (data && (courseData.length < 1)) {
+            const mappedMenuItems = mapMenuChapters(data, 'the-great-sync-learn-js');
+            setCourseData(mappedMenuItems);
+            // setCourseSequence(createList(mappedMenuItems))
+            courseSequence.current = createList(mappedMenuItems)
+        }
+    }, [data])
 
     return (
-        <NavContext.Provider value={{ menuData: data ? mapMenuChapters(data, 'the-great-sync-learn-js') : [] }}>
+        <NavContext.Provider value={{
+            menuData: courseData,
+            courseSequence: courseSequence.current,
+            showNext: !!(courseSequence.current?.currentPageNode?.next),
+            showPrev: true,
+            nextPage,
+            prevPage
+        }}>
             {children}
         </NavContext.Provider>
     )

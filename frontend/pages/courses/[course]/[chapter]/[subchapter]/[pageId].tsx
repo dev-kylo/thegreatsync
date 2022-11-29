@@ -25,7 +25,7 @@ type CoursePageProps = {
 export default function CoursePage({ title, type, content }: CoursePageProps) {
     const router = useRouter();
     const { data: session, status } = useSession();
-    const { menuData } = useContext(NavContext);
+    const { menuData, nextPage, prevPage } = useContext(NavContext);
 
     const { id, code, text, image } = content[0];
     let contentLayout = <></>
@@ -43,13 +43,15 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
 
     else if (type === 'video')
         contentLayout = <Video />
+    console.log('------PAGE NAVV')
+    console.log({ nextPage, prevPage })
 
     return (
         <Protected>
             <Layout>
                 <Navbar title={`${title}`} menuData={menuData} />
                 {contentLayout}
-                {!hasPageSteps && <ControlBar />}
+                {!hasPageSteps && <ControlBar nextPage={nextPage} prevPage={prevPage} />}
             </Layout>
         </Protected>
     );

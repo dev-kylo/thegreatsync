@@ -6,8 +6,9 @@ import '../styles/duotone_prism.css';
 import '../styles/line_numbers_prism.css';
 import Head from 'next/head'
 import { SessionProvider } from 'next-auth/react';
-import { ChaptersResponse } from '../types';
 import NavContextProvider from '../context/nav';
+import { AppContextType } from 'next/dist/shared/lib/utils';
+import App from 'next/app';
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
@@ -27,5 +28,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     )
 }
+
+// MyApp.getInitialProps = async (appContext: AppContextType) => {
+//     // calls page's `getInitialProps` and fills `appProps.pageProps`
+//     const appProps = await App.getInitialProps(appContext);
+
+//     return { ...appProps };
+// };
 
 export default MyApp

@@ -9,6 +9,9 @@ export function serverRedirectObject(url: string, permanent: boolean = true) {
     };
 }
 
+
+const completedPageIds = [1];
+
 type EntityWithMenuOrder = ChapterData | SubChapter | Page
 
 function sortByOrderNumber(a: EntityWithMenuOrder, b: EntityWithMenuOrder) {
@@ -22,14 +25,22 @@ function mapMenuPages(pages: Page[], prependLinkUrl: string): MenuItem[] {
         .map((page) => {
             const mappedPage = {} as Partial<MenuItem>;
             mappedPage.level = 3;
+            mappedPage.id = page.id
             mappedPage.name = page.attributes.title;
             const icon = page.attributes.menu.icon as MenuType;
             mappedPage.type = icon || 'read';
             mappedPage.orderNumber = page.attributes.menu.orderNumber;
-            mappedPage.completed = false;
+            mappedPage.completed = completedPageIds.includes(page.id);
             mappedPage.href = `${prependLinkUrl}/${page.id}`
             return mappedPage as MenuItem;;
         })
+}
+
+function pageCompletionCount(pages: Page[]) {
+    return pages.reduce((accumulator: number, current: Page) => {
+        if (completedPageIds.includes(current.id)) return accumulator + 1;
+        return accumulator
+    }, 0)
 }
 
 function mapMenuSubChapters(subchapters: SubChapter[], prependLinkUrl: string): MenuItem[] {
@@ -41,9 +52,10 @@ function mapMenuSubChapters(subchapters: SubChapter[], prependLinkUrl: string): 
             const pages = subchapter.attributes.pages?.data;
             if (pages) mappedSubChapter.children = mapMenuPages(pages, `/${prependLinkUrl}/${subchapter.id}`);
             mappedSubChapter.name = subchapter.attributes.title;
-            mappedSubChapter.progress = 0;
+            mappedSubChapter.progress = +pageCompletionCount(pages!) / (mappedSubChapter.children!.length) * 100;
             mappedSubChapter.level = 2;
-            mappedSubChapter.completed = false;
+            mappedSubChapter.id = subchapter.id;
+            mappedSubChapter.completed = mappedSubChapter.progress === 100;
             return mappedSubChapter as MenuItem;
         })
 }
@@ -60,8 +72,9 @@ export function mapMenuChapters(data: ChaptersResponse, courseUid: string): Menu
             const mappedChapter = {} as Partial<MenuItem>;
             mappedChapter.name = chapterTitle;
             mappedChapter.completed = false;
-            mappedChapter.progress = 0;
             mappedChapter.children = mapMenuSubChapters(subchapters, `courses/${courseUid}/${chapterId}`);
+            mappedChapter.progress = 0;
+            mappedChapter.id = chapter.id;
             mappedChapter.level = 1;
             return mappedChapter as MenuItem;
         })

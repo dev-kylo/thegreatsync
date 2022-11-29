@@ -4,6 +4,7 @@ export type PageType = 'text_image_code' | 'video' | 'text_image'
 
 export type MenuItem = {
     name: string;
+    id: number;
     level: number,
     progress?: number | string,
     completed?: boolean,

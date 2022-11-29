@@ -20,7 +20,7 @@
             "type": "enumeration",
             "enum": [
                 "text_image_code",
-                "image_text",
+                "text_image",
                 "video"
             ],
             "required": true
@@ -28,8 +28,8 @@
         "content": {
             "type": "dynamiczone",
             "components": [
-                "media.text-image-code",
-                "media.text-image"
+                "media.text-image",
+                "media.text-image-code"
             ],
             "required": true
         },

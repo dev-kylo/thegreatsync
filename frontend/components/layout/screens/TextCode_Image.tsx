@@ -13,10 +13,10 @@ export default function TextCode_Image({ md }: { md: string }) {
 
                     <div className="flex flex-col">
                         <Block outerClasses="bg-[#111111] h-full mb-1" innerClasses="p-4" enableScroll>
-                            <ContentBlock md={md} />
+                            <ContentBlock md={md} id={0} />
                         </Block>
                         <Block outerClasses="bg-[#111111] h-full mt-1" innerClasses="p-4" enableScroll>
-                            <ContentBlock md={md} />
+                            <ContentBlock id={0} md={md} />
                         </Block>
                     </div>
 

@@ -12,14 +12,16 @@ type PageStepsProps = {
     pageSteps: PageStep[],
     completeStep: (id: number) => void;
     showNextButton: boolean,
-    type: PageType
+    type: PageType,
+    nextPage: () => void,
+    prevPage: () => void,
 }
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-const PageSteps = ({ pageSteps, completeStep, showNextButton, type }: PageStepsProps) => {
+const PageSteps = ({ pageSteps, completeStep, showNextButton, type, nextPage, prevPage }: PageStepsProps) => {
     const [current, setCurrent] = useState(pageSteps[0].id); // Keeps Track of current id
     const stepsContainer = useRef<HTMLOListElement>(null);
 
@@ -66,7 +68,7 @@ const PageSteps = ({ pageSteps, completeStep, showNextButton, type }: PageStepsP
 
             {type === 'text_image' && <Text_Image id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
 
-            <ControlBar showNext={showNextButton}>
+            <ControlBar showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
                 <nav aria-label="Progress" className='flex scrollbar-thin scrollbar-none relative z-50  '>
                     <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('left')}>
                         <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
