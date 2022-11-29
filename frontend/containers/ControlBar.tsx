@@ -20,12 +20,7 @@ const ControlBar = ({ children, showNext = true, nextPage, prevPage }: ControlBa
     );
 
     const nextPageHandler = () => nextPage();
-
     const prevPageHandler = () => prevPage();
-
-    console.log('------CONTROL BAR NAVV')
-    console.log({ nextPage, prevPage })
-
     return (
         <div className="relative h-full bg-[#03143f] flex flex-col justify-center">
 

@@ -43,8 +43,6 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
 
     else if (type === 'video')
         contentLayout = <Video />
-    console.log('------PAGE NAVV')
-    console.log({ nextPage, prevPage })
 
     return (
         <Protected>

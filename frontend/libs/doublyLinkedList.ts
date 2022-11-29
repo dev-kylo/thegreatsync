@@ -11,6 +11,16 @@ export class DoublyLinkedList {
         this.currentPageNode = null;
     }
 
+    getByDataId(id: number) {
+        var found = null;
+        var current = this.head;
+        while (!found) {
+            if (current?.data.id === id) found = current;
+            current = current?.next || null;
+        }
+        return found;
+    }
+
     addToTail(data: MenuItem) {
         const newTail = new Node(data);
         const currentTail = this.tail;
@@ -23,8 +33,6 @@ export class DoublyLinkedList {
         if ((this.currentPageNode && this.currentPageNode.data.completed && !newTail.data.completed) || newTail.data.completed) {
             this.currentPageNode = newTail;
         }
-
-
     }
 
     printList() {
@@ -38,8 +46,6 @@ export class DoublyLinkedList {
         console.log(output);
     }
 }
-
-
 
 export class Node {
     data: MenuItem;

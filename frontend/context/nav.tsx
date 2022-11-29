@@ -7,6 +7,7 @@ import { DoublyLinkedList, Node } from "../libs/doublyLinkedList";
 import { useRouter } from "next/router";
 
 
+
 type NavProviderValues = {
     menuData: MenuItem[]
     courseSequence?: DoublyLinkedList | null
@@ -56,6 +57,8 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const courseSequence = useRef<DoublyLinkedList | null>(null)
     const { data, error } = useSWR('/api/chapters', getChapters) // update so it only fetches when course is truthy
     const router = useRouter();
+    const { pageId } = router.query as { pageId: string };
+
 
     const nextPage = () => {
         if (!courseSequence.current) return;
@@ -74,6 +77,14 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
             router.replace(prevNode.data.href!)
         }
     }
+
+    useEffect(() => {
+        const list = courseSequence.current
+        if (list && +pageId !== list.currentPageNode?.data.id) {
+            const foundNode = list.getByDataId(+pageId);
+            if (foundNode) list.currentPageNode = foundNode
+        }
+    }, [pageId, courseSequence.current])
 
     useEffect(() => {
         if (data && (courseData.length < 1)) {
