@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path')
 
 export default ({ env }) => ({
   connection: {
@@ -9,8 +10,9 @@ export default ({ env }) => ({
       database: env('DATABASE_NAME'),
       user: env('DATABASE_USERNAME'),
       password: env('DATABASE_PASSWORD'),
+      // ssl: env('DATABASE_SSL', false)
       ssl: {
-        ca: fs.readFileSync(`${__dirname}/path/to/your/ca-certificate.crt`).toString(),
+        ca: fs.readFileSync(path.resolve(__dirname, "../../certificates/prod-ca-2021.crt")).toString(),
       },
     },
   },

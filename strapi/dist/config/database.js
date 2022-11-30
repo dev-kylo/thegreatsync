@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require('fs');
+const path = require('path');
 exports.default = ({ env }) => ({
     connection: {
         client: 'postgres',
@@ -9,7 +11,10 @@ exports.default = ({ env }) => ({
             database: env('DATABASE_NAME'),
             user: env('DATABASE_USERNAME'),
             password: env('DATABASE_PASSWORD'),
-            ssl: env.bool('DATABASE_SSL', false),
+            // ssl: env('DATABASE_SSL', false)
+            ssl: {
+                ca: fs.readFileSync(path.resolve(__dirname, "../../certificates/prod-ca-2021.crt")).toString(),
+            },
         },
     },
 });
