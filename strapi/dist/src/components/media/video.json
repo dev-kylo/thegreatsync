@@ -8,12 +8,9 @@
     "options": {},
     "attributes": {
         "video": {
-            "type": "media",
-            "multiple": false,
-            "required": true,
-            "allowedTypes": [
-                "videos"
-            ]
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "plugin::mux-video-uploader.mux-asset"
         }
     }
 }
