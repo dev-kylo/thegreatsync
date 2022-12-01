@@ -43,7 +43,7 @@ function createList(menuItems: MenuItem[]) {
 
 const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
 
-    const [courseUid, setCourseUid] = useState('learn-js-inside-the-great-sync');
+    const [courseUid, setCourseUid] = useState('learn-js');
     const [showNextButton, setNextButton] = useState(true);
     const [showPrevButton, setPrevButton] = useState(true);
     const { data: session, status } = useSession();
@@ -86,7 +86,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     useEffect(() => {
         if (data && (courseData.length < 1)) {
             console.log('Setting Page Doubly Linked List')
-            const mappedMenuItems = mapMenuChapters(data, 'learn-js-inside-the-great-sync');
+            const mappedMenuItems = mapMenuChapters(data, 'learn-js');
             setCourseData(mappedMenuItems);
             courseSequence.current = createList(mappedMenuItems)
         }

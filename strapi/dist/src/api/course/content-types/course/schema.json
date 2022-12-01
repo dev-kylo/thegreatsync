@@ -24,6 +24,14 @@
             "type": "relation",
             "relation": "oneToMany",
             "target": "api::chapter.chapter"
+        },
+        "description": {
+            "type": "dynamiczone",
+            "components": [
+                "media.video",
+                "media.text"
+            ],
+            "required": true
         }
     }
 }

@@ -30,7 +30,8 @@
             "components": [
                 "media.text-image",
                 "media.text-image-code",
-                "media.video"
+                "media.video",
+                "media.text"
             ],
             "required": true
         },
