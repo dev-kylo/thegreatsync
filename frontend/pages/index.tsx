@@ -11,42 +11,18 @@ import ProgressIcon from '../components/ui/ProgressIcon';
 import Block from '../components/layout/Block';
 import ContentBlock from '../components/layout/ContentBlock';
 import Link from 'next/link';
+import { getCourse } from '../services/queries';
+import Video from '../components/layout/screens/Video';
+import { VideoT } from '../types';
 
-const Home = ({ names }: { names: string }) => {
+const Home = ({ description, title, video }: { title: string, description?: string, video?: VideoT }) => {
 
     const { menuData, courseSequence } = useContext(NavContext);
-    console.log(names)
-
-    const title = 'Statements and declarations';
-
-    console.log('MENU DATA');
-    console.log(menuData)
-
-    const style = { "--value": 70, "--size": '7em' } as React.CSSProperties
 
     return (
         <>
             <Layout>
                 <Navbar title={`${title}`} menuData={menuData} />
-
-                {/* <div className="flex justify-center m-8">
-
-                    <div className="my-8 max-w-xl rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1">
-                    <div>
-                    <Image
-                            alt="Mountains"
-                            src="https://res.cloudinary.com/the-great-sync/image/upload/v1667044950/2000x2000/Whirlpool_F_a_g1mm3x.jpg"
-                            layout="responsive"
-                            // placeholder="blur"
-                            width={3000}
-                            height={2000}
-                            className="aspect-square h-auto w-full"
-                        />
-                        </div>
-
-                    </div>
-
-                </div> */}
                 <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12 mt-8">
                     <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 gap-4 ">
                         <div className="sm:col-span-1 w-full">
@@ -58,7 +34,7 @@ const Home = ({ names }: { names: string }) => {
                                 </div>
                                 <div className="text-center">
                                     <p className="text-xl text-white font-bold mb-2">LEARN JAVASCRIPT</p>
-                                    <p className="text-base text-gray-400 font-normal">________________________________________</p>
+                                    <p className="text-base text-gray-400 font-normal">_____________________________</p>
                                 </div>
 
                             </div>
@@ -75,7 +51,10 @@ const Home = ({ names }: { names: string }) => {
                         </div>
 
                         <div className="min-w-sm min-h-[20rem] bg-[#031b4352] rounded-lg sm:col-span-2 px-8">
-                            <ContentBlock md={'Hello World'} id={5} />
+                            <ContentBlock md={description || ''} id={5} />
+                            <div className="p-16">
+                                {video && <Video data={video} noPadding />}
+                            </div>
                         </div>
 
                     </div>
@@ -93,9 +72,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
 
+    const resp = (await getCourse(2, session)).data;
+    console.log('----COURSE DATA -----');
+    const descriptionItems = resp.attributes.description
+    const text = descriptionItems.find(item => item.__component === 'media.text')?.text;
+    const video = descriptionItems.find(item => item.__component === 'media.video')?.video;
+
     return {
         props: {
-            names: 'mike'
+            title: resp.attributes.title,
+            description: text,
+            video
         },
     };
 }

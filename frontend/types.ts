@@ -56,6 +56,11 @@ export interface StrapiResponseMetaData {
     publishedAt: Date;
 }
 
+export interface CourseResponse {
+    data: CourseData;
+    meta: Meta;
+}
+
 export interface ChaptersResponse {
     data: ChapterData[];
     meta: Meta;
@@ -64,6 +69,11 @@ export interface ChaptersResponse {
 export interface PageResponse {
     data: PageData;
     meta: Meta;
+}
+
+export interface CourseData {
+    id: number;
+    attributes: CourseAttributes;
 }
 
 export interface ChapterData {
@@ -118,6 +128,12 @@ export interface ImageAttributes {
     url: string;
 }
 
+export interface CourseAttributes extends StrapiResponseMetaData {
+    description: { id: string, text?: string, __component: 'media.text' | 'media.video', video?: VideoT }[],
+    uid: string,
+    title: string,
+}
+
 export interface ChaptersAttributes extends StrapiResponseMetaData {
     title: string;
     visible: boolean;
@@ -125,6 +141,24 @@ export interface ChaptersAttributes extends StrapiResponseMetaData {
     sub_chapters: {
         data: SubChapter[]
     };
+}
+
+export interface VideoT {
+    data: {
+        id: 1,
+        attributes: {
+            title: string,
+            upload_id: string,
+            asset_id: string,
+            playback_id: string,
+            error_message: null | string,
+            isReady: boolean,
+            duration: number,
+            aspect_ratio: string,
+            createdAt: Date,
+            updatedAt: Date
+        }
+    }
 }
 
 export interface Menu {

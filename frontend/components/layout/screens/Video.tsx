@@ -1,15 +1,19 @@
 import MuxVideo from '@mux/mux-video-react';
+import { VideoT } from '../../../types';
 
-const Video = () => {
+type VideoProps = { data: VideoT, noPadding?: boolean }
+
+const Video = ({ data, noPadding }: VideoProps) => {
+    const { playback_id, title, asset_id } = data.data.attributes;
     return (
-        <div className='w-full h-full flex justify-center items-center p-12'>
+        <div className={`w-full flex justify-center items-center ${noPadding ? '' : ' h-full p-12'}`}>
             <MuxVideo
                 style={{ height: '100%', maxWidth: '100%' }}
-                playbackId="DS00Spx1CV902MCtPj5WknGlR102V5HFkDe"
+                playbackId={playback_id}
                 metadata={{
-                    video_id: 'video-id-123456',
-                    video_title: 'Super Interesting Video',
-                    viewer_user_id: 'user-id-bc-789',
+                    video_id: asset_id,
+                    video_title: title,
+                    // viewer_user_id: 'user-id-bc-789',
                 }}
                 streamType="on-demand"
                 controls
