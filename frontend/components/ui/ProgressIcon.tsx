@@ -1,7 +1,7 @@
 import { StopCircleIcon } from '@heroicons/react/24/outline'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 
-const ProgressIcon = ({ amount, completed }: { amount?: number | string, completed?: boolean }) => {
+const ProgressIcon = ({ amount, completed, size }: { amount?: number | string, completed?: boolean, size?: string }) => {
     if (!amount && !completed) return <></>
     if (completed) return (
         <CheckCircleIcon
@@ -14,7 +14,7 @@ const ProgressIcon = ({ amount, completed }: { amount?: number | string, complet
 
     return (
         <>
-            <div className="rotate-[270deg] w-7 h-7">
+            <div className={`rotate-[270deg] ${size ? `w-${size} h-${size}` : "w-7 h-7"}`}>
                 <svg className="p-0 m-0" viewBox="0 0 30 30">
                     <circle
                         className="text-gray-300 w-full h-auto"

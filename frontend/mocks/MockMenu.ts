@@ -1,5 +1,5 @@
-import type { MenuItem } from "../../types"
-export const mockMenu: MenuItem[] = [
+// import type { MenuItem } from "../../types"
+export const mockMenu = [
     {
         name: 'Course Structure and Setup',
         current: false,

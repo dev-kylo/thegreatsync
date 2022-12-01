@@ -1,68 +1,101 @@
 
-import Text_Image_Code from '../components/layout/screens/Text_Image_Code';
-import fs from 'fs';
-import PageContainer from '../components/layout/PageContainer';
-import ContentBlock from '../components/layout/ContentBlock';
-import FlexGrid from '../components/layout/FlexGrid';
-import Experimental from '../components/layout/Experimental';
-import ProgressIcon from '../components/ui/ProgressIcon';
-import Text_Image from '../components/layout/screens/Text_Image';
-import TextCode_Image from '../components/layout/screens/TextCode_Image';
-import NextPrev from '../containers/ControlBar';
-import Video from '../components/layout/screens/Video';
 import Navbar from '../components/ui/Navbar';
 import { getSession } from 'next-auth/react';
 import { serverRedirectObject } from '../libs/helpers';
 import { GetServerSideProps } from 'next';
-import { getChapters } from '../services/queries';
 import { useContext } from 'react';
 import { NavContext } from '../context/nav';
-import Protected from '../containers/Protected';
 import Layout from '../components/layout';
+import Image from 'next/image';
+import ProgressIcon from '../components/ui/ProgressIcon';
+import Block from '../components/layout/Block';
+import ContentBlock from '../components/layout/ContentBlock';
+import Link from 'next/link';
 
-const Home = ({ md, blogMd }: { md: string, blogMd: string }) => {
+const Home = ({ names }: { names: string }) => {
 
-    const { menuData } = useContext(NavContext)
+    const { menuData, courseSequence } = useContext(NavContext);
+    console.log(names)
 
     const title = 'Statements and declarations';
 
+    console.log('MENU DATA');
+    console.log(menuData)
+
+    const style = { "--value": 70, "--size": '7em' } as React.CSSProperties
+
     return (
         <>
-            <Protected>
-                <Layout>
-                    <Navbar title={title} menuData={menuData} />
-                    {/* <Video /> */}
-                    {/* <Text_Image_Code code={md} text={blogMd} /> */}
-                    {/* <TextCode_Image md={md} /> */}
-                    {/* <Text_Image md={text.data.attributes.text} /> */}
-                </Layout>
-            </Protected>
-            {/* <ControlBar /> */}
+            <Layout>
+                <Navbar title={`${title}`} menuData={menuData} />
+
+                {/* <div className="flex justify-center m-8">
+
+                    <div className="my-8 max-w-xl rounded shadow-lg shadow-gray-200 dark:shadow-gray-900 bg-white dark:bg-gray-800 duration-300 hover:-translate-y-1">
+                    <div>
+                    <Image
+                            alt="Mountains"
+                            src="https://res.cloudinary.com/the-great-sync/image/upload/v1667044950/2000x2000/Whirlpool_F_a_g1mm3x.jpg"
+                            layout="responsive"
+                            // placeholder="blur"
+                            width={3000}
+                            height={2000}
+                            className="aspect-square h-auto w-full"
+                        />
+                        </div>
+
+                    </div>
+
+                </div> */}
+                <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12 mt-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 gap-4 ">
+                        <div className="sm:col-span-1 w-full">
+                            <div
+                                className=" bg-gray-900 rounded-lg shadow-lg p-12 flex flex-col justify-center items-center"
+                            >
+                                <div className="mb-8">
+                                    <ProgressIcon amount="70" completed={false} size="28" />
+                                </div>
+                                <div className="text-center">
+                                    <p className="text-xl text-white font-bold mb-2">LEARN JAVASCRIPT</p>
+                                    <p className="text-base text-gray-400 font-normal">________________________________________</p>
+                                </div>
+
+                            </div>
+                            <div className="flex justify-center">
+                                {courseSequence && <Link href={courseSequence.currentPageNode?.data.href || '/courses'}>
+                                    <button
+                                        type="button"
+                                        className="my-4 inline-flex items-center justify-center rounded-md border border-green-400 bg-primary_blue  px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
+                                    >
+                                        Start Learning
+                                    </button>
+                                </Link>}
+                            </div>
+                        </div>
+
+                        <div className="min-w-sm min-h-[20rem] bg-[#031b4352] rounded-lg sm:col-span-2 px-8">
+                            <ContentBlock md={'Hello World'} id={5} />
+                        </div>
+
+                    </div>
+                </section>
+
+            </Layout>
+
         </>
     );
 }
 
-export default Home
+export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
 
-    const md = fs.readFileSync(`mocks/MockCode.md`, 'utf-8');
-    const blogMd = fs.readFileSync(`mocks/MockBlog.md`, 'utf-8');
-    let menu, error;
-    try {
-        menu = await getChapters('/api/chapters', session);
-    } catch (e) {
-        console.log('*******ERRRRROOORRRR**********')
-        error = true;
-    }
-
     return {
         props: {
-            md,
-            blogMd,
-            menu,
+            names: 'mike'
         },
     };
 }

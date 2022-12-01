@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import NextAuth from 'next-auth';
+import NextAuth, { User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { signIn } from '../../../services/signIn';
 
@@ -14,30 +14,21 @@ export default NextAuth({
                 email: { label: 'Email', type: 'text' },
                 password: { label: 'Password', type: 'password' },
             },
-            async authorize(credentials, req) {
+            async authorize(credentials, _) {
                 /**
                  * This function is used to define if the user is authenticated or not.
                  * If authenticated, the function should return an object contains the user data.
                  * If not, the function should return `null`.
                  */
-                // console.dir(credentials)
                 if (credentials === null || !credentials?.email || !credentials?.password) return null;
-                /**
-                 * credentials is defined in the config above.
-                 * We can expect it contains two properties: `email` and `password`
-                 */
                 try {
                     const { user, jwt } = await signIn({
                         email: credentials.email,
                         password: credentials.password,
                     });
-                    console.log('Made it here')
-                    // console.dir(jwt)
-                    return { ...user, jwt };
+                    return { ...user, jwt } as unknown as User;
                 } catch (error) {
                     console.log('SIGN IN FAIL');
-                    // console.dir(error)
-                    // Sign In Fail
                     return null;
                 }
             },
@@ -52,9 +43,10 @@ export default NextAuth({
         },
         jwt: async ({ token, user }) => {
             const isSignIn = user ? true : false;
-            if (isSignIn) {
-                token.id = user.id;
-                token.jwt = user.jwt;
+            const userWithType = user as User & { jwt: string }
+            if (userWithType && isSignIn) {
+                token.id = userWithType.id;
+                token.jwt = userWithType.jwt;
             }
             return Promise.resolve(token);
         },

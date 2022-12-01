@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import { getChapters } from "../services/queries";
 import { DoublyLinkedList, Node } from "../libs/doublyLinkedList";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 
 
@@ -34,28 +35,22 @@ function addToList(item: MenuItem, list: DoublyLinkedList) {
 function createList(menuItems: MenuItem[]) {
     const list = new DoublyLinkedList();
     menuItems.forEach(item => addToList(item, list));
-    console.log('-------- AND THE BIG MOMENT -------');
+    console.log('-------- AND Queue of PAGES -------');
     console.log(list.printList())
-    console.log('The current is:')
-    // console.log({
-    //     current: list.current?.data,
-    //     prev: list.current?.previous?.data,
-    //     next: list.current?.next?.data
-    // })
-    console.log('----------------');
     return list
 }
 
 
 const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
 
-    const [courseUid, setCourseUid] = useState('the-great-sync-learn-js');
+    const [courseUid, setCourseUid] = useState('learn-js-inside-the-great-sync');
     const [showNextButton, setNextButton] = useState(true);
     const [showPrevButton, setPrevButton] = useState(true);
+    const { data: session, status } = useSession();
     const [courseData, setCourseData] = useState<MenuItem[]>([]);
-    // const [courseSequence, setCourseSequence] = useState<DoublyLinkedList | null>(null);
-    const courseSequence = useRef<DoublyLinkedList | null>(null)
-    const { data, error } = useSWR('/api/chapters', getChapters) // update so it only fetches when course is truthy
+    const courseSequence = useRef<DoublyLinkedList | null>(null);
+
+    const { data, error } = useSWR(() => session ? '/api/chapters' : null, getChapters, { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false })
     const router = useRouter();
     const { pageId } = router.query as { pageId: string };
 
@@ -79,18 +74,20 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     }
 
     useEffect(() => {
-        const list = courseSequence.current
-        if (list && +pageId !== list.currentPageNode?.data.id) {
-            const foundNode = list.getByDataId(+pageId);
-            if (foundNode) list.currentPageNode = foundNode
+        const list = courseSequence.current;
+        if (pageId && list) {
+            if (+pageId !== list.currentPageNode?.data.id) {
+                const foundNode = list.getByDataId(+pageId);
+                if (foundNode) list.currentPageNode = foundNode
+            }
         }
     }, [pageId, courseSequence.current])
 
     useEffect(() => {
         if (data && (courseData.length < 1)) {
-            const mappedMenuItems = mapMenuChapters(data, 'the-great-sync-learn-js');
+            console.log('Setting Page Doubly Linked List')
+            const mappedMenuItems = mapMenuChapters(data, 'learn-js-inside-the-great-sync');
             setCourseData(mappedMenuItems);
-            // setCourseSequence(createList(mappedMenuItems))
             courseSequence.current = createList(mappedMenuItems)
         }
     }, [data])
