@@ -28,7 +28,7 @@ export const getChapters = async (url?: string, session?: Session) => {
 export const getPage = async (id: string | number, session: Session): Promise<PageResponse> => {
 
     const query = qs.stringify({
-        populate: ['content', 'content.image']
+        populate: ['content', 'content.image', 'content.video']
     }, {
         encodeValuesOnly: true, // prettify URL
     });

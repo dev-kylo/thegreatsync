@@ -1,6 +1,6 @@
 export type MenuType = 'watch' | 'code' | 'read' | 'draw' | 'imagine' | 'listen' | 'play';
 
-export type PageType = 'text_image_code' | 'video' | 'text_image'
+export type PageType = 'text_image_code' | 'video' | 'text_image' | 'text'
 
 export type MenuItem = {
     name: string;
@@ -105,6 +105,7 @@ export interface PageContent {
     text: string;
     orderNumber?: number;
     image: ImageComp;
+    video?: VideoT
 }
 
 

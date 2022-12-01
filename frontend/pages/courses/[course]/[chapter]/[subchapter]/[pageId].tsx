@@ -27,7 +27,7 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
     const { data: session, status } = useSession();
     const { menuData, nextPage, prevPage } = useContext(NavContext);
 
-    const { id, code, text, image } = content[0];
+    const { id, code, text, image, video } = content[0];
     let contentLayout = <></>
 
     const hasPageSteps = content.length > 1;
@@ -42,7 +42,7 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
         contentLayout = <Text_Image text={text} image={image} id={id} />
 
     else if (type === 'video')
-        contentLayout = <Video />
+        contentLayout = <Video data={video!} />
 
     return (
         <Protected>
