@@ -1,0 +1,24 @@
+{
+    "collectionName": "components_menu_menu_infos",
+    "info": {
+        "displayName": "menu_data",
+        "icon": "bars",
+        "description": ""
+    },
+    "options": {},
+    "attributes": {
+        "icon": {
+            "type": "enumeration",
+            "enum": [
+                "write",
+                "code",
+                "read",
+                "watch"
+            ]
+        },
+        "orderNumber": {
+            "type": "integer",
+            "required": true
+        }
+    }
+}

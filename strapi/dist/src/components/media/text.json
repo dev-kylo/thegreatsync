@@ -1,0 +1,15 @@
+{
+    "collectionName": "components_media_texts",
+    "info": {
+        "displayName": "text",
+        "icon": "pencil-alt",
+        "description": ""
+    },
+    "options": {},
+    "attributes": {
+        "text": {
+            "type": "richtext",
+            "required": true
+        }
+    }
+}

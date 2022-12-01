@@ -1,0 +1,33 @@
+{
+    "kind": "collectionType",
+    "collectionName": "chapters",
+    "info": {
+        "singularName": "chapter",
+        "pluralName": "chapters",
+        "displayName": "Chapter",
+        "description": ""
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "menu": {
+            "type": "component",
+            "repeatable": false,
+            "component": "menu.menu-info"
+        },
+        "sub_chapters": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::subchapter.subchapter"
+        },
+        "visible": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+}
