@@ -19,18 +19,23 @@ type CoursePageProps = {
     title: string | number;
     type: PageType,
     content: PageContent[]
+    error?: boolean;
 }
 
 
-export default function CoursePage({ title, type, content }: CoursePageProps) {
+export default function CoursePage({ title, type, content, error }: CoursePageProps) {
     const router = useRouter();
     const { data: session, status } = useSession();
     const { menuData, nextPage, prevPage } = useContext(NavContext);
+
+    console.log({ title, type, content })
 
     const { id, code, text, image, video } = content[0];
     let contentLayout = <></>
 
     const hasPageSteps = content.length > 1;
+
+    if (error) contentLayout = <p className="text-md text-red-700"> This page does not exist</p>
 
     if (hasPageSteps)
         contentLayout = <PageStepsController pageContent={content} type={type} />
@@ -41,7 +46,7 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
     else if (type === 'text_image')
         contentLayout = <Text_Image text={text} image={image} id={id} />
 
-    else if (type === 'video')
+    else if (type === 'video' && video)
         contentLayout = <Video data={video!} />
 
     return (
@@ -59,7 +64,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     const { chapter, subchapter, pageId } = context.params as { chapter: string, subchapter: string, pageId: string };
-    const resp = (await getPage(pageId, session)).data;
+    const resp = (await getPage(pageId, session))?.data;
+
+    if (!resp) return {
+        props: {
+            error: true
+        }
+    }
+
     const { title, type, content } = resp.attributes;
 
     return {

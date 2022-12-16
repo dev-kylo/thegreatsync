@@ -74,7 +74,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const resp = (await getCourse(2, session)).data;
     console.log('----COURSE DATA -----');
-    const descriptionItems = resp.attributes.description
+    console.log(resp)
+    const descriptionItems = resp.attributes.description;
     const text = descriptionItems.find(item => item.__component === 'media.text')?.text;
     const video = descriptionItems.find(item => item.__component === 'media.video')?.video;
 
