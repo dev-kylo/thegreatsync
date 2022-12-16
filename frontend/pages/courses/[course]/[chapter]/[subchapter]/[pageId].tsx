@@ -14,6 +14,7 @@ import Text_Image from '../../../../../components/layout/screens/Text_Image';
 import Video from '../../../../../components/layout/screens/Video';
 import ControlBar from '../../../../../containers/ControlBar';
 import PageStepsController from '../../../../../containers/PageStepsController';
+import Text from '../../../../../components/layout/screens/Text';
 
 type CoursePageProps = {
     title: string | number;
@@ -21,6 +22,7 @@ type CoursePageProps = {
     content: PageContent[]
     error?: boolean;
 }
+
 
 
 export default function CoursePage({ title, type, content, error }: CoursePageProps) {
@@ -39,6 +41,9 @@ export default function CoursePage({ title, type, content, error }: CoursePagePr
 
     if (hasPageSteps)
         contentLayout = <PageStepsController pageContent={content} type={type} />
+
+    else if (type === 'text')
+        contentLayout = <Text text={text} id={id} />
 
     else if (type === 'text_image_code')
         contentLayout = <Text_Image_Code code={code!} text={text} image={image} id={id} />
