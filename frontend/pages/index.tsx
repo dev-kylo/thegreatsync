@@ -34,19 +34,21 @@ const Home = ({ description, title, video }: { title: string, description?: stri
                                 </div>
                                 <div className="text-center">
                                     <p className="text-xl text-white font-bold mb-2">LEARN JAVASCRIPT</p>
-                                    <p className="text-base text-gray-400 font-normal">_____________________________</p>
+                                    <p className="text-base text-gray-400 font-normal">____________________________</p>
                                 </div>
 
                             </div>
                             <div className="flex justify-center">
-                                {courseSequence && <Link href={courseSequence.currentPageNode?.data.href || '/courses'}>
-                                    <button
-                                        type="button"
-                                        className="my-4 inline-flex items-center justify-center rounded-md border border-green-400 bg-primary_blue  px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
-                                    >
-                                        Start Learning
-                                    </button>
-                                </Link>}
+                                {courseSequence &&
+                                    <Link href={courseSequence.currentPageNode?.data.href || '/courses'}>
+                                        <button
+                                            type="button"
+                                            className="my-4 inline-flex items-center justify-center rounded-md border border-green-400 bg-primary_blue  px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
+                                        >
+                                            Start Learning
+                                        </button>
+                                    </Link>
+                                }
                             </div>
                         </div>
 
@@ -73,8 +75,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
 
     const resp = (await getCourse(2, session)).data;
-    console.log('----COURSE DATA -----');
-    const descriptionItems = resp.attributes.description
+    const descriptionItems = resp.attributes.description;
     const text = descriptionItems.find(item => item.__component === 'media.text')?.text;
     const video = descriptionItems.find(item => item.__component === 'media.video')?.video;
 

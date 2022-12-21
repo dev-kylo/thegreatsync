@@ -4,10 +4,8 @@ const qs = require('qs');
 import type { Session } from "next-auth";
 import { httpClient } from "../libs/axios";
 
-const strapiUrl = process.env.STRAPI_URL;
-
 export const getText = async (id: string, axios: AxiosStatic) => {
-    const res = await axios.get(`${strapiUrl}/api/text-image-codes/${id}`);
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/text-image-codes/${id}`);
     return res.data;
 };
 

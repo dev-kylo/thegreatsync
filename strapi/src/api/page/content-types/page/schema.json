@@ -21,17 +21,18 @@
       "enum": [
         "text_image_code",
         "text_image",
-        "video"
+        "video",
+        "text"
       ],
       "required": true
     },
     "content": {
       "type": "dynamiczone",
       "components": [
+        "media.text",
         "media.text-image",
         "media.text-image-code",
-        "media.video",
-        "media.text"
+        "media.video"
       ],
       "required": true
     },
