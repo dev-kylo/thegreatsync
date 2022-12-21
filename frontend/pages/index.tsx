@@ -34,7 +34,7 @@ const Home = ({ description, title, video }: { title: string, description?: stri
                                 </div>
                                 <div className="text-center">
                                     <p className="text-xl text-white font-bold mb-2">LEARN JAVASCRIPT</p>
-                                    <p className="text-base text-gray-400 font-normal">_____________________________</p>
+                                    <p className="text-base text-gray-400 font-normal">____________________________</p>
                                 </div>
 
                             </div>
@@ -75,8 +75,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
 
     const resp = (await getCourse(2, session)).data;
-    console.log('----COURSE DATA -----');
-    console.log(resp)
     const descriptionItems = resp.attributes.description;
     const text = descriptionItems.find(item => item.__component === 'media.text')?.text;
     const video = descriptionItems.find(item => item.__component === 'media.video')?.video;
