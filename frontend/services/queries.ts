@@ -20,8 +20,8 @@ export const getChapters = async (url?: string, session?: Session) => {
         encodeValuesOnly: true, // prettify URL
     });
 
-    const res = !session ? await httpClient.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}${url || '/api/chapters'}?${query}`)
-        : await axios.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/chapters?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });;
+    const res = !session ? await httpClient.get<ChaptersResponse>(`${strapiUrl}${url || '/api/chapters'}?${query}`)
+        : await axios.get<ChaptersResponse>(`${strapiUrl}/api/chapters?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });;
     return res.data;
 };
 
@@ -32,7 +32,7 @@ export const getPage = async (id: string | number, session: Session): Promise<Pa
     }, {
         encodeValuesOnly: true, // prettify URL
     });
-    const res = await axios.get<PageResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/pages/${id}?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
+    const res = await axios.get<PageResponse>(`${strapiUrl}/api/pages/${id}?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
     return res.data;
 };
 
@@ -43,6 +43,6 @@ export const getCourse = async (id: string | number, session: Session): Promise<
     }, {
         encodeValuesOnly: true, // prettify URL
     });
-    const res = await axios.get<CourseResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/courses/${id}?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
+    const res = await axios.get<CourseResponse>(`${strapiUrl}/api/courses/${id}?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
     return res.data;
 };
