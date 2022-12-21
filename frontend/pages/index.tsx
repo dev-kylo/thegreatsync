@@ -39,14 +39,16 @@ const Home = ({ description, title, video }: { title: string, description?: stri
 
                             </div>
                             <div className="flex justify-center">
-                                {courseSequence && <Link href={courseSequence.currentPageNode?.data.href || '/courses'}>
-                                    <button
-                                        type="button"
-                                        className="my-4 inline-flex items-center justify-center rounded-md border border-green-400 bg-primary_blue  px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
-                                    >
-                                        Start Learning
-                                    </button>
-                                </Link>}
+                                {courseSequence &&
+                                    <Link href={courseSequence.currentPageNode?.data.href || '/courses'}>
+                                        <button
+                                            type="button"
+                                            className="my-4 inline-flex items-center justify-center rounded-md border border-green-400 bg-primary_blue  px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
+                                        >
+                                            Start Learning
+                                        </button>
+                                    </Link>
+                                }
                             </div>
                         </div>
 
