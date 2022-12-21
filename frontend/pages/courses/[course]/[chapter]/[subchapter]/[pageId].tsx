@@ -14,47 +14,29 @@ import Text_Image from '../../../../../components/layout/screens/Text_Image';
 import Video from '../../../../../components/layout/screens/Video';
 import ControlBar from '../../../../../containers/ControlBar';
 import PageStepsController from '../../../../../containers/PageStepsController';
-<<<<<<< HEAD
-=======
 import Text from '../../../../../components/layout/screens/Text';
->>>>>>> development
 
 type CoursePageProps = {
     title: string | number;
     type: PageType,
     content: PageContent[]
-<<<<<<< HEAD
-}
-
-
-export default function CoursePage({ title, type, content }: CoursePageProps) {
-=======
     error?: boolean;
 }
 
 
 
 export default function CoursePage({ title, type, content, error }: CoursePageProps) {
->>>>>>> development
     const router = useRouter();
     const { data: session, status } = useSession();
     const { menuData, nextPage, prevPage } = useContext(NavContext);
 
-<<<<<<< HEAD
-=======
     console.log({ title, type, content })
 
->>>>>>> development
     const { id, code, text, image, video } = content[0];
     let contentLayout = <></>
 
     const hasPageSteps = content.length > 1;
 
-<<<<<<< HEAD
-    if (hasPageSteps)
-        contentLayout = <PageStepsController pageContent={content} type={type} />
-
-=======
     if (error) contentLayout = <p className="text-md text-red-700"> This page does not exist</p>
 
     if (hasPageSteps)
@@ -63,18 +45,13 @@ export default function CoursePage({ title, type, content, error }: CoursePagePr
     else if (type === 'text')
         contentLayout = <Text text={text} id={id} />
 
->>>>>>> development
     else if (type === 'text_image_code')
         contentLayout = <Text_Image_Code code={code!} text={text} image={image} id={id} />
 
     else if (type === 'text_image')
         contentLayout = <Text_Image text={text} image={image} id={id} />
 
-<<<<<<< HEAD
-    else if (type === 'video')
-=======
     else if (type === 'video' && video)
->>>>>>> development
         contentLayout = <Video data={video!} />
 
     return (
@@ -92,9 +69,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getSession(context);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     const { chapter, subchapter, pageId } = context.params as { chapter: string, subchapter: string, pageId: string };
-<<<<<<< HEAD
-    const resp = (await getPage(pageId, session)).data;
-=======
     const resp = (await getPage(pageId, session))?.data;
 
     if (!resp) return {
@@ -103,7 +77,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         }
     }
 
->>>>>>> development
     const { title, type, content } = resp.attributes;
 
     return {
