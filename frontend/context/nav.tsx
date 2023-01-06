@@ -84,7 +84,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     }, [pageId, courseSequence.current])
 
     useEffect(() => {
-        if (data && (courseData.length < 1)) {
+        if (data && data.data && (courseData.length < 1)) {
             console.log('Setting Page Doubly Linked List')
             const mappedMenuItems = mapMenuChapters(data, 'learn-js');
             setCourseData(mappedMenuItems);
