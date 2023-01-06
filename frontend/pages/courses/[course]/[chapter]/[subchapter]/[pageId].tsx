@@ -1,6 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
-import { getSession, useSession } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import Protected from '../../../../../containers/Protected';
 import Layout from '../../../../../components/layout';
 import Navbar from '../../../../../components/ui/Navbar';
@@ -26,8 +25,7 @@ type CoursePageProps = {
 
 
 export default function CoursePage({ title, type, content }: CoursePageProps) {
-    const router = useRouter();
-    const { data: session, status } = useSession();
+
     const { menuData, nextPage, prevPage } = useContext(NavContext);
 
     console.log({ title, type, content })
