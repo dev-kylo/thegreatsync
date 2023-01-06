@@ -129,11 +129,14 @@ export default function SignIn() {
                             </div>
                         </div>
                     </div>
-                    <div className="relative hidden w-0 flex-1 lg:block">
-                        <img
-                            className="absolute inset-0 h-full w-full object-cover"
-                            src="https://res.cloudinary.com/the-great-sync/image/upload/v1668087776/2000x2000/Creation_Phase_Empty_kpcotv.jpg"
+                    <div className="relative hidden w-0 flex-1 lg:block hover:brightness-125">
+                        <Image
                             alt=""
+                            src="https://res.cloudinary.com/the-great-sync/image/upload/v1668087776/2000x2000/Creation_Phase_Empty_kpcotv.jpg"
+                            layout="fill"
+                            objectFit="cover"
+                            objectPosition="center"
+
                         />
                     </div>
                 </div>

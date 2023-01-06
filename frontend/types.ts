@@ -28,12 +28,7 @@ export type PageStepT = {
 
 export type ErrorResponse = {
     data: null,
-    error: {
-        status: number,
-        name: string,
-        message: string,
-        details?: unknown
-    }
+    error: ErrorData
 }
 
 export type SignInResponse = {
@@ -57,17 +52,27 @@ export interface StrapiResponseMetaData {
 }
 
 export interface CourseResponse {
-    data: CourseData;
+    data?: CourseData;
+    error: ErrorData;
     meta: Meta;
 }
 
+export interface ErrorData {
+    status: string, // HTTP status
+    name: string, // Strapi error name ('ApplicationError' or 'ValidationError')
+    message: string, // A human readable error message
+    details: any
+}
+
 export interface ChaptersResponse {
-    data: ChapterData[];
+    data?: ChapterData[];
+    error?: ErrorData;
     meta: Meta;
 }
 
 export interface PageResponse {
-    data: PageData;
+    data?: PageData;
+    error?: ErrorData;
     meta: Meta;
 }
 
@@ -115,7 +120,8 @@ export type PageStep = PageContent & {
 
 
 export interface ImageComp {
-    data: ImageData;
+    data?: ImageData;
+    error?: ErrorData
 }
 
 export interface ImageData {
@@ -169,7 +175,8 @@ export interface Menu {
 }
 
 export interface Pages {
-    data: Page[];
+    data?: Page[];
+    error?: ErrorData
 }
 
 export interface SubChapter {

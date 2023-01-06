@@ -1,8 +1,9 @@
 import axios, { AxiosInstance, AxiosStatic } from "axios";
-import { ChaptersResponse, CourseResponse, PageData, PageResponse } from "../types";
+import { ChaptersResponse, CourseResponse, PageResponse } from "../types";
 const qs = require('qs');
 import type { Session } from "next-auth";
 import { httpClient } from "../libs/axios";
+import { logError } from "../libs/errorHandler";
 
 export const getText = async (id: string, axios: AxiosStatic) => {
     const res = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/text-image-codes/${id}`);
@@ -11,7 +12,6 @@ export const getText = async (id: string, axios: AxiosStatic) => {
 
 
 export const getChapters = async (url?: string, session?: Session) => {
-
     const query = qs.stringify({
         populate: ['menu', 'sub_chapters', 'sub_chapters.menu', 'sub_chapters.pages', 'sub_chapters.pages.menu'],
     }, {
@@ -19,8 +19,9 @@ export const getChapters = async (url?: string, session?: Session) => {
     });
 
     const res = !session ? await httpClient.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}${url || '/api/chapters'}?${query}`)
-        : await axios.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/chapters?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });;
-    return res.data;
+        : await axios.get<ChaptersResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/chapters?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
+    if (!res || res.data.error) logError(res.data.error || 'Received undefined after attempting to fetch CHAPTERS')
+    return res.data
 };
 
 export const getPage = async (id: string | number, session: Session): Promise<PageResponse> => {
@@ -30,8 +31,10 @@ export const getPage = async (id: string | number, session: Session): Promise<Pa
     }, {
         encodeValuesOnly: true, // prettify URL
     });
+    console.log('About to fetch data')
     const res = await axios.get<PageResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/pages/${id}?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
-    return res.data;
+    if (!res || res.data?.error) logError(res.data.error || 'Received undefined after attempting to fetch PAGE with ID: ' + id)
+    return res.data
 };
 
 export const getCourse = async (id: string | number, session: Session): Promise<CourseResponse> => {
@@ -42,5 +45,6 @@ export const getCourse = async (id: string | number, session: Session): Promise<
         encodeValuesOnly: true, // prettify URL
     });
     const res = await axios.get<CourseResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/courses/${id}?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
-    return res.data;
+    if (!res || res.data.error) logError(res.data.error || 'Received undefined after attempting to fetch COURSE with ID: ' + id)
+    return res.data
 };
