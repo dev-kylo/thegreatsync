@@ -1,11 +1,11 @@
 
 import { getSession } from 'next-auth/react';
+import CourseDashboard from '../containers/CourseDashboard/CourseDashboard';
 import { serverRedirectObject } from '../libs/helpers';
 import { GetServerSideProps } from 'next';
 import { getCourse } from '../services/queries';
 import { ErrorData, VideoT } from '../types';
 import { createErrorString } from '../libs/errorHandler';
-import CourseDashboard from '../containers/CourseHome/CourseHome';
 
 type CourseData = { title: string, description?: string, video?: VideoT }
 type HomeProps = { course?: CourseData, error?: { error: boolean, data: ErrorData } }
