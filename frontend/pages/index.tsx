@@ -4,8 +4,8 @@ import { serverRedirectObject } from '../libs/helpers';
 import { GetServerSideProps } from 'next';
 import { getCourse } from '../services/queries';
 import { ErrorData, VideoT } from '../types';
-import CourseHome from '../containers/CourseHome/CourseHome';
 import { createErrorString } from '../libs/errorHandler';
+import CourseDashboard from '../containers/CourseHome/CourseHome';
 
 type CourseData = { title: string, description?: string, video?: VideoT }
 type HomeProps = { course?: CourseData, error?: { error: boolean, data: ErrorData } }
@@ -14,7 +14,7 @@ const Home = ({ course, error }: HomeProps) => {
 
     if (error && error.data && error.data.status === '500') return <p>Oh no, looks like a 500 server error!</p>;
     if (error || !course) return <p>Oh no we have an issue</p>;
-    return <CourseHome title={course.title} description={course.description} video={course.video} />
+    return <CourseDashboard title={course.title} description={course.description} video={course.video} />
 
 }
 
