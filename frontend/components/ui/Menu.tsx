@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react'
 import Link from 'next/link'
-import { mockMenu } from '../../mocks/MockMenu'
+// import { mockMenu } from '../../mocks/MockMenu'
 import type { MenuItem } from '../../types'
 import MenuIcon from './MenuIcon'
 import ProgressIcon from './ProgressIcon'
@@ -10,7 +10,7 @@ function classNames(...classes: string[]) {
 }
 
 function createMenuLink(item: MenuItem) {
-    <Link href={item.href!}>
+    <Link href={item.href!} passHref>
         <div key={item.name}>
             <a
 

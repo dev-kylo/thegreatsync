@@ -1,11 +1,10 @@
 
-import Navbar from '../components/ui/Navbar';
 import { getSession } from 'next-auth/react';
 import { serverRedirectObject } from '../libs/helpers';
 import { GetServerSideProps } from 'next';
 import { getCourse } from '../services/queries';
 import { ErrorData, VideoT } from '../types';
-import CourseHome from '../containers/courseHome/courseHome';
+import CourseHome from '../containers/CourseHome/CourseHome';
 import { createErrorString } from '../libs/errorHandler';
 
 type CourseData = { title: string, description?: string, video?: VideoT }
@@ -13,7 +12,7 @@ type HomeProps = { course?: CourseData, error?: { error: boolean, data: ErrorDat
 
 const Home = ({ course, error }: HomeProps) => {
 
-    if (error && error.data && error.data.status === '500') return <p>Oh no, it's a 500 server error!</p>;
+    if (error && error.data && error.data.status === '500') return <p>Oh no, looks like a 500 server error!</p>;
     if (error || !course) return <p>Oh no we have an issue</p>;
     return <CourseHome title={course.title} description={course.description} video={course.video} />
 

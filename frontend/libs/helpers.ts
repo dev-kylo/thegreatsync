@@ -62,6 +62,7 @@ function mapMenuSubChapters(subchapters: SubChapter[], prependLinkUrl: string): 
 
 export function mapMenuChapters(data: ChaptersResponse, courseUid: string): MenuItem[] {
     const chapters = data.data;
+    if (!chapters) return [];
     return chapters
         .filter(chapter => chapter.attributes.visible)
         .sort(sortByOrderNumber)
