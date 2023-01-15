@@ -44,6 +44,11 @@
         "visible": {
             "type": "boolean",
             "default": true
+        },
+        "links": {
+            "type": "component",
+            "repeatable": true,
+            "component": "media.link"
         }
     }
 }

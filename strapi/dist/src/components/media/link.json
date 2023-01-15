@@ -1,0 +1,33 @@
+{
+    "collectionName": "components_media_links",
+    "info": {
+        "displayName": "link",
+        "icon": "link"
+    },
+    "options": {},
+    "attributes": {
+        "file": {
+            "allowedTypes": [
+                "images",
+                "files"
+            ],
+            "type": "media",
+            "multiple": false
+        },
+        "type": {
+            "type": "enumeration",
+            "enum": [
+                "download",
+                "external"
+            ],
+            "required": true
+        },
+        "external_url": {
+            "type": "string"
+        },
+        "title": {
+            "type": "string",
+            "required": true
+        }
+    }
+}
