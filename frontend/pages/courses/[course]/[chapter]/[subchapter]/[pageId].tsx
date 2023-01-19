@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/react';
+import { unstable_getServerSession } from "next-auth/next";
 import Protected from '../../../../../containers/Protected';
 import Layout from '../../../../../components/layout';
 import Navbar from '../../../../../components/ui/Navbar';
@@ -15,6 +15,7 @@ import ControlBar from '../../../../../containers/ControlBar';
 import PageStepsController from '../../../../../containers/PageStepsController';
 import Text from '../../../../../components/layout/screens/Text';
 import { createErrorString } from '../../../../../libs/errorHandler';
+import { authOptions } from '../../../../api/auth/[...nextauth]';
 
 type CoursePageProps = {
     title: string | number;
@@ -62,7 +63,7 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const session = await getSession(context);
+    const session = await unstable_getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     const { chapter, subchapter, pageId } = context.params as { chapter: string, subchapter: string, pageId: string };
     const resp = (await getPage(pageId, session));

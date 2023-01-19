@@ -44,7 +44,8 @@ export const getCourse = async (id: string | number, session: Session): Promise<
     }, {
         encodeValuesOnly: true, // prettify URL
     });
-    const res = await axios.get<CourseResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/courses/${id}?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
-    if (!res || res.data.error) logError(res.data.error || 'Received undefined after attempting to fetch COURSE with ID: ' + id)
+    const res = await httpClient.get<CourseResponse>(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/courses/${id}?${query}`, { headers: { Authorization: `Bearer ${session.jwt}` } });
+    if (!res || (res.data && res.data.error)) logError(res.data.error || 'Received undefined after attempting to fetch COURSE with ID: ' + id)
+
     return res.data
 };

@@ -1,11 +1,13 @@
 
-import { getSession } from 'next-auth/react';
+import { unstable_getServerSession } from "next-auth/next";
 import CourseDashboard from '../containers/CourseDashboard/CourseDashboard';
 import { serverRedirectObject } from '../libs/helpers';
 import { GetServerSideProps } from 'next';
 import { getCourse } from '../services/queries';
 import { ErrorData, VideoT } from '../types';
 import { createErrorString } from '../libs/errorHandler';
+import { authOptions } from './api/auth/[...nextauth]';
+import { setAuthToken } from "../libs/axios";
 
 type CourseData = { title: string, description?: string, video?: VideoT }
 type HomeProps = { course?: CourseData, error?: { error: boolean, data: ErrorData } }
@@ -21,15 +23,17 @@ const Home = ({ course, error }: HomeProps) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const session = await getSession(context);
+    const session = await unstable_getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
+    session.jwt && setAuthToken(session.jwt);
 
-    console.log('About to fetch data')
     const resp = (await getCourse(2, session));
     if (!resp || resp.error || !resp.data) {
-        let errorStr = createErrorString(resp.error, 'Failed to fetch course data. Received undefined');
-        if (resp.error && resp.error.status === '403') errorStr = 'You do not have the correct permissions to view this course';
-        else if (resp.error && resp.error.status === '500') errorStr = 'Oh no! The server is currently down';
+        console.log('THERE IS AN ERROR')
+        if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
+        if (resp.error.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
+        if (resp.error.status === 403) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error='You do not have the correct permissions to view this course'`);
+        else if (resp.error.status === 500) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down!'`);
         return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=${resp.error ? `${resp.error.name}: ${resp.error.message}` : 'Failed to fetch course data. Received undefined'}`);
     }
 

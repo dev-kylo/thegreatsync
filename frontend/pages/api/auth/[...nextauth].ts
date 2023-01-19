@@ -1,9 +1,9 @@
 import NextAuth, { User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { signIn } from '../../../services/signIn';
+import type { NextAuthOptions } from 'next-auth'
 
-
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
     // Configure one or more authentication providers
     providers: [
         CredentialsProvider({
@@ -50,4 +50,6 @@ export default NextAuth({
             return Promise.resolve(token);
         },
     },
-});
+}
+
+export default NextAuth(authOptions);

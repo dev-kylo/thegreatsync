@@ -5,6 +5,7 @@ import Logo from '../assets/logo.webp'
 import Image from 'next/image';
 import Alert from '../components/ui/Alert';
 
+
 interface Submission {
     email: string, password: string
 }
