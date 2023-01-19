@@ -5,17 +5,20 @@ import { serverRedirectObject } from '../libs/helpers';
 import { GetServerSideProps } from 'next';
 import { getCourse } from '../services/queries';
 import { ErrorData, VideoT } from '../types';
-import { createErrorString } from '../libs/errorHandler';
 import { authOptions } from './api/auth/[...nextauth]';
 import { setAuthToken } from "../libs/axios";
+import { useSession } from "next-auth/react"
 
 type CourseData = { title: string, description?: string, video?: VideoT }
 type HomeProps = { course?: CourseData, error?: { error: boolean, data: ErrorData } }
 
 const Home = ({ course, error }: HomeProps) => {
 
-    if (error && error.data && error.data.status === '500') return <p>Oh no, looks like a 500 server error!</p>;
+    const { data: session } = useSession();
+    setAuthToken(session?.jwt || '')
+
     if (error || !course) return <p>Oh no we have an issue</p>;
+    if (!session?.jwt) return <p>Loading</p>;
     return <CourseDashboard title={course.title} description={course.description} video={course.video} />
 
 }
@@ -27,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     session.jwt && setAuthToken(session.jwt);
 
-    const resp = (await getCourse(2, session));
+    const resp = (await getCourse(2));
     if (!resp || resp.error || !resp.data) {
         console.log('THERE IS AN ERROR')
         if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);

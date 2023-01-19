@@ -14,8 +14,9 @@ import Video from '../../../../../components/layout/screens/Video';
 import ControlBar from '../../../../../containers/ControlBar';
 import PageStepsController from '../../../../../containers/PageStepsController';
 import Text from '../../../../../components/layout/screens/Text';
-import { createErrorString } from '../../../../../libs/errorHandler';
 import { authOptions } from '../../../../api/auth/[...nextauth]';
+import { setAuthToken } from '../../../../../libs/axios';
+import { useSession } from 'next-auth/react';
 
 type CoursePageProps = {
     title: string | number;
@@ -24,10 +25,12 @@ type CoursePageProps = {
 }
 
 
-
 export default function CoursePage({ title, type, content }: CoursePageProps) {
 
     const { menuData, nextPage, prevPage } = useContext(NavContext);
+
+    const { data: session } = useSession();
+    setAuthToken(session?.jwt || '');
 
     console.log({ title, type, content })
 
@@ -65,13 +68,17 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await unstable_getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
-    const { chapter, subchapter, pageId } = context.params as { chapter: string, subchapter: string, pageId: string };
-    const resp = (await getPage(pageId, session));
-    if (!resp || resp.error || !resp.data || !resp.data.attributes.content[0]) {
-        let errorStr = createErrorString(resp.error, 'There was an error fetching this page.');
-        if (resp.error && resp.error.status === '400') errorStr = 'This course page does not exist.'
-        if (resp.data && !resp.data.attributes.content[0]) errorStr = 'No data for this page was found.'
-        return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=${errorStr}`);
+    session.jwt && setAuthToken(session.jwt);
+
+    const { pageId } = context.params as { chapter: string, subchapter: string, pageId: string };
+    const resp = (await getPage(pageId));
+    if (!resp || resp.error || !resp.data) {
+        console.log('THERE IS AN ERROR')
+        if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
+        if (resp.error.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
+        if (resp.error.status === 403) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error='You do not have the correct permissions to view this course'`);
+        else if (resp.error.status === 500) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down!'`);
+        return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=${resp.error ? `${resp.error.name}: ${resp.error.message}` : 'Failed to fetch page data. Received undefined'}`);
     }
 
     const { title, type, content } = resp.data.attributes;

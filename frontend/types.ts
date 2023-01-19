@@ -72,7 +72,7 @@ export interface ChaptersResponse {
 
 export interface PageResponse {
     data?: PageData;
-    error?: ErrorData;
+    error: ErrorData;
     meta: Meta;
 }
 
