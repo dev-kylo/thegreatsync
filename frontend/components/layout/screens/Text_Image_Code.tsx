@@ -7,7 +7,7 @@ type Text_Image_Code_Props = { text: string, code: string, image: ImageComp, id:
 
 export default function Text_Image_Code({ text, code, image, id, showImageBorder }: Text_Image_Code_Props) {
 
-    const { width, height, url } = image.data.attributes;
+    const { width, height, url, placeholder } = image.data.attributes;
 
     return (
         <>
@@ -24,7 +24,8 @@ export default function Text_Image_Code({ text, code, image, id, showImageBorder
                             alt="Mountains"
                             src={url || "https://res.cloudinary.com/the-great-sync/image/upload/v1667044950/2000x2000/Whirlpool_F_a_g1mm3x.jpg"}
                             layout="responsive"
-                            // placeholder="blur"
+                            placeholder="blur"
+                            blurDataURL={placeholder}
                             width={width || 2000}
                             height={height || 2000}
                             className="aspect-square h-auto w-full"

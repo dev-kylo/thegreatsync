@@ -18,5 +18,11 @@ module.exports = ({ env }) => ({
                 delete: {},
             },
         },
-    }
+    },
+    placeholder: {
+        enabled: true,
+        config: {
+            size: 10,
+        },
+    },
 });

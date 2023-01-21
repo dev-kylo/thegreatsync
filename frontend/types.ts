@@ -133,6 +133,9 @@ export interface ImageAttributes {
     width: number;
     height: number;
     url: string;
+    title: string
+    placeholder: string;
+    size: number;
 }
 
 export interface CourseAttributes extends StrapiResponseMetaData {
