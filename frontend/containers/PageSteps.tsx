@@ -77,7 +77,7 @@ const PageSteps = ({ pageSteps, completeStep, showNextButton, type, nextPage, pr
                         {pageSteps.length > 6 && current > 3 && <div className='fixed w-12 h-full bg-[#021e44bc] left-[3em] top-0 blur-sm scale-y-150 z-[100]'></div>}
                         <ol role="list" ref={stepsContainer} className="flex items-center ">
                             {pageSteps.map((step: PageStep, stepIdx: number) => (
-                                <li key={step.id} id={`step_${stepIdx}`} className={classNames(stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-10' : '', 'relative')}>
+                                <li key={step.id} id={`step_${stepIdx}`} className={classNames(stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-10' : '', 'relative', 'cursor-pointer')}>
                                     <Step  {...step} orderNumber={stepIdx + 1} setCurrent={handleClick} status={step.id === current ? 'current' : step.status} />
                                 </li>
                             ))}

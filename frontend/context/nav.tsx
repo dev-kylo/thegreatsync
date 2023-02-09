@@ -62,6 +62,12 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
             courseSequence.current.currentPageNode = nextNode;
             router.replace(nextNode.data.href!)
         }
+
+        // STEPS TO SET COMPLETED
+        // CHECK IF EXISTING IS ALREADY COMPLETED
+        // IF NOT
+        // FETCH CALL TO ADD ID TO COMPLETED ARRAY IN STRAPI
+        // UPDATE COURSE SEQUENCE
     }
 
     const prevPage = () => {
