@@ -1,85 +1,71 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { mapMenuChapters } from "../libs/helpers";
-import { MenuItem, ChaptersResponse, PageResponse, PageStep } from "../types";
-import useSWR from 'swr'
-import { getChapters, getPage } from "../services/queries";
-import { DoublyLinkedList, Node } from "../libs/doublyLinkedList";
+import React, { ReactNode, useCallback, useMemo, useState } from "react";
+import { PageStep, PageContent } from "../types";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 
 
 
-type NavProviderValues = {
-
-    nextPage: () => void
-    prevPage: () => void
-    showNext: boolean
-    showPrev: boolean
+type StepProviderValues = {
+    step?: PageStep,
+    steps?: PageStep[]
+    setStepData: (contentSteps: PageContent[]) => void
+    nextStep: () => void
+    prevStep: () => void
+    goToStep: (ind: number) => void
 }
 
-export const NavContext = React.createContext<NavProviderValues>({
-    menuData: [],
-    courseSequence: null,
-    nextPage: () => { },
-    prevPage: () => { },
-    showNext: false,
-    showPrev: false
+export const StepContext = React.createContext<StepProviderValues>({
+    setStepData: () => { },
+    nextStep: () => { },
+    prevStep: () => { },
+    goToStep: () => { },
 });
 
-function addToList(item: MenuItem, list: DoublyLinkedList) {
-    if (item.children) item.children.forEach(itemChild => addToList(itemChild, list))
-    else list.addToTail(item)
-}
 
-function createList(menuItems: MenuItem[]) {
-    const list = new DoublyLinkedList();
-    menuItems.forEach(item => addToList(item, list));
-    console.log('-------- AND Queue of PAGES -------');
-    console.log(list.printList())
-    return list
-}
-
-
-const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
-    const [serverFetchedData, setServerFetchedData] = useState<PageResponse | null>(null);
-    const [clientFetcherId, setClientFetcher] = useState(false);
-    const { data, error } = useSWR(() => clientFetcher ? '/api/chapters' : null, getPage, { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false })
+const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
+    const [steps, setSteps] = useState<PageStep[]>()
     const router = useRouter();
-    const { pageId } = router.query as { pageId: string };
 
+    const { stepIndex = 0 } = router.query as { chapter: string, subchapter: string, pageId: string, stepIndex: string };
 
-    const storeServerData = (data: PageResponse) => {
-        setServerFetchedData(data);
-    }
-
-    const getData = () => {
-        if (serverFetchedData) return serverFetchedData
-        else {
-            if (!clientFetcher) setClientFetcher(true);
-            return data;
-        }
-    }
-
-    function getSteps(){
-        const pageData = getData()
-        if (!pageData) return [];
-        return pageData  .map((topic: Partial<PageStep>) => {
-            topic.status = viewed.includes(topic.id!) ? 'complete' : 'default';
-            return topic
+    const setStepData = useCallback(function setStepData(contentSteps: PageContent[]){
+        const mapped = contentSteps.map((content:PageContent) => {
+            // topic.status = viewed.includes(topic.id!) ? 'complete' : 'default';
+            const step = {...content} as Partial<PageStep>;
+            step.status = 'default';
+            return step
         }) as PageStep[]
-    
+        setSteps(mapped);
+    }, []) 
+
+    function nextStep(){
+        console.log('NEXT')
+        console.log(steps && +stepIndex === steps.length - 1)
+        if(steps && +stepIndex === steps.length - 1) return;
+        router.replace(`${window.location.pathname}?stepIndex=${+stepIndex+1}`)
     }
 
+    function prevStep(){
+        if(+stepIndex < 1) return;
+        router.replace(`${window.location.pathname}?stepIndex=${+stepIndex-1}`)
+    }
 
+    function goToStep(index: number){
+        router.replace(`${window.location.pathname}?stepIndex=${index}`)
+    }
 
     return (
-        <NavContext.Provider value={{
-            steps: getSteps() || pageSteps
+        <StepContext.Provider value={{
+            step:  steps && steps[+stepIndex],
+            steps,
+            setStepData,
+            nextStep,
+            prevStep,
+            goToStep
         }}>
             {children}
-        </NavContext.Provider>
+        </StepContext.Provider>
     )
 
 };
 
-export default NavContextProvider;
+export default StepContextProvider;

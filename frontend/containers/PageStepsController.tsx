@@ -1,8 +1,9 @@
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import type { PageContent, PageStep, PageType } from '../types';
 import PageSteps from '../containers/PageSteps';
 import { NavContext } from '../context/nav';
+import { StepContext } from '../context/steps';
 
 type PageStepsControllerProps = {
     pageContent: PageContent[],
@@ -12,27 +13,38 @@ type PageStepsControllerProps = {
 
 const PageStepsController = ({ pageContent, type }: PageStepsControllerProps) => {
     const { nextPage, prevPage } = useContext(NavContext);
+    const {nextStep, prevStep, goToStep, step, setStepData, steps } = useContext(StepContext)
 
-    const [viewed, setViewed] = useState<number[]>([])
-    const title = 'Statements and declarations';
+    // const [viewed, setViewed] = useState<number[]>([])
     const handleViewedStep = (id: number) => {
-        if (!viewed.includes(id)) setViewed([...viewed, id])
+        // if (!viewed.includes(id)) setViewed([...viewed, id])
+        console.log('Viewed ID')
+        console.log(id);
     }
 
-    const pageSteps: PageStep[] = pageContent.map((topic: Partial<PageStep>) => {
-        topic.status = viewed.includes(topic.id!) ? 'complete' : 'default';
-        return topic
-    }) as PageStep[]
+    useEffect(() => {
+        console.log('Ready to set steps?:', !!steps)
+        if(pageContent && !steps) setStepData(pageContent);
+    }, [pageContent, setStepData, steps])
+
+    if (!step || !steps){
+        return <p>Loading Step Context</p>
+    }
 
 
     return (
         <PageSteps
             completeStep={handleViewedStep}
-            pageSteps={pageSteps}
-            showNextButton={viewed.length >= pageSteps.length - 1}
+            pageStep={step}
+            pageSteps={steps}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            // showNextButton={viewed.length >= pageSteps.length - 1}
+            showNextButton={true}
             type={type}
             nextPage={nextPage}
             prevPage={prevPage}
+            goToStep={goToStep}
         />
     );
 }

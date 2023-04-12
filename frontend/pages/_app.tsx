@@ -6,6 +6,7 @@ import Head from 'next/head'
 import { Session } from "next-auth";
 import { SessionProvider } from 'next-auth/react';
 import NavContextProvider from '../context/nav';
+import StepContextProvider from '../context/steps';
 
 
 function MyApp({ Component, pageProps }: AppProps<{
@@ -21,7 +22,9 @@ function MyApp({ Component, pageProps }: AppProps<{
             </Head>
             <main>
                 <NavContextProvider>
-                    <Component {...pageProps} />
+                    <StepContextProvider>
+                        <Component {...pageProps} />
+                    </StepContextProvider>
                 </NavContextProvider>
             </main>
         </SessionProvider>

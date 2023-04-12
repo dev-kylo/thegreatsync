@@ -32,6 +32,7 @@ export const getPage = async (id: string | number): Promise<PageResponse> => {
     return res && res.data
 };
 
+
 export const getCourse = async (id: string | number): Promise<CourseResponse> => {
 
     const query = qs.stringify({
