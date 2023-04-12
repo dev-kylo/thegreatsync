@@ -82,11 +82,11 @@ const PageSteps = ({ pageStep, pageSteps, completeStep, showNextButton, type, ne
             {type === 'text_image' && <Text_Image id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
 
             <ControlBar showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
-                <nav aria-label="Progress" className='flex scrollbar-thin scrollbar-none relative z-50  '>
+                <nav aria-label="Progress" className='flex items-center relative z-50  '>
                     <button className="text-white px-4 hover:text-primary_green" onClick={handlePrev}>
                         <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
                     </button>
-                    <div className='max-w-md overflow-hidden relative'>
+                    <div className='max-w-md relative'>
                         {/* {pageSteps.length > 6 && current > 3 && <div className='fixed w-12 h-full bg-[#021e44bc] left-[3em] top-0 blur-sm scale-y-150 z-[100]'></div>} */}
                         <ol role="list" ref={stepsContainer} className="flex items-center ">
                             {pageSteps.map((step: PageStep, stepIdx: number) => (
