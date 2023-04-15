@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 
 type StepProviderValues = {
-    step?: PageStep,
+    currIndex: number,
     steps?: PageStep[]
     setStepData: (contentSteps: PageContent[]) => void
     nextStep: () => void
@@ -14,6 +14,7 @@ type StepProviderValues = {
 }
 
 export const StepContext = React.createContext<StepProviderValues>({
+    currIndex: 0,
     setStepData: () => { },
     nextStep: () => { },
     prevStep: () => { },
@@ -38,8 +39,6 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
     }, []) 
 
     function nextStep(){
-        console.log('NEXT')
-        console.log(steps && +stepIndex === steps.length - 1)
         if(steps && +stepIndex === steps.length - 1) return;
         router.replace(`${window.location.pathname}?stepIndex=${+stepIndex+1}`)
     }
@@ -55,7 +54,7 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
 
     return (
         <StepContext.Provider value={{
-            step:  steps && steps[+stepIndex],
+            currIndex: +stepIndex || 0,
             steps,
             setStepData,
             nextStep,

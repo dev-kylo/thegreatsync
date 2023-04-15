@@ -13,7 +13,7 @@ type PageStepsControllerProps = {
 
 const PageStepsController = ({ pageContent, type }: PageStepsControllerProps) => {
     const { nextPage, prevPage } = useContext(NavContext);
-    const {nextStep, prevStep, goToStep, step, setStepData, steps } = useContext(StepContext)
+    const {nextStep, prevStep, goToStep, currIndex, setStepData, steps } = useContext(StepContext)
 
     // const [viewed, setViewed] = useState<number[]>([])
     const handleViewedStep = (id: number) => {
@@ -27,7 +27,7 @@ const PageStepsController = ({ pageContent, type }: PageStepsControllerProps) =>
         if(pageContent && !steps) setStepData(pageContent);
     }, [pageContent, setStepData, steps])
 
-    if (!step || !steps){
+    if (!steps){
         return <p>Loading Step Context</p>
     }
 
@@ -35,7 +35,7 @@ const PageStepsController = ({ pageContent, type }: PageStepsControllerProps) =>
     return (
         <PageSteps
             completeStep={handleViewedStep}
-            pageStep={step}
+            currIndex={currIndex}
             pageSteps={steps}
             nextStep={nextStep}
             prevStep={prevStep}
