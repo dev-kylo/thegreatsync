@@ -10,14 +10,13 @@ import { setAuthToken } from "../libs/axios";
 import { useSession } from "next-auth/react"
 
 type CourseData = { title: string, description?: string, video?: VideoT }
-type HomeProps = { course?: CourseData, error?: { error: boolean, data: ErrorData } }
+type HomeProps = { course: CourseData }
 
-const Home = ({ course, error }: HomeProps) => {
+const Home = ({ course }: HomeProps) => {
 
     const { data: session } = useSession();
     setAuthToken(session?.jwt || '')
 
-    if (error || !course) return <p>Oh no we have an issue</p>;
     if (!session?.jwt) return <p>Loading</p>;
     return <CourseDashboard title={course.title} description={course.description} video={course.video} />
 
@@ -32,7 +31,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const resp = (await getCourse(2));
     if (!resp || resp.error || !resp.data) {
-        console.log('THERE IS AN ERROR')
         if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
         if (resp.error.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
         if (resp.error.status === 403) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error='You do not have the correct permissions to view this course'`);
