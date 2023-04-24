@@ -13,6 +13,8 @@ const Step = ({ status, id, orderNumber, setCurrent }: StepProps) => {
         complete: "h-7 w-7 bg-secondary_red hover:bg-primary_green",
     };
 
+    console.log(status)
+
     return (
         <>
             <div className="absolute inset-0 flex items-center flex-wrap" aria-hidden="true">

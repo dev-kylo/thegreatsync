@@ -13,14 +13,8 @@ type PageStepsControllerProps = {
 
 const PageStepsController = ({ pageContent, type }: PageStepsControllerProps) => {
     const { nextPage, prevPage } = useContext(NavContext);
-    const {nextStep, prevStep, goToStep, currIndex, setStepData, steps } = useContext(StepContext)
+    const {nextStep, prevStep, goToStep, currIndex, setStepData, steps, showNextPageButton } = useContext(StepContext)
 
-    // const [viewed, setViewed] = useState<number[]>([])
-    const handleViewedStep = (id: number) => {
-        // if (!viewed.includes(id)) setViewed([...viewed, id])
-        console.log('Viewed ID')
-        console.log(id);
-    }
 
     useEffect(() => {
         console.log('Ready to set steps?:', !!steps)
@@ -34,13 +28,11 @@ const PageStepsController = ({ pageContent, type }: PageStepsControllerProps) =>
 
     return (
         <PageSteps
-            completeStep={handleViewedStep}
             currIndex={currIndex}
             pageSteps={steps}
             nextStep={nextStep}
             prevStep={prevStep}
-            // showNextButton={viewed.length >= pageSteps.length - 1}
-            showNextButton={true}
+            showNextButton={showNextPageButton}
             type={type}
             nextPage={nextPage}
             prevPage={prevPage}

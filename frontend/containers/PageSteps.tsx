@@ -36,6 +36,18 @@ const PageSteps = ({ currIndex, pageSteps, showNextButton, type, nextPage, prevP
         scrollIntoView(currIndex)
     }, [currIndex])
 
+    useEffect(() => {
+        function handleKeyPress(e: KeyboardEvent) {
+            console.log('KEYDOWN')
+            if (e.key ==='ArrowLeft') prevStep()
+            else if (e.key === 'ArrowRight') nextStep();
+        }
+
+        document.addEventListener('keydown', handleKeyPress)
+
+        return () => document.removeEventListener('keydown', handleKeyPress)
+    }, [prevStep, nextStep])
+
 
     const handleNext = (e: SyntheticEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -57,6 +69,8 @@ const PageSteps = ({ currIndex, pageSteps, showNextButton, type, nextPage, prevP
             {type === 'text_image_code' && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} showImageBorder={currentTopicStep?.transparent_image} />}
             {type === 'text_image' && <Text_Image id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
 
+        <div>
+            <div className='my-1 p-0 text-white mx-auto text-center text-sm'><span>Use your arrow keys</span></div>
             <ControlBar showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
                 <nav aria-label="Progress" className='flex items-center relative z-50  '>
                     <button className="text-white px-4 hover:text-primary_green" onClick={handlePrev}>
@@ -67,7 +81,7 @@ const PageSteps = ({ currIndex, pageSteps, showNextButton, type, nextPage, prevP
                         <ol role="list" ref={stepsContainer} className="flex items-center ">
                             {pageSteps.map((step: PageStep, stepIdx: number) => (
                                 <li key={step.id} id={`step_${stepIdx}`} className={classNames(stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-10' : '', 'relative', 'cursor-pointer')}>
-                                    <Step  {...step} orderNumber={stepIdx + 1} setCurrent={() =>goToStep(stepIdx)} status={stepIdx === currIndex ? 'current' : step?.status || 'default'} />
+                                    <Step  {...step} orderNumber={stepIdx + 1} setCurrent={() =>goToStep(stepIdx)} status={stepIdx === currIndex ? 'current' : step?.status} />
                                 </li>
                             ))}
                         </ol>
@@ -78,6 +92,7 @@ const PageSteps = ({ currIndex, pageSteps, showNextButton, type, nextPage, prevP
                     </button>
                 </nav>
             </ControlBar>
+            </div>
         </>
     );
 }
