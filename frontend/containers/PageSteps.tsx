@@ -69,8 +69,8 @@ const PageSteps = ({ currIndex, pageSteps, showNextButton, type, nextPage, prevP
             {type === 'text_image_code' && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} showImageBorder={currentTopicStep?.transparent_image} />}
             {type === 'text_image' && <Text_Image id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
 
-        <div>
-            <div className='my-1 p-0 text-white mx-auto text-center text-sm'><span>Use your arrow keys</span></div>
+        <div className='relative'>
+            <div className='absolute top-[-1rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 my-1 p-0 text-white mx-auto text-center text-sm'><span>Use your arrow keys</span></div>
             <ControlBar showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
                 <nav aria-label="Progress" className='flex items-center relative z-50  '>
                     <button className="text-white px-4 hover:text-primary_green" onClick={handlePrev}>
