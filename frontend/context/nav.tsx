@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import { mapMenuChapters } from "../libs/helpers";
 import { MenuItem } from "../types";
 import useSWR from 'swr'
@@ -6,11 +6,12 @@ import { getChapters } from "../services/queries";
 import { DoublyLinkedList} from "../libs/doublyLinkedList";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { httpClient, setAuthToken } from "../libs/axios";
 
 
 
 type NavProviderValues = {
-    menuData: MenuItem[]
+    menuData?: MenuItem[]
     courseSequence?: DoublyLinkedList | null
     nextPage: () => void
     prevPage: () => void
@@ -19,7 +20,7 @@ type NavProviderValues = {
 }
 
 export const NavContext = React.createContext<NavProviderValues>({
-    menuData: [],
+    menuData: undefined,
     courseSequence: null,
     nextPage: () => { },
     prevPage: () => { },
@@ -47,19 +48,27 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const [showNextButton, setNextButton] = useState(true);
     const [showPrevButton, setPrevButton] = useState(true);
     const { data: session} = useSession();
-    const [courseData, setCourseData] = useState<MenuItem[]>([]);
-    const courseSequence = useRef<DoublyLinkedList | null>(null);
+    // const [courseData, setCourseData] = useState<MenuItem[]>([]);
+    // const courseSequence = useRef<DoublyLinkedList | null>(null);
+    const [hasAuth, setHasAuth] = useState(false)
 
-    const { data, error } = useSWR(() => session ? '/api/chapters' : null, getChapters, { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false })
+    const { data, error } = useSWR(() => session && !!httpClient.defaults.headers.common['Authorization'] ? '/api/chapters' : null, getChapters, { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false })
     const router = useRouter();
     const { pageId } = router.query as { pageId: string };
 
+    const menuChapters = useMemo(() => data && mapMenuChapters(data, 'learn-js'), [data]);
+    const courseSequence = useMemo(() => menuChapters && createList(menuChapters), [menuChapters])
 
+    
+    useEffect(() =>{
+        if (session?.jwt) setAuthToken(session?.jwt || '');
+    }, [session?.jwt])
+    
     const nextPage = () => {
-        if (!courseSequence.current) return;
-        const nextNode = courseSequence.current.currentPageNode?.next;
+        if (!courseSequence) return;
+        const nextNode = courseSequence.currentPageNode?.next;
         if (nextNode) {
-            courseSequence.current.currentPageNode = nextNode;
+            courseSequence.currentPageNode = nextNode;
             router.replace(nextNode.data.href!)
         }
 
@@ -71,39 +80,30 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     }
 
     const prevPage = () => {
-        if (!courseSequence.current) return;
-        const prevNode = courseSequence.current.currentPageNode?.previous;
+        if (!courseSequence) return;
+        const prevNode = courseSequence.currentPageNode?.previous;
         if (prevNode) {
-            courseSequence.current.currentPageNode = prevNode;
+            courseSequence.currentPageNode = prevNode;
             router.replace(prevNode.data.href!)
         }
     }
 
     useEffect(() => {
-        const list = courseSequence.current;
-        if (courseData && pageId && list) {
+        const list = courseSequence;
+        if (pageId && list) {
             if (+pageId !== list.currentPageNode?.data.id) {
                 const foundNode = list.getByDataId(+pageId);
                 if (foundNode) list.currentPageNode = foundNode
             }
         }
-    }, [pageId, courseData])
-
-    useEffect(() => {
-        if (data && data.data && (courseData.length < 1)) {
-            console.log('Setting Page Doubly Linked List')
-            const mappedMenuItems = mapMenuChapters(data, 'learn-js');
-            courseSequence.current = createList(mappedMenuItems)
-            setCourseData(mappedMenuItems);
-        }
-    }, [data, courseData.length]);
+    }, [pageId, courseSequence])
 
 
     return (
         <NavContext.Provider value={{
-            menuData: courseData,
-            courseSequence: courseSequence.current,
-            showNext: !!(courseSequence.current?.currentPageNode?.next),
+            menuData: menuChapters,
+            courseSequence,
+            showNext: !!(courseSequence?.currentPageNode?.next),
             showPrev: true,
             nextPage,
             prevPage
