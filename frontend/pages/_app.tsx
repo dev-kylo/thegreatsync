@@ -6,10 +6,12 @@ import Head from 'next/head'
 import { Session } from "next-auth";
 import { SessionProvider } from 'next-auth/react';
 import NavContextProvider from '../context/nav';
+import StepContextProvider from '../context/steps';
 
 
 function MyApp({ Component, pageProps }: AppProps<{
     session: Session;
+    isStepPage: boolean
 }>) {
     return (
         <SessionProvider session={pageProps!.session}>
@@ -21,7 +23,12 @@ function MyApp({ Component, pageProps }: AppProps<{
             </Head>
             <main>
                 <NavContextProvider>
-                    <Component {...pageProps} />
+                    { pageProps!.isStepPage ? (
+                        <StepContextProvider>
+                            <Component {...pageProps} />
+                        </StepContextProvider>
+                    ): <Component {...pageProps} />  }
+
                 </NavContextProvider>
             </main>
         </SessionProvider>

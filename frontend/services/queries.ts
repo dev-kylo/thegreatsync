@@ -5,6 +5,7 @@ import { httpClient } from "../libs/axios";
 
 export const getText = async (id: string) => {
     console.log('About to fetch TEXT data')
+    console.log(`/api/text-image-codes/${id}`)
     const res = await httpClient.get(`/api/text-image-codes/${id}`);
     return res && res.data;
 };
@@ -16,6 +17,7 @@ export const getChapters = async (url?: string) => {
         encodeValuesOnly: true, // prettify URL
     });
     console.log('About to fetch CHAPTERS data')
+    console.log(`${url || '/api/chapters'}?${query}`)
     const res = await httpClient.get<ChaptersResponse>(`${url || '/api/chapters'}?${query}`)
     return res && res.data;
 };
@@ -28,9 +30,11 @@ export const getPage = async (id: string | number): Promise<PageResponse> => {
         encodeValuesOnly: true, // prettify URL
     });
     console.log('About to fetch PAGE data')
+    console.log(`/api/pages/${id}?${query}`)
     const res = await httpClient.get<PageResponse>(`/api/pages/${id}?${query}`);
     return res && res.data
 };
+
 
 export const getCourse = async (id: string | number): Promise<CourseResponse> => {
 
@@ -40,6 +44,7 @@ export const getCourse = async (id: string | number): Promise<CourseResponse> =>
         encodeValuesOnly: true, // prettify URL
     });
     console.log('About to fetch COURSE data')
+    console.log(`/api/courses/${id}?${query}`)
     const res = await httpClient.get<CourseResponse>(`/api/courses/${id}?${query}`);
     return res && res.data;
 };

@@ -1,9 +1,9 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { mapMenuChapters } from "../libs/helpers";
-import { MenuItem, ChaptersResponse } from "../types";
+import { MenuItem } from "../types";
 import useSWR from 'swr'
 import { getChapters } from "../services/queries";
-import { DoublyLinkedList, Node } from "../libs/doublyLinkedList";
+import { DoublyLinkedList} from "../libs/doublyLinkedList";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -46,7 +46,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const [courseUid, setCourseUid] = useState('learn-js');
     const [showNextButton, setNextButton] = useState(true);
     const [showPrevButton, setPrevButton] = useState(true);
-    const { data: session, status } = useSession();
+    const { data: session} = useSession();
     const [courseData, setCourseData] = useState<MenuItem[]>([]);
     const courseSequence = useRef<DoublyLinkedList | null>(null);
 
@@ -81,22 +81,23 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
 
     useEffect(() => {
         const list = courseSequence.current;
-        if (pageId && list) {
+        if (courseData && pageId && list) {
             if (+pageId !== list.currentPageNode?.data.id) {
                 const foundNode = list.getByDataId(+pageId);
                 if (foundNode) list.currentPageNode = foundNode
             }
         }
-    }, [pageId, courseSequence.current])
+    }, [pageId, courseData])
 
     useEffect(() => {
         if (data && data.data && (courseData.length < 1)) {
             console.log('Setting Page Doubly Linked List')
             const mappedMenuItems = mapMenuChapters(data, 'learn-js');
-            setCourseData(mappedMenuItems);
             courseSequence.current = createList(mappedMenuItems)
+            setCourseData(mappedMenuItems);
         }
-    }, [data])
+    }, [data, courseData.length]);
+
 
     return (
         <NavContext.Provider value={{

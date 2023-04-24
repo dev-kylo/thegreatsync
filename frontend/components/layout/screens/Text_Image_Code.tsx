@@ -8,10 +8,6 @@ type Text_Image_Code_Props = { text: string, code: string, image: ImageComp, id:
 export default function Text_Image_Code({ text, code, image, id, showImageBorder }: Text_Image_Code_Props) {
 
     const { width, height, url, placeholder } = image.data.attributes;
-
-    console.log('RENDER TEXT-IMAGE-CODE')
-    console.log({ placeholder, url, code })
-
     return (
         <>
 

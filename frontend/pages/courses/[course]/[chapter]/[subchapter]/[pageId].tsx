@@ -88,6 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             title,
             type,
             content,
+            isStepPage: content.length > 1
         }
     };
 };
