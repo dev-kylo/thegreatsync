@@ -43,7 +43,6 @@ export class DoublyLinkedList {
             currentNode = currentNode.getNextNode();
         }
         output += '<tail>';
-        console.log(output);
     }
 }
 

@@ -4,6 +4,7 @@ import { signIn } from 'next-auth/react';
 import Logo from '../assets/logo.webp'
 import Image from 'next/image';
 import Alert from '../components/ui/Alert';
+import Spinner from '../components/ui/Spinner';
 
 
 interface Submission {
@@ -12,7 +13,7 @@ interface Submission {
 
 export default function SignIn() {
     const router = useRouter();
-    const [error, setError] = useState(false);
+    const [formState, setFormState] = useState({loading: false, error: false});
 
     const sendCredentials = async ({ email, password }: Submission) => {
         const result = await signIn('credentials', {
@@ -20,24 +21,20 @@ export default function SignIn() {
             email,
             password
         });
-        console.log('------RESULT------');
-        console.log(result);
+        console.log('------SIGNIN RESULT------', result);
         const redirectUrl = router.query.redirect as string;;
         if (result?.ok) return router.replace(redirectUrl || '/');
-        setError(true);
+        setFormState({loading: true, error: true});
     }
 
     const onSubmit = (e: any) => {
         e.preventDefault();
-        setError(false);
+        setFormState({error: false, loading: true})
         const form = e.target;
         const data = Object.fromEntries(new FormData(form)) as unknown as Submission
-        if (!data?.email || !data?.password) setError(true);
+        if (!data?.email || !data?.password) setFormState({error: false, loading: false})
         sendCredentials(data)
     };
-
-
-    console.log(router.query)
 
     return (
         <>
@@ -117,14 +114,16 @@ export default function SignIn() {
                                         <div>
                                             <button
                                                 type="submit"
+                                                disabled={formState.loading}
                                                 className="flex w-full justify-center rounded-md border border-transparent bg-secondary_red py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                             >
-                                                Sign in
+                    
+                                              {formState.loading ? <Spinner />: 'Signin'}
                                             </button>
                                         </div>
                                     </form>
                                     <div className='my-4'>
-                                        {error && <Alert text="There was an error signing you in" />}
+                                        {formState.error && <Alert text="There was an error signing you in" />}
                                     </div>
                                 </div>
                             </div>

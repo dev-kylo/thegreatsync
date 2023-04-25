@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { logError } from "./errorHandler";
 import { signOut } from "next-auth/react";
 
@@ -11,7 +11,7 @@ httpClient.interceptors.response.use(response => {
 }, (error) => {
     console.log('Response intercepted');
     logError(error);
-    if (error.response.status === 403) signOut();
+    if (error?.response?.status === 403) signOut();
     return error.response;
 });
 
