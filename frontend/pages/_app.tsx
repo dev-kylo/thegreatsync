@@ -1,7 +1,5 @@
 import type { AppProps } from 'next/app'
 import '../styles/global.css';
-import '../styles/duotone_prism.css';
-import '../styles/line_numbers_prism.css';
 import Head from 'next/head'
 import { Session } from "next-auth";
 import { SessionProvider } from 'next-auth/react';

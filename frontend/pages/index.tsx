@@ -15,7 +15,6 @@ type HomeProps = { course: CourseData }
 const Home = ({ course }: HomeProps) => {
 
     const { data: session } = useSession();
-    setAuthToken(session?.jwt || '')
 
     if (!session?.jwt) return <p>Loading</p>;
     return <CourseDashboard title={course.title} description={course.description} video={course.video} />

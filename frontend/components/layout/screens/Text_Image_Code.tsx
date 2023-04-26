@@ -14,7 +14,7 @@ export default function Text_Image_Code({ text, code, image, id, showImageBorder
             <div className="py-8 px-8 self-center 2xl:px-32 relative">
                 <div className="mx-auto w-full grid grid-cols-[1fr,1.5fr,1fr] gap-1 xl:px-2 self-center relative">
 
-                    <Block outerClasses="bg-[#111111]" innerClasses="p-4" enableScroll>
+                    <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll>
                         <ContentBlock md={text} id={id} />
                     </Block>
 
