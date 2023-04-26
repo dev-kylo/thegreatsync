@@ -1,43 +1,37 @@
 /* eslint-disable react/no-children-prop */
 import ReactMarkdown from 'react-markdown'
-import ContainsCodeSnippet from '../ui/ContainsCodeSnippet';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+import js from 'react-syntax-highlighter/dist/cjs/languages/hljs/javascript';
+import style from 'react-syntax-highlighter/dist/cjs/styles/hljs/night-owl';
 
-const ContentBlock = ({ md, numbered = false, id }: { md: string, id: number, numbered?: boolean }) => {
+SyntaxHighlighter.registerLanguage('javascript', js);
+
+const ContentBlock = ({ md, numbered = false, id,  }: { md: string, id: number, numbered?: boolean }) => {
 
     return (
-        <article id={`md-block:${id} `} className="prose dark:prose-invert prose-lg prose-headings:text-secondary_lightblue mx-auto">
-            
-            <ContainsCodeSnippet numbered={numbered} id={id}>
-            {/* <SyntaxHighlighter language="javascript" style={docco}>
-                <ReactMarkdown children={md} />
-                
-            </SyntaxHighlighter> */}
+        <article id={`md-block:${id} `} className="prose dark:prose-invert prose-lg prose-headings:text-secondary_lightblue mx-auto prose-pre:p-0 pt-2 prose-code:text-[#7fdbca] prose-code:after:hidden prose-code:before:hidden pb-16">
 
             <ReactMarkdown
                 children={md}
                 components={{
                 code({node, inline, className, children, ...props}) {
-                    const match = /language-(\w+)/.exec(className || '')
-                    return !inline && match ? (
-                    <SyntaxHighlighter
-                        {...props}
-                        children={String(children).replace(/\n$/, '')}
-                        style={docco}
-                        language={match[1]}
-                        PreTag="div"
-                    />
+                    return !inline ? (
+                            <SyntaxHighlighter
+                                {...props}
+                                children={String(children).replace(/\n$/, '')}
+                                style={style}
+                                language={'javascript'}
+                                PreTag="div"
+                            />
+                      
                     ) : (
-                    <code {...props} className={className}>
+                    <code {...props} className={`${className} text-lg bg-code_bg`}>
                         {children}
                     </code>
                     )
                 }
-    }}
-  />
-
-            </ContainsCodeSnippet>
+                }}
+            />
         </article >
     )
 
@@ -45,5 +39,3 @@ const ContentBlock = ({ md, numbered = false, id }: { md: string, id: number, nu
 
 export default ContentBlock;
 
-
-// I REMOVED PADDING 4 for Code Snippet
