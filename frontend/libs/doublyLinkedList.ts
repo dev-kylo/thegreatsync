@@ -1,8 +1,11 @@
-import { MenuItem } from "../types";
+import { MenuItem } from '../types';
+import { Node } from './node';
 
 export class DoublyLinkedList {
     head: null | Node;
+
     tail: null | Node;
+
     currentPageNode: null | Node;
 
     constructor() {
@@ -12,8 +15,8 @@ export class DoublyLinkedList {
     }
 
     getByDataId(id: number) {
-        var found = null;
-        var current = this.head;
+        let found = null;
+        let current = this.head;
         while (!found) {
             if (current?.data.id === id) found = current;
             current = current?.next || null;
@@ -30,7 +33,10 @@ export class DoublyLinkedList {
         }
         this.tail = newTail;
         if (!this.head) this.head = newTail;
-        if ((this.currentPageNode && this.currentPageNode.data.completed && !newTail.data.completed) || newTail.data.completed) {
+        if (
+            (this.currentPageNode && this.currentPageNode.data.completed && !newTail.data.completed) ||
+            newTail.data.completed
+        ) {
             this.currentPageNode = newTail;
         }
     }
@@ -39,45 +45,10 @@ export class DoublyLinkedList {
         let currentNode = this.head;
         let output = '<head> ';
         while (currentNode !== null) {
-            output += currentNode.data.name + '--' + ' ';
+            output += `${currentNode.data.name}--` + ` `;
             currentNode = currentNode.getNextNode();
         }
         output += '<tail>';
-    }
-}
-
-export class Node {
-    data: MenuItem;
-    next: null | Node;
-    previous: null | Node;
-
-    constructor(data: MenuItem) {
-        this.data = data;
-        this.next = null;
-        this.previous = null;
-    }
-
-    setNextNode(node: Node) {
-        if (node instanceof Node || node === null) {
-            this.next = node;
-        } else {
-            throw new Error('Next node must be a member of the Node class')
-        }
-    }
-
-    setPreviousNode(node: Node) {
-        if (node instanceof Node || node === null) {
-            this.previous = node;
-        } else {
-            throw new Error('Previous node must be a member of the Node class')
-        }
-    }
-
-    getNextNode() {
-        return this.next;
-    }
-
-    getPreviousNode() {
-        return this.previous;
+        console.log(output);
     }
 }

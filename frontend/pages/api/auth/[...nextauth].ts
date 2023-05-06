@@ -1,7 +1,7 @@
 import NextAuth, { User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import type { NextAuthOptions } from 'next-auth';
 import { signIn } from '../../../services/signIn';
-import type { NextAuthOptions } from 'next-auth'
 
 export const authOptions: NextAuthOptions = {
     // Configure one or more authentication providers
@@ -35,14 +35,14 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         session: async ({ session, token }) => {
-            console.log('SESSION CALLBACK')
+            console.log('SESSION CALLBACK');
             session.id = token.id as string;
             session.jwt = token.jwt as string;
             return Promise.resolve(session);
         },
         jwt: async ({ token, user }) => {
-            const isSignIn = user ? true : false;
-            const userWithType = user as User & { jwt: string }
+            const isSignIn = !!user;
+            const userWithType = user as User & { jwt: string };
             if (userWithType && isSignIn) {
                 token.id = userWithType.id;
                 token.jwt = userWithType.jwt;
@@ -50,6 +50,6 @@ export const authOptions: NextAuthOptions = {
             return Promise.resolve(token);
         },
     },
-}
+};
 
 export default NextAuth(authOptions);

@@ -1,51 +1,32 @@
-import { Disclosure } from '@headlessui/react'
-import Link from 'next/link'
+import { Disclosure } from '@headlessui/react';
+import Link from 'next/link';
 // import { mockMenu } from '../../mocks/MockMenu'
-import type { MenuItem } from '../../types'
-import MenuIcon from './MenuIcon'
-import ProgressIcon from './ProgressIcon'
+import type { MenuItem } from '../../types';
+import MenuIcon from './MenuIcon';
+import ProgressIcon from './ProgressIcon';
 
 function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
+    return classes.filter(Boolean).join(' ');
 }
 
 function createMenuLink(item: MenuItem) {
-    <Link href={item.href!} passHref>
-        <div key={item.name}>
-            <a
-
-                className={classNames(
-                    item.current
-                        ? 'bg-gray-100 text-gray-900'
-                        : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                    'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md'
-                )}
-            >
-                Icon
-                {item.name}
-            </a>
-        </div>
-    </Link>
-}
-
-function createMenuDropDownLink(children: MenuItem[]) {
-    return children.map((subItem) => {
-        const { level, type, name, completed, children, href, current } = subItem;
-        if (!children) {
-            return (
-                <Disclosure.Button
-                    key={name}
-                    as="a"
-                    href={href}
-                    className={`group flex w-full items-center rounded-md py-3 ${level === 2 ? 'pl-8' : level === 3 ? 'pl-20' : 'pl-4'} pr-2 text-md font-medium text-white hover:bg-gray-50 hover:text-gray-900`}
+    return (
+        <Link href={item.href!} passHref>
+            <div key={item.name}>
+                <a
+                    className={classNames(
+                        item.current
+                            ? 'bg-gray-100 text-gray-900'
+                            : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                        'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md'
+                    )}
                 >
-                    {type && <MenuIcon type={type} completed={!!completed} active={!!current} />}
-                    {name}
-                </Disclosure.Button>
-            )
-        }
-        return createMenuDropDown(subItem)
-    })
+                    Icon
+                    {item.name}
+                </a>
+            </div>
+        </Link>
+    );
 }
 
 function createMenuDropDown(item: MenuItem) {
@@ -58,10 +39,11 @@ function createMenuDropDown(item: MenuItem) {
                             item.current
                                 ? `py-3 bg-gray-100 text-white pl-[${item.level}rem]`
                                 : 'py-3 bg-transparent text-white hover:bg-gray-50 hover:text-gray-900',
-                            'group w-full flex items-center pl-2 pr-1 py-2 text-left text-md font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'
-                            , `${item.level === 2 ? 'pl-8' : item.level === 3 ? 'pl-20' : 'pl-4'}`)}
+                            'group w-full flex items-center pl-2 pr-1 py-2 text-left text-md font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500',
+                            `${item.level === 2 ? 'pl-8' : item.level === 3 ? 'pl-20' : 'pl-4'}`
+                        )}
                     >
-                        <div className='pl-2 mr-8 w-6'>
+                        <div className="pl-2 mr-8 w-6">
                             <ProgressIcon amount={item.progress} completed={!!item.completed} />
                         </div>
                         <span className="flex-1">{item.name}</span>
@@ -82,18 +64,32 @@ function createMenuDropDown(item: MenuItem) {
                 </>
             )}
         </Disclosure>
-    )
+    );
 }
 
+function createMenuDropDownLink(menuChildren: MenuItem[]) {
+    return menuChildren.map((subItem) => {
+        const { level, type, name, completed, children, href, current } = subItem;
+        if (!children) {
+            return (
+                <Disclosure.Button
+                    key={name}
+                    as="a"
+                    href={href}
+                    className={`group flex w-full items-center rounded-md py-3 ${
+                        level === 2 ? 'pl-8' : level === 3 ? 'pl-20' : 'pl-4'
+                    } pr-2 text-md font-medium text-white hover:bg-gray-50 hover:text-gray-900`}
+                >
+                    {type && <MenuIcon type={type} completed={!!completed} active={!!current} />}
+                    {name}
+                </Disclosure.Button>
+            );
+        }
+        return createMenuDropDown(subItem);
+    });
+}
 
-export default function Menu({ menuData }: { menuData: MenuItem[] }) {
-    console.log(menuData)
-    const menuLinks = menuData.map((item) =>
-        !item.children ? createMenuLink(item) : createMenuDropDown(item)
-    );
-    return (
-        <>
-            {menuLinks}
-        </>
-    )
+export default function Menu({ menuData }: { menuData: MenuItem[] }): JSX.Element[] {
+    const menuLinks = menuData.map((item) => (!item.children ? createMenuLink(item) : createMenuDropDown(item)));
+    return menuLinks;
 }

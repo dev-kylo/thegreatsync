@@ -1,3 +1,3 @@
-const Spinner = () => <span className="loader"></span>;
+const Spinner = () => <span className="loader" />;
 
 export default Spinner;

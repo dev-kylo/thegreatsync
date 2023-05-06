@@ -1,35 +1,33 @@
-import { Fragment } from 'react'
-import { Menu, Transition } from '@headlessui/react'
-import { Disclosure } from '@headlessui/react'
-import { signOut } from 'next-auth/react'
-
+import { Fragment } from 'react';
+import { Menu, Transition, Disclosure } from '@headlessui/react';
+import { signOut } from 'next-auth/react';
 
 const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
-
-    if (mobile) return (
-        <>
-            <Disclosure.Button
-                as="a"
-                href="#"
-                className="block rounded-md px-3 py-2 text-base font-medium text-indigo-200 hover:bg-indigo-600 hover:text-indigo-100"
-            >
-                Your Profile
-            </Disclosure.Button>
-            <Disclosure.Button
-                as="a"
-                href="#"
-                className="mt-1 block rounded-md px-3 py-2 text-base font-medium text-indigo-200 hover:bg-indigo-600 hover:text-indigo-100"
-            >
-                Settings
-            </Disclosure.Button>
-            <Disclosure.Button
-                onClick={() => signOut()}
-                className="mt-1 block rounded-md px-3 py-2 text-base font-medium text-indigo-200 hover:bg-indigo-600 hover:text-indigo-100"
-            >
-                Sign out
-            </Disclosure.Button>
-        </>
-    )
+    if (mobile)
+        return (
+            <>
+                <Disclosure.Button
+                    as="a"
+                    href="#"
+                    className="block rounded-md px-3 py-2 text-base font-medium text-indigo-200 hover:bg-indigo-600 hover:text-indigo-100"
+                >
+                    Your Profile
+                </Disclosure.Button>
+                <Disclosure.Button
+                    as="a"
+                    href="#"
+                    className="mt-1 block rounded-md px-3 py-2 text-base font-medium text-indigo-200 hover:bg-indigo-600 hover:text-indigo-100"
+                >
+                    Settings
+                </Disclosure.Button>
+                <Disclosure.Button
+                    onClick={() => signOut()}
+                    className="mt-1 block rounded-md px-3 py-2 text-base font-medium text-indigo-200 hover:bg-indigo-600 hover:text-indigo-100"
+                >
+                    Sign out
+                </Disclosure.Button>
+            </>
+        );
 
     return (
         <Menu as="div" className="relative flex-shrink-0">
@@ -86,7 +84,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                 </Menu.Items>
             </Transition>
         </Menu>
-    )
-}
+    );
+};
 
 export default ProfileDropDown;

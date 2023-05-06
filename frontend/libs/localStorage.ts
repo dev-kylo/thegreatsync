@@ -3,10 +3,10 @@ type StorageKeys = 'tgs-page-completion';
 export type TgsLocallyStoredData = {
     [key: string | number]: {
         stepsCompleted: {
-            [key: string]: boolean
-        }
-    }
-}
+            [key: string]: boolean;
+        };
+    };
+};
 
 export function retrieveLocallyStoredValue<T>(key: StorageKeys): T | undefined {
     try {

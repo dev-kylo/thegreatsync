@@ -1,6 +1,5 @@
-import Image from "next/image"
-import { ExclamationCircleIcon } from '@heroicons/react/20/solid'
-
+import Image from 'next/image';
+import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 
 const Error = () => (
     <div className="h-screen w-screen relative">
@@ -21,13 +20,14 @@ const Error = () => (
                 <div className="opacity-100">
                     <h4 className="text-2xl font-bold text-red-600 text-center ">Oh no! We have an error...</h4>
                     <p className="mt-4 text-center text-lg">
-                        In javascript, receiving <code className="text-red-600 font-bold">undefined</code> (volcano island) does not cause an error. But lots of other things do! Please try go back and retry.
+                        In javascript, receiving <code className="text-red-600 font-bold">undefined</code> (volcano
+                        island) does not cause an error. But lots of other things do! Please try go back and retry.
                     </p>
                     <p className="text-blue-700 font-bold mt-2 text-center">If the problem persists, contact me!</p>
                 </div>
             </div>
         </div>
     </div>
-)
+);
 
-export default Error
+export default Error;

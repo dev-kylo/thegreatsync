@@ -1,8 +1,8 @@
-import { XCircleIcon } from '@heroicons/react/20/solid'
+import { XCircleIcon } from '@heroicons/react/20/solid';
 
 type AlertProps = {
-    text: string
-}
+    text: string;
+};
 
 export default function Alert({ text }: AlertProps) {
     return (
@@ -22,5 +22,5 @@ export default function Alert({ text }: AlertProps) {
                 </div>
             </div>
         </div>
-    )
+    );
 }

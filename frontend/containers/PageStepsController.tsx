@@ -1,30 +1,26 @@
-
-import { useContext, useEffect, useState } from 'react';
-import type { PageContent, PageStep, PageType } from '../types';
-import PageSteps from '../containers/PageSteps';
+import { useContext, useEffect } from 'react';
+import type { PageContent, PageType } from '../types';
+import PageSteps from './PageSteps';
 import { NavContext } from '../context/nav';
 import { StepContext } from '../context/steps';
 
 type PageStepsControllerProps = {
-    pageContent: PageContent[],
-    type: PageType,
-}
-
+    pageContent: PageContent[];
+    type: PageType;
+};
 
 const PageStepsController = ({ pageContent, type }: PageStepsControllerProps) => {
     const { nextPage, prevPage } = useContext(NavContext);
-    const {nextStep, prevStep, goToStep, currIndex, setStepData, steps, showNextPageButton } = useContext(StepContext)
-
+    const { nextStep, prevStep, goToStep, currIndex, setStepData, steps, showNextPageButton } = useContext(StepContext);
 
     useEffect(() => {
-        console.log('Ready to set steps?:', !!steps)
-        if(pageContent && !steps) setStepData(pageContent);
-    }, [pageContent, setStepData, steps])
+        console.log('Ready to set steps?:', !!steps);
+        if (pageContent && !steps) setStepData(pageContent);
+    }, [pageContent, setStepData, steps]);
 
-    if (!steps){
-        return <p>Loading Step Context</p>
+    if (!steps) {
+        return <p>Loading Step Context</p>;
     }
-
 
     return (
         <PageSteps
@@ -39,6 +35,6 @@ const PageStepsController = ({ pageContent, type }: PageStepsControllerProps) =>
             goToStep={goToStep}
         />
     );
-}
+};
 
 export default PageStepsController;

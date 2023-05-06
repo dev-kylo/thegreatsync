@@ -1,13 +1,13 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { Fragment, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 type SlideOverProps = {
     children: React.ReactNode;
     open: boolean;
     setOpen: (open: boolean) => void;
-}
+};
 
 function SlideOver({ children, open, setOpen }: SlideOverProps) {
     return (
@@ -41,7 +41,9 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                                     <div className="flex h-full flex-col overflow-y-scroll bg-primary_blue pt-6 shadow-xl">
                                         <div className="px-4 sm:px-6">
                                             <div className="flex items-start justify-between">
-                                                <Dialog.Title className="text-lg font-medium text-white">The Great Sync</Dialog.Title>
+                                                <Dialog.Title className="text-lg font-medium text-white">
+                                                    The Great Sync
+                                                </Dialog.Title>
                                                 <div className="ml-3 flex h-7 items-center">
                                                     <button
                                                         type="button"
@@ -56,11 +58,7 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                                         </div>
                                         <div className="relative mt-6 flex-1 ">
                                             {/* slide content */}
-                                            <div className="absolute inset-0 bg-primary_blue">
-
-                                                {children}
-
-                                            </div>
+                                            <div className="absolute inset-0 bg-primary_blue">{children}</div>
                                             {/* /End slide content */}
                                         </div>
                                     </div>
@@ -71,8 +69,7 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                 </div>
             </Dialog>
         </Transition.Root>
-    )
-};
-
+    );
+}
 
 export default SlideOver;

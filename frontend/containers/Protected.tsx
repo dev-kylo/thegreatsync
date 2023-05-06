@@ -1,15 +1,12 @@
-import { useSession } from "next-auth/react";
-import { ReactNode, useEffect } from "react";
-import axiosdb from "../libs/api";
-
+import { useSession } from 'next-auth/react';
+import { ReactNode } from 'react';
 
 type ProtectedProps = {
-    children: ReactNode | ReactNode[]
-}
+    children: ReactNode | ReactNode[];
+};
 
 const Protected = ({ children }: ProtectedProps) => {
-
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
     // useEffect(() => {
     //     const accessToken = session?.jwt;
     //     if (accessToken) {
@@ -25,13 +22,9 @@ const Protected = ({ children }: ProtectedProps) => {
     // console.log('------session-------', session);
 
     // WILL USE THIS LATER ON FOR ROLE BASED ROUTES, OR FEATURE FLAG DETECTION
-    if (!session) console.log('No Session detected')
+    if (!session) console.log('No Session detected');
 
-    return (
-        <>
-            {children}
-        </>
-    )
+    return <div>{children}</div>;
 };
 
 export default Protected;

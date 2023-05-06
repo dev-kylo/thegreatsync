@@ -1,49 +1,48 @@
 export type MenuType = 'watch' | 'code' | 'read' | 'draw' | 'imagine' | 'listen' | 'play';
 
-export type PageType = 'text_image_code' | 'video' | 'text_image' | 'text'
+export type PageType = 'text_image_code' | 'video' | 'text_image' | 'text';
 
 export type MenuItem = {
     name: string;
     id: number;
-    level: number,
-    progress?: number | string,
-    completed?: boolean,
-    type?: MenuType
+    level: number;
+    progress?: number | string;
+    completed?: boolean;
+    type?: MenuType;
     current?: boolean;
     href?: string;
     orderNumber: number;
-    children?: MenuItem[]
-}
-
+    children?: MenuItem[];
+};
 
 export type PageStepT = {
     image: string;
     code?: string;
     text: string;
-    id: number,
-    orderNumber: number,
-    name: string,
-    status: 'current' | 'complete' | 'default'
-}
+    id: number;
+    orderNumber: number;
+    name: string;
+    status: 'current' | 'complete' | 'default';
+};
 
 export type ErrorResponse = {
-    data: null,
-    error: ErrorData
-}
+    data: null;
+    error: ErrorData;
+};
 
 export type SignInResponse = {
-    jwt: string,
+    jwt: string;
     user: {
-        id: number,
-        username: string,
-        email: string,
-        provider: string,
-        confirmed: boolean,
-        blocked: boolean,
-        createdAt: Date,
-        updatedAt: Date
-    }
-}
+        id: number;
+        username: string;
+        email: string;
+        provider: string;
+        confirmed: boolean;
+        blocked: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+    };
+};
 
 export interface StrapiResponseMetaData {
     createdAt: Date;
@@ -58,10 +57,10 @@ export interface CourseResponse {
 }
 
 export interface ErrorData {
-    status: number, // HTTP status
-    name: string, // Strapi error name ('ApplicationError' or 'ValidationError')
-    message: string, // A human readable error message
-    details: any
+    status: number; // HTTP status
+    name: string; // Strapi error name ('ApplicationError' or 'ValidationError')
+    message: string; // A human readable error message
+    details: any;
 }
 
 export interface ChaptersResponse {
@@ -110,18 +109,15 @@ export interface PageContent {
     text: string;
     orderNumber?: number;
     image: ImageComp;
-    video?: VideoT
+    video?: VideoT;
 }
-
 
 export type PageStep = PageContent & {
-    status: 'current' | 'complete' | 'default'
-}
-
+    status: 'current' | 'complete' | 'default';
+};
 
 export interface ImageComp {
     data: ImageData;
-
 }
 
 export interface ImageData {
@@ -133,15 +129,15 @@ export interface ImageAttributes {
     width: number;
     height: number;
     url: string;
-    title: string
+    title: string;
     placeholder: string;
     size: number;
 }
 
 export interface CourseAttributes extends StrapiResponseMetaData {
-    description: { id: string, text?: string, __component: 'media.text' | 'media.video', video?: VideoT }[],
-    uid: string,
-    title: string,
+    description: { id: string; text?: string; __component: 'media.text' | 'media.video'; video?: VideoT }[];
+    uid: string;
+    title: string;
 }
 
 export interface ChaptersAttributes extends StrapiResponseMetaData {
@@ -149,26 +145,26 @@ export interface ChaptersAttributes extends StrapiResponseMetaData {
     visible: boolean;
     menu: Menu;
     sub_chapters: {
-        data: SubChapter[]
+        data: SubChapter[];
     };
 }
 
 export interface VideoT {
     data: {
-        id: 1,
+        id: 1;
         attributes: {
-            title: string,
-            upload_id: string,
-            asset_id: string,
-            playback_id: string,
-            error_message: null | string,
-            isReady: boolean,
-            duration: number,
-            aspect_ratio: string,
-            createdAt: Date,
-            updatedAt: Date
-        }
-    }
+            title: string;
+            upload_id: string;
+            asset_id: string;
+            playback_id: string;
+            error_message: null | string;
+            isReady: boolean;
+            duration: number;
+            aspect_ratio: string;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+    };
 }
 
 export interface Menu {
@@ -179,7 +175,7 @@ export interface Menu {
 
 export interface Pages {
     data?: Page[];
-    error?: ErrorData
+    error?: ErrorData;
 }
 
 export interface SubChapter {
