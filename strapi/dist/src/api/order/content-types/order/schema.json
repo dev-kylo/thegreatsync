@@ -1,0 +1,107 @@
+{
+    "kind": "collectionType",
+    "collectionName": "orders",
+    "info": {
+        "singularName": "order",
+        "pluralName": "orders",
+        "displayName": "Order"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "email": {
+            "type": "email",
+            "required": true
+        },
+        "alert_id": {
+            "type": "string"
+        },
+        "balance_currency": {
+            "type": "string"
+        },
+        "balance_fee": {
+            "type": "string"
+        },
+        "balance_gross": {
+            "type": "string"
+        },
+        "balance_tax": {
+            "type": "string"
+        },
+        "checkout_id": {
+            "type": "string"
+        },
+        "country": {
+            "type": "string"
+        },
+        "coupon": {
+            "type": "string"
+        },
+        "currency": {
+            "type": "string"
+        },
+        "custom_data": {
+            "type": "json"
+        },
+        "customer_name": {
+            "type": "string",
+            "required": true
+        },
+        "earnings": {
+            "type": "string"
+        },
+        "fee": {
+            "type": "string"
+        },
+        "event_time": {
+            "type": "string"
+        },
+        "marketing_consent": {
+            "type": "boolean",
+            "required": true
+        },
+        "order_id": {
+            "type": "string",
+            "required": true,
+            "unique": true
+        },
+        "payment_method": {
+            "type": "enumeration",
+            "enum": [
+                "free",
+                "card",
+                "paypal",
+                "wire-transfer",
+                "apple-pay",
+                "google-pay",
+                "ideal",
+                "alipay"
+            ]
+        },
+        "payment_tax": {
+            "type": "string"
+        },
+        "product_id": {
+            "type": "string"
+        },
+        "product_name": {
+            "type": "string"
+        },
+        "sale_gross": {
+            "type": "string"
+        },
+        "used_price_override": {
+            "type": "boolean"
+        },
+        "alert_name": {
+            "type": "enumeration",
+            "enum": [
+                "payment_succeeded",
+                "payment_refunded",
+                "locker_processed"
+            ]
+        }
+    }
+}
