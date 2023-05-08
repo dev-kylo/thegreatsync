@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Logo from '../assets/logo.webp';
 import Alert from '../components/ui/Alert';
 import Spinner from '../components/ui/Spinner';
+import { RegisterPayload, register } from '../services/register';
 
 interface Submission {
     email: string;
@@ -13,35 +14,26 @@ interface Submission {
 }
 
 export default function Enrollment() {
-    const [formState, setFormState] = useState({ loading: false, error: false });
+    const [formState, setFormState] = useState({ loading: false, error: false, message: '' });
     const [createNewAccount, setCreateNewAccount] = useState(true);
     const router = useRouter();
     const { orderId } = router.query as { orderId: string };
 
-    const sendCredentials = async ({ email, password }: Submission) => {
-        // const result = await signIn('credentials', {
-        //     redirect: false,
-        //     email,
-        //     password,
-        // });
-        // console.log('------SIGNIN RESULT------', result);
-        // const redirectUrl = router.query.redirect as string;
-        // if (result?.ok) return router.replace(redirectUrl || '/');
-
-        setFormState({ loading: true, error: true });
+    const sendCredentials = async (payload: RegisterPayload) => {
+        const result = await register(payload);
+        console.log('------REGISTER RESULT------', result);
+        if (!result?.success) setFormState({ loading: false, error: true, message: result.error!.message });
+        else setFormState({ loading: false, error: true, message: result.message });
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setFormState({ error: false, loading: true });
+        setFormState({ error: false, loading: true, message: '' });
         const form = e.target as HTMLFormElement;
         const data = Object.fromEntries(new FormData(form)) as unknown as Submission;
-        if (!data?.email) setFormState({ error: false, loading: false });
+        if (!data?.email) setFormState({ error: false, loading: false, message: '' });
 
-        console.log('SUBMIT');
-        console.log(data);
-
-        const payload = {
+        const payload: RegisterPayload = {
             username: data.email,
             existingAccount: !createNewAccount,
             password: data.password,
@@ -49,8 +41,7 @@ export default function Enrollment() {
         };
 
         console.log(payload);
-
-        sendCredentials(data);
+        sendCredentials(payload);
     };
 
     return (

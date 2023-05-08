@@ -44,6 +44,12 @@ export type SignInResponse = {
     };
 };
 
+export type RegisterResponse = {
+    success: boolean;
+    message: string;
+    error?: ErrorData;
+};
+
 export interface StrapiResponseMetaData {
     createdAt: Date;
     updatedAt: Date;
