@@ -67,6 +67,12 @@
             "type": "relation",
             "relation": "oneToMany",
             "target": "api::enrollment.enrollment"
+        },
+        "orders": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::order.order",
+            "mappedBy": "user"
         }
     }
 }

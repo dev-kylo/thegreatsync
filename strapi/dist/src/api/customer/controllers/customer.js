@@ -12,39 +12,50 @@ exports.default = {
             // Find order
             console.log('Finding Order');
             const order = await strapi.db.query('api::order.order').findOne({
-                where: { order_id: data.orderId }
+                where: { order_id: data.orderId },
+                populate: ['user']
             });
-            if (!order)
-                return ctx.forbidden('No order exists');
+            console.log(order);
+            console.log(ctx);
+            if (!order) {
+                return ctx.response.forbidden('No order exists');
+            }
             // Check if order already has a user assigned to it
+            if (order === null || order === void 0 ? void 0 : order.user) {
+                console.log('Should not be in here');
+                return ctx.forbidden('The account has already been registered for this order. Please contact kylo at kylo@thegreatsync.com');
+            }
             // Check for an existing user
             console.log('Searching for User');
             let user = await strapi.db.query('plugin::users-permissions.user').findOne({
                 where: { email: data.username }
             });
             // If no user found but existingAccount param supplied
-            if (!user && data.existingAccount)
-                return ctx.NotFound('No user with this email address was found. Register with a different address.');
+            if (!user && data.existingAccount) {
+                return ctx.response.notFound('No user with this email address was found. Register with a different address.');
+            }
             // If user found but not delcared an existing account
-            if (user && !data.existingAccount)
-                return ctx.MethodNotAllowed('A user account with this address already exists. Supply a new email or select option for existing account');
+            if (user && !data.existingAccount) {
+                return ctx.response.methodNotAllowed('A user account with this address already exists. Supply a new email or select option for existing account');
+            }
             // If there is, update User data
             if (user && data.existingAccount) {
-                await strapi.db.query('plugin::users-permissions.user').update({
-                    where: { id: user.id },
+                await strapi.entityService.update('api::order.order', order.id, {
                     data: {
-                        // link order to it.
-                        blocked: true,
+                        user: user.id
                     },
                 });
                 console.log('User Updated');
-                return ctx.body = {
+                ctx.body = {
                     success: true,
                     message: 'Your account has been updated with the new course. Proceed to login.'
                 };
+                return next();
             }
             else {
                 // Create new User
+                // Get Enrollment from Order
+                // Add enrollment to payload
                 console.log('Creating new user');
                 user = await strapi.plugins['users-permissions'].services.user.add({
                     blocked: false,
@@ -55,10 +66,16 @@ exports.default = {
                     provider: 'local',
                     created_by: 1,
                     updated_by: 1,
-                    role: 1 //role id
+                    role: 1, //role id
                 });
                 console.log('NEW USER CREATED');
-                return ctx.body = {
+                console.log(user);
+                await strapi.entityService.update('api::order.order', order.id, {
+                    data: {
+                        user: user.id
+                    },
+                });
+                ctx.body = {
                     success: true,
                     message: 'You have successfully registered. Proceed to login.'
                 };
