@@ -16,10 +16,19 @@
       "type": "date",
       "required": true
     },
-    "release": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "enrollments"
+    },
+    "course": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::release.release"
+      "target": "api::course.course"
+    },
+    "price": {
+      "type": "string"
     }
   }
 }
