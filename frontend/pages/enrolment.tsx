@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FormEventHandler, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { signIn } from 'next-auth/react';
 import Image from 'next/image';
+import axios from 'axios';
 import Logo from '../assets/logo.webp';
 import Alert from '../components/ui/Alert';
 import Spinner from '../components/ui/Spinner';
 import { RegisterPayload, register } from '../services/register';
+import type { RegisterResponse, ServerResponse } from '../types';
 
 interface Submission {
     email: string;
@@ -20,10 +21,19 @@ export default function Enrollment() {
     const { orderId } = router.query as { orderId: string };
 
     const sendCredentials = async (payload: RegisterPayload) => {
-        const result = await register(payload);
-        console.log('------REGISTER RESULT------', result);
-        if (!result?.success) setFormState({ loading: false, error: true, message: result.error!.message });
-        else setFormState({ loading: false, error: true, message: result.message });
+        try {
+            const result = await register(payload);
+            console.log('------REGISTER RESULT------', result);
+            if (!result?.success) throw new Error(result?.error?.message);
+            else setFormState({ loading: false, error: false, message: result.message });
+        } catch (e) {
+            console.log(e);
+            if (axios.isAxiosError(e)) {
+                const error = e.response?.data as ServerResponse<RegisterResponse>;
+                setFormState({ loading: false, error: true, message: error?.error?.message });
+            } else if (typeof e === 'string') setFormState({ loading: false, error: true, message: e });
+            else setFormState({ loading: false, error: true, message: 'Error' });
+        }
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -117,25 +127,25 @@ export default function Enrollment() {
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <button
-                                            type="submit"
-                                            disabled={formState.loading || !orderId}
-                                            className="flex w-full justify-center rounded-md border border-transparent bg-secondary_red py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-[#03143f] disabled:text-neutral-500"
-                                        >
-                                            {formState.loading ? (
-                                                <Spinner />
-                                            ) : createNewAccount ? (
-                                                'Create my account'
-                                            ) : (
-                                                'Use my existing account'
-                                            )}
-                                        </button>
-                                    </div>
+                                    <button
+                                        type="submit"
+                                        disabled={formState.loading || !orderId}
+                                        className="flex w-full justify-center rounded-md border border-transparent bg-secondary_red py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-[#03143f] disabled:text-neutral-500"
+                                    >
+                                        {formState.loading ? (
+                                            <Spinner />
+                                        ) : createNewAccount ? (
+                                            'Create my account'
+                                        ) : (
+                                            'Use my existing account'
+                                        )}
+                                    </button>
                                 </form>
-                                <div className="my-4">
-                                    {formState.error && <Alert text="There was an error signing you in" />}
-                                </div>
+                                {(formState.message || formState.error) && (
+                                    <div className="mt-4">
+                                        <Alert type={formState.error ? 'error' : 'success'} text={formState.message} />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

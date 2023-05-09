@@ -44,6 +44,12 @@ export type SignInResponse = {
     };
 };
 
+export type ServerResponse<T> = {
+    data?: T;
+    error: ErrorData;
+    meta: Meta;
+};
+
 export type RegisterResponse = {
     success: boolean;
     message: string;

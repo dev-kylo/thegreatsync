@@ -26,7 +26,7 @@ export default {
       // Check if order already has a user assigned to it
       if (order?.user) {
         console.log('Should not be in here')
-        return ctx.forbidden('The account has already been registered for this order. Please contact kylo at kylo@thegreatsync.com')
+        return ctx.forbidden('The account has already been registered for this order.')
       }
 
       // Check for an existing user
@@ -72,7 +72,7 @@ export default {
           confirmed: true, 
           username: data.username, // so username will always be unique
           email: data.username,
-          password: 'default', //will be hashed automatically
+          password: data.password, //will be hashed automatically
           provider: 'local', //provider
           created_by: 1, //user admin id
           updated_by: 1, //user admin id
