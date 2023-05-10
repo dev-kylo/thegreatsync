@@ -64,12 +64,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!resp || resp.error || !resp.data) {
         console.log('THERE IS AN ERROR');
         if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
-        if (resp.error.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
-        if (resp.error.status === 403)
+        if (resp.error?.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
+        if (resp.error?.status === 403)
             return serverRedirectObject(
                 `/error?redirect=${context.resolvedUrl}&error='You do not have the correct permissions to view this course'`
             );
-        if (resp.error.status === 500)
+        if (resp.error?.status === 500)
             return serverRedirectObject(
                 `/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down!'`
             );

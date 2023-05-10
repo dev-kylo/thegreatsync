@@ -68,6 +68,12 @@ export interface CourseResponse {
     meta: Meta;
 }
 
+export interface CoursesByUserResponse {
+    data?: CourseData[];
+    error: ErrorData;
+    meta: Meta;
+}
+
 export interface ErrorData {
     status: number; // HTTP status
     name: string; // Strapi error name ('ApplicationError' or 'ValidationError')
@@ -90,6 +96,12 @@ export interface PageResponse {
 export interface CourseData {
     id: number;
     attributes: CourseAttributes;
+}
+
+export interface CourseByUser extends StrapiResponseMetaData {
+    id: number;
+    uid: string;
+    title: string;
 }
 
 export interface ChapterData {

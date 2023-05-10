@@ -12,6 +12,7 @@ function MyApp({
 }: AppProps<{
     session: Session;
     isStepPage: boolean;
+    pageType?: 'text' | 'text-image-code' | 'text-image' | 'video' | 'standalone';
 }>) {
     return (
         <SessionProvider session={pageProps.session}>
@@ -22,15 +23,20 @@ function MyApp({
                 <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
             </Head>
             <main>
-                <NavContextProvider>
-                    {pageProps.isStepPage ? (
-                        <StepContextProvider>
-                            <Component {...pageProps} />
-                        </StepContextProvider>
-                    ) : (
-                        <Component {...pageProps} />
-                    )}
-                </NavContextProvider>
+                {!pageProps.pageType ||
+                    (pageProps.pageType !== 'standalone' && (
+                        <NavContextProvider>
+                            {pageProps.isStepPage ? (
+                                <StepContextProvider>
+                                    <Component {...pageProps} />
+                                </StepContextProvider>
+                            ) : (
+                                <Component {...pageProps} />
+                            )}
+                        </NavContextProvider>
+                    ))}
+
+                {pageProps.pageType && pageProps.pageType === 'standalone' && <Component {...pageProps} />}
             </main>
         </SessionProvider>
     );
