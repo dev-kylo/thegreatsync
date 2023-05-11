@@ -49,7 +49,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const { courseId, pageId } = router.query as { courseId: string; pageId: string };
 
     const { data, error } = useSWR(
-        () => (session && !!httpClient.defaults.headers.common.Authorization && courseId ? '/api/chapters' : null),
+        () => (session && !!httpClient.defaults.headers.common.Authorization && courseId ? courseId : null),
         getChapters,
         { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
     );
