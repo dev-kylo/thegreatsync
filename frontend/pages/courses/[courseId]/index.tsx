@@ -1,21 +1,23 @@
 import { unstable_getServerSession } from 'next-auth/next';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
+import { useContext, useEffect } from 'react';
 import CourseDashboard from '../../../containers/CourseDashboard/CourseDashboard';
 import { serverRedirectObject } from '../../../libs/helpers';
 import { getCourse } from '../../../services/queries';
 import { VideoT } from '../../../types';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { setAuthToken } from '../../../libs/axios';
+import { NavContext } from '../../../context/nav';
 
-type CourseData = { title: string; description?: string; video?: VideoT };
+type CourseData = { title: string; description?: string; video: VideoT | null };
 type CourseProps = { course: CourseData };
 
 const Course = ({ course }: CourseProps) => {
     const { data: session } = useSession();
 
     if (!session?.jwt) return <p>Loading</p>;
-    return <CourseDashboard title={course.title} description={course.description} video={course.video} />;
+    return <CourseDashboard title={course.title} description={course.description} />;
 };
 
 export default Course;
@@ -48,6 +50,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const descriptionItems = resp.data.attributes.description;
+    console.log(descriptionItems);
     const text = descriptionItems.find((item) => item.__component === 'media.text')?.text;
     const video = descriptionItems.find((item) => item.__component === 'media.video')?.video;
 
@@ -56,7 +59,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             course: {
                 title: resp.data.attributes.title,
                 description: text,
-                video,
+                video: video || null,
             },
         },
     };

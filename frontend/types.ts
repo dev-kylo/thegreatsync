@@ -82,7 +82,10 @@ export interface ErrorData {
 }
 
 export interface ChaptersResponse {
-    data?: ChapterData[];
+    data?: {
+        data: ChapterData[];
+        completed: number[];
+    };
     error?: ErrorData;
     meta: Meta;
 }
@@ -114,15 +117,15 @@ export interface PageData {
     attributes: PageAttributes;
 }
 
-export interface PageAttributes {
-    title: string;
-    type: PageType;
-    visible: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-    publishedAt: Date;
-    content: PageContent[];
-}
+// export interface PageAttributes {
+//     title: string;
+//     type: PageType;
+//     visible: boolean;
+//     createdAt: Date;
+//     updatedAt: Date;
+//     publishedAt: Date;
+//     content: PageContent[];
+// }
 
 export interface PageContent {
     id: number;
@@ -222,7 +225,9 @@ export interface Page {
 export interface PageAttributes extends StrapiResponseMetaData {
     title: string;
     type: PageType;
+    visible: boolean;
     menu: Menu;
+    content: PageContent[];
 }
 
 export interface Meta {
