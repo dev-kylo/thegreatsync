@@ -23,7 +23,8 @@ const iconLookup: { [key: string]: React.ReactNode | IconType } = {
     play: MagnifyingGlassIcon,
 };
 
-const MenuIcon = ({ type, completed, active = false }: { type: MenuType; completed: boolean; active: boolean }) => {
+const MenuIcon = ({ type, completed, active }: { type: MenuType; completed: boolean; active: boolean }) => {
+    if (active) console.log(`${type} in menu is active`);
     let Icon = MagnifyingGlassIcon;
     if (completed) Icon = CheckCircleIcon;
     else if (iconLookup[type]) Icon = iconLookup[type] as IconType;

@@ -7,7 +7,7 @@ import style from 'react-syntax-highlighter/dist/cjs/styles/hljs/night-owl';
 
 SyntaxHighlighter.registerLanguage('javascript', js);
 
-const ContentBlock = ({ md, numbered = false, id }: { md: string; id: number; numbered?: boolean }) => {
+const ContentBlock = ({ md, id }: { md: string; id: number; numbered?: boolean }) => {
     return (
         <article
             id={`md-block:${id} `}
@@ -16,6 +16,7 @@ const ContentBlock = ({ md, numbered = false, id }: { md: string; id: number; nu
             <ReactMarkdown
                 children={md}
                 components={{
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     code({ node, inline, className, children, ...props }) {
                         return !inline ? (
                             <SyntaxHighlighter

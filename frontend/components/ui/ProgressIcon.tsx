@@ -1,4 +1,3 @@
-import { StopCircleIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 
 const ProgressIcon = ({
@@ -10,7 +9,7 @@ const ProgressIcon = ({
     completed?: boolean;
     size?: string;
 }) => {
-    if (!amount && !completed) return <></>;
+    if (!amount && !completed) return null;
     if (completed) return <CheckCircleIcon className="text-green-400 mr-3 h-6 w-6" aria-hidden="true" />;
 
     const radius = 9;

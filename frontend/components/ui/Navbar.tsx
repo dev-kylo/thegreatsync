@@ -7,7 +7,7 @@ import TitleStrip from './TitleStrip';
 import Menu from './Menu';
 import { MenuItem } from '../../types';
 
-export default function Navbar({ title, menuData }: { title: string; menuData: MenuItem[] }) {
+export default function Navbar({ title, menuData }: { title: string; menuData?: MenuItem[] }) {
     const [openMenu, setOpenMenu] = useState(false);
 
     return (
@@ -31,7 +31,7 @@ export default function Navbar({ title, menuData }: { title: string; menuData: M
                 </div>
             </Disclosure>
             <SlideOver open={openMenu} setOpen={setOpenMenu}>
-                <Menu menuData={menuData} />
+                {menuData && <Menu menuData={menuData} />}
             </SlideOver>
         </>
     );

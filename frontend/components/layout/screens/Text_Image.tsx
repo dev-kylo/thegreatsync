@@ -17,7 +17,7 @@ export default function Text_Image({ text, image, id }: Text_Image_Props) {
                     <ContentBlock md={text} id={id} />
                 </Block>
 
-                <Block image outerClasses="w-full">
+                <Block outerClasses="w-full">
                     <Image
                         alt="Mountains"
                         src={

@@ -12,7 +12,10 @@ function MyApp({
 }: AppProps<{
     session: Session;
     isStepPage: boolean;
+    pageType?: 'text' | 'text-image-code' | 'text-image' | 'video' | 'standalone';
 }>) {
+    const { isStepPage } = pageProps;
+
     return (
         <SessionProvider session={pageProps.session}>
             <Head>
@@ -23,7 +26,7 @@ function MyApp({
             </Head>
             <main>
                 <NavContextProvider>
-                    {pageProps.isStepPage ? (
+                    {isStepPage ? (
                         <StepContextProvider>
                             <Component {...pageProps} />
                         </StepContextProvider>

@@ -28,6 +28,12 @@
         "visible": {
             "type": "boolean",
             "default": true
+        },
+        "courses": {
+            "type": "relation",
+            "relation": "manyToMany",
+            "target": "api::course.course",
+            "inversedBy": "chapters"
         }
     }
 }

@@ -18,6 +18,7 @@ function sortByOrderNumber(a: EntityWithMenuOrder, b: EntityWithMenuOrder) {
 }
 
 function mapMenuPages(pages: Page[], prependLinkUrl: string): MenuItem[] {
+    if (!pages || pages.length === 0) return [];
     return pages
         .filter((page) => page.attributes.visible)
         .sort(sortByOrderNumber)
@@ -43,6 +44,7 @@ function pageCompletionCount(pages: Page[]) {
 }
 
 function mapMenuSubChapters(subchapters: SubChapter[], prependLinkUrl: string): MenuItem[] {
+    if (!subchapters || subchapters.length === 0) return [];
     return subchapters
         .filter((subchapter) => subchapter.attributes.visible)
         .sort(sortByOrderNumber)
@@ -59,9 +61,16 @@ function mapMenuSubChapters(subchapters: SubChapter[], prependLinkUrl: string): 
         });
 }
 
-export function mapMenuChapters(data: ChaptersResponse, courseUid: string): MenuItem[] {
-    const chapters = data.data;
-    if (!chapters) return [];
+export function mapMenuChapters(chaptersResponse: ChaptersResponse, courseUid: string): MenuItem[] {
+    console.log('Running this function with:');
+    console.log({ chaptersResponse });
+    const chapters = chaptersResponse.data?.data;
+    if (!Array.isArray(chapters)) {
+        console.error('chapters is not an array:', chapters);
+        console.log({ chapters });
+        return [];
+    }
+    if (!chapters || chapters.length === 0) return [];
     return chapters
         .filter((chapter) => chapter.attributes.visible)
         .sort(sortByOrderNumber)

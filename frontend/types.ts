@@ -44,6 +44,18 @@ export type SignInResponse = {
     };
 };
 
+export type ServerResponse<T> = {
+    data?: T;
+    error: ErrorData;
+    meta: Meta;
+};
+
+export type RegisterResponse = {
+    success: boolean;
+    message: string;
+    error?: ErrorData;
+};
+
 export interface StrapiResponseMetaData {
     createdAt: Date;
     updatedAt: Date;
@@ -56,6 +68,12 @@ export interface CourseResponse {
     meta: Meta;
 }
 
+export interface CoursesByUserResponse {
+    data?: CourseData[];
+    error: ErrorData;
+    meta: Meta;
+}
+
 export interface ErrorData {
     status: number; // HTTP status
     name: string; // Strapi error name ('ApplicationError' or 'ValidationError')
@@ -64,7 +82,10 @@ export interface ErrorData {
 }
 
 export interface ChaptersResponse {
-    data?: ChapterData[];
+    data?: {
+        data: ChapterData[];
+        completed: number[];
+    };
     error?: ErrorData;
     meta: Meta;
 }
@@ -80,6 +101,12 @@ export interface CourseData {
     attributes: CourseAttributes;
 }
 
+export interface CourseByUser extends StrapiResponseMetaData {
+    id: number;
+    uid: string;
+    title: string;
+}
+
 export interface ChapterData {
     id: number;
     attributes: ChaptersAttributes;
@@ -90,15 +117,15 @@ export interface PageData {
     attributes: PageAttributes;
 }
 
-export interface PageAttributes {
-    title: string;
-    type: PageType;
-    visible: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-    publishedAt: Date;
-    content: PageContent[];
-}
+// export interface PageAttributes {
+//     title: string;
+//     type: PageType;
+//     visible: boolean;
+//     createdAt: Date;
+//     updatedAt: Date;
+//     publishedAt: Date;
+//     content: PageContent[];
+// }
 
 export interface PageContent {
     id: number;
@@ -198,7 +225,9 @@ export interface Page {
 export interface PageAttributes extends StrapiResponseMetaData {
     title: string;
     type: PageType;
+    visible: boolean;
     menu: Menu;
+    content: PageContent[];
 }
 
 export interface Meta {

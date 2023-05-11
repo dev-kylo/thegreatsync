@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { Disclosure } from '@headlessui/react';
 import Link from 'next/link';
-// import { mockMenu } from '../../mocks/MockMenu'
 import type { MenuItem } from '../../types';
 import MenuIcon from './MenuIcon';
 import ProgressIcon from './ProgressIcon';
@@ -89,7 +89,9 @@ function createMenuDropDownLink(menuChildren: MenuItem[]) {
     });
 }
 
-export default function Menu({ menuData }: { menuData: MenuItem[] }): JSX.Element[] {
+const Menu = ({ menuData }: { menuData: MenuItem[] }) => {
     const menuLinks = menuData.map((item) => (!item.children ? createMenuLink(item) : createMenuDropDown(item)));
-    return menuLinks;
-}
+    return <div>{menuLinks}</div>;
+};
+
+export default Menu;

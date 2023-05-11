@@ -1,4 +1,5 @@
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+/* eslint-disable react/jsx-no-constructed-context-values */
+import React, { ReactNode, useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
@@ -40,23 +41,23 @@ function createList(menuItems: MenuItem[]) {
 }
 
 const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
-    const [courseUid, setCourseUid] = useState('learn-js');
-    const [showNextButton, setNextButton] = useState(true);
-    const [showPrevButton, setPrevButton] = useState(true);
+    // const [showNextButton, setNextButton] = useState(true);
+    // const [showPrevButton, setPrevButton] = useState(true);
     const { data: session } = useSession();
-    // const [courseData, setCourseData] = useState<MenuItem[]>([]);
-    // const courseSequence = useRef<DoublyLinkedList | null>(null);
-    const [hasAuth, setHasAuth] = useState(false);
+
+    const router = useRouter();
+    const { courseId, pageId } = router.query as { courseId: string; pageId: string };
 
     const { data, error } = useSWR(
-        () => (session && !!httpClient.defaults.headers.common.Authorization ? '/api/chapters' : null),
+        () => (session && !!httpClient.defaults.headers.common.Authorization && courseId ? courseId : null),
         getChapters,
         { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
     );
-    const router = useRouter();
-    const { pageId } = router.query as { pageId: string };
 
-    const menuChapters = useMemo(() => data && mapMenuChapters(data, 'learn-js'), [data]);
+    const menuChapters = useMemo(
+        () => (data && courseId ? mapMenuChapters(data, courseId) : undefined),
+        [data, courseId]
+    );
     const courseSequence = useMemo(() => menuChapters && createList(menuChapters), [menuChapters]);
 
     useEffect(() => {
