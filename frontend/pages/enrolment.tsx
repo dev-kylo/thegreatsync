@@ -26,12 +26,11 @@ export default function Enrollment() {
             console.log('------REGISTER RESULT------', result);
             if (!result?.success) throw new Error(result?.error?.message);
             else setFormState({ loading: false, error: false, message: result.message });
-        } catch (e) {
-            console.log(e);
-            if (axios.isAxiosError(e)) {
-                const error = e.response?.data as ServerResponse<RegisterResponse>;
+        } catch (er) {
+            if (axios.isAxiosError(er)) {
+                const error = er.response?.data as ServerResponse<RegisterResponse>;
                 setFormState({ loading: false, error: true, message: error?.error?.message });
-            } else if (typeof e === 'string') setFormState({ loading: false, error: true, message: e });
+            } else if (typeof er === 'string') setFormState({ loading: false, error: true, message: er });
             else setFormState({ loading: false, error: true, message: 'Error' });
         }
     };
@@ -62,6 +61,7 @@ export default function Enrollment() {
                         <div className="relative w-full h-32">
                             <Image
                                 alt="The Great Sync Logo"
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                                 src={Logo}
                                 layout="fill"
                                 objectFit="contain"
@@ -118,7 +118,7 @@ export default function Enrollment() {
                                                 name="remember-me"
                                                 type="checkbox"
                                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                onChange={(e) => setCreateNewAccount(!createNewAccount)}
+                                                onChange={() => setCreateNewAccount(!createNewAccount)}
                                             />
                                             <label htmlFor="remember-me" className="ml-4 block text-sm text-white">
                                                 I already have an account with this email address and would like to use

@@ -1,14 +1,12 @@
 import { unstable_getServerSession } from 'next-auth/next';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
-import { useContext, useEffect } from 'react';
 import CourseDashboard from '../../../containers/CourseDashboard/CourseDashboard';
 import { serverRedirectObject } from '../../../libs/helpers';
 import { getCourse } from '../../../services/queries';
 import { VideoT } from '../../../types';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { setAuthToken } from '../../../libs/axios';
-import { NavContext } from '../../../context/nav';
 
 type CourseData = { title: string; description?: string; video: VideoT | null };
 type CourseProps = { course: CourseData };
@@ -25,7 +23,7 @@ export default Course;
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await unstable_getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
-    if (session.jwt) setAuthToken(session.jwt);
+    if (session.jwt) setAuthToken(session.jwt as string);
 
     const { courseId } = context.params as { courseId: string };
 

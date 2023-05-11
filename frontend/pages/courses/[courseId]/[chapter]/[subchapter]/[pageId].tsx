@@ -27,7 +27,7 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
     const { menuData, nextPage, prevPage } = useContext(NavContext);
 
     const { data: session } = useSession();
-    setAuthToken(session?.jwt || '');
+    setAuthToken((session?.jwt as string) || '');
 
     console.log({ title, type, content });
 
@@ -57,7 +57,7 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await unstable_getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
-    if (session.jwt) setAuthToken(session.jwt);
+    if (session.jwt) setAuthToken(session.jwt as string);
 
     const { pageId } = context.params as { chapter: string; subchapter: string; pageId: string };
     const resp = await getPage(pageId);

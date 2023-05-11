@@ -25,7 +25,7 @@ export default Home;
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await unstable_getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
-    if (session.jwt) setAuthToken(session.jwt);
+    if (session.jwt) setAuthToken(session.jwt as string);
 
     const resp = await getEnrolledCourses();
     console.log(resp);

@@ -15,7 +15,7 @@ export default function TextCode_Image({ md }: { md: string }) {
                     </Block>
                 </div>
 
-                <Block image outerClasses="w-full">
+                <Block outerClasses="w-full">
                     <Image
                         alt="Mountains"
                         src="https://placeimg.com/3000/2000/tech"

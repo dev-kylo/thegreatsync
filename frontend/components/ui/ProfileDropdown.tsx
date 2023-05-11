@@ -1,6 +1,10 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Fragment } from 'react';
 import { Menu, Transition, Disclosure } from '@headlessui/react';
 import { signOut } from 'next-auth/react';
+import Image from 'next/image';
 
 const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
     if (mobile)
@@ -34,10 +38,9 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
             <div>
                 <Menu.Button className="flex rounded-full bg-indigo-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700">
                     <span className="sr-only">Open user menu</span>
-                    <img
-                        className="h-8 w-8 xl:h-10 xl:w-10 rounded-full"
-                        src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&h=256&q=80"
-                        alt=""
+                    <Image
+                        src="https://res.cloudinary.com/the-great-sync/image/upload/c_crop,g_face/v1674746967/2000x2000/Operator_Cinematic_q1sfux.png"
+                        alt="profile"
                     />
                 </Menu.Button>
             </div>
@@ -74,7 +77,8 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                     <Menu.Item>
                         {({ active }) => (
                             <a
-                                onClick={() => signOut({ callbackUrl: 'http://localhost:3000/' })}
+                                type="button"
+                                onClick={() => signOut()}
                                 className={`${active ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
                             >
                                 Logout

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
@@ -28,10 +29,11 @@ export default function SignIn() {
         setFormState({ loading: true, error: true });
     };
 
-    const onSubmit = (e: Event) => {
+    const onSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
         setFormState({ error: false, loading: true });
-        const form = e.target;
+        const form = e.target as HTMLFormElement;
+        if (!form) return;
         const data = Object.fromEntries(new FormData(form)) as unknown as Submission;
         if (!data?.email || !data?.password) setFormState({ error: false, loading: false });
         sendCredentials(data);
