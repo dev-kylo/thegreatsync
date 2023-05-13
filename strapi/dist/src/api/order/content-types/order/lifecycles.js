@@ -1,3 +1,9 @@
+// example
+// {
+//   "price": "125",
+//   "courseId": 1,
+//   "date": "2022-01-12"
+// }
 module.exports = {
     async afterUpdate(event) {
         var _a;
@@ -40,15 +46,27 @@ module.exports = {
         const pageCourseCompletion = pages.map(sub => {
             return { id: sub.id, completed: false, subchapter: sub.subchapter };
         });
-        // Addd course completion record for that user
-        await strapi.entityService.create('api::user-course-progress.user-course-progress', { data: {
-                user: result.user.id,
-                course: course.id,
-                chapters: JSON.stringify(chapterCourseCompletion),
-                subchapters: JSON.stringify(subchapterCourseCompletion),
-                pages: JSON.stringify(pageCourseCompletion)
-            } });
-        console.log(`user-course-progress record created for userID: ${result.user.id}.`);
-        // Create a new enrollment for that course and user 
+        try {
+            // Addd course completion record for that user
+            await strapi.entityService.create('api::user-course-progress.user-course-progress', { data: {
+                    user: result.user.id,
+                    course: course.id,
+                    chapters: JSON.stringify(chapterCourseCompletion),
+                    subchapters: JSON.stringify(subchapterCourseCompletion),
+                    pages: JSON.stringify(pageCourseCompletion)
+                } });
+            console.log(`user-course-progress record created for userID: ${result.user.id}.`);
+            // Create a new enrollment for that course and user 
+            await strapi.entityService.create('api::enrollment.enrollment', { data: {
+                    user: result.user.id,
+                    course: course.id,
+                    date: customData.date,
+                    price: customData.price
+                } });
+            console.log(`New enrollment created for user ${result.user.id}, course: ${course.id}`);
+        }
+        catch (e) {
+            console.log(e);
+        }
     },
 };
