@@ -4,6 +4,11 @@
 //   "courseId": 1,
 //   "date": "2022-01-12"
 // }
+/**
+ * This lifecycle is for creating a new user-course-progress record for completion data, and an enrollment for a user to a course
+ * This only happens after an order is updated with an attached user
+ * It depends on custom data provided in the order data
+ */
 module.exports = {
     async afterUpdate(event) {
         var _a;

@@ -2,7 +2,7 @@
  * A set of functions called "actions" for `purchase`
  */
 
-import { PaddleOrder } from "../../../../schemas";
+import { PaddleOrder } from "../../../../custom-types";
 
 
 // User will have a checkbox to use an existing account. Just has to supply an email address with orderId to look up, then must login
@@ -124,7 +124,7 @@ export default {
 
         // Extract values
         const data = ctx.request.body as PaddleOrder;
-        const payload = (({ email,alert_id,balance_currency,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,product_name,sale_gross,used_price_override,alert_name}) =>({ email,alert_id,balance_currency,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,product_name,sale_gross,used_price_override,alert_name}))(data);
+        const payload = (({ email,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,sale_gross,used_price_override,alert_name,receipt_url}) =>({ email,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,sale_gross,used_price_override,alert_name, receipt_url}))(data);
     
     
         

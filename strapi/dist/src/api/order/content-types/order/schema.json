@@ -16,12 +16,6 @@
             "type": "email",
             "required": true
         },
-        "alert_id": {
-            "type": "string"
-        },
-        "balance_currency": {
-            "type": "string"
-        },
         "balance_fee": {
             "type": "string"
         },
@@ -87,9 +81,6 @@
         "product_id": {
             "type": "string"
         },
-        "product_name": {
-            "type": "string"
-        },
         "sale_gross": {
             "type": "string"
         },
@@ -109,6 +100,9 @@
             "relation": "manyToOne",
             "target": "plugin::users-permissions.user",
             "inversedBy": "orders"
+        },
+        "receipt_url": {
+            "type": "string"
         }
     }
 }

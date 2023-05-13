@@ -105,7 +105,7 @@ exports.default = {
             // Verify Order
             // Extract values
             const data = ctx.request.body;
-            const payload = (({ email, alert_id, balance_currency, balance_fee, balance_gross, balance_tax, checkout_id, country, coupon, currency, custom_data, customer_name, earnings, fee, event_time, marketing_consent, order_id, payment_method, payment_tax, product_id, product_name, sale_gross, used_price_override, alert_name }) => ({ email, alert_id, balance_currency, balance_fee, balance_gross, balance_tax, checkout_id, country, coupon, currency, custom_data, customer_name, earnings, fee, event_time, marketing_consent, order_id, payment_method, payment_tax, product_id, product_name, sale_gross, used_price_override, alert_name }))(data);
+            const payload = (({ email, balance_fee, balance_gross, balance_tax, checkout_id, country, coupon, currency, custom_data, customer_name, earnings, fee, event_time, marketing_consent, order_id, payment_method, payment_tax, product_id, sale_gross, used_price_override, alert_name, receipt_url }) => ({ email, balance_fee, balance_gross, balance_tax, checkout_id, country, coupon, currency, custom_data, customer_name, earnings, fee, event_time, marketing_consent, order_id, payment_method, payment_tax, product_id, sale_gross, used_price_override, alert_name, receipt_url }))(data);
             // Create Order - No need to check for existing order, orderId must be unique anyway
             await strapi.entityService.create('api::order.order', { data: payload });
             // Send email

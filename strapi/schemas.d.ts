@@ -520,6 +520,16 @@ export interface PluginUsersPermissionsUser extends CollectionTypeSchema {
       'oneToMany',
       'api::enrollment.enrollment'
     >;
+    orders: RelationAttribute<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::order.order'
+    >;
+    user_course_progresses: RelationAttribute<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::user-course-progress.user-course-progress'
+    >;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     createdBy: RelationAttribute<
@@ -613,12 +623,17 @@ export interface ApiChapterChapter extends CollectionTypeSchema {
   attributes: {
     title: StringAttribute;
     menu: ComponentAttribute<'menu.menu-info'>;
-    sub_chapters: RelationAttribute<
+    subchapters: RelationAttribute<
       'api::chapter.chapter',
       'oneToMany',
       'api::subchapter.subchapter'
     >;
     visible: BooleanAttribute & DefaultTo<true>;
+    courses: RelationAttribute<
+      'api::chapter.chapter',
+      'manyToMany',
+      'api::course.course'
+    >;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
@@ -652,10 +667,10 @@ export interface ApiCourseCourse extends CollectionTypeSchema {
     title: StringAttribute & RequiredAttribute;
     chapters: RelationAttribute<
       'api::course.course',
-      'oneToMany',
+      'manyToMany',
       'api::chapter.chapter'
     >;
-    description: DynamicZoneAttribute<['media.video', 'media.text']> &
+    description: DynamicZoneAttribute<['media.text', 'media.video']> &
       RequiredAttribute;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
@@ -687,11 +702,17 @@ export interface ApiEnrollmentEnrollment extends CollectionTypeSchema {
   };
   attributes: {
     date: DateAttribute & RequiredAttribute;
-    release: RelationAttribute<
+    user: RelationAttribute<
+      'api::enrollment.enrollment',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    course: RelationAttribute<
       'api::enrollment.enrollment',
       'oneToOne',
-      'api::release.release'
+      'api::course.course'
     >;
+    price: StringAttribute;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
@@ -736,14 +757,13 @@ export interface ApiOrderOrder extends CollectionTypeSchema {
     singularName: 'order';
     pluralName: 'orders';
     displayName: 'Order';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     email: EmailAttribute & RequiredAttribute;
-    alert_id: StringAttribute;
-    balance_currency: StringAttribute;
     balance_fee: StringAttribute;
     balance_gross: StringAttribute;
     balance_tax: StringAttribute;
@@ -772,12 +792,17 @@ export interface ApiOrderOrder extends CollectionTypeSchema {
     >;
     payment_tax: StringAttribute;
     product_id: StringAttribute;
-    product_name: StringAttribute;
     sale_gross: StringAttribute;
     used_price_override: BooleanAttribute;
     alert_name: EnumerationAttribute<
       ['payment_succeeded', 'payment_refunded', 'locker_processed']
     >;
+    user: RelationAttribute<
+      'api::order.order',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    receipt_url: StringAttribute;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
@@ -795,8 +820,6 @@ export interface ApiOrderOrder extends CollectionTypeSchema {
       PrivateAttribute;
   };
 }
-
-export type PaddleOrder = ApiOrderOrder['attributes'];
 
 export interface ApiPagePage extends CollectionTypeSchema {
   info: {
@@ -831,41 +854,6 @@ export interface ApiPagePage extends CollectionTypeSchema {
   };
 }
 
-export interface ApiReleaseRelease extends CollectionTypeSchema {
-  info: {
-    singularName: 'release';
-    pluralName: 'releases';
-    displayName: 'Release';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    price: DecimalAttribute;
-    course: RelationAttribute<
-      'api::release.release',
-      'oneToOne',
-      'api::course.course'
-    >;
-    createdAt: DateTimeAttribute;
-    updatedAt: DateTimeAttribute;
-    publishedAt: DateTimeAttribute;
-    createdBy: RelationAttribute<
-      'api::release.release',
-      'oneToOne',
-      'admin::user'
-    > &
-      PrivateAttribute;
-    updatedBy: RelationAttribute<
-      'api::release.release',
-      'oneToOne',
-      'admin::user'
-    > &
-      PrivateAttribute;
-  };
-}
-
 export interface ApiSubchapterSubchapter extends CollectionTypeSchema {
   info: {
     singularName: 'subchapter';
@@ -896,6 +884,49 @@ export interface ApiSubchapterSubchapter extends CollectionTypeSchema {
       PrivateAttribute;
     updatedBy: RelationAttribute<
       'api::subchapter.subchapter',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+  };
+}
+
+export interface ApiUserCourseProgressUserCourseProgress
+  extends CollectionTypeSchema {
+  info: {
+    singularName: 'user-course-progress';
+    pluralName: 'user-course-progresses';
+    displayName: 'UserCourseProgress';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: RelationAttribute<
+      'api::user-course-progress.user-course-progress',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    course: RelationAttribute<
+      'api::user-course-progress.user-course-progress',
+      'oneToOne',
+      'api::course.course'
+    >;
+    chapters: JSONAttribute;
+    subchapters: JSONAttribute;
+    pages: JSONAttribute;
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    publishedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<
+      'api::user-course-progress.user-course-progress',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<
+      'api::user-course-progress.user-course-progress',
       'oneToOne',
       'admin::user'
     > &
@@ -1003,8 +1034,8 @@ declare global {
       'api::menu.menu': ApiMenuMenu;
       'api::order.order': ApiOrderOrder;
       'api::page.page': ApiPagePage;
-      'api::release.release': ApiReleaseRelease;
       'api::subchapter.subchapter': ApiSubchapterSubchapter;
+      'api::user-course-progress.user-course-progress': ApiUserCourseProgressUserCourseProgress;
       'media.link': MediaLink;
       'media.text-image-code': MediaTextImageCode;
       'media.text-image': MediaTextImage;
