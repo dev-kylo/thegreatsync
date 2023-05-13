@@ -23,31 +23,41 @@ export default {
         return ctx.response.forbidden('No order exists');
       }
 
-      // Check if order already has a user assigned to it
-      if (order?.user) {
-        console.log('Should not be in here')
-        return ctx.forbidden('The account has already been registered for this order.')
-      }
-
       // Check for an existing user
       console.log('Searching for User')
      let user =  await strapi.db.query('plugin::users-permissions.user').findOne({
         where: { email: data.username }
       }) 
 
-      // If no user found but existingAccount param supplied
+
+      // Check if order already has a user assigned to it
+      if (order?.user) {
+        // if the order user's email matches the logged in user's email, instruct to login
+        if (user && order.user.email === user.email) {
+          ctx.body = {
+            success: true,
+            message: 'Your account has already been registered with this course. Proceed to login.'
+          };
+          await next();
+        }
+        // There is a different email already attached to this order than the one supplied
+        return ctx.forbidden('The account has already been registered for this order. You can proceed to login')
+      }
+
+      // If no user found despite user claiming to have an existingAccount
       if (!user && data.existingAccount) {
         return ctx.response.notFound('No user with this email address was found. Register with a different address.')
       }
 
-      // If user found but not delcared an existing account
+      // If user found but did not delcare that an existing accounts exists (needs work)
       if (user && !data.existingAccount) {
-        return ctx.response.methodNotAllowed('A user account with this address already exists. Supply a new email or select option for existing account')
+        return ctx.response.methodNotAllowed('A user account with this address already exists. Select the option for using an existing account and try again.')
       }
 
-      // If there is, update User data
+      // If there is a user, update User data
       if (user && data.existingAccount){
 
+        // User is attached to the order
         await strapi.entityService.update('api::order.order', order.id, {
           data: {
             user: user.id
@@ -91,11 +101,21 @@ export default {
         };
       }
 
+    // Create enrollment for user
+
+    // Now with a valid user, create a course progress record for that specific course
+    // await strapi.entityService.create('api::user-course-progress.user-course-progress', { data: {
+    //   user: user.id,
+    //   course: order.
+    // }});
+
     } catch (err) {
       console.log('Caught')
       console.log(err)
       ctx.body = err;
     }
+
+
   },
   	createOrder: async (ctx, next) => {
       console.log('Create Order')
@@ -106,8 +126,10 @@ export default {
         const data = ctx.request.body as PaddleOrder;
         const payload = (({ email,alert_id,balance_currency,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,product_name,sale_gross,used_price_override,alert_name}) =>({ email,alert_id,balance_currency,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,product_name,sale_gross,used_price_override,alert_name}))(data);
     
+    
+        
         // Create Order - No need to check for existing order, orderId must be unique anyway
-        const order = await strapi.entityService.create('api::order.order', {data: payload});
+        await strapi.entityService.create('api::order.order', {data: payload});
 
         // Send email
 

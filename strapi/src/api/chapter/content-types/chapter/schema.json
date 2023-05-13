@@ -20,7 +20,7 @@
       "repeatable": false,
       "component": "menu.menu-info"
     },
-    "sub_chapters": {
+    "subchapters": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::subchapter.subchapter"

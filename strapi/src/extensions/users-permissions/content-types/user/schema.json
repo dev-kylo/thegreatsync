@@ -75,11 +75,11 @@
       "target": "api::order.order",
       "mappedBy": "user"
     },
-    "user_course_progress": {
+    "user_course_progresses": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::user-course-progress.user-course-progress",
-      "inversedBy": "user"
+      "mappedBy": "user"
     }
   }
 }

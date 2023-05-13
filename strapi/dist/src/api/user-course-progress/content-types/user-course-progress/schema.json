@@ -4,7 +4,8 @@
     "info": {
         "singularName": "user-course-progress",
         "pluralName": "user-course-progresses",
-        "displayName": "UserCourseProgress"
+        "displayName": "UserCourseProgress",
+        "description": ""
     },
     "options": {
         "draftAndPublish": true
@@ -13,15 +14,14 @@
     "attributes": {
         "user": {
             "type": "relation",
-            "relation": "oneToOne",
+            "relation": "manyToOne",
             "target": "plugin::users-permissions.user",
-            "inversedBy": "user_course_progress"
+            "inversedBy": "user_course_progresses"
         },
         "course": {
             "type": "relation",
             "relation": "oneToOne",
-            "target": "api::course.course",
-            "inversedBy": "user_course_progress"
+            "target": "api::course.course"
         },
         "chapters": {
             "type": "json"

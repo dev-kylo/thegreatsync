@@ -13,4 +13,5 @@ export default factories.createCoreController('api::order.order', ({ strapi }) =
   
       return this.transformResponse(sanitizedResults, { pagination });
     }
+
   }));

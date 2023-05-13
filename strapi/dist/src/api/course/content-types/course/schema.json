@@ -24,7 +24,7 @@
             "type": "relation",
             "relation": "manyToMany",
             "target": "api::chapter.chapter",
-            "inversedBy": "courses"
+            "mappedBy": "courses"
         },
         "description": {
             "type": "dynamiczone",
@@ -33,12 +33,6 @@
                 "media.video"
             ],
             "required": true
-        },
-        "user_course_progress": {
-            "type": "relation",
-            "relation": "oneToOne",
-            "target": "api::user-course-progress.user-course-progress",
-            "inversedBy": "course"
         }
     }
 }
