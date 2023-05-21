@@ -1,14 +1,7 @@
-
-type CompletionProgress = {
-  id: number | string;
-  completed: boolean;
-  course?: string;
-  subchapter?: string;
-  chapter?: string;
-}
+import { ChapterCompletion, PageCompletion, SubchapterCompletion } from "../../../../../custom-types";
 
 type CustomData = {
-  courseId: number | string;
+  courseId: number;
   date: string;
   price: string;
 }
@@ -60,19 +53,19 @@ module.exports = {
     if (existing) return console.log('Attempted completion data failed: a user-course-progress record already exists for this user and course.');
     
     // Preparing all of the completion data to be stored as data
-    const chapterCourseCompletion:CompletionProgress = course.chapters.map(crs => {
+    const chapterCourseCompletion:ChapterCompletion = course.chapters.map(crs => {
       return {id: crs.id, completed: false, course: customData.courseId}
     })
     // flatten subchapters array and add the chapter ID to each chapter
     const subchapters = course.chapters.reduce(((acc, curr) => { return acc = [...acc, ...(curr.subchapters.map(sb =>{ return {...sb, chapter: curr.id}}))]}), []);
-    const subchapterCourseCompletion:CompletionProgress = subchapters.map(sub => {
+    const subchapterCourseCompletion:SubchapterCompletion = subchapters.map(sub => {
       return {id: sub.id, completed: false, chapter: sub.chapter}
     })
      // flatten pages array and add the subchapter ID to each page
     const pages = subchapters.reduce(((acc, curr) => { 
       return acc = [...acc, ...(curr.pages.map(pg =>{ return {...pg, subchapter: curr.id}}))]
     }), []);
-    const pageCourseCompletion:CompletionProgress = pages.map(sub => {
+    const pageCourseCompletion:PageCompletion = pages.map(sub => {
       return { id: sub.id, completed: false, subchapter: sub.subchapter}
     })
 
@@ -98,7 +91,5 @@ module.exports = {
     } catch(e){
       console.log(e)
     }
-
-    
     },
   }

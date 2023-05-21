@@ -101,14 +101,6 @@ export default {
         };
       }
 
-    // Create enrollment for user
-
-    // Now with a valid user, create a course progress record for that specific course
-    // await strapi.entityService.create('api::user-course-progress.user-course-progress', { data: {
-    //   user: user.id,
-    //   course: order.
-    // }});
-
     } catch (err) {
       console.log('Caught')
       console.log(err)
@@ -125,8 +117,7 @@ export default {
         // Extract values
         const data = ctx.request.body as PaddleOrder;
         const payload = (({ email,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,sale_gross,used_price_override,alert_name,receipt_url}) =>({ email,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,sale_gross,used_price_override,alert_name, receipt_url}))(data);
-    
-    
+
         
         // Create Order - No need to check for existing order, orderId must be unique anyway
         await strapi.entityService.create('api::order.order', {data: payload});

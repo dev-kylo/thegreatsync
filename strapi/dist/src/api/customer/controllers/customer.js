@@ -86,12 +86,6 @@ exports.default = {
                     message: 'You have successfully registered. Proceed to login.'
                 };
             }
-            // Create enrollment for user
-            // Now with a valid user, create a course progress record for that specific course
-            // await strapi.entityService.create('api::user-course-progress.user-course-progress', { data: {
-            //   user: user.id,
-            //   course: order.
-            // }});
         }
         catch (err) {
             console.log('Caught');
