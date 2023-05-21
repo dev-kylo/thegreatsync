@@ -72,14 +72,3 @@ export default {
       }
 }
 
-
-// ON UPDATE
-
-
-
-
-// Get chapters JSON
-// For each chapter
-    // filter subchapter for that chapterID
-    // from this filter completed subchapters
-        // if chapter's allSubChapters === completed, set chapter to TRUE
