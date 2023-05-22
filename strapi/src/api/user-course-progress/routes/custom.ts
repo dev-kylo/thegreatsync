@@ -9,6 +9,15 @@ export default {
          middlewares: [],
        },
       },
+      {
+        method: 'PUT',
+        path: '/user-course-progress/synchronise',
+        handler: 'synchronise.updateAll',
+        config: {
+          policies: [],
+          middlewares: [],
+        },
+       },
     ],
   };
   

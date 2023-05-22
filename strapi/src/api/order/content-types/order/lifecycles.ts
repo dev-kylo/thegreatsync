@@ -1,4 +1,5 @@
 import { ChapterCompletion, PageCompletion, SubchapterCompletion } from "../../../../../custom-types";
+import { createSubchapterCompletion } from "../../../../utils/user-course-completion";
 
 type CustomData = {
   courseId: number;
@@ -58,9 +59,7 @@ module.exports = {
     })
     // flatten subchapters array and add the chapter ID to each chapter
     const subchapters = course.chapters.reduce(((acc, curr) => { return acc = [...acc, ...(curr.subchapters.map(sb =>{ return {...sb, chapter: curr.id}}))]}), []);
-    const subchapterCourseCompletion:SubchapterCompletion = subchapters.map(sub => {
-      return {id: sub.id, completed: false, chapter: sub.chapter}
-    })
+    const subchapterCourseCompletion:SubchapterCompletion = subchapters.map(sub => createSubchapterCompletion(sub.id, sub.chapter))
      // flatten pages array and add the subchapter ID to each page
     const pages = subchapters.reduce(((acc, curr) => { 
       return acc = [...acc, ...(curr.pages.map(pg =>{ return {...pg, subchapter: curr.id}}))]

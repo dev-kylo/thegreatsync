@@ -1,4 +1,4 @@
-import { ChapterCompletion, PageCompletion, SubchapterCompletion } from "../../../../custom-types";
+import { PageCompletion, UserCourseProgress } from "../../../../custom-types";
 
 
 // Create a function with generic type, and params for arrays
@@ -20,7 +20,7 @@ export default {
         const { id: userId } = ctx.state.user;
         const userCompletion =  await strapi.db.query('api::user-course-progress.user-course-progress').findOne({
             where: {  user: userId, course: courseId },
-        }) as { chapters: ChapterCompletion[], pages: PageCompletion[], subchapters: SubchapterCompletion[], id: number}
+        }) as UserCourseProgress
 
         // Exit if no user completion data found
         if (!userCompletion) return ctx.response.notFound('No user course progress data found')
