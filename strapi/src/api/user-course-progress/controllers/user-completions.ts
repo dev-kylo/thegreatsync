@@ -4,8 +4,28 @@ import { PageCompletion, UserCourseProgress } from "../../../../custom-types";
 // Create a function with generic type, and params for arrays
 
 export default {
-    async updateUserCompletionData(ctx, next) {
 
+    async getUserCompletionData(ctx, next){
+        // Receive completed pageID and courseID
+        const qry = ctx.request.query as {courseId: string;};
+        const {courseId } = qry;
+        // Get User's completion data for that course
+        const { id: userId } = ctx.state.user;
+        // Exit if these are not here
+        if (!courseId || !userId) return ctx.badRequest('Invalid query paramaters');
+        
+        const userCompletion =  await strapi.db.query('api::user-course-progress.user-course-progress').findOne({
+            where: {  user: userId, course: courseId },
+        }) as UserCourseProgress
+
+        // Exit if no user completion data found
+        if (!userCompletion) return ctx.response.notFound('No user course progress data found')
+
+        ctx.body = userCompletion;
+        next();
+    },
+
+    async updateUserCompletionData(ctx, next) {
         try{
 
         console.log('Updating User-Course-Progress')

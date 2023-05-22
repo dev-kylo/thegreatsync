@@ -3,12 +3,21 @@ export default {
       {
        method: 'PUT',
        path: '/user-course-progress',
-       handler: 'custom.updateUserCompletionData',
+       handler: 'user-completions.updateUserCompletionData',
        config: {
          policies: [],
          middlewares: [],
        },
       },
+      {
+        method: 'GET',
+        path: '/user-course-progress',
+        handler: 'user-completions.getUserCompletionData',
+        config: {
+          policies: [],
+          middlewares: [],
+        },
+       },
       {
         method: 'PUT',
         path: '/user-course-progress/synchronise',
