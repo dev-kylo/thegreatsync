@@ -30,22 +30,34 @@ module.exports = {
     try {
         // Update UserCourseProgress records based on course structure comparison
         userCourseProgresses.forEach(async (userCourseProgress) => {
-            // Update completion records for chapters
+            
+            // Chapters
             course.chapters.forEach(chapter => {
                 const chapterExistsInCompletion = userCourseProgress.chapters.find(completion => completion.id === chapter.id);
                 // If chapter is not in completion data
                 if (!chapterExistsInCompletion) userCourseProgress.chapters.push(createChapterCompletion(chapter.id, +courseId))
 
                 // Subchapters
-                chapter.subchapters.forEach(sub =>{
+                chapter.subchapters.forEach((sub) =>{
                     const subChapterExistsInCompletion = userCourseProgress.subchapters.find(completion => completion.id === sub.id);
                     // If subchapter is not in completion data
-                    if (!subChapterExistsInCompletion) userCourseProgress.subchapters.push(createSubchapterCompletion(sub.id, chapter.id))
+                    if (!subChapterExistsInCompletion) {
+                        userCourseProgress.subchapters.push(createSubchapterCompletion(sub.id, chapter.id))
+                         // If there is an existing chapter, it can no longer be completed
+                        if (chapterExistsInCompletion) chapterExistsInCompletion.completed = false;
+                    }
 
                     // Pages
                     sub.pages.forEach(pg => {
                         const pageExistsInCompletion = userCourseProgress.pages.find(completion => completion.id === pg.id);
-                        if (!pageExistsInCompletion) userCourseProgress.pages.push(createPageCompletion(pg.id, sub.id))
+                        if (!pageExistsInCompletion){
+                            userCourseProgress.pages.push(createPageCompletion(pg.id, sub.id))
+                            // If there is an existing subchapter, that subchapter and its parent chapter can longer be completed
+                            if (subChapterExistsInCompletion){
+                                subChapterExistsInCompletion.completed = false;
+                                chapterExistsInCompletion.completed = false;
+                            }
+                        }
                     })
                 })
             });
