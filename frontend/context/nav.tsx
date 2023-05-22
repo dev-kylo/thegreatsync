@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { mapMenuChapters } from '../libs/helpers';
 import { MenuItem } from '../types';
-import { getChapters } from '../services/queries';
+import { getChapters, getUserCompletions } from '../services/queries';
 import { DoublyLinkedList } from '../libs/doublyLinkedList';
 import { httpClient, setAuthToken } from '../libs/axios';
 
@@ -54,6 +54,15 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
     );
 
+    const { data: usercompletion, error: completionError } = useSWR(
+        () =>
+            session && !!httpClient.defaults.headers.common.Authorization && courseId
+                ? { url: '/api/getUserCompletions', courseId }
+                : null,
+        getUserCompletions,
+        { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
+    );
+
     const menuChapters = useMemo(
         () => (data && courseId ? mapMenuChapters(data, courseId) : undefined),
         [data, courseId]
@@ -61,7 +70,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const courseSequence = useMemo(() => menuChapters && createList(menuChapters), [menuChapters]);
 
     useEffect(() => {
-        if (session?.jwt) setAuthToken(session?.jwt || '');
+        if (session?.jwt) setAuthToken((session?.jwt as string) || '');
     }, [session?.jwt]);
 
     const nextPage = () => {
@@ -98,7 +107,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         }
     }, [pageId, courseSequence]);
 
-    console.log({ error });
+    console.log({ error, usercompletion, completionError });
 
     return (
         <NavContext.Provider

@@ -41,6 +41,8 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                     <Image
                         src="https://res.cloudinary.com/the-great-sync/image/upload/c_crop,g_face/v1674746967/2000x2000/Operator_Cinematic_q1sfux.png"
                         alt="profile"
+                        width="112"
+                        height="151"
                     />
                 </Menu.Button>
             </div>

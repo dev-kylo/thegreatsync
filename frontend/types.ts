@@ -171,7 +171,7 @@ export interface ChaptersAttributes extends StrapiResponseMetaData {
     title: string;
     visible: boolean;
     menu: Menu;
-    sub_chapters: {
+    subchapters: {
         data: SubChapter[];
     };
 }
@@ -240,3 +240,19 @@ export interface Pagination {
     pageCount: number;
     total: number;
 }
+
+export type CompletionProgress = {
+    id: number;
+    completed: boolean;
+};
+
+export type PageCompletion = CompletionProgress & { subchapter?: number };
+export type SubchapterCompletion = CompletionProgress & { chapter?: number };
+export type ChapterCompletion = CompletionProgress & { course?: number };
+export type UserCourseProgressResponse = {
+    chapters: ChapterCompletion[];
+    pages: PageCompletion[];
+    subchapters: SubchapterCompletion[];
+    id: number;
+    user: number;
+} & StrapiResponseMetaData;

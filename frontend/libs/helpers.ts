@@ -75,9 +75,11 @@ export function mapMenuChapters(chaptersResponse: ChaptersResponse, courseUid: s
         .filter((chapter) => chapter.attributes.visible)
         .sort(sortByOrderNumber)
         .map((chapter) => {
+            console.log('------CHAPTER-------');
+            console.log(chapter);
             const { id: chapterId, attributes } = chapter;
             const chapterTitle = attributes.title;
-            const subchapters = attributes.sub_chapters.data;
+            const subchapters = attributes.subchapters.data;
             const mappedChapter = {} as Partial<MenuItem>;
             mappedChapter.name = chapterTitle;
             mappedChapter.completed = false;
