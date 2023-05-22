@@ -13,11 +13,9 @@ module.exports = {
     const course= await strapi.db.query('api::course.course').findOne({
         where: { id: courseId },
         populate: ['chapters', 'chapters.subchapters', 'chapters.subchapters.pages']
-    })
+    });
 
     if (!course) return ctx.response.notFound('Course not found')
-
-    console.log(course)
     
     // Retrieve the UserCourseProgress records for the users enrolled in the course
     const userCourseProgresses = await strapi.db.query('api::user-course-progress.user-course-progress').findMany({ 
@@ -28,17 +26,24 @@ module.exports = {
     if (!userCourseProgresses || userCourseProgresses.length < 1) return ctx.response.notFound('No user-course-progress records found for this course')
     
     try {
+
+        const validPageIds: number[] = [];
+        const validSubchapterIds: number[] = [];
+        const validChapterIds: number[] = [];
+
         // Update UserCourseProgress records based on course structure comparison
         userCourseProgresses.forEach(async (userCourseProgress) => {
             
             // Chapters
             course.chapters.forEach(chapter => {
+                validChapterIds.push(chapter.id)
                 const chapterExistsInCompletion = userCourseProgress.chapters.find(completion => completion.id === chapter.id);
                 // If chapter is not in completion data
                 if (!chapterExistsInCompletion) userCourseProgress.chapters.push(createChapterCompletion(chapter.id, +courseId))
 
                 // Subchapters
                 chapter.subchapters.forEach((sub) =>{
+                    validSubchapterIds.push(sub.id)
                     const subChapterExistsInCompletion = userCourseProgress.subchapters.find(completion => completion.id === sub.id);
                     // If subchapter is not in completion data
                     if (!subChapterExistsInCompletion) {
@@ -49,6 +54,7 @@ module.exports = {
 
                     // Pages
                     sub.pages.forEach(pg => {
+                        validPageIds.push(pg.id)
                         const pageExistsInCompletion = userCourseProgress.pages.find(completion => completion.id === pg.id);
                         if (!pageExistsInCompletion){
                             userCourseProgress.pages.push(createPageCompletion(pg.id, sub.id))
@@ -62,6 +68,11 @@ module.exports = {
                 })
             });
 
+            // Check that no pages, subpages or chapters have been deleted
+            userCourseProgress.pages = userCourseProgress.pages.filter(page => !!(validPageIds.includes(page.id)))
+            userCourseProgress.subchapters = userCourseProgress.subchapters.filter(sub => !!(validSubchapterIds.includes(sub.id)))
+            userCourseProgress.chapters = userCourseProgress.chapters.filter(chap => !!(validChapterIds.includes(chap.id)))
+
             await strapi.db.query('api::user-course-progress.user-course-progress').update({
                 where: {course: courseId, user: userCourseProgress.user},
                 data: userCourseProgress
@@ -72,10 +83,7 @@ module.exports = {
         ctx.body = err;
     }
 
-
-    // Remove any deleted 
-
     // Return a response indicating the update was successful
-    ctx.send({ message: 'UserCourseProgress records updated successfully' });
+    ctx.send({ success: true, message: 'UserCourseProgress records updated successfully' });
   },
 };
