@@ -24,7 +24,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::chapter.chapter",
-      "inversedBy": "courses"
+      "mappedBy": "courses"
     },
     "description": {
       "type": "dynamiczone",

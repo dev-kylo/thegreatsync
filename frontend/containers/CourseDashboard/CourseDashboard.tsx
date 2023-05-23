@@ -12,24 +12,34 @@ import type { VideoT } from '../../types';
 import Spinner from '../../components/ui/Spinner';
 
 const CourseDashboard = ({ description, title, video }: { title: string; description?: string; video?: VideoT }) => {
-    const { menuData, courseSequence } = useContext(NavContext);
+    const { menuData, courseSequence, courseCompletionStat } = useContext(NavContext);
+
+    console.log(`And the winnder is: ${courseCompletionStat}`);
 
     return (
         <Layout>
-            {menuData && <Navbar title={`${title}`} menuData={menuData} />}
+            {menuData && <Navbar title="Course Dashboard" menuData={menuData} />}
             <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12 mt-8">
                 <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 gap-4 ">
                     <div className="sm:col-span-1 w-full">
                         <div className=" bg-gray-900 rounded-lg shadow-lg p-12 flex flex-col justify-center items-center">
                             <div className="mb-8">
-                                {courseSequence ? (
-                                    <ProgressIcon amount="70" completed={false} size="28" />
-                                ) : (
+                                {courseCompletionStat === null ? (
                                     <Spinner />
+                                ) : (
+                                    <div className="flex align-center flex-col">
+                                        <ProgressIcon
+                                            // removeViewbox
+                                            amount={courseCompletionStat === 0 ? 1 : courseCompletionStat}
+                                            completed={courseCompletionStat === 100}
+                                            size="24"
+                                        />
+                                        <small className="text-green-400 text-center">{courseCompletionStat}%</small>
+                                    </div>
                                 )}
                             </div>
                             <div className="text-center">
-                                <p className="text-xl text-white font-bold mb-2">LEARN JAVASCRIPT</p>
+                                <p className="text-xl text-white font-bold mb-2">{title}</p>
                                 <p className="text-base text-gray-400 font-normal">____________________________</p>
                             </div>
                         </div>
@@ -40,7 +50,7 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
                                         type="button"
                                         className="my-4 inline-flex items-center justify-center rounded-md border border-green-400 bg-primary_blue  px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
                                     >
-                                        Start Learning
+                                        {courseCompletionStat === 0 ? 'Start Learning' : 'Resume Learning'}
                                     </button>
                                 </Link>
                             )}

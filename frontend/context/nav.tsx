@@ -5,9 +5,10 @@ import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { mapMenuChapters } from '../libs/helpers';
 import { MenuItem } from '../types';
-import { getChapters } from '../services/queries';
+import { getChapters, getUserCompletions } from '../services/queries';
 import { DoublyLinkedList } from '../libs/doublyLinkedList';
 import { httpClient, setAuthToken } from '../libs/axios';
+import { completePage } from '../services/mutations';
 
 type NavProviderValues = {
     menuData?: MenuItem[];
@@ -16,6 +17,7 @@ type NavProviderValues = {
     prevPage: () => void;
     showNext: boolean;
     showPrev: boolean;
+    courseCompletionStat: number | null;
 };
 
 export const NavContext = React.createContext<NavProviderValues>({
@@ -25,6 +27,7 @@ export const NavContext = React.createContext<NavProviderValues>({
     prevPage: () => {},
     showNext: false,
     showPrev: false,
+    courseCompletionStat: null,
 });
 
 function addToList(item: MenuItem, list: DoublyLinkedList) {
@@ -35,8 +38,6 @@ function addToList(item: MenuItem, list: DoublyLinkedList) {
 function createList(menuItems: MenuItem[]) {
     const list = new DoublyLinkedList();
     menuItems.forEach((item) => addToList(item, list));
-    console.log('-------- AND Queue of PAGES -------');
-    console.log(list.printList());
     return list;
 }
 
@@ -54,29 +55,39 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
     );
 
+    const {
+        data: usercompletion,
+        error: completionError,
+        mutate,
+    } = useSWR(
+        () =>
+            session && !!httpClient.defaults.headers.common.Authorization && courseId
+                ? { url: '/api/getUserCompletions', courseId }
+                : null,
+        getUserCompletions,
+        { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
+    );
+
     const menuChapters = useMemo(
-        () => (data && courseId ? mapMenuChapters(data, courseId) : undefined),
-        [data, courseId]
+        () => (data && usercompletion ? mapMenuChapters(data, usercompletion, courseId) : undefined),
+        [data, courseId, usercompletion]
     );
     const courseSequence = useMemo(() => menuChapters && createList(menuChapters), [menuChapters]);
 
     useEffect(() => {
-        if (session?.jwt) setAuthToken(session?.jwt || '');
+        if (session?.jwt) setAuthToken((session?.jwt as string) || '');
     }, [session?.jwt]);
 
-    const nextPage = () => {
-        if (!courseSequence) return;
+    const nextPage = async () => {
+        if (!courseSequence || !courseSequence.currentPageNode) return;
+
+        await completePage(courseId, courseSequence.currentPageNode.data.id);
+        mutate(); // Fetch new completion data
         const nextNode = courseSequence.currentPageNode?.next;
         if (nextNode) {
             courseSequence.currentPageNode = nextNode;
             router.replace(nextNode.data.href!);
         }
-
-        // STEPS TO SET COMPLETED
-        // CHECK IF EXISTING IS ALREADY COMPLETED
-        // IF NOT
-        // FETCH CALL TO ADD ID TO COMPLETED ARRAY IN STRAPI
-        // UPDATE COURSE SEQUENCE
     };
 
     const prevPage = () => {
@@ -98,13 +109,24 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         }
     }, [pageId, courseSequence]);
 
-    console.log({ error });
+    console.log({ error, completionError });
+
+    const completionStat = () => {
+        if (!usercompletion || !courseSequence) return null;
+        const completed = usercompletion.pages.filter((pg) => pg.completed);
+        return (completed.length / courseSequence.getTotalNodes()) * 100;
+    };
+
+    const courseCompletionStat = usercompletion && courseSequence ? completionStat() : null;
+
+    console.log({ courseCompletionStat });
 
     return (
         <NavContext.Provider
             value={{
                 menuData: menuChapters,
                 courseSequence,
+                courseCompletionStat,
                 showNext: !!courseSequence?.currentPageNode?.next,
                 showPrev: true,
                 nextPage,

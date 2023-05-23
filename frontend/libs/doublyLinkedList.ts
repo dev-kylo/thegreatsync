@@ -41,11 +41,21 @@ export class DoublyLinkedList {
         }
     }
 
+    getTotalNodes(): number {
+        let count = 0;
+        let currentNode = this.head;
+        while (currentNode !== null) {
+            count++;
+            currentNode = currentNode.getNextNode();
+        }
+        return count;
+    }
+
     printList() {
         let currentNode = this.head;
         let output = '<head> ';
         while (currentNode !== null) {
-            output += `${currentNode.data.name}--` + ` `;
+            output += `${currentNode.data.name}--`;
             currentNode = currentNode.getNextNode();
         }
         output += '<tail>';

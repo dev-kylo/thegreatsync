@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import qs from 'qs';
-import { ChaptersResponse, CourseResponse, CoursesByUserResponse, PageResponse } from '../types';
+import {
+    ChaptersResponse,
+    CourseResponse,
+    CoursesByUserResponse,
+    PageResponse,
+    UserCourseProgressResponse,
+} from '../types';
 
 import { httpClient } from '../libs/axios';
 
@@ -8,7 +14,7 @@ export const getChapters = async (courseId: string | number): Promise<ChaptersRe
     if (!courseId) throw new Error('Missing course Id');
     const query = qs.stringify(
         {
-            populate: ['menu', 'sub_chapters', 'sub_chapters.menu', 'sub_chapters.pages', 'sub_chapters.pages.menu'],
+            populate: ['menu', 'subchapters', 'subchapters.menu', 'subchapters.pages', 'subchapters.pages.menu'],
             filters: {
                 courses: {
                     id: {
@@ -57,5 +63,16 @@ export const getCourse = async (id: string | number): Promise<CourseResponse> =>
     );
     console.log('About to fetch COURSE data');
     const res = await httpClient.get<CourseResponse>(`/api/courses/${id}?${query}`);
+    return res && res.data;
+};
+
+export const getUserCompletions = async ({
+    courseId,
+}: {
+    url: string;
+    courseId: string | number;
+}): Promise<UserCourseProgressResponse> => {
+    console.log('About to fetch user completion data');
+    const res = await httpClient.get<UserCourseProgressResponse>(`/api/user-course-progress/?courseId=${courseId}`);
     return res && res.data;
 };

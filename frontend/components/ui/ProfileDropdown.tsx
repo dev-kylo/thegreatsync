@@ -35,12 +35,14 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
 
     return (
         <Menu as="div" className="relative flex-shrink-0">
-            <div>
+            <div className="hover:scale-110">
                 <Menu.Button className="flex rounded-full bg-indigo-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700">
                     <span className="sr-only">Open user menu</span>
                     <Image
-                        src="https://res.cloudinary.com/the-great-sync/image/upload/c_crop,g_face/v1674746967/2000x2000/Operator_Cinematic_q1sfux.png"
+                        src="https://res.cloudinary.com/the-great-sync/image/upload/c_fit,w_50/v1684818397/Scope_Sphere_rrzm5s.png"
                         alt="profile"
+                        width="50"
+                        height="50"
                     />
                 </Menu.Button>
             </div>
