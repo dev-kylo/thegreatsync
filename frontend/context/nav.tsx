@@ -66,8 +66,8 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     );
 
     const menuChapters = useMemo(
-        () => (data && courseId ? mapMenuChapters(data, courseId) : undefined),
-        [data, courseId]
+        () => (data && usercompletion ? mapMenuChapters(data, usercompletion, courseId) : undefined),
+        [data, courseId, usercompletion]
     );
     const courseSequence = useMemo(() => menuChapters && createList(menuChapters), [menuChapters]);
 
