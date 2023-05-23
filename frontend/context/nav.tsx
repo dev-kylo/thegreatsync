@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { ReactNode, useEffect, useMemo } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
@@ -16,6 +16,7 @@ type NavProviderValues = {
     prevPage: () => void;
     showNext: boolean;
     showPrev: boolean;
+    courseCompletionStat: number | null;
 };
 
 export const NavContext = React.createContext<NavProviderValues>({
@@ -25,6 +26,7 @@ export const NavContext = React.createContext<NavProviderValues>({
     prevPage: () => {},
     showNext: false,
     showPrev: false,
+    courseCompletionStat: null,
 });
 
 function addToList(item: MenuItem, list: DoublyLinkedList) {
@@ -107,13 +109,24 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         }
     }, [pageId, courseSequence]);
 
-    console.log({ error, usercompletion, completionError });
+    console.log({ error, completionError });
+
+    const completionStat = () => {
+        if (!usercompletion || !courseSequence) return null;
+        const completed = usercompletion.pages.filter((pg) => pg.completed);
+        return (completed.length / courseSequence.getTotalNodes()) * 100;
+    };
+
+    const courseCompletionStat = usercompletion && courseSequence ? completionStat() : null;
+
+    console.log({ courseCompletionStat });
 
     return (
         <NavContext.Provider
             value={{
                 menuData: menuChapters,
                 courseSequence,
+                courseCompletionStat,
                 showNext: !!courseSequence?.currentPageNode?.next,
                 showPrev: true,
                 nextPage,

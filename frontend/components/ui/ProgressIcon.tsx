@@ -10,7 +10,7 @@ const ProgressIcon = ({
     size?: string;
 }) => {
     if (!amount && !completed) return null;
-    if (completed) return <CheckCircleIcon className="text-green-400 mr-3 h-6 w-6" aria-hidden="true" />;
+    if (completed) return <CheckCircleIcon className="text-green-400 mr-3 h-24 w-24" aria-hidden="true" />;
 
     const radius = 9;
 
@@ -30,7 +30,7 @@ const ProgressIcon = ({
                     className="text-green-400"
                     strokeWidth="4"
                     strokeDasharray={radius * 2 * Math.PI}
-                    strokeDashoffset={radius * 2 * Math.PI - (50 / 100) * (radius * 2 * Math.PI)}
+                    strokeDashoffset={radius * 2 * Math.PI - ((amount ? +amount : 50) / 100) * (radius * 2 * Math.PI)}
                     strokeLinecap="round"
                     stroke="currentColor"
                     fill="transparent"
