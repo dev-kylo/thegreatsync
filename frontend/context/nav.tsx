@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { ReactNode, useCallback, useEffect, useMemo } from 'react';
+import React, { ReactNode, useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
@@ -8,6 +8,7 @@ import { MenuItem } from '../types';
 import { getChapters, getUserCompletions } from '../services/queries';
 import { DoublyLinkedList } from '../libs/doublyLinkedList';
 import { httpClient, setAuthToken } from '../libs/axios';
+import { completePage } from '../services/mutations';
 
 type NavProviderValues = {
     menuData?: MenuItem[];
@@ -37,8 +38,6 @@ function addToList(item: MenuItem, list: DoublyLinkedList) {
 function createList(menuItems: MenuItem[]) {
     const list = new DoublyLinkedList();
     menuItems.forEach((item) => addToList(item, list));
-    console.log('-------- AND Queue of PAGES -------');
-    console.log(list.printList());
     return list;
 }
 
@@ -56,7 +55,11 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
     );
 
-    const { data: usercompletion, error: completionError } = useSWR(
+    const {
+        data: usercompletion,
+        error: completionError,
+        mutate,
+    } = useSWR(
         () =>
             session && !!httpClient.defaults.headers.common.Authorization && courseId
                 ? { url: '/api/getUserCompletions', courseId }
@@ -75,19 +78,16 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (session?.jwt) setAuthToken((session?.jwt as string) || '');
     }, [session?.jwt]);
 
-    const nextPage = () => {
-        if (!courseSequence) return;
+    const nextPage = async () => {
+        if (!courseSequence || !courseSequence.currentPageNode) return;
+
+        await completePage(courseId, courseSequence.currentPageNode.data.id);
+        mutate(); // Fetch new completion data
         const nextNode = courseSequence.currentPageNode?.next;
         if (nextNode) {
             courseSequence.currentPageNode = nextNode;
             router.replace(nextNode.data.href!);
         }
-
-        // STEPS TO SET COMPLETED
-        // CHECK IF EXISTING IS ALREADY COMPLETED
-        // IF NOT
-        // FETCH CALL TO ADD ID TO COMPLETED ARRAY IN STRAPI
-        // UPDATE COURSE SEQUENCE
     };
 
     const prevPage = () => {
