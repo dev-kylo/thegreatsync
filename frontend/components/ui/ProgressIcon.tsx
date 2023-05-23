@@ -10,7 +10,13 @@ const ProgressIcon = ({
     size?: string;
 }) => {
     if (!amount && !completed) return null;
-    if (completed) return <CheckCircleIcon className="text-green-400 mr-3 h-24 w-24" aria-hidden="true" />;
+    if (completed)
+        return (
+            <CheckCircleIcon
+                className={`text-green-400 mr-3 ${size ? `w-${size} h-${size}` : 'w-7 h-7'} `}
+                aria-hidden="true"
+            />
+        );
 
     const radius = 9;
 
