@@ -31,7 +31,7 @@ export default function Navbar({ title, menuData }: { title: string; menuData?: 
                 </div>
             </Disclosure>
             <SlideOver open={openMenu} setOpen={setOpenMenu}>
-                {menuData && <Menu menuData={menuData} />}
+                {menuData && <Menu menuData={menuData} closeMenu={() => setOpenMenu(false)} />}
             </SlideOver>
         </>
     );

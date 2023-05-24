@@ -11,25 +11,23 @@ function classNames(...classes: string[]) {
 
 function createMenuLink(item: MenuItem) {
     return (
-        <Link href={item.href!} passHref>
-            <div key={item.name}>
-                <a
-                    className={classNames(
-                        item.current
-                            ? 'bg-gray-100 text-gray-900'
-                            : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                        'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md'
-                    )}
-                >
-                    Icon
-                    {item.name}
-                </a>
-            </div>
+        <Link
+            key={item.name}
+            href={item.href!}
+            className={classNames(
+                item.current
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md'
+            )}
+        >
+            Icon
+            {item.name}
         </Link>
     );
 }
 
-function createMenuDropDown(item: MenuItem) {
+function createMenuDropDown(item: MenuItem, callback: () => void) {
     return (
         <Disclosure as="div" key={item.name} className="space-y-1">
             {({ open }) => (
@@ -59,7 +57,7 @@ function createMenuDropDown(item: MenuItem) {
                         </svg>
                     </Disclosure.Button>
                     <Disclosure.Panel className="space-y-1">
-                        {item.children && createMenuDropDownLink(item.children)}
+                        {item.children && createMenuDropDownLink(item.children, callback)}
                     </Disclosure.Panel>
                 </>
             )}
@@ -67,30 +65,34 @@ function createMenuDropDown(item: MenuItem) {
     );
 }
 
-function createMenuDropDownLink(menuChildren: MenuItem[]) {
+function createMenuDropDownLink(menuChildren: MenuItem[], callback: () => void) {
     return menuChildren.map((subItem) => {
         const { level, type, name, completed, children, href, current } = subItem;
         if (!children) {
             return (
-                <Disclosure.Button
-                    key={name}
-                    as="a"
-                    href={href}
-                    className={`group flex w-full items-center rounded-md py-3 ${
-                        level === 2 ? 'pl-8' : level === 3 ? 'pl-20' : 'pl-4'
-                    } pr-2 text-md font-medium text-white hover:bg-gray-50 hover:text-gray-900`}
-                >
-                    {type && <MenuIcon type={type} completed={!!completed} active={!!current} />}
-                    {name}
-                </Disclosure.Button>
+                <Link href={href || '/'} passHref>
+                    <Disclosure.Button
+                        onClick={() => callback()}
+                        key={name}
+                        as="a"
+                        className={`group flex w-full items-center rounded-md py-3 ${
+                            level === 2 ? 'pl-8' : level === 3 ? 'pl-20' : 'pl-4'
+                        } pr-2 text-md font-medium text-white hover:bg-gray-50 hover:text-gray-900`}
+                    >
+                        {type && <MenuIcon type={type} completed={!!completed} active={!!current} />}
+                        {name}
+                    </Disclosure.Button>
+                </Link>
             );
         }
-        return createMenuDropDown(subItem);
+        return createMenuDropDown(subItem, callback);
     });
 }
 
-const Menu = ({ menuData }: { menuData: MenuItem[] }) => {
-    const menuLinks = menuData.map((item) => (!item.children ? createMenuLink(item) : createMenuDropDown(item)));
+const Menu = ({ menuData, closeMenu }: { menuData: MenuItem[]; closeMenu: () => void }) => {
+    const menuLinks = menuData.map((item) =>
+        !item.children ? createMenuLink(item) : createMenuDropDown(item, closeMenu)
+    );
     return <div>{menuLinks}</div>;
 };
 
