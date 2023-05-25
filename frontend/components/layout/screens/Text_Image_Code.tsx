@@ -14,7 +14,7 @@ export default function Text_Image_Code({ text, code, image, id, showImageBorder
                     <ContentBlock md={text} id={id} />
                 </Block>
 
-                <Block showBorder={showImageBorder} outerClasses="w-full relative">
+                <Block hideBorder={showImageBorder} outerClasses="w-full relative">
                     <Image
                         id={`image:${id}`}
                         alt="Mountains"

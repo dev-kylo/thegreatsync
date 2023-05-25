@@ -9,7 +9,7 @@ import { NavContext } from '../../../../../context/nav';
 import { getPage } from '../../../../../services/queries';
 import { serverRedirectObject } from '../../../../../libs/helpers';
 import { PageContent, PageType } from '../../../../../types';
-import Text_Image_Code from '../../../../../components/layout/screens/Text_Image_Code';
+// import Text_Image_Code from '../../../../../components/layout/screens/Text_Image_Code';
 import Text_Image from '../../../../../components/layout/screens/Text_Image';
 import Video from '../../../../../components/layout/screens/Video';
 import ControlBar from '../../../../../containers/ControlBar';
@@ -17,6 +17,7 @@ import PageStepsController from '../../../../../containers/PageStepsController';
 import Text from '../../../../../components/layout/screens/Text';
 import { authOptions } from '../../../../api/auth/[...nextauth]';
 import { setAuthToken } from '../../../../../libs/axios';
+import Tic from '../../../../../components/layout/screens/Tic';
 
 type CoursePageProps = {
     title: string | number;
@@ -38,8 +39,7 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
 
     if (hasPageSteps) contentLayout = <PageStepsController pageContent={content} type={type} />;
     else if (type === 'text') contentLayout = <Text text={text} id={id} />;
-    else if (type === 'text_image_code')
-        contentLayout = <Text_Image_Code code={code!} text={text} image={image} id={id} />;
+    else if (type === 'text_image_code') contentLayout = <Tic code={code!} text={text} image={image} id={id} />;
     else if (type === 'text_image') contentLayout = <Text_Image text={text} image={image} id={id} />;
     else if (type === 'video' && video) contentLayout = <Video data={video} />;
 
