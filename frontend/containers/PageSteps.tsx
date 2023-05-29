@@ -13,6 +13,7 @@ type PageStepsProps = {
     pageSteps: PageStep[];
     showNextButton: boolean;
     type: PageType;
+    heading?: string;
     nextPage: () => void;
     prevPage: () => void;
     nextStep: () => void;
@@ -29,6 +30,7 @@ const PageSteps = ({
     pageSteps,
     showNextButton,
     type,
+    heading,
     nextPage,
     prevPage,
     nextStep,
@@ -75,15 +77,16 @@ const PageSteps = ({
         <>
             {type === 'text_image_code' && (
                 <Text_Image_Code
-                    code={currentTopicStep?.code!}
-                    id={+currentTopicStep?.id}
+                    heading={currIndex === 0 ? heading : undefined}
+                    code={currentTopicStep.code!}
+                    id={+currentTopicStep.id}
                     text={currentTopicStep?.text}
                     image={currentTopicStep?.image}
                     showImageBorder={currentTopicStep?.transparent_image}
                 />
             )}
             {type === 'text_image' && (
-                <Text_Image id={+currentTopicStep?.id} text={currentTopicStep?.text} image={currentTopicStep?.image} />
+                <Text_Image id={+currentTopicStep.id} text={currentTopicStep?.text} image={currentTopicStep?.image} />
             )}
 
             <div className="relative">
@@ -92,12 +95,12 @@ const PageSteps = ({
                 </div>
                 <ControlBar showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
                     <nav aria-label="Progress" className="flex items-center relative z-50  ">
-                        <button className="text-white px-4 hover:text-primary_green" onClick={handlePrev}>
+                        <button type="button" className="text-white px-4 hover:text-primary_green" onClick={handlePrev}>
                             <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
                         </button>
                         <div className="max-w-md relative">
                             {pageSteps.length > 6 && currIndex > 2 && <BlurEdge position="left" />}
-                            <ol role="list" ref={stepsContainer} className="flex items-center ">
+                            <ol ref={stepsContainer} className="flex items-center ">
                                 {pageSteps.map((step: PageStep, stepIdx: number) => (
                                     <li
                                         key={step.id}

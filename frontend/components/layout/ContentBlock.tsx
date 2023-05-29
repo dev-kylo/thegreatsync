@@ -7,12 +7,13 @@ import style from 'react-syntax-highlighter/dist/cjs/styles/hljs/night-owl';
 
 SyntaxHighlighter.registerLanguage('javascript', js);
 
-const ContentBlock = ({ md, id }: { md: string; id: number; numbered?: boolean }) => {
+const ContentBlock = ({ md, id, heading }: { md: string; id: number; heading?: string }) => {
     return (
         <article
             id={`md-block:${id} `}
             className="prose dark:prose-invert prose-lg prose-headings:text-secondary_lightblue mx-auto prose-pre:p-0 pt-2 prose-code:text-[#7fdbca] prose-code:after:hidden prose-code:before:hidden pb-16"
         >
+            {heading && <h2>{heading}</h2>}
             <ReactMarkdown
                 children={md}
                 components={{

@@ -114,7 +114,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const completionStat = () => {
         if (!usercompletion || !courseSequence) return null;
         const completed = usercompletion.pages.filter((pg) => pg.completed);
-        return (completed.length / courseSequence.getTotalNodes()) * 100;
+        return Math.round((completed.length / courseSequence.getTotalNodes()) * 100);
     };
 
     const courseCompletionStat = usercompletion && courseSequence ? completionStat() : null;
