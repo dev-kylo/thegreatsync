@@ -6,7 +6,7 @@ import { StepContext } from '../context/steps';
 
 type PageStepsControllerProps = {
     pageContent: PageContent[];
-    heading: string;
+    heading?: string;
     type: PageType;
 };
 

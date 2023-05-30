@@ -1,6 +1,9 @@
-const TitleStrip = ({ title }: { title: string }) => (
+const TitleStrip = ({ chapterTitle, subChapterTitle }: { chapterTitle: string; subChapterTitle: string }) => (
     <div className="">
-        <h2 className="text-secondary_lightblue m-0 p-0 text-2xl">{title}</h2>
+        <span className="text-secondary_lightblue m-0 p-0 text-xl block">{chapterTitle}</span>
+        <span className=" m-0 mt-1 p-0 text-xs block uppercase text-center text-green-400 font-bold">
+            {subChapterTitle}
+        </span>
     </div>
 );
 

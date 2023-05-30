@@ -2,6 +2,20 @@ export type MenuType = 'watch' | 'code' | 'read' | 'draw' | 'imagine' | 'listen'
 
 export type PageType = 'text_image_code' | 'video' | 'text_image' | 'text';
 
+export type MenuParentSubchapter = {
+    subchapter?: {
+        name: string;
+        id: string | number;
+    };
+};
+
+export type MenuParentChapter = {
+    chapter?: {
+        name: string;
+        id: string | number;
+    };
+};
+
 export type MenuItem = {
     name: string;
     id: number;
@@ -13,6 +27,7 @@ export type MenuItem = {
     href?: string;
     orderNumber: number;
     children?: MenuItem[];
+    parent: MenuParentChapter & MenuParentSubchapter;
 };
 
 export type PageStepT = {

@@ -6,6 +6,8 @@ import {
     ChapterData,
     SubChapter,
     UserCourseProgressResponse,
+    MenuParentChapter,
+    MenuParentSubchapter,
 } from '../types';
 
 export function serverRedirectObject(url: string, permanent = true) {
@@ -37,7 +39,12 @@ function sortByOrderNumber(a: EntityWithMenuOrder, b: EntityWithMenuOrder) {
     return +a.attributes.menu!.orderNumber - b.attributes.menu!.orderNumber;
 }
 
-function mapMenuPages(pages: Page[], completionData: UserCourseProgressResponse, prependLinkUrl: string): MenuItem[] {
+function mapMenuPages(
+    pages: Page[],
+    parent: MenuParentSubchapter,
+    completionData: UserCourseProgressResponse,
+    prependLinkUrl: string
+): MenuItem[] {
     if (!pages || pages.length === 0) return [];
     return pages
         .filter((page) => page.attributes.visible)
@@ -52,12 +59,14 @@ function mapMenuPages(pages: Page[], completionData: UserCourseProgressResponse,
             mappedPage.orderNumber = page.attributes.menu.orderNumber;
             mappedPage.completed = completionData.pages.find((pg) => pg.id === page.id)?.completed;
             mappedPage.href = `${prependLinkUrl}/${page.id}`;
+            mappedPage.parent = { ...parent };
             return mappedPage as MenuItem;
         });
 }
 
 function mapMenuSubChapters(
     subchapters: SubChapter[],
+    parent: MenuParentChapter,
     completionData: UserCourseProgressResponse,
     prependLinkUrl: string
 ): MenuItem[] {
@@ -68,8 +77,17 @@ function mapMenuSubChapters(
         .map((subchapter) => {
             const mappedSubChapter = {} as Partial<MenuItem>;
             const pages = subchapter.attributes.pages?.data;
+            const parentData = {
+                ...parent,
+                subchapter: { id: subchapter.id, name: subchapter.attributes.title },
+            };
             if (pages)
-                mappedSubChapter.children = mapMenuPages(pages, completionData, `/${prependLinkUrl}/${subchapter.id}`);
+                mappedSubChapter.children = mapMenuPages(
+                    pages,
+                    parentData,
+                    completionData,
+                    `/${prependLinkUrl}/${subchapter.id}`
+                );
             mappedSubChapter.name = subchapter.attributes.title;
             mappedSubChapter.progress = calculateSubchapterProgress(subchapter.id, completionData);
             mappedSubChapter.level = 2;
@@ -92,12 +110,14 @@ export function mapMenuChapters(
         .map((chapter) => {
             const { id: chapterId, attributes } = chapter;
             const chapterTitle = attributes.title;
+            const parentData = { chapter: { id: chapterId, name: chapterTitle } };
             const subchapters = attributes.subchapters.data;
             const mappedChapter = {} as Partial<MenuItem>;
             mappedChapter.name = chapterTitle;
             mappedChapter.completed = completionData.chapters.find((chp) => chp.id === chapter.id)?.completed;
             mappedChapter.children = mapMenuSubChapters(
                 subchapters,
+                parentData,
                 completionData,
                 `courses/${courseUid}/${chapterId}`
             );

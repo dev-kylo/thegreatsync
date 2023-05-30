@@ -7,7 +7,15 @@ import TitleStrip from './TitleStrip';
 import Menu from './Menu';
 import { MenuItem } from '../../types';
 
-export default function Navbar({ title, menuData }: { title: string; menuData?: MenuItem[] }) {
+export default function Navbar({
+    chapterTitle,
+    subChapterTitle,
+    menuData,
+}: {
+    chapterTitle: string;
+    subChapterTitle: string;
+    menuData?: MenuItem[];
+}) {
     const [openMenu, setOpenMenu] = useState(false);
 
     return (
@@ -21,7 +29,7 @@ export default function Navbar({ title, menuData }: { title: string; menuData?: 
                             className="block h-8 w-8 xl:h-10 xl:w-10 text-white hover:cursor-pointer hover:text-primary_green focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary_blue"
                             aria-hidden="true"
                         />
-                        <TitleStrip title={title} />
+                        <TitleStrip chapterTitle={chapterTitle} subChapterTitle={subChapterTitle} />
                         <div className="hidden lg:block">
                             <div className="flex items-center justify-end">
                                 <ProfileDropDown />

@@ -11,6 +11,8 @@ import { httpClient, setAuthToken } from '../libs/axios';
 import { completePage } from '../services/mutations';
 
 type NavProviderValues = {
+    subChapterName?: string;
+    chapterName?: string;
     menuData?: MenuItem[];
     courseSequence?: DoublyLinkedList | null;
     nextPage: () => void;
@@ -21,6 +23,8 @@ type NavProviderValues = {
 };
 
 export const NavContext = React.createContext<NavProviderValues>({
+    subChapterName: '',
+    chapterName: '',
     menuData: undefined,
     courseSequence: null,
     nextPage: () => {},
@@ -37,6 +41,7 @@ function addToList(item: MenuItem, list: DoublyLinkedList) {
 
 function createList(menuItems: MenuItem[]) {
     const list = new DoublyLinkedList();
+    console.log(menuItems);
     menuItems.forEach((item) => addToList(item, list));
     return list;
 }
@@ -120,10 +125,14 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const courseCompletionStat = usercompletion && courseSequence ? completionStat() : null;
 
     console.log({ courseCompletionStat });
+    const chapterName = courseSequence?.currentPageNode?.data?.parent.chapter?.name;
+    const subChapterName = courseSequence?.currentPageNode?.data?.parent.subchapter?.name;
 
     return (
         <NavContext.Provider
             value={{
+                chapterName,
+                subChapterName,
                 menuData: menuChapters,
                 courseSequence,
                 courseCompletionStat,

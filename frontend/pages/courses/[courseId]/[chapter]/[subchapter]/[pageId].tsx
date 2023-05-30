@@ -19,12 +19,12 @@ import { authOptions } from '../../../../api/auth/[...nextauth]';
 import { setAuthToken } from '../../../../../libs/axios';
 
 type CoursePageProps = {
-    title: string | number;
+    title?: string;
     type: PageType;
     content: PageContent[];
 };
 export default function CoursePage({ title, type, content }: CoursePageProps) {
-    const { menuData, nextPage, prevPage } = useContext(NavContext);
+    const { menuData, chapterName, subChapterName, nextPage, prevPage } = useContext(NavContext);
 
     const { data: session } = useSession();
     setAuthToken((session?.jwt as string) || '');
@@ -36,7 +36,7 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
 
     const hasPageSteps = content.length > 1;
 
-    if (hasPageSteps) contentLayout = <PageStepsController pageContent={content} type={type} />;
+    if (hasPageSteps) contentLayout = <PageStepsController heading={title} pageContent={content} type={type} />;
     else if (type === 'text') contentLayout = <Text text={text} heading={title} id={id} />;
     else if (type === 'text_image_code')
         contentLayout = <Text_Image_Code code={code!} text={text} heading={title} image={image} id={id} />;
@@ -46,7 +46,7 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
     return (
         <Protected>
             <Layout>
-                <Navbar title={`${title}`} menuData={menuData} />
+                <Navbar chapterTitle={chapterName || ''} subChapterTitle={subChapterName || ''} menuData={menuData} />
                 {contentLayout}
                 {!hasPageSteps && <ControlBar nextPage={nextPage} prevPage={prevPage} />}
             </Layout>
