@@ -4,6 +4,8 @@ import ReactMarkdown from 'react-markdown';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import js from 'react-syntax-highlighter/dist/cjs/languages/hljs/javascript';
 import style from 'react-syntax-highlighter/dist/cjs/styles/hljs/night-owl';
+import Divider from '../ui/Divider';
+import ExternalLink from '../ExternalLink';
 
 SyntaxHighlighter.registerLanguage('javascript', js);
 
@@ -35,6 +37,31 @@ const ContentBlock = ({ md, id, heading }: { md: string; id: number; heading?: s
                     },
                 }}
             />
+            <div>
+                <Divider />
+                <h3 className="text-center pt-12 py-2"> Links & Resources</h3>
+                <ul className="pl-4 ml-0 max-w-xl">
+                    <li className="flex items-center justify-between py-2  pr-5 text-sm leading-6">
+                        <ExternalLink type="link" link="/" title="Javascript Primitive Values" subtitle="exercise" />
+                    </li>
+                    <li className="flex items-center justify-between py-2  pr-5 text-sm leading-6">
+                        <ExternalLink
+                            type="download"
+                            link="/"
+                            title="Javascript Primitive Values"
+                            subtitle="solution"
+                        />
+                    </li>
+                    <li className="flex items-center justify-between py-2  pr-5 text-sm leading-6">
+                        <ExternalLink
+                            type="download"
+                            link="/"
+                            title="Javascript Primitive Values"
+                            subtitle="solution"
+                        />
+                    </li>
+                </ul>
+            </div>
         </article>
     );
 };

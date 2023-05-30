@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Layout from '../../components/layout';
 import ContentBlock from '../../components/layout/ContentBlock';
 import Video from '../../components/layout/screens/Video';
@@ -13,8 +13,7 @@ import Spinner from '../../components/ui/Spinner';
 
 const CourseDashboard = ({ description, title, video }: { title: string; description?: string; video?: VideoT }) => {
     const { menuData, courseSequence, courseCompletionStat } = useContext(NavContext);
-
-    console.log(`And the winnder is: ${courseCompletionStat}`);
+    const [loading, setLoading] = useState(false);
 
     return (
         <Layout>
@@ -50,9 +49,17 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
                                 <Link href={courseSequence.currentPageNode?.data.href || '/courses'} passHref>
                                     <button
                                         type="button"
+                                        onClick={() => setLoading(true)}
+                                        disabled={loading}
                                         className="my-4 inline-flex items-center justify-center rounded-md border border-green-400 bg-primary_blue  px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
                                     >
-                                        {courseCompletionStat === 0 ? 'Start Learning' : 'Resume Learning'}
+                                        {loading ? (
+                                            <Spinner />
+                                        ) : courseCompletionStat === 0 ? (
+                                            'Start Learning'
+                                        ) : (
+                                            'Resume Learning'
+                                        )}
                                     </button>
                                 </Link>
                             )}

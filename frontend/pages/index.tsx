@@ -7,15 +7,16 @@ import { CourseByUser } from '../types';
 import { authOptions } from './api/auth/[...nextauth]';
 import { setAuthToken } from '../libs/axios';
 import AllCourses from '../containers/AllCourses';
+import LoadingQuote from '../containers/LoadingQuote';
 
 type HomeProps = { courses: CourseByUser[] };
 
 const Home = ({ courses }: HomeProps) => {
     const { data: session } = useSession();
 
-    if (!session?.jwt || !courses) return <p>Loading</p>;
+    if (!session?.jwt || !courses) return <LoadingQuote />;
 
-    if (courses.length < 1) console.log('Here we should redirect to the specific course page');
+    if (courses.length < 1) console.log('Redirect to the specific course page');
 
     return <AllCourses courses={courses} />;
 };
