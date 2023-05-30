@@ -2,18 +2,27 @@ import Image from 'next/image';
 import { Allotment } from 'allotment';
 import Block from '../Block';
 import ContentBlock from '../ContentBlock';
-import { ImageComp } from '../../../types';
+import { ImageComp, ResourceLink } from '../../../types';
 
 type Text_Image_Code_Props = {
     text: string;
     code: string;
     image: ImageComp;
     id: number;
+    links: ResourceLink[];
     showImageBorder?: boolean;
     heading?: string;
 };
 
-export default function Text_Image_Code({ text, code, image, id, showImageBorder, heading }: Text_Image_Code_Props) {
+export default function Text_Image_Code({
+    text,
+    code,
+    image,
+    id,
+    showImageBorder,
+    heading,
+    links,
+}: Text_Image_Code_Props) {
     console.log({ image, code, text, id, showImageBorder });
     const { url, placeholder } = image.data.attributes;
 
@@ -23,7 +32,7 @@ export default function Text_Image_Code({ text, code, image, id, showImageBorder
                 <Allotment.Pane>
                     <div id="one" className="bg-black h-full w-full ">
                         <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll>
-                            <ContentBlock md={text} id={id} heading={heading} />
+                            <ContentBlock md={text} id={id} heading={heading} links={links} />
                         </Block>
                     </div>
                 </Allotment.Pane>

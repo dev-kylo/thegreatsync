@@ -35,7 +35,7 @@ export const getChapters = async (courseId: string | number): Promise<ChaptersRe
 export const getPage = async (id: string | number): Promise<PageResponse> => {
     const query = qs.stringify(
         {
-            populate: ['content', 'content.image', 'content.video'],
+            populate: ['content', 'content.image', 'content.video', 'links', 'links.file'],
         },
         {
             encodeValuesOnly: true, // prettify URL

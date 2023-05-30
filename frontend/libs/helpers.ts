@@ -127,3 +127,21 @@ export function mapMenuChapters(
             return mappedChapter as MenuItem;
         });
 }
+
+export function getDomainName(url: string) {
+    let hostname;
+    console.log('--------GET DOMAIN NAME-------------------------------');
+    console.log(url);
+    try {
+        const urlObj = new URL(url);
+        hostname = urlObj.hostname;
+        // Remove "www" subdomain if present
+        if (hostname.startsWith('www.')) {
+            hostname = hostname.substring(4);
+        }
+    } catch (error) {
+        console.error(`Invalid URL: ${error}`);
+    }
+
+    return hostname;
+}

@@ -8,7 +8,7 @@ import Navbar from '../../../../../components/ui/Navbar';
 import { NavContext } from '../../../../../context/nav';
 import { getPage } from '../../../../../services/queries';
 import { serverRedirectObject } from '../../../../../libs/helpers';
-import { PageContent, PageType } from '../../../../../types';
+import { PageContent, PageType, ResourceLink } from '../../../../../types';
 import Text_Image_Code from '../../../../../components/layout/screens/Text_Image_Code';
 import Text_Image from '../../../../../components/layout/screens/Text_Image';
 import Video from '../../../../../components/layout/screens/Video';
@@ -22,8 +22,9 @@ type CoursePageProps = {
     title?: string;
     type: PageType;
     content: PageContent[];
+    links: ResourceLink[];
 };
-export default function CoursePage({ title, type, content }: CoursePageProps) {
+export default function CoursePage({ title, type, content, links }: CoursePageProps) {
     const { menuData, chapterName, subChapterName, nextPage, prevPage } = useContext(NavContext);
 
     const { data: session } = useSession();
@@ -39,8 +40,11 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
     if (hasPageSteps) contentLayout = <PageStepsController heading={title} pageContent={content} type={type} />;
     else if (type === 'text') contentLayout = <Text text={text} heading={title} id={id} />;
     else if (type === 'text_image_code')
-        contentLayout = <Text_Image_Code code={code!} text={text} heading={title} image={image} id={id} />;
-    else if (type === 'text_image') contentLayout = <Text_Image text={text} heading={title} image={image} id={id} />;
+        contentLayout = (
+            <Text_Image_Code code={code!} text={text} heading={title} image={image} id={id} links={links} />
+        );
+    else if (type === 'text_image')
+        contentLayout = <Text_Image text={text} heading={title} image={image} id={id} links={links} />;
     else if (type === 'video' && video) contentLayout = <Video data={video} />;
 
     return (
@@ -82,12 +86,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         );
     }
 
-    const { title, type, content } = resp.data.attributes;
+    const { title, type, content, links } = resp.data.attributes;
 
     return {
         props: {
             title,
             type,
+            links,
             content,
             isStepPage: content.length > 1,
         },
