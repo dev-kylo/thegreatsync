@@ -2,7 +2,7 @@
 import { SyntheticEvent, useEffect, useRef } from 'react';
 import { ChevronDoubleRightIcon, ChevronDoubleLeftIcon } from '@heroicons/react/20/solid';
 import Text_Image_Code from '../components/layout/screens/Text_Image_Code';
-import type { PageStep, PageType } from '../types';
+import type { PageStep, PageType, ResourceLink } from '../types';
 import Step from '../components/ui/Step';
 import ControlBar from './ControlBar';
 import Text_Image from '../components/layout/screens/Text_Image';
@@ -14,6 +14,7 @@ type PageStepsProps = {
     showNextButton: boolean;
     type: PageType;
     heading?: string;
+    links: ResourceLink[];
     nextPage: () => void;
     prevPage: () => void;
     nextStep: () => void;
@@ -31,6 +32,7 @@ const PageSteps = ({
     showNextButton,
     type,
     heading,
+    links,
     nextPage,
     prevPage,
     nextStep,
@@ -83,10 +85,16 @@ const PageSteps = ({
                     text={currentTopicStep?.text}
                     image={currentTopicStep?.image}
                     showImageBorder={currentTopicStep?.transparent_image}
+                    links={links}
                 />
             )}
             {type === 'text_image' && (
-                <Text_Image id={+currentTopicStep.id} text={currentTopicStep?.text} image={currentTopicStep?.image} />
+                <Text_Image
+                    id={+currentTopicStep.id}
+                    text={currentTopicStep?.text}
+                    image={currentTopicStep?.image}
+                    links={links}
+                />
             )}
 
             <div className="relative">

@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import type { PageContent, PageType } from '../types';
+import type { PageContent, PageType, ResourceLink } from '../types';
 import PageSteps from './PageSteps';
 import { NavContext } from '../context/nav';
 import { StepContext } from '../context/steps';
@@ -8,9 +8,10 @@ type PageStepsControllerProps = {
     pageContent: PageContent[];
     heading?: string;
     type: PageType;
+    links: ResourceLink[];
 };
 
-const PageStepsController = ({ pageContent, type, heading }: PageStepsControllerProps) => {
+const PageStepsController = ({ pageContent, type, heading, links }: PageStepsControllerProps) => {
     const { nextPage, prevPage } = useContext(NavContext);
     const { nextStep, prevStep, goToStep, currIndex, setStepData, steps, showNextPageButton } = useContext(StepContext);
 
@@ -28,6 +29,7 @@ const PageStepsController = ({ pageContent, type, heading }: PageStepsController
             heading={heading}
             currIndex={currIndex}
             pageSteps={steps}
+            links={links}
             nextStep={nextStep}
             prevStep={prevStep}
             showNextButton={showNextPageButton}

@@ -38,14 +38,14 @@ export default function CoursePage({ title, type, content, links }: CoursePagePr
     const hasPageSteps = content.length > 1;
 
     if (hasPageSteps) contentLayout = <PageStepsController heading={title} pageContent={content} type={type} />;
-    else if (type === 'text') contentLayout = <Text text={text} heading={title} id={id} />;
+    else if (type === 'text') contentLayout = <Text text={text} heading={title} id={id} links={links} />;
     else if (type === 'text_image_code')
         contentLayout = (
             <Text_Image_Code code={code!} text={text} heading={title} image={image} id={id} links={links} />
         );
     else if (type === 'text_image')
         contentLayout = <Text_Image text={text} heading={title} image={image} id={id} links={links} />;
-    else if (type === 'video' && video) contentLayout = <Video data={video} />;
+    else if (type === 'video') contentLayout = <Video data={video} resources={links} />;
 
     return (
         <Protected>

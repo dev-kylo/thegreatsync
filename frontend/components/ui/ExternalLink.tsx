@@ -25,7 +25,7 @@ const ExternalLink = ({ type, title, subtitle, link }: ExternalLinkProps) => (
                 <a
                     href={link}
                     download="sds.js"
-                    className="font-medium flex text-xs no-underline text-green-400 hover:text-indigo-500 uppercase"
+                    className="font-medium flex text-xs no-underline text-green-400 hover:text-secondary_blue uppercase"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ const ExternalLink = ({ type, title, subtitle, link }: ExternalLinkProps) => (
             {type === 'link' && (
                 <a
                     href={link}
-                    className="font-medium flex text-xs no-underline text-green-400 hover:text-indigo-500 uppercase"
+                    className="font-medium flex text-xs no-underline text-green-400 hover:text-secondary_blue uppercase"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
