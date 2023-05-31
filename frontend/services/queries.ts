@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import qs from 'qs';
+import { AxiosResponse } from 'axios';
 import {
     ChaptersResponse,
+    CourseData,
     CourseResponse,
     CoursesByUserResponse,
     PageResponse,
@@ -46,10 +48,11 @@ export const getPage = async (id: string | number): Promise<PageResponse> => {
     return res && res.data;
 };
 
-export const getEnrolledCourses = async (): Promise<CoursesByUserResponse> => {
+export const getEnrolledCourses = async (): Promise<AxiosResponse<CourseData[]>> => {
     console.log('About to fetch all COURSES ');
-    const res = await httpClient.get<CoursesByUserResponse>(`/api/coursesByUser`);
-    return res && res.data;
+    const res = await httpClient.get<CourseData[]>(`/api/coursesByUser`);
+    console.log(res);
+    return res;
 };
 
 export const getCourse = async (id: string | number): Promise<CourseResponse> => {

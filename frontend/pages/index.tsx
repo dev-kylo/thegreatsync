@@ -16,8 +16,6 @@ const Home = ({ courses }: HomeProps) => {
 
     if (!session?.jwt || !courses) return <LoadingQuote />;
 
-    if (courses.length < 1) console.log('Redirect to the specific course page');
-
     return <AllCourses courses={courses} />;
 };
 
@@ -30,29 +28,28 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const resp = await getEnrolledCourses();
     console.log(resp);
-    if (!resp || resp.error) {
+    if (!resp || resp.status !== 200) {
         if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
-        if (resp.error?.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
-        if (resp.error?.status === 403)
+        if (resp.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
+        if (resp.status === 403)
             return serverRedirectObject(
                 `/error?redirect=${context.resolvedUrl}&error='You do not have the correct permissions to view this course'`
             );
-        if (resp.error?.status === 500)
+        if (resp.status === 500)
             return serverRedirectObject(
                 `/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down!'`
             );
         return serverRedirectObject(
-            `/error?redirect=${context.resolvedUrl}&error=${
-                resp.error
-                    ? `${resp.error.name}: ${resp.error.message}`
-                    : 'Failed to fetch course data. Received undefined'
-            }`
+            `/error?redirect=${context.resolvedUrl}&error=Failed to fetch course data. Received undefined`
         );
     }
+    // Redirect to dashboard if there is only one course
+
+    if (resp.data.length === 1) return serverRedirectObject(`/courses/${resp.data[0].id}`);
 
     return {
         props: {
-            courses: resp,
+            courses: resp.data,
             pageType: 'standalone',
         },
     };

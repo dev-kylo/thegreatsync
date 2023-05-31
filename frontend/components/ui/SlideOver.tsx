@@ -13,11 +13,12 @@ type SlideOverProps = {
 function SlideOver({ children, open, setOpen, current }: SlideOverProps) {
     useEffect(() => {
         const timer = setTimeout(() => {
-            console.log({ current });
-            const chapterLink = document.getElementById(`menu-1-${current.chapterId}`);
-            if (chapterLink) chapterLink.click();
-            const subchapterLink = document.getElementById(`menu-2-${current.subchapterId}`);
-            if (subchapterLink) subchapterLink.click();
+            if (current && current.pageId) {
+                const chapterLink = document.getElementById(`menu-1-${current.chapterId}`);
+                if (chapterLink) chapterLink.click();
+                const subchapterLink = document.getElementById(`menu-2-${current.subchapterId}`);
+                if (subchapterLink) subchapterLink.click();
+            }
             clearTimeout(timer);
         }, 100);
     }, [open, current]);
