@@ -3,7 +3,7 @@ import Alert from '../../ui/Alert';
 import { ResourceLink, VideoT } from '../../../types';
 import ResourceDropDown from '../../ui/LinkDropdown';
 
-type VideoProps = { data: VideoT; resources: ResourceLink[]; noPadding?: boolean };
+type VideoProps = { data: VideoT; resources?: ResourceLink[]; noPadding?: boolean };
 
 const Video = ({ data, resources, noPadding }: VideoProps) => {
     if (!data?.data) return <Alert text="There was an error trying to retrieve the data for this video. " />;

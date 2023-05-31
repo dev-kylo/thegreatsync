@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Disclosure } from '@headlessui/react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import type { CurrentLocation, MenuItem } from '../../types';
 import MenuIcon from './MenuIcon';
 import ProgressIcon from './ProgressIcon';
