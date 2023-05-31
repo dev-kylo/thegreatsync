@@ -1,9 +1,11 @@
 // import Link from 'next/link';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
 import Layout from '../components/layout';
 import Navbar from '../components/ui/Navbar';
 import type { CourseByUser } from '../types';
+import Spinner from '../components/ui/Spinner';
 
 const bgMap: { [key: string]: string } = {
     1: 'https://res.cloudinary.com/the-great-sync/image/upload/c_scale,w_500/v1674395945/2000x2000/genie_assigned_zgdwyb.jpg',
@@ -11,11 +13,15 @@ const bgMap: { [key: string]: string } = {
 };
 
 const AllCourses = ({ courses }: { courses: CourseByUser[] }) => {
-    console.log(courses);
+    const [loading, setLoading] = useState(false);
     return (
         <Layout>
-            <Navbar title="Your Courses" />
-            <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12 mt-8">
+            <Navbar
+                chapterTitle="A list of purchased courses"
+                subChapterTitle="The Great Sync"
+                current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
+            />
+            <section className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-4 py-12 mt-8">
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8">
                     {courses.map((course) => (
                         <Link key={course.id} href={`courses/${course.id}`} passHref>
@@ -28,12 +34,14 @@ const AllCourses = ({ courses }: { courses: CourseByUser[] }) => {
                                             alt=""
                                             width={800}
                                             height={800}
+                                            onClick={() => setLoading(true)}
                                         />
                                         <div className="absolute z-10 border-4 border-primary w-[95%] h-[95%] invisible group-hover:visible opacity-0 group-hover:opacity-100 group-hover:scale-90 transition-all duration-500" />
                                     </div>
 
                                     <p className="mb-4 font-light  text-sm md:text-lg text-center text-white">
                                         {course.title}
+                                        {loading && <Spinner />}
                                     </p>
                                 </div>
                             </li>

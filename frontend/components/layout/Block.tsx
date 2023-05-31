@@ -3,15 +3,15 @@ type BlockProps = {
     outerClasses?: string;
     innerClasses?: string;
     enableScroll?: boolean;
-    showBorder?: boolean;
+    hideBorder?: boolean;
     id?: string;
 };
 
-const Block = ({ children, outerClasses, innerClasses, enableScroll, showBorder, id }: BlockProps) => (
+const Block = ({ children, outerClasses, innerClasses, enableScroll, hideBorder, id }: BlockProps) => (
     <div
         id={id}
-        className={`relative overflow-hidden rounded-lg ${
-            showBorder ? '' : 'border-2 border-r-2 border-secondary_lightblue'
+        className={`h-full w-full relative overflow-hidden rounded-lg ${
+            hideBorder ? '' : 'border-2 border-r-2 border-secondary_lightblue'
         } ${enableScroll ? 'scrollbar-thin scrollbar-thumb-primary_green overflow-y-scroll' : ''} ${outerClasses}`}
     >
         {enableScroll ? (

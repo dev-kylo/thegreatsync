@@ -8,7 +8,7 @@ import Navbar from '../../../../../components/ui/Navbar';
 import { NavContext } from '../../../../../context/nav';
 import { getPage } from '../../../../../services/queries';
 import { serverRedirectObject } from '../../../../../libs/helpers';
-import { PageContent, PageType } from '../../../../../types';
+import { CurrentLocation, PageContent, PageType, ResourceLink } from '../../../../../types';
 import Text_Image_Code from '../../../../../components/layout/screens/Text_Image_Code';
 import Text_Image from '../../../../../components/layout/screens/Text_Image';
 import Video from '../../../../../components/layout/screens/Video';
@@ -19,12 +19,14 @@ import { authOptions } from '../../../../api/auth/[...nextauth]';
 import { setAuthToken } from '../../../../../libs/axios';
 
 type CoursePageProps = {
-    title: string | number;
+    title?: string;
     type: PageType;
     content: PageContent[];
+    links: ResourceLink[];
+    current: CurrentLocation;
 };
-export default function CoursePage({ title, type, content }: CoursePageProps) {
-    const { menuData, nextPage, prevPage } = useContext(NavContext);
+export default function CoursePage({ title, type, content, links, current }: CoursePageProps) {
+    const { menuData, chapterName, subChapterName, loadingPage, nextPage, prevPage } = useContext(NavContext);
 
     const { data: session } = useSession();
     setAuthToken((session?.jwt as string) || '');
@@ -36,19 +38,36 @@ export default function CoursePage({ title, type, content }: CoursePageProps) {
 
     const hasPageSteps = content.length > 1;
 
-    if (hasPageSteps) contentLayout = <PageStepsController pageContent={content} type={type} />;
-    else if (type === 'text') contentLayout = <Text text={text} id={id} />;
+    if (hasPageSteps)
+        contentLayout = (
+            <PageStepsController
+                loadingPage={loadingPage}
+                heading={title}
+                pageContent={content}
+                type={type}
+                links={links}
+            />
+        );
+    else if (type === 'text') contentLayout = <Text text={text} heading={title} id={id} links={links} />;
     else if (type === 'text_image_code')
-        contentLayout = <Text_Image_Code code={code!} text={text} image={image} id={id} />;
-    else if (type === 'text_image') contentLayout = <Text_Image text={text} image={image} id={id} />;
-    else if (type === 'video' && video) contentLayout = <Video data={video} />;
+        contentLayout = (
+            <Text_Image_Code code={code!} text={text} heading={title} image={image} id={id} links={links} />
+        );
+    else if (type === 'text_image')
+        contentLayout = <Text_Image text={text} heading={title} image={image} id={id} links={links} />;
+    else if (type === 'video' && video) contentLayout = <Video data={video} resources={links} />;
 
     return (
         <Protected>
             <Layout>
-                <Navbar title={`${title}`} menuData={menuData} />
+                <Navbar
+                    current={current}
+                    chapterTitle={chapterName || ''}
+                    subChapterTitle={subChapterName || ''}
+                    menuData={menuData}
+                />
                 {contentLayout}
-                {!hasPageSteps && <ControlBar nextPage={nextPage} prevPage={prevPage} />}
+                {!hasPageSteps && <ControlBar loadingPage={loadingPage} nextPage={nextPage} prevPage={prevPage} />}
             </Layout>
         </Protected>
     );
@@ -59,7 +78,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     if (session.jwt) setAuthToken(session.jwt as string);
 
-    const { pageId } = context.params as { chapter: string; subchapter: string; pageId: string };
+    const { pageId, subchapter, chapter } = context.params as { chapter: string; subchapter: string; pageId: string };
     const resp = await getPage(pageId);
     if (!resp || resp.error || !resp.data) {
         console.log('THERE IS AN ERROR');
@@ -82,13 +101,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         );
     }
 
-    const { title, type, content } = resp.data.attributes;
+    const { title, type, content, links } = resp.data.attributes;
 
     return {
         props: {
             title,
             type,
+            links,
             content,
+            current: { pageId, chapterId: chapter, subchapterId: subchapter },
             isStepPage: content.length > 1,
         },
     };

@@ -2,6 +2,20 @@ export type MenuType = 'watch' | 'code' | 'read' | 'draw' | 'imagine' | 'listen'
 
 export type PageType = 'text_image_code' | 'video' | 'text_image' | 'text';
 
+export type MenuParentSubchapter = {
+    subchapter?: {
+        name: string;
+        id: string | number;
+    };
+};
+
+export type MenuParentChapter = {
+    chapter?: {
+        name: string;
+        id: string | number;
+    };
+};
+
 export type MenuItem = {
     name: string;
     id: number;
@@ -13,7 +27,10 @@ export type MenuItem = {
     href?: string;
     orderNumber: number;
     children?: MenuItem[];
+    parent: MenuParentChapter & MenuParentSubchapter;
 };
+
+export type CurrentLocation = { pageId: string | number; subchapterId: string | number; chapterId: string | number };
 
 export type PageStepT = {
     image: string;
@@ -55,6 +72,8 @@ export type RegisterResponse = {
     message: string;
     error?: ErrorData;
 };
+
+export type LinkTypes = 'link' | 'download';
 
 export interface StrapiResponseMetaData {
     createdAt: Date;
@@ -117,15 +136,32 @@ export interface PageData {
     attributes: PageAttributes;
 }
 
-// export interface PageAttributes {
-//     title: string;
-//     type: PageType;
-//     visible: boolean;
-//     createdAt: Date;
-//     updatedAt: Date;
-//     publishedAt: Date;
-//     content: PageContent[];
-// }
+export type ExternalFile = {
+    data: null | {
+        id: number;
+        attributes: {
+            name: string;
+            alternativeText: string;
+            caption: string;
+            hash: string;
+            ext: string;
+            mime: 'text/javascript';
+            size: 1.12;
+            url: string;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+    };
+};
+
+export type ResourceLink = {
+    id: number;
+    type: LinkTypes;
+    external_url: string | null;
+    title: string;
+    subtitle: string;
+    file: ExternalFile;
+};
 
 export interface PageContent {
     id: number;
@@ -228,6 +264,7 @@ export interface PageAttributes extends StrapiResponseMetaData {
     visible: boolean;
     menu: Menu;
     content: PageContent[];
+    links: ResourceLink[];
 }
 
 export interface Meta {

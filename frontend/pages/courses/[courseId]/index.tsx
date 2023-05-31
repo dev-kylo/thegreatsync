@@ -7,6 +7,7 @@ import { getCourse } from '../../../services/queries';
 import { VideoT } from '../../../types';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { setAuthToken } from '../../../libs/axios';
+import LoadingQuote from '../../../containers/LoadingQuote';
 
 type CourseData = { title: string; description?: string; video: VideoT | null };
 type CourseProps = { course: CourseData };
@@ -14,7 +15,7 @@ type CourseProps = { course: CourseData };
 const Course = ({ course }: CourseProps) => {
     const { data: session } = useSession();
 
-    if (!session?.jwt) return <p>Loading</p>;
+    if (!session?.jwt) return <LoadingQuote />;
     return <CourseDashboard title={course.title} description={course.description} />;
 };
 

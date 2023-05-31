@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
 import '../styles/global.css';
+import 'allotment/dist/style.css';
 import Head from 'next/head';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';

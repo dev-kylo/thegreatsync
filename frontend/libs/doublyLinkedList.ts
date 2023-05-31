@@ -51,6 +51,16 @@ export class DoublyLinkedList {
         return count;
     }
 
+    getFirstUncompleted(): Node | null {
+        let found = null;
+        let current = this.head;
+        while (!found && current) {
+            if (!current?.data.completed) found = current;
+            current = current?.next || null;
+        }
+        return found;
+    }
+
     printList() {
         let currentNode = this.head;
         let output = '<head> ';

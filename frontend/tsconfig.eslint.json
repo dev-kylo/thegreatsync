@@ -6,6 +6,7 @@
         "pages",
         "components",
         "containers",
+        "hooks",
         "context",
         "libs",
         "services",

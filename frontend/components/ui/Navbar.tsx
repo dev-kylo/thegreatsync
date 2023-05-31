@@ -5,11 +5,20 @@ import ProfileDropDown from './ProfileDropdown';
 import SlideOver from './SlideOver';
 import TitleStrip from './TitleStrip';
 import Menu from './Menu';
-import { MenuItem } from '../../types';
+import { CurrentLocation, MenuItem } from '../../types';
 
-export default function Navbar({ title, menuData }: { title: string; menuData?: MenuItem[] }) {
+export default function Navbar({
+    chapterTitle,
+    subChapterTitle,
+    menuData,
+    current,
+}: {
+    chapterTitle: string;
+    subChapterTitle: string;
+    current: CurrentLocation;
+    menuData?: MenuItem[];
+}) {
     const [openMenu, setOpenMenu] = useState(false);
-
     return (
         <>
             <Disclosure as="nav" className="flex-shrink-0 bg-primary_blue">
@@ -21,7 +30,7 @@ export default function Navbar({ title, menuData }: { title: string; menuData?: 
                             className="block h-8 w-8 xl:h-10 xl:w-10 text-white hover:cursor-pointer hover:text-primary_green focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary_blue"
                             aria-hidden="true"
                         />
-                        <TitleStrip title={title} />
+                        <TitleStrip chapterTitle={chapterTitle} subChapterTitle={subChapterTitle} />
                         <div className="hidden lg:block">
                             <div className="flex items-center justify-end">
                                 <ProfileDropDown />
@@ -30,8 +39,8 @@ export default function Navbar({ title, menuData }: { title: string; menuData?: 
                     </div>
                 </div>
             </Disclosure>
-            <SlideOver open={openMenu} setOpen={setOpenMenu}>
-                {menuData && <Menu menuData={menuData} />}
+            <SlideOver open={openMenu} setOpen={setOpenMenu} current={current}>
+                {menuData && <Menu menuData={menuData} closeMenu={() => setOpenMenu(false)} current={current} />}
             </SlideOver>
         </>
     );

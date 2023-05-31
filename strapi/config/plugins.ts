@@ -10,6 +10,7 @@ module.exports = ({ env }) => ({
                 region: env('AWS_REGION'),
                 params: {
                     Bucket: env('AWS_BUCKET'),
+                    ContentDisposition: 'attachment'
                 },
             },
             actionOptions: {
