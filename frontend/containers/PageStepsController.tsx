@@ -6,12 +6,13 @@ import { StepContext } from '../context/steps';
 
 type PageStepsControllerProps = {
     pageContent: PageContent[];
+    loadingPage: boolean;
     heading?: string;
     type: PageType;
     links: ResourceLink[];
 };
 
-const PageStepsController = ({ pageContent, type, heading, links }: PageStepsControllerProps) => {
+const PageStepsController = ({ pageContent, type, heading, links, loadingPage }: PageStepsControllerProps) => {
     const { nextPage, prevPage } = useContext(NavContext);
     const { nextStep, prevStep, goToStep, currIndex, setStepData, steps, showNextPageButton } = useContext(StepContext);
 
@@ -34,6 +35,7 @@ const PageStepsController = ({ pageContent, type, heading, links }: PageStepsCon
             prevStep={prevStep}
             showNextButton={showNextPageButton}
             type={type}
+            loadingPage={loadingPage}
             nextPage={nextPage}
             prevPage={prevPage}
             goToStep={goToStep}

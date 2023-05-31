@@ -15,6 +15,7 @@ type PageStepsProps = {
     type: PageType;
     heading?: string;
     links: ResourceLink[];
+    loadingPage: boolean;
     nextPage: () => void;
     prevPage: () => void;
     nextStep: () => void;
@@ -33,6 +34,7 @@ const PageSteps = ({
     type,
     heading,
     links,
+    loadingPage,
     nextPage,
     prevPage,
     nextStep,
@@ -84,7 +86,6 @@ const PageSteps = ({
                     id={+currentTopicStep.id}
                     text={currentTopicStep?.text}
                     image={currentTopicStep?.image}
-                    showImageBorder={currentTopicStep?.transparent_image}
                     links={links}
                 />
             )}
@@ -101,39 +102,51 @@ const PageSteps = ({
                 <div className="absolute top-[-1rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 my-1 p-0 text-white mx-auto text-center text-sm">
                     <span>Use your arrow keys</span>
                 </div>
-                <ControlBar showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
-                    <nav aria-label="Progress" className="flex items-center relative z-50  ">
-                        <button type="button" className="text-white px-4 hover:text-primary_green" onClick={handlePrev}>
-                            <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
-                        </button>
-                        <div className="max-w-md relative">
-                            {pageSteps.length > 6 && currIndex > 2 && <BlurEdge position="left" />}
-                            <ol ref={stepsContainer} className="flex items-center ">
-                                {pageSteps.map((step: PageStep, stepIdx: number) => (
-                                    <li
-                                        key={step.id}
-                                        id={`step_${stepIdx}`}
-                                        className={classNames(
-                                            stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-10' : '',
-                                            'relative',
-                                            'cursor-pointer'
-                                        )}
-                                    >
-                                        <Step
-                                            {...step}
-                                            orderNumber={stepIdx + 1}
-                                            setCurrent={() => goToStep(stepIdx)}
-                                            status={stepIdx === currIndex ? 'current' : step?.status}
-                                        />
-                                    </li>
-                                ))}
-                            </ol>
-                            {!isSecondLastStep && !isLastStep && pageSteps.length > 6 && <BlurEdge position="right" />}
-                        </div>
-                        <button type="button" className="text-white px-4 hover:text-primary_green" onClick={handleNext}>
-                            <ChevronDoubleRightIcon className="m-auto h-8 w-8" aria-hidden="true" />
-                        </button>
-                    </nav>
+                <ControlBar loadingPage={loadingPage} showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
+                    {!loadingPage && (
+                        <nav aria-label="Progress" className="flex items-center relative z-50  ">
+                            <button
+                                type="button"
+                                className="text-white px-4 hover:text-primary_green"
+                                onClick={handlePrev}
+                            >
+                                <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
+                            </button>
+                            <div className="max-w-md relative">
+                                {pageSteps.length > 6 && currIndex > 2 && <BlurEdge position="left" />}
+                                <ol ref={stepsContainer} className="flex items-center ">
+                                    {pageSteps.map((step: PageStep, stepIdx: number) => (
+                                        <li
+                                            key={step.id}
+                                            id={`step_${stepIdx}`}
+                                            className={classNames(
+                                                stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-10' : '',
+                                                'relative',
+                                                'cursor-pointer'
+                                            )}
+                                        >
+                                            <Step
+                                                {...step}
+                                                orderNumber={stepIdx + 1}
+                                                setCurrent={() => goToStep(stepIdx)}
+                                                status={stepIdx === currIndex ? 'current' : step?.status}
+                                            />
+                                        </li>
+                                    ))}
+                                </ol>
+                                {!isSecondLastStep && !isLastStep && pageSteps.length > 6 && (
+                                    <BlurEdge position="right" />
+                                )}
+                            </div>
+                            <button
+                                type="button"
+                                className="text-white px-4 hover:text-primary_green"
+                                onClick={handleNext}
+                            >
+                                <ChevronDoubleRightIcon className="m-auto h-8 w-8" aria-hidden="true" />
+                            </button>
+                        </nav>
+                    )}
                 </ControlBar>
             </div>
         </>

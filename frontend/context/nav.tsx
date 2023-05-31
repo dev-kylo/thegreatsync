@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { ReactNode, useEffect, useMemo } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
@@ -17,6 +17,8 @@ type NavProviderValues = {
     courseSequence?: DoublyLinkedList | null;
     nextPage: () => void;
     prevPage: () => void;
+    setLoadingPage: (val: boolean) => void;
+    loadingPage: boolean;
     showNext: boolean;
     showPrev: boolean;
     courseCompletionStat: number | null;
@@ -29,6 +31,8 @@ export const NavContext = React.createContext<NavProviderValues>({
     courseSequence: null,
     nextPage: () => {},
     prevPage: () => {},
+    setLoadingPage: () => {},
+    loadingPage: false,
     showNext: false,
     showPrev: false,
     courseCompletionStat: null,
@@ -50,7 +54,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     // const [showNextButton, setNextButton] = useState(true);
     // const [showPrevButton, setPrevButton] = useState(true);
     const { data: session } = useSession();
-
+    const [loadingPage, setLoadingPage] = useState(false);
     const router = useRouter();
     const { courseId, pageId } = router.query as { courseId: string; pageId: string };
 
@@ -85,23 +89,26 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
 
     const nextPage = async () => {
         if (!courseSequence || !courseSequence.currentPageNode) return;
-
+        setLoadingPage(true);
         await completePage(courseId, courseSequence.currentPageNode.data.id);
         mutate(); // Fetch new completion data
         const nextNode = courseSequence.currentPageNode?.next;
         if (nextNode) {
             courseSequence.currentPageNode = nextNode;
+            setLoadingPage(false);
             router.replace(nextNode.data.href!);
-        }
+        } else setLoadingPage(false);
     };
 
     const prevPage = () => {
         if (!courseSequence) return;
+        setLoadingPage(true);
         const prevNode = courseSequence.currentPageNode?.previous;
         if (prevNode) {
             courseSequence.currentPageNode = prevNode;
+            setLoadingPage(false);
             router.replace(prevNode.data.href!);
-        }
+        } else setLoadingPage(false);
     };
 
     useEffect(() => {
@@ -138,6 +145,8 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
                 courseCompletionStat,
                 showNext: !!courseSequence?.currentPageNode?.next,
                 showPrev: true,
+                loadingPage,
+                setLoadingPage,
                 nextPage,
                 prevPage,
             }}

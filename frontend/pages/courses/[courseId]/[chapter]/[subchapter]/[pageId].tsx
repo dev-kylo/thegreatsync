@@ -25,7 +25,7 @@ type CoursePageProps = {
     links: ResourceLink[];
 };
 export default function CoursePage({ title, type, content, links }: CoursePageProps) {
-    const { menuData, chapterName, subChapterName, nextPage, prevPage } = useContext(NavContext);
+    const { menuData, chapterName, subChapterName, loadingPage, nextPage, prevPage } = useContext(NavContext);
 
     const { data: session } = useSession();
     setAuthToken((session?.jwt as string) || '');
@@ -37,7 +37,16 @@ export default function CoursePage({ title, type, content, links }: CoursePagePr
 
     const hasPageSteps = content.length > 1;
 
-    if (hasPageSteps) contentLayout = <PageStepsController heading={title} pageContent={content} type={type} />;
+    if (hasPageSteps)
+        contentLayout = (
+            <PageStepsController
+                loadingPage={loadingPage}
+                heading={title}
+                pageContent={content}
+                type={type}
+                links={links}
+            />
+        );
     else if (type === 'text') contentLayout = <Text text={text} heading={title} id={id} links={links} />;
     else if (type === 'text_image_code')
         contentLayout = (
@@ -52,7 +61,7 @@ export default function CoursePage({ title, type, content, links }: CoursePagePr
             <Layout>
                 <Navbar chapterTitle={chapterName || ''} subChapterTitle={subChapterName || ''} menuData={menuData} />
                 {contentLayout}
-                {!hasPageSteps && <ControlBar nextPage={nextPage} prevPage={prevPage} />}
+                {!hasPageSteps && <ControlBar loadingPage={loadingPage} nextPage={nextPage} prevPage={prevPage} />}
             </Layout>
         </Protected>
     );
