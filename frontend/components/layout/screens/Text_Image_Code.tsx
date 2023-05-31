@@ -3,6 +3,8 @@ import { Allotment } from 'allotment';
 import Block from '../Block';
 import ContentBlock from '../ContentBlock';
 import { ImageComp, ResourceLink } from '../../../types';
+import useResponsivePanes from '../../../hooks/useResponsivePanes';
+import PaneTabs from '../PaneTabs';
 
 type Text_Image_Code_Props = {
     text: string;
@@ -10,33 +12,65 @@ type Text_Image_Code_Props = {
     image: ImageComp;
     id: number;
     links: ResourceLink[];
-    showImageBorder?: boolean;
     heading?: string;
 };
 
-export default function Text_Image_Code({
-    text,
-    code,
-    image,
-    id,
-    showImageBorder,
-    heading,
-    links,
-}: Text_Image_Code_Props) {
-    console.log({ image, code, text, id, showImageBorder });
+export default function Text_Image_Code({ text, code, image, id, heading, links }: Text_Image_Code_Props) {
+    const { isMobile, visiblePane, setVisiblePane } = useResponsivePanes();
     const { url, placeholder } = image.data.attributes;
 
-    return (
-        <div className="p-4">
-            <Allotment defaultSizes={[1, 1.5, 1]}>
-                <Allotment.Pane>
-                    <div id="one" className="bg-black h-full w-full ">
+    if (isMobile)
+        return (
+            <div className="p-4 pt-16 relative">
+                <PaneTabs text image code setVisiblePane={setVisiblePane} />
+
+                {visiblePane === 'text' && (
+                    <div className="bg-black h-full w-full">
                         <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll>
                             <ContentBlock md={text} id={id} heading={heading} links={links} />
                         </Block>
                     </div>
-                </Allotment.Pane>
-                <Allotment.Pane minSize={200} preferredSize="20%">
+                )}
+                {visiblePane === 'image' && (
+                    <div className=" h-full flex align-middle items-center ">
+                        <Block hideBorder outerClasses=" h-full relative">
+                            <Image
+                                id={`image:${id}`}
+                                alt="Mountains"
+                                src={url}
+                                layout="fill"
+                                placeholder="blur"
+                                blurDataURL={placeholder}
+                                className="aspect-square h-auto object-contain"
+                                onLoadingComplete={() => console.log('image loaded!')}
+                            />
+                        </Block>
+                    </div>
+                )}
+                {visiblePane === 'code' && (
+                    <div className="bg-violet-800 h-full ">
+                        <Block outerClasses="bg-code_bg" enableScroll>
+                            <ContentBlock md={code} id={id} />
+                        </Block>
+                    </div>
+                )}
+            </div>
+        );
+
+    return (
+        <div className="p-4">
+            <Allotment defaultSizes={[1, 1.5, 1]}>
+                {(!isMobile || (isMobile && visiblePane === 'text')) && (
+                    <Allotment.Pane>
+                        <div id="one" className="bg-black h-full w-full ">
+                            <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll>
+                                <ContentBlock md={text} id={id} heading={heading} links={links} />
+                            </Block>
+                        </div>
+                    </Allotment.Pane>
+                )}
+                {(!isMobile || (isMobile && visiblePane === 'image')) && (
+                    // <Allotment.Pane minSize={200} preferredSize="20%">
                     <div id="two" className=" h-full flex align-middle items-center ">
                         <Block hideBorder outerClasses=" h-full relative">
                             <Image
@@ -51,14 +85,17 @@ export default function Text_Image_Code({
                             />
                         </Block>
                     </div>
-                </Allotment.Pane>
-                <Allotment.Pane>
-                    <div id="three" className="bg-violet-800 h-full ">
-                        <Block outerClasses="bg-code_bg" enableScroll>
-                            <ContentBlock md={code} id={id} />
-                        </Block>
-                    </div>
-                </Allotment.Pane>
+                    // </Allotment.Pane>
+                )}
+                {(!isMobile || (isMobile && visiblePane === 'code')) && (
+                    <Allotment.Pane>
+                        <div id="three" className="bg-violet-800 h-full ">
+                            <Block outerClasses="bg-code_bg" enableScroll>
+                                <ContentBlock md={code} id={id} />
+                            </Block>
+                        </div>
+                    </Allotment.Pane>
+                )}
             </Allotment>
         </div>
     );
