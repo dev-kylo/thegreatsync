@@ -98,8 +98,11 @@ const PageSteps = ({
                 />
             )}
 
+            {/* bottom: 50px;
+    background: #03143f; */}
+
             <div className="relative">
-                <div className="absolute top-[-1rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 my-1 p-0 text-white mx-auto text-center text-sm">
+                <div className=" hidden xl:block absolute  xl:top-[-1rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 my-1 p-0 text-white mx-auto text-center text-sm">
                     <span>Use your arrow keys</span>
                 </div>
                 <ControlBar loadingPage={loadingPage} showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>

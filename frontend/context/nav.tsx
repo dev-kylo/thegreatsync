@@ -91,13 +91,17 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (!courseSequence || !courseSequence.currentPageNode) return;
         setLoadingPage(true);
         await completePage(courseId, courseSequence.currentPageNode.data.id);
+        courseSequence.currentPageNode.data.completed = true;
         mutate(); // Fetch new completion data
-        const nextNode = courseSequence.currentPageNode?.next;
+        const nextNode = courseSequence.currentPageNode?.next || courseSequence.getFirstUncompleted();
         if (nextNode) {
             courseSequence.currentPageNode = nextNode;
             setLoadingPage(false);
             router.replace(nextNode.data.href!);
-        } else setLoadingPage(false);
+        } else {
+            setLoadingPage(false);
+            router.replace('/courseCompleted');
+        }
     };
 
     const prevPage = () => {

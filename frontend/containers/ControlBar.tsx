@@ -11,9 +11,17 @@ type ControlBarProps = {
     loadingPage: boolean;
 };
 
+// bottom: 50px;
+//     background: #03143f;
+
 const ControlBar = ({ children, loadingPage, showNext = true, nextPage, prevPage }: ControlBarProps) => {
     let stepsControls = <></>;
-    if (children) stepsControls = <div className="absolute left-1/2 transform -translate-x-1/2">{children}</div>;
+    if (children)
+        stepsControls = (
+            <div className="absolute bottom-14 sm:bottom-5 bg-primary_blue left-1/2 transform -translate-x-1/2">
+                {children}
+            </div>
+        );
 
     const nextPageHandler = () => {
         nextPage();
