@@ -18,7 +18,12 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
     return (
         <Layout>
             {menuData && (
-                <Navbar chapterTitle="Course Dashboard" subChapterTitle="The Great Sync" menuData={menuData} />
+                <Navbar
+                    chapterTitle="Course Dashboard"
+                    subChapterTitle="The Great Sync"
+                    menuData={menuData}
+                    current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
+                />
             )}
             <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12 mt-8">
                 <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 gap-4 ">

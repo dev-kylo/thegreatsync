@@ -11,6 +11,7 @@ import { httpClient, setAuthToken } from '../libs/axios';
 import { completePage } from '../services/mutations';
 
 type NavProviderValues = {
+    courseId?: string | number;
     subChapterName?: string;
     chapterName?: string;
     menuData?: MenuItem[];
@@ -25,6 +26,7 @@ type NavProviderValues = {
 };
 
 export const NavContext = React.createContext<NavProviderValues>({
+    courseId: undefined,
     subChapterName: '',
     chapterName: '',
     menuData: undefined,
@@ -143,6 +145,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         <NavContext.Provider
             value={{
                 chapterName,
+                courseId,
                 subChapterName,
                 menuData: menuChapters,
                 courseSequence,
