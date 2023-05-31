@@ -30,6 +30,8 @@ export type MenuItem = {
     parent: MenuParentChapter & MenuParentSubchapter;
 };
 
+export type CurrentLocation = { pageId: string | number; subchapterId: string | number; chapterId: string | number };
+
 export type PageStepT = {
     image: string;
     code?: string;

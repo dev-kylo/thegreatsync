@@ -5,19 +5,20 @@ import ProfileDropDown from './ProfileDropdown';
 import SlideOver from './SlideOver';
 import TitleStrip from './TitleStrip';
 import Menu from './Menu';
-import { MenuItem } from '../../types';
+import { CurrentLocation, MenuItem } from '../../types';
 
 export default function Navbar({
     chapterTitle,
     subChapterTitle,
     menuData,
+    current,
 }: {
     chapterTitle: string;
     subChapterTitle: string;
+    current: CurrentLocation;
     menuData?: MenuItem[];
 }) {
     const [openMenu, setOpenMenu] = useState(false);
-
     return (
         <>
             <Disclosure as="nav" className="flex-shrink-0 bg-primary_blue">
@@ -38,8 +39,8 @@ export default function Navbar({
                     </div>
                 </div>
             </Disclosure>
-            <SlideOver open={openMenu} setOpen={setOpenMenu}>
-                {menuData && <Menu menuData={menuData} closeMenu={() => setOpenMenu(false)} />}
+            <SlideOver open={openMenu} setOpen={setOpenMenu} current={current}>
+                {menuData && <Menu menuData={menuData} closeMenu={() => setOpenMenu(false)} current={current} />}
             </SlideOver>
         </>
     );
