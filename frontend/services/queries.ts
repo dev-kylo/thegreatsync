@@ -1,45 +1,81 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+import qs from 'qs';
+import { AxiosResponse } from 'axios';
+import {
+    ChaptersResponse,
+    CourseData,
+    CourseResponse,
+    CoursesByUserResponse,
+    PageResponse,
+    UserCourseProgressResponse,
+} from '../types';
 
-import { ChaptersResponse, CourseResponse, PageResponse } from "../types";
-const qs = require('qs');
-import { httpClient } from "../libs/axios";
+import { httpClient } from '../libs/axios';
 
-export const getText = async (id: string) => {
-    console.log('About to fetch TEXT data')
-    const res = await httpClient.get(`/api/text-image-codes/${id}`);
-    return res && res.data;
-};
-
-export const getChapters = async (url?: string) => {
-    const query = qs.stringify({
-        populate: ['menu', 'sub_chapters', 'sub_chapters.menu', 'sub_chapters.pages', 'sub_chapters.pages.menu'],
-    }, {
-        encodeValuesOnly: true, // prettify URL
-    });
-    console.log('About to fetch CHAPTERS data')
-    const res = await httpClient.get<ChaptersResponse>(`${url || '/api/chapters'}?${query}`)
+export const getChapters = async (courseId: string | number): Promise<ChaptersResponse> => {
+    if (!courseId) throw new Error('Missing course Id');
+    const query = qs.stringify(
+        {
+            populate: ['menu', 'subchapters', 'subchapters.menu', 'subchapters.pages', 'subchapters.pages.menu'],
+            filters: {
+                courses: {
+                    id: {
+                        $eq: courseId,
+                    },
+                },
+            },
+        },
+        {
+            encodeValuesOnly: true, // prettify URL
+        }
+    );
+    console.log('About to fetch CHAPTERS data');
+    const res = await httpClient.get<ChaptersResponse>(`/api/chapters?${query}`);
     return res && res.data;
 };
 
 export const getPage = async (id: string | number): Promise<PageResponse> => {
-
-    const query = qs.stringify({
-        populate: ['content', 'content.image', 'content.video']
-    }, {
-        encodeValuesOnly: true, // prettify URL
-    });
-    console.log('About to fetch PAGE data')
+    const query = qs.stringify(
+        {
+            populate: ['content', 'content.image', 'content.video', 'links', 'links.file'],
+        },
+        {
+            encodeValuesOnly: true, // prettify URL
+        }
+    );
+    console.log('About to fetch PAGE data');
     const res = await httpClient.get<PageResponse>(`/api/pages/${id}?${query}`);
-    return res && res.data
+    return res && res.data;
+};
+
+export const getEnrolledCourses = async (): Promise<AxiosResponse<CourseData[]>> => {
+    console.log('About to fetch all COURSES ');
+    const res = await httpClient.get<CourseData[]>(`/api/coursesByUser`);
+    console.log(res);
+    return res;
 };
 
 export const getCourse = async (id: string | number): Promise<CourseResponse> => {
-
-    const query = qs.stringify({
-        populate: ['description', 'description.video']
-    }, {
-        encodeValuesOnly: true, // prettify URL
-    });
-    console.log('About to fetch COURSE data')
+    const query = qs.stringify(
+        {
+            populate: ['description', 'description.video'],
+        },
+        {
+            encodeValuesOnly: true, // prettify URL
+        }
+    );
+    console.log('About to fetch COURSE data');
     const res = await httpClient.get<CourseResponse>(`/api/courses/${id}?${query}`);
+    return res && res.data;
+};
+
+export const getUserCompletions = async ({
+    courseId,
+}: {
+    url: string;
+    courseId: string | number;
+}): Promise<UserCourseProgressResponse> => {
+    console.log('About to fetch user completion data');
+    const res = await httpClient.get<UserCourseProgressResponse>(`/api/user-course-progress/?courseId=${courseId}`);
     return res && res.data;
 };

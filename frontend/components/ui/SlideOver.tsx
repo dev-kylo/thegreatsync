@@ -1,15 +1,28 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { Fragment, useEffect } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { CurrentLocation } from '../../types';
 
 type SlideOverProps = {
     children: React.ReactNode;
     open: boolean;
     setOpen: (open: boolean) => void;
-}
+    current: CurrentLocation;
+};
 
-function SlideOver({ children, open, setOpen }: SlideOverProps) {
+function SlideOver({ children, open, setOpen, current }: SlideOverProps) {
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (current && current.pageId) {
+                const chapterLink = document.getElementById(`menu-1-${current.chapterId}`);
+                if (chapterLink) chapterLink.click();
+                const subchapterLink = document.getElementById(`menu-2-${current.subchapterId}`);
+                if (subchapterLink) subchapterLink.click();
+            }
+            clearTimeout(timer);
+        }, 100);
+    }, [open, current]);
+
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10 " onClose={setOpen}>
@@ -41,7 +54,9 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                                     <div className="flex h-full flex-col overflow-y-scroll bg-primary_blue pt-6 shadow-xl">
                                         <div className="px-4 sm:px-6">
                                             <div className="flex items-start justify-between">
-                                                <Dialog.Title className="text-lg font-medium text-white">The Great Sync</Dialog.Title>
+                                                <Dialog.Title className="text-lg font-medium text-white">
+                                                    The Great Sync
+                                                </Dialog.Title>
                                                 <div className="ml-3 flex h-7 items-center">
                                                     <button
                                                         type="button"
@@ -56,11 +71,7 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                                         </div>
                                         <div className="relative mt-6 flex-1 ">
                                             {/* slide content */}
-                                            <div className="absolute inset-0 bg-primary_blue">
-
-                                                {children}
-
-                                            </div>
+                                            <div className="absolute inset-0 bg-primary_blue">{children}</div>
                                             {/* /End slide content */}
                                         </div>
                                     </div>
@@ -71,8 +82,7 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                 </div>
             </Dialog>
         </Transition.Root>
-    )
-};
-
+    );
+}
 
 export default SlideOver;

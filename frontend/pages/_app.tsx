@@ -1,18 +1,24 @@
-import type { AppProps } from 'next/app'
+import type { AppProps } from 'next/app';
 import '../styles/global.css';
-import '../styles/duotone_prism.css';
-import '../styles/line_numbers_prism.css';
-import Head from 'next/head'
-import { Session } from "next-auth";
+import 'allotment/dist/style.css';
+import Head from 'next/head';
+import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import NavContextProvider from '../context/nav';
+import StepContextProvider from '../context/steps';
 
-
-function MyApp({ Component, pageProps }: AppProps<{
+function MyApp({
+    Component,
+    pageProps,
+}: AppProps<{
     session: Session;
+    isStepPage: boolean;
+    pageType?: 'text' | 'text-image-code' | 'text-image' | 'video' | 'standalone';
 }>) {
+    const { isStepPage } = pageProps;
+
     return (
-        <SessionProvider session={pageProps!.session}>
+        <SessionProvider session={pageProps.session}>
             <Head>
                 <title>The Great Sync Course</title>
                 <link href="http://fonts.cdnfonts.com/css/utopia-std" rel="stylesheet" />
@@ -21,13 +27,17 @@ function MyApp({ Component, pageProps }: AppProps<{
             </Head>
             <main>
                 <NavContextProvider>
-                    <Component {...pageProps} />
+                    {isStepPage ? (
+                        <StepContextProvider>
+                            <Component {...pageProps} />
+                        </StepContextProvider>
+                    ) : (
+                        <Component {...pageProps} />
+                    )}
                 </NavContextProvider>
             </main>
         </SessionProvider>
-
-    )
+    );
 }
 
-
-export default MyApp
+export default MyApp;

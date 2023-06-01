@@ -1,40 +1,46 @@
-
-import { useContext, useState } from 'react';
-import type { PageContent, PageStep, PageType } from '../types';
-import PageSteps from '../containers/PageSteps';
+import { useContext, useEffect } from 'react';
+import type { PageContent, PageType, ResourceLink } from '../types';
+import PageSteps from './PageSteps';
 import { NavContext } from '../context/nav';
+import { StepContext } from '../context/steps';
 
 type PageStepsControllerProps = {
-    pageContent: PageContent[],
-    type: PageType,
-}
+    pageContent: PageContent[];
+    loadingPage: boolean;
+    heading?: string;
+    type: PageType;
+    links: ResourceLink[];
+};
 
-
-const PageStepsController = ({ pageContent, type }: PageStepsControllerProps) => {
+const PageStepsController = ({ pageContent, type, heading, links, loadingPage }: PageStepsControllerProps) => {
     const { nextPage, prevPage } = useContext(NavContext);
+    const { nextStep, prevStep, goToStep, currIndex, setStepData, steps, showNextPageButton } = useContext(StepContext);
 
-    const [viewed, setViewed] = useState<number[]>([])
-    const title = 'Statements and declarations';
-    const handleViewedStep = (id: number) => {
-        if (!viewed.includes(id)) setViewed([...viewed, id])
+    useEffect(() => {
+        console.log('Ready to set steps?:', !!steps);
+        if (pageContent && !steps) setStepData(pageContent);
+    }, [pageContent, setStepData, steps]);
+
+    if (!steps) {
+        return <p>Loading Step Context</p>;
     }
-
-    const pageSteps: PageStep[] = pageContent.map((topic: Partial<PageStep>) => {
-        topic.status = viewed.includes(topic.id!) ? 'complete' : 'default';
-        return topic
-    }) as PageStep[]
-
 
     return (
         <PageSteps
-            completeStep={handleViewedStep}
-            pageSteps={pageSteps}
-            showNextButton={viewed.length >= pageSteps.length - 1}
+            heading={heading}
+            currIndex={currIndex}
+            pageSteps={steps}
+            links={links}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            showNextButton={showNextPageButton}
             type={type}
+            loadingPage={loadingPage}
             nextPage={nextPage}
             prevPage={prevPage}
+            goToStep={goToStep}
         />
     );
-}
+};
 
 export default PageStepsController;

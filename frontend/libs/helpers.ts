@@ -1,82 +1,147 @@
-import { ChaptersResponse, MenuItem, MenuType, Page, ChapterData, SubChapter } from "../types";
+import {
+    ChaptersResponse,
+    MenuItem,
+    MenuType,
+    Page,
+    ChapterData,
+    SubChapter,
+    UserCourseProgressResponse,
+    MenuParentChapter,
+    MenuParentSubchapter,
+} from '../types';
 
-export function serverRedirectObject(url: string, permanent: boolean = true) {
+export function serverRedirectObject(url: string, permanent = true) {
     return {
         redirect: {
             destination: url,
-            permanent: permanent,
+            permanent,
         },
     };
 }
 
+function calculateChapterProgress(id: number | string, progressData: UserCourseProgressResponse) {
+    const data = progressData.subchapters;
+    const subchapters = data.filter((sb) => sb.chapter === +id);
+    const completed = subchapters.filter((sub) => sub.completed);
+    return (completed.length / subchapters.length) * 100;
+}
 
-const completedPageIds = [1];
+function calculateSubchapterProgress(id: number | string, progressData: UserCourseProgressResponse) {
+    const data = progressData.pages;
+    const subchapterPages = data.filter((sb) => sb.subchapter === id);
+    const completed = subchapterPages.filter((sub) => sub.completed);
+    return (completed.length / subchapterPages.length) * 100;
+}
 
-type EntityWithMenuOrder = ChapterData | SubChapter | Page
+type EntityWithMenuOrder = ChapterData | SubChapter | Page;
 
 function sortByOrderNumber(a: EntityWithMenuOrder, b: EntityWithMenuOrder) {
     return +a.attributes.menu!.orderNumber - b.attributes.menu!.orderNumber;
 }
 
-function mapMenuPages(pages: Page[], prependLinkUrl: string): MenuItem[] {
+function mapMenuPages(
+    pages: Page[],
+    parent: MenuParentSubchapter,
+    completionData: UserCourseProgressResponse,
+    prependLinkUrl: string
+): MenuItem[] {
+    if (!pages || pages.length === 0) return [];
     return pages
-        .filter(page => page.attributes.visible)
+        .filter((page) => page.attributes.visible)
         .sort(sortByOrderNumber)
         .map((page) => {
             const mappedPage = {} as Partial<MenuItem>;
             mappedPage.level = 3;
-            mappedPage.id = page.id
+            mappedPage.id = page.id;
             mappedPage.name = page.attributes.title;
             const icon = page.attributes.menu.icon as MenuType;
             mappedPage.type = icon || 'read';
             mappedPage.orderNumber = page.attributes.menu.orderNumber;
-            mappedPage.completed = completedPageIds.includes(page.id);
-            mappedPage.href = `${prependLinkUrl}/${page.id}`
-            return mappedPage as MenuItem;;
-        })
+            mappedPage.completed = completionData.pages.find((pg) => pg.id === page.id)?.completed;
+            mappedPage.href = `${prependLinkUrl}/${page.id}`;
+            mappedPage.parent = { ...parent };
+            return mappedPage as MenuItem;
+        });
 }
 
-function pageCompletionCount(pages: Page[]) {
-    return pages.reduce((accumulator: number, current: Page) => {
-        if (completedPageIds.includes(current.id)) return accumulator + 1;
-        return accumulator
-    }, 0)
-}
-
-function mapMenuSubChapters(subchapters: SubChapter[], prependLinkUrl: string): MenuItem[] {
+function mapMenuSubChapters(
+    subchapters: SubChapter[],
+    parent: MenuParentChapter,
+    completionData: UserCourseProgressResponse,
+    prependLinkUrl: string
+): MenuItem[] {
+    if (!subchapters || subchapters.length === 0) return [];
     return subchapters
-        .filter(subchapter => subchapter.attributes.visible)
+        .filter((subchapter) => subchapter.attributes.visible)
         .sort(sortByOrderNumber)
         .map((subchapter) => {
             const mappedSubChapter = {} as Partial<MenuItem>;
             const pages = subchapter.attributes.pages?.data;
-            if (pages) mappedSubChapter.children = mapMenuPages(pages, `/${prependLinkUrl}/${subchapter.id}`);
+            const parentData = {
+                ...parent,
+                subchapter: { id: subchapter.id, name: subchapter.attributes.title },
+            };
+            if (pages)
+                mappedSubChapter.children = mapMenuPages(
+                    pages,
+                    parentData,
+                    completionData,
+                    `/${prependLinkUrl}/${subchapter.id}`
+                );
             mappedSubChapter.name = subchapter.attributes.title;
-            mappedSubChapter.progress = +pageCompletionCount(pages!) / (mappedSubChapter.children!.length) * 100;
+            mappedSubChapter.progress = calculateSubchapterProgress(subchapter.id, completionData);
             mappedSubChapter.level = 2;
             mappedSubChapter.id = subchapter.id;
-            mappedSubChapter.completed = mappedSubChapter.progress === 100;
+            mappedSubChapter.completed = completionData.subchapters.find((sb) => sb.id === subchapter.id)?.completed;
             return mappedSubChapter as MenuItem;
-        })
+        });
 }
 
-export function mapMenuChapters(data: ChaptersResponse, courseUid: string): MenuItem[] {
-    const chapters = data.data;
-    if (!chapters) return [];
+export function mapMenuChapters(
+    chaptersResponse: ChaptersResponse,
+    completionData: UserCourseProgressResponse,
+    courseUid: string
+): MenuItem[] {
+    const chapters = chaptersResponse.data?.data;
+    if (!Array.isArray(chapters) || !chapters || chapters.length === 0) return [];
     return chapters
-        .filter(chapter => chapter.attributes.visible)
+        .filter((chapter) => chapter.attributes.visible)
         .sort(sortByOrderNumber)
-        .map(chapter => {
+        .map((chapter) => {
             const { id: chapterId, attributes } = chapter;
             const chapterTitle = attributes.title;
-            const subchapters = attributes.sub_chapters.data;
+            const parentData = { chapter: { id: chapterId, name: chapterTitle } };
+            const subchapters = attributes.subchapters.data;
             const mappedChapter = {} as Partial<MenuItem>;
             mappedChapter.name = chapterTitle;
-            mappedChapter.completed = false;
-            mappedChapter.children = mapMenuSubChapters(subchapters, `courses/${courseUid}/${chapterId}`);
-            mappedChapter.progress = 0;
+            mappedChapter.completed = completionData.chapters.find((chp) => chp.id === chapter.id)?.completed;
+            mappedChapter.children = mapMenuSubChapters(
+                subchapters,
+                parentData,
+                completionData,
+                `courses/${courseUid}/${chapterId}`
+            );
+            mappedChapter.progress = calculateChapterProgress(chapter.id, completionData);
             mappedChapter.id = chapter.id;
             mappedChapter.level = 1;
             return mappedChapter as MenuItem;
-        })
+        });
+}
+
+export function getDomainName(url: string) {
+    let hostname;
+    console.log('--------GET DOMAIN NAME-------------------------------');
+    console.log(url);
+    try {
+        const urlObj = new URL(url);
+        hostname = urlObj.hostname;
+        // Remove "www" subdomain if present
+        if (hostname.startsWith('www.')) {
+            hostname = hostname.substring(4);
+        }
+    } catch (error) {
+        console.error(`Invalid URL: ${error}`);
+    }
+
+    return hostname;
 }

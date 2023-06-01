@@ -1,98 +1,159 @@
 // @refresh reset
+import { SyntheticEvent, useEffect, useRef } from 'react';
+import { ChevronDoubleRightIcon, ChevronDoubleLeftIcon } from '@heroicons/react/20/solid';
 import Text_Image_Code from '../components/layout/screens/Text_Image_Code';
-import type { PageStep, PageType } from '../types'
-import { useRef, useState } from 'react';
+import type { PageStep, PageType, ResourceLink } from '../types';
 import Step from '../components/ui/Step';
 import ControlBar from './ControlBar';
-import { ChevronDoubleRightIcon } from '@heroicons/react/20/solid'
-import { ChevronDoubleLeftIcon } from '@heroicons/react/20/solid'
 import Text_Image from '../components/layout/screens/Text_Image';
+import BlurEdge from '../components/ui/BlurEdge';
 
 type PageStepsProps = {
-    pageSteps: PageStep[],
-    completeStep: (id: number) => void;
-    showNextButton: boolean,
-    type: PageType,
-    nextPage: () => void,
-    prevPage: () => void,
-}
+    currIndex: number;
+    pageSteps: PageStep[];
+    showNextButton: boolean;
+    type: PageType;
+    heading?: string;
+    links: ResourceLink[];
+    loadingPage: boolean;
+    nextPage: () => void;
+    prevPage: () => void;
+    nextStep: () => void;
+    prevStep: () => void;
+    goToStep: (ind: number) => void;
+};
 
 function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ')
+    return classes.filter(Boolean).join(' ');
 }
 
-const PageSteps = ({ pageSteps, completeStep, showNextButton, type, nextPage, prevPage }: PageStepsProps) => {
-    const [current, setCurrent] = useState(pageSteps[0].id); // Keeps Track of current id
+const PageSteps = ({
+    currIndex,
+    pageSteps,
+    showNextButton,
+    type,
+    heading,
+    links,
+    loadingPage,
+    nextPage,
+    prevPage,
+    nextStep,
+    prevStep,
+    goToStep,
+}: PageStepsProps) => {
     const stepsContainer = useRef<HTMLOListElement>(null);
 
-    // REFACTOR INTO SINGLY LINKED LIST
+    useEffect(() => {
+        function scrollIntoView(indx: number) {
+            if (stepsContainer.current)
+                stepsContainer.current.querySelector(`#step_${indx}`)!.scrollIntoView({ behavior: 'smooth' });
+        }
+        scrollIntoView(currIndex);
+    }, [currIndex]);
 
-    function getNextIndex(index: number, max: number, direction: 'left' | 'right', amount = 3) {
-        let target = direction === 'right' ? index + amount : index - amount;
-        if (target > max) target = max;
-        else if (target < 0) target = 0;
-        return target;
-    }
+    useEffect(() => {
+        function handleKeyPress(e: KeyboardEvent) {
+            console.log('KEYDOWN');
+            if (e.key === 'ArrowLeft') prevStep();
+            else if (e.key === 'ArrowRight') nextStep();
+        }
 
-    const handleClick = (id: number) => {
-        const clickedStepIndex = pageSteps.findIndex(stp => stp.id === id);
-        const currentStepIndex = pageSteps.findIndex(stp => stp.id === current);
-        completeStep(current);
-        setCurrent(id);
-        const isForwards = clickedStepIndex > currentStepIndex!;
-        scrollIntoView(clickedStepIndex, isForwards ? 'right' : 'left')
-    }
+        document.addEventListener('keydown', handleKeyPress);
 
-    const handleNext = (direction: 'left' | 'right') => {
-        let currentIndex = pageSteps.findIndex(stp => stp.id === current);
-        const nextStepIndex = getNextIndex(currentIndex, pageSteps.length - 1, direction, 1);
-        completeStep(current);
-        setCurrent(pageSteps[nextStepIndex].id);
-        scrollIntoView(nextStepIndex, direction);
-    }
+        return () => document.removeEventListener('keydown', handleKeyPress);
+    }, [prevStep, nextStep]);
 
-    function scrollIntoView(indx: number, direction: 'left' | 'right', amount?: number) {
-        const indexToScrollIntoView = getNextIndex(indx, pageSteps.length - 1, direction, amount);
-        if (stepsContainer.current) stepsContainer.current.querySelector(`#step_${indexToScrollIntoView}`)!.scrollIntoView({ behavior: "smooth" })
-    }
+    const handleNext = (e: SyntheticEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        nextStep();
+    };
 
+    const handlePrev = (e: SyntheticEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        prevStep();
+    };
 
-    const isLastStep = current === pageSteps[pageSteps.length - 1].id;
-    const isSecondLastStep = current === pageSteps[pageSteps.length - 2].id;
-    const currentTopicStep = pageSteps.find(stp => stp.id === current);
+    const currentTopicStep = pageSteps[currIndex];
+    const isLastStep = currIndex === pageSteps.length - 1;
+    const isSecondLastStep = currIndex === pageSteps.length - 2;
 
     return (
         <>
+            {type === 'text_image_code' && (
+                <Text_Image_Code
+                    heading={currIndex === 0 ? heading : undefined}
+                    code={currentTopicStep.code!}
+                    id={+currentTopicStep.id}
+                    text={currentTopicStep?.text}
+                    image={currentTopicStep?.image}
+                    links={links}
+                />
+            )}
+            {type === 'text_image' && (
+                <Text_Image
+                    id={+currentTopicStep.id}
+                    text={currentTopicStep?.text}
+                    image={currentTopicStep?.image}
+                    links={links}
+                />
+            )}
 
-            {type === 'text_image_code' && <Text_Image_Code code={currentTopicStep?.code!} id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} showImageBorder={currentTopicStep?.transparent_image} />}
+            {/* bottom: 50px;
+    background: #03143f; */}
 
-            {type === 'text_image' && <Text_Image id={+currentTopicStep?.id!} text={currentTopicStep?.text!} image={currentTopicStep?.image!} />}
-
-            <ControlBar showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
-                <nav aria-label="Progress" className='flex scrollbar-thin scrollbar-none relative z-50  '>
-                    <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('left')}>
-                        <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
-                    </button>
-                    <div className='max-w-md overflow-hidden relative'>
-                        {pageSteps.length > 6 && current > 3 && <div className='fixed w-12 h-full bg-[#021e44bc] left-[3em] top-0 blur-sm scale-y-150 z-[100]'></div>}
-                        <ol role="list" ref={stepsContainer} className="flex items-center ">
-                            {pageSteps.map((step: PageStep, stepIdx: number) => (
-                                <li key={step.id} id={`step_${stepIdx}`} className={classNames(stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-10' : '', 'relative')}>
-                                    <Step  {...step} orderNumber={stepIdx + 1} setCurrent={handleClick} status={step.id === current ? 'current' : step.status} />
-                                </li>
-                            ))}
-                        </ol>
-                        {!isSecondLastStep && !isLastStep && pageSteps.length > 6 && <div className='fixed w-12 h-full bg-[#021e44e3] right-[3em] top-0 blur-sm scale-y-150 '></div>}
-                    </div>
-                    <button className="text-white px-4 hover:text-primary_green" onClick={() => handleNext('right')}>
-                        <ChevronDoubleRightIcon className="m-auto h-8 w-8" aria-hidden="true" />
-                    </button>
-                </nav>
-            </ControlBar>
+            <div className="relative">
+                <div className=" hidden xl:block absolute  xl:top-[-1rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 my-1 p-0 text-white mx-auto text-center text-sm">
+                    <span>Use your arrow keys</span>
+                </div>
+                <ControlBar loadingPage={loadingPage} showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
+                    {!loadingPage && (
+                        <nav aria-label="Progress" className="flex items-center relative z-50  ">
+                            <button
+                                type="button"
+                                className="text-white px-4 hover:text-primary_green"
+                                onClick={handlePrev}
+                            >
+                                <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
+                            </button>
+                            <div className="max-w-md relative">
+                                {pageSteps.length > 6 && currIndex > 2 && <BlurEdge position="left" />}
+                                <ol ref={stepsContainer} className="flex items-center ">
+                                    {pageSteps.map((step: PageStep, stepIdx: number) => (
+                                        <li
+                                            key={step.id}
+                                            id={`step_${stepIdx}`}
+                                            className={classNames(
+                                                stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-10' : '',
+                                                'relative',
+                                                'cursor-pointer'
+                                            )}
+                                        >
+                                            <Step
+                                                {...step}
+                                                orderNumber={stepIdx + 1}
+                                                setCurrent={() => goToStep(stepIdx)}
+                                                status={stepIdx === currIndex ? 'current' : step?.status}
+                                            />
+                                        </li>
+                                    ))}
+                                </ol>
+                                {!isSecondLastStep && !isLastStep && pageSteps.length > 6 && (
+                                    <BlurEdge position="right" />
+                                )}
+                            </div>
+                            <button
+                                type="button"
+                                className="text-white px-4 hover:text-primary_green"
+                                onClick={handleNext}
+                            >
+                                <ChevronDoubleRightIcon className="m-auto h-8 w-8" aria-hidden="true" />
+                            </button>
+                        </nav>
+                    )}
+                </ControlBar>
+            </div>
         </>
     );
-}
+};
 
-export default PageSteps
-
-
+export default PageSteps;

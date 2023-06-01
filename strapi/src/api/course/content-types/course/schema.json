@@ -22,14 +22,15 @@
     },
     "chapters": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::chapter.chapter"
+      "relation": "manyToMany",
+      "target": "api::chapter.chapter",
+      "mappedBy": "courses"
     },
     "description": {
       "type": "dynamiczone",
       "components": [
-        "media.video",
-        "media.text"
+        "media.text",
+        "media.video"
       ],
       "required": true
     }

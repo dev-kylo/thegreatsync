@@ -1,110 +1,166 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { mapMenuChapters } from "../libs/helpers";
-import { MenuItem, ChaptersResponse } from "../types";
-import useSWR from 'swr'
-import { getChapters } from "../services/queries";
-import { DoublyLinkedList, Node } from "../libs/doublyLinkedList";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
-
-
+/* eslint-disable react/jsx-no-constructed-context-values */
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import useSWR from 'swr';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
+import { mapMenuChapters } from '../libs/helpers';
+import { MenuItem } from '../types';
+import { getChapters, getUserCompletions } from '../services/queries';
+import { DoublyLinkedList } from '../libs/doublyLinkedList';
+import { httpClient, setAuthToken } from '../libs/axios';
+import { completePage } from '../services/mutations';
 
 type NavProviderValues = {
-    menuData: MenuItem[]
-    courseSequence?: DoublyLinkedList | null
-    nextPage: () => void
-    prevPage: () => void
-    showNext: boolean
-    showPrev: boolean
-}
+    courseId?: string | number;
+    subChapterName?: string;
+    chapterName?: string;
+    menuData?: MenuItem[];
+    courseSequence?: DoublyLinkedList | null;
+    nextPage: () => void;
+    prevPage: () => void;
+    setLoadingPage: (val: boolean) => void;
+    loadingPage: boolean;
+    showNext: boolean;
+    showPrev: boolean;
+    courseCompletionStat: number | null;
+};
 
 export const NavContext = React.createContext<NavProviderValues>({
-    menuData: [],
+    courseId: undefined,
+    subChapterName: '',
+    chapterName: '',
+    menuData: undefined,
     courseSequence: null,
-    nextPage: () => { },
-    prevPage: () => { },
+    nextPage: () => {},
+    prevPage: () => {},
+    setLoadingPage: () => {},
+    loadingPage: false,
     showNext: false,
-    showPrev: false
+    showPrev: false,
+    courseCompletionStat: null,
 });
 
 function addToList(item: MenuItem, list: DoublyLinkedList) {
-    if (item.children) item.children.forEach(itemChild => addToList(itemChild, list))
-    else list.addToTail(item)
+    if (item.children) item.children.forEach((itemChild) => addToList(itemChild, list));
+    else list.addToTail(item);
 }
 
 function createList(menuItems: MenuItem[]) {
     const list = new DoublyLinkedList();
-    menuItems.forEach(item => addToList(item, list));
-    console.log('-------- AND Queue of PAGES -------');
-    console.log(list.printList())
-    return list
+    console.log(menuItems);
+    menuItems.forEach((item) => addToList(item, list));
+    return list;
 }
 
-
 const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
-
-    const [courseUid, setCourseUid] = useState('learn-js');
-    const [showNextButton, setNextButton] = useState(true);
-    const [showPrevButton, setPrevButton] = useState(true);
-    const { data: session, status } = useSession();
-    const [courseData, setCourseData] = useState<MenuItem[]>([]);
-    const courseSequence = useRef<DoublyLinkedList | null>(null);
-
-    const { data, error } = useSWR(() => session ? '/api/chapters' : null, getChapters, { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false })
+    // const [showNextButton, setNextButton] = useState(true);
+    // const [showPrevButton, setPrevButton] = useState(true);
+    const { data: session } = useSession();
+    const [loadingPage, setLoadingPage] = useState(false);
     const router = useRouter();
-    const { pageId } = router.query as { pageId: string };
+    const { courseId, pageId } = router.query as { courseId: string; pageId: string };
 
+    const { data, error } = useSWR(
+        () => (session && !!httpClient.defaults.headers.common.Authorization && courseId ? courseId : null),
+        getChapters,
+        { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
+    );
 
-    const nextPage = () => {
-        if (!courseSequence.current) return;
-        const nextNode = courseSequence.current.currentPageNode?.next;
-        if (nextNode) {
-            courseSequence.current.currentPageNode = nextNode;
-            router.replace(nextNode.data.href!)
-        }
-    }
+    const {
+        data: usercompletion,
+        error: completionError,
+        mutate,
+    } = useSWR(
+        () =>
+            session && !!httpClient.defaults.headers.common.Authorization && courseId
+                ? { url: '/api/getUserCompletions', courseId }
+                : null,
+        getUserCompletions,
+        { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
+    );
 
-    const prevPage = () => {
-        if (!courseSequence.current) return;
-        const prevNode = courseSequence.current.currentPageNode?.previous;
-        if (prevNode) {
-            courseSequence.current.currentPageNode = prevNode;
-            router.replace(prevNode.data.href!)
-        }
-    }
+    const menuChapters = useMemo(
+        () => (data && usercompletion ? mapMenuChapters(data, usercompletion, courseId) : undefined),
+        [data, courseId, usercompletion]
+    );
+    const courseSequence = useMemo(() => menuChapters && createList(menuChapters), [menuChapters]);
 
     useEffect(() => {
-        const list = courseSequence.current;
+        if (session?.jwt) setAuthToken((session?.jwt as string) || '');
+    }, [session?.jwt]);
+
+    const nextPage = async () => {
+        if (!courseSequence || !courseSequence.currentPageNode) return;
+        setLoadingPage(true);
+        await completePage(courseId, courseSequence.currentPageNode.data.id);
+        courseSequence.currentPageNode.data.completed = true;
+        mutate(); // Fetch new completion data
+        const nextNode = courseSequence.currentPageNode?.next || courseSequence.getFirstUncompleted();
+        if (nextNode) {
+            courseSequence.currentPageNode = nextNode;
+            setLoadingPage(false);
+            router.replace(nextNode.data.href!);
+        } else {
+            setLoadingPage(false);
+            router.replace('/courseCompleted');
+        }
+    };
+
+    const prevPage = () => {
+        if (!courseSequence) return;
+        setLoadingPage(true);
+        const prevNode = courseSequence.currentPageNode?.previous;
+        if (prevNode) {
+            courseSequence.currentPageNode = prevNode;
+            setLoadingPage(false);
+            router.replace(prevNode.data.href!);
+        } else setLoadingPage(false);
+    };
+
+    useEffect(() => {
+        const list = courseSequence;
         if (pageId && list) {
             if (+pageId !== list.currentPageNode?.data.id) {
                 const foundNode = list.getByDataId(+pageId);
-                if (foundNode) list.currentPageNode = foundNode
+                if (foundNode) list.currentPageNode = foundNode;
             }
         }
-    }, [pageId, courseSequence.current])
+    }, [pageId, courseSequence]);
 
-    useEffect(() => {
-        if (data && data.data && (courseData.length < 1)) {
-            console.log('Setting Page Doubly Linked List')
-            const mappedMenuItems = mapMenuChapters(data, 'learn-js');
-            setCourseData(mappedMenuItems);
-            courseSequence.current = createList(mappedMenuItems)
-        }
-    }, [data])
+    console.log({ error, completionError });
+
+    const completionStat = () => {
+        if (!usercompletion || !courseSequence) return null;
+        const completed = usercompletion.pages.filter((pg) => pg.completed);
+        return Math.round((completed.length / courseSequence.getTotalNodes()) * 100);
+    };
+
+    const courseCompletionStat = usercompletion && courseSequence ? completionStat() : null;
+
+    console.log({ courseCompletionStat });
+    const chapterName = courseSequence?.currentPageNode?.data?.parent.chapter?.name;
+    const subChapterName = courseSequence?.currentPageNode?.data?.parent.subchapter?.name;
 
     return (
-        <NavContext.Provider value={{
-            menuData: courseData,
-            courseSequence: courseSequence.current,
-            showNext: !!(courseSequence.current?.currentPageNode?.next),
-            showPrev: true,
-            nextPage,
-            prevPage
-        }}>
+        <NavContext.Provider
+            value={{
+                chapterName,
+                courseId,
+                subChapterName,
+                menuData: menuChapters,
+                courseSequence,
+                courseCompletionStat,
+                showNext: !!courseSequence?.currentPageNode?.next,
+                showPrev: true,
+                loadingPage,
+                setLoadingPage,
+                nextPage,
+                prevPage,
+            }}
+        >
             {children}
         </NavContext.Provider>
-    )
-
+    );
 };
 
 export default NavContextProvider;
