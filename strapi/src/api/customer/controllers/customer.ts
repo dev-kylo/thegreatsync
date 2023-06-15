@@ -2,7 +2,7 @@
  * A set of functions called "actions" for `purchase`
  */
 
-import { PaddleOrder } from "../../../../custom-types";
+import {  CustomerService, Order, PaddleOrder, User } from "../../../../custom-types";
 
 
 // User will have a checkbox to use an existing account. Just has to supply an email address with orderId to look up, then must login
@@ -17,7 +17,7 @@ export default {
       const order = await strapi.db.query('api::order.order').findOne({
         where: { order_id: data.orderId },
         populate: ['user']
-      })
+      }) as Order;
 
       if (!order){ 
         return ctx.response.forbidden('No order exists');
@@ -27,7 +27,7 @@ export default {
       console.log('Searching for User')
      let user =  await strapi.db.query('plugin::users-permissions.user').findOne({
         where: { email: data.username }
-      }) 
+      }) as User;
 
 
       // Check if order already has a user assigned to it
@@ -65,6 +65,10 @@ export default {
         });
 
         console.log('User Updated')
+
+          // Enroll User In Course 
+        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order.custom_data, user.id);
+
         ctx.body = {
           success: true,
           message: 'Your account has been updated with the new course. Proceed to login.'
@@ -95,8 +99,12 @@ export default {
           },
         });
 
+        // Enroll User In Course 
+        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order.custom_data, user.id);
+
         ctx.body = {
           success: true,
+          orderId: order.order_id,
           message: 'You have successfully registered. Proceed to login.'
         };
       }
@@ -106,8 +114,6 @@ export default {
       console.log(err)
       ctx.body = err;
     }
-
-
   },
   	createOrder: async (ctx, next) => {
       console.log('Create Order')
@@ -120,13 +126,16 @@ export default {
 
         
         // Create Order - No need to check for existing order, orderId must be unique anyway
-        await strapi.entityService.create('api::order.order', {data: payload});
+        const order = await strapi.entityService.create('api::order.order', {data: payload}) as Order;
 
+        
         // Send email
+
 
         // Return response
         ctx.body = {
           success: true,
+          orderId: order.order_id,
           message: `You have been emailed a link to complete the registration and access the course. If you do not receive this email please contact kylo@thegreatsync.com`
         };
           
