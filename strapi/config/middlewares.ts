@@ -12,7 +12,7 @@ export default [
             'data:',
             'blob:',
             'dl.airtable.com',
-            'the-great-sync-bucket.s3.amazonaws.com',
+            'the-great-sync.s3.amazonaws.com',
 
           ],
           'media-src': [
@@ -20,7 +20,7 @@ export default [
             'data:',
             'blob:',
             'dl.airtable.com',
-            'the-great-sync-bucket.s3.amazonaws.com',
+            'the-great-sync.s3.amazonaws.com',
           ],
           upgradeInsecureRequests: null,
         },
