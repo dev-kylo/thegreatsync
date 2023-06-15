@@ -25,7 +25,8 @@ export default function SignIn() {
         });
         console.log('------SIGNIN RESULT------', result);
         const redirectUrl = router.query.redirect as string;
-        if (result?.ok) return router.replace(redirectUrl || '/');
+        if (result?.ok) console.log('Everything is okay');
+        if (result?.ok) return router.replace(redirectUrl);
         setFormState({ loading: true, error: true });
     };
 
@@ -34,6 +35,7 @@ export default function SignIn() {
         setFormState({ error: false, loading: true });
         const form = e.target as HTMLFormElement;
         if (!form) return;
+        console.log('getting here');
         const data = Object.fromEntries(new FormData(form)) as unknown as Submission;
         if (!data?.email || !data?.password) setFormState({ error: false, loading: false });
         sendCredentials(data);
