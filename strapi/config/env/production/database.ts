@@ -10,11 +10,9 @@ export default ({ env }) => ({
             database: env('DATABASE_NAME'),
             user: env('DATABASE_USERNAME'),
             password: env('DATABASE_PASSWORD'),
-            ssl: false
-            // ssl: env('DATABASE_SSL', false)
-            // ssl: {
-            //     ca: fs.readFileSync(path.resolve(__dirname, "../../../certificates/prod-ca-2021.crt")).toString(),
-            // },
+            ssl: {
+                rejectUnauthorized: env.bool('DATABASE_SSL_SELF', false), // For self-signed certificates
+            },
         },
     },
 });

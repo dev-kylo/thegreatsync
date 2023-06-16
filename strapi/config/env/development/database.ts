@@ -10,7 +10,7 @@ export default ({ env }) => ({
             database: env('LOCAL_DATABASE_NAME'),
             user: env('LOCAL_DATABASE_USERNAME'),
             password: env('LOCAL_DATABASE_PASSWORD'),
-            ssl: env('DATABASE_SSL', false)
+            ssl: false
         },
     },
 });
