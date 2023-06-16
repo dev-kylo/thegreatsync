@@ -27,7 +27,7 @@ export default function SignIn() {
         const redirectUrl = router.query.redirect as string;
         if (result?.ok) console.log('Everything is okay');
         if (result?.ok) return router.replace(redirectUrl);
-        setFormState({ loading: true, error: true });
+        setFormState({ loading: false, error: true });
     };
 
     const onSubmit = (e: SyntheticEvent) => {
