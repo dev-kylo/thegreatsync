@@ -20,14 +20,16 @@ export function serverRedirectObject(url: string, permanent = true) {
 }
 
 function calculateChapterProgress(id: number | string, progressData: UserCourseProgressResponse) {
-    const data = progressData.subchapters;
+    const data = progressData?.subchapters;
+    if (!data || data.length < 1) return 0;
     const subchapters = data.filter((sb) => sb.chapter === +id);
     const completed = subchapters.filter((sub) => sub.completed);
     return (completed.length / subchapters.length) * 100;
 }
 
 function calculateSubchapterProgress(id: number | string, progressData: UserCourseProgressResponse) {
-    const data = progressData.pages;
+    const data = progressData?.pages;
+    if (!data || data.length < 1) return 0;
     const subchapterPages = data.filter((sb) => sb.subchapter === id);
     const completed = subchapterPages.filter((sub) => sub.completed);
     return (completed.length / subchapterPages.length) * 100;
@@ -130,8 +132,6 @@ export function mapMenuChapters(
 
 export function getDomainName(url: string) {
     let hostname;
-    console.log('--------GET DOMAIN NAME-------------------------------');
-    console.log(url);
     try {
         const urlObj = new URL(url);
         hostname = urlObj.hostname;

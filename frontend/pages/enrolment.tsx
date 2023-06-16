@@ -18,7 +18,8 @@ export default function Enrollment() {
     const [formState, setFormState] = useState({ loading: false, error: false, message: '' });
     const [createNewAccount, setCreateNewAccount] = useState(true);
     const router = useRouter();
-    const { orderId } = router.query as { orderId: string };
+    const { orderid } = router.query as { orderid: string };
+    console.log(router.query);
 
     const sendCredentials = async (payload: RegisterPayload) => {
         try {
@@ -46,7 +47,7 @@ export default function Enrollment() {
             username: data.email,
             existingAccount: !createNewAccount,
             password: data.password,
-            orderId,
+            orderId: orderid,
         };
 
         console.log(payload);
@@ -129,7 +130,7 @@ export default function Enrollment() {
 
                                     <button
                                         type="submit"
-                                        disabled={formState.loading || !orderId}
+                                        disabled={formState.loading || !orderid}
                                         className="flex w-full justify-center rounded-md border border-transparent bg-secondary_red py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-[#03143f] disabled:text-neutral-500"
                                     >
                                         {formState.loading ? (

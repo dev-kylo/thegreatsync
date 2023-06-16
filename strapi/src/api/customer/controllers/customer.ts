@@ -136,7 +136,7 @@ export default {
         ctx.body = {
           success: true,
           orderId: order.order_id,
-          message: `You have been emailed a link to complete the registration and access the course. If you do not receive this email please contact kylo@thegreatsync.com`
+          message: `You have been emailed a link to complete the registration and access the course. If you do not receive this email please contact Kylo.`
         };
           
       } catch(err){
