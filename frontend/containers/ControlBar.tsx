@@ -18,7 +18,7 @@ const ControlBar = ({ children, loadingPage, showNext = true, nextPage, prevPage
     let stepsControls = <></>;
     if (children)
         stepsControls = (
-            <div className="absolute bottom-14 sm:bottom-5 bg-primary_blue left-1/2 transform -translate-x-1/2">
+            <div className="absolute bottom-14 sm:bottom-[auto] bg-primary_blue left-1/2 transform -translate-x-1/2">
                 {children}
             </div>
         );

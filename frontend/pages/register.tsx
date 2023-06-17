@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import axios from 'axios';
+import Link from 'next/link';
 import Logo from '../assets/logo.webp';
 import Alert from '../components/ui/Alert';
 import Spinner from '../components/ui/Spinner';
@@ -16,9 +17,10 @@ interface Submission {
 
 export default function Enrollment() {
     const [formState, setFormState] = useState({ loading: false, error: false, message: '' });
-    const [createNewAccount, setCreateNewAccount] = useState(true);
+    const [createNewAccount] = useState(true);
     const router = useRouter();
-    const { orderId } = router.query as { orderId: string };
+    const { orderid } = router.query as { orderid: string };
+    console.log(router.query);
 
     const sendCredentials = async (payload: RegisterPayload) => {
         try {
@@ -46,7 +48,7 @@ export default function Enrollment() {
             username: data.email,
             existingAccount: !createNewAccount,
             password: data.password,
-            orderId,
+            orderId: orderid,
         };
 
         console.log(payload);
@@ -111,7 +113,8 @@ export default function Enrollment() {
                                         </div>
                                     )}
 
-                                    <div className="flex items-center justify-between">
+                                    {/* CHECKBOX FOR USERS WHO ALREADY HAVE AN ACCOUNT */}
+                                    {/* <div className="flex items-center justify-between">
                                         <div className="flex items-center">
                                             <input
                                                 id="remember-me"
@@ -125,12 +128,12 @@ export default function Enrollment() {
                                                 the same one.
                                             </label>
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     <button
                                         type="submit"
-                                        disabled={formState.loading || !orderId}
-                                        className="flex w-full justify-center rounded-md border border-transparent bg-secondary_red py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:bg-[#03143f] disabled:text-neutral-500"
+                                        disabled={formState.loading || !orderid}
+                                        className="w-full  py-0.5 text-sm md:py-1 md:text-base inline-flex items-center justify-center border border-secondary_lightblue bg-primary_blue  rounded-md font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2 disabled:bg-[#03143f] disabled:text-neutral-500"
                                     >
                                         {formState.loading ? (
                                             <Spinner />
@@ -144,6 +147,22 @@ export default function Enrollment() {
                                 {(formState.message || formState.error) && (
                                     <div className="mt-4">
                                         <Alert type={formState.error ? 'error' : 'success'} text={formState.message} />
+                                        {!formState.error && (
+                                            <div className="flex justify-center mt-4">
+                                                <Link href="/" passHref>
+                                                    <button
+                                                        type="button"
+                                                        className="w-32 mx-8 px-2 md:px-4 py-0.5 text-sm md:py-1 md:text-base inline-flex items-center justify-center rounded-md border border-secondary_lightblue bg-primary_blue   font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
+                                                    >
+                                                        Login
+                                                        {/* <ChevronRightIcon
+                                                        className="-mr-1 ml-3 h-5 w-5"
+                                                        aria-hidden="true"
+                                                    /> */}
+                                                    </button>
+                                                </Link>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>

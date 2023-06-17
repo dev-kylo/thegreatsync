@@ -1,5 +1,5 @@
 // @refresh reset
-import { SyntheticEvent, useEffect, useRef } from 'react';
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { ChevronDoubleRightIcon, ChevronDoubleLeftIcon } from '@heroicons/react/20/solid';
 import Text_Image_Code from '../components/layout/screens/Text_Image_Code';
 import type { PageStep, PageType, ResourceLink } from '../types';
@@ -42,6 +42,14 @@ const PageSteps = ({
     goToStep,
 }: PageStepsProps) => {
     const stepsContainer = useRef<HTMLOListElement>(null);
+
+    const [shownKeysMsg, setShownKeysMsg] = useState(false);
+
+    useEffect(() => {
+        if (!localStorage.getItem('tgs-keys-msg')) {
+            localStorage.setItem('tgs-keys-msg', 'true');
+        } else setShownKeysMsg(true);
+    }, []);
 
     useEffect(() => {
         function scrollIntoView(indx: number) {
@@ -103,7 +111,7 @@ const PageSteps = ({
 
             <div className="relative">
                 <div className=" hidden xl:block absolute  xl:top-[-1rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 my-1 p-0 text-white mx-auto text-center text-sm">
-                    <span>Use your arrow keys</span>
+                    {!shownKeysMsg && <span>Use your arrow keys</span>}
                 </div>
                 <ControlBar loadingPage={loadingPage} showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
                     {!loadingPage && (

@@ -15,6 +15,8 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
     const { menuData, courseSequence, courseCompletionStat } = useContext(NavContext);
     const [loading, setLoading] = useState(false);
 
+    const isProgressing = !Number.isNaN(courseCompletionStat) && courseCompletionStat && courseCompletionStat > 0;
+
     return (
         <Layout>
             {menuData && (
@@ -36,11 +38,13 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
                                     <div className="flex align-center flex-col">
                                         <ProgressIcon
                                             // removeViewbox
-                                            amount={courseCompletionStat === 0 ? 1 : courseCompletionStat}
+                                            amount={!isProgressing ? 1 : courseCompletionStat}
                                             completed={courseCompletionStat === 100}
                                             size="24"
                                         />
-                                        <small className="text-green-400 text-center">{courseCompletionStat}%</small>
+                                        <small className="text-green-400 text-center">
+                                            {isProgressing ? `${courseCompletionStat}% completed` : `0% completed`}
+                                        </small>
                                     </div>
                                 )}
                             </div>
@@ -58,22 +62,18 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
                                         disabled={loading}
                                         className="my-4 inline-flex items-center justify-center rounded-md border border-green-400 bg-primary_blue  px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
                                     >
-                                        {loading ? (
-                                            <Spinner />
-                                        ) : courseCompletionStat === 0 ? (
-                                            'Start Learning'
-                                        ) : (
-                                            'Resume Learning'
-                                        )}
+                                        {loading ? <Spinner /> : !isProgressing ? 'Start Learning' : 'Resume Learning'}
                                     </button>
                                 </Link>
                             )}
                         </div>
                     </div>
 
-                    <div className="min-w-sm min-h-[20rem] bg-[#031b4352] rounded-lg sm:col-span-2 px-8">
-                        <ContentBlock md={description || ''} id={5} />
-                        <div className="p-16">{video && <Video data={video} noPadding />}</div>
+                    <div className="min-w-sm min-h-[75vh]  bg-[#031b4352] relative rounded-lg sm:col-span-2 px-8 overflow-scroll scrollbar-thin scrollbar-thumb-primary_green overflow-y-scroll">
+                        <div className="absolute top-0 p-8 left-0 w-full h-auto">
+                            <ContentBlock md={description || ''} id={5} />
+                            <div className="p-16">{video && <Video data={video} noPadding />}</div>
+                        </div>
                     </div>
                 </div>
             </section>
