@@ -23,6 +23,8 @@ export default function SignIn() {
             email,
             password,
         });
+        console.log(process.env.NEXT_PUBLIC_STRAPI_URL);
+        console.log({ hasAuthSecret: process.env.NEXTAUTH_SECRET });
         console.log('------SIGNIN RESULT------', result);
         const redirectUrl = router.query.redirect as string;
         if (result?.ok) console.log('Everything is okay');
