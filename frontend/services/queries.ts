@@ -29,7 +29,7 @@ export const getChapters = async (courseId: string | number): Promise<ChaptersRe
             encodeValuesOnly: true, // prettify URL
         }
     );
-    console.log('About to fetch CHAPTERS data');
+    console.log('Querying CHAPTERS data');
     const res = await httpClient.get<ChaptersResponse>(`/api/chapters?${query}`);
     return res && res.data;
 };
@@ -43,15 +43,13 @@ export const getPage = async (id: string | number): Promise<PageResponse> => {
             encodeValuesOnly: true, // prettify URL
         }
     );
-    console.log('About to fetch PAGE data');
+    console.log('Querying PAGE data');
     const res = await httpClient.get<PageResponse>(`/api/pages/${id}?${query}`);
     return res && res.data;
 };
 
 export const getEnrolledCourses = async (): Promise<AxiosResponse<CourseData[]>> => {
-    console.log('About to fetch all COURSES ');
     const res = await httpClient.get<CourseData[]>(`/api/coursesByUser`);
-    console.log(res);
     return res;
 };
 
@@ -64,7 +62,6 @@ export const getCourse = async (id: string | number): Promise<CourseResponse> =>
             encodeValuesOnly: true, // prettify URL
         }
     );
-    console.log('About to fetch COURSE data');
     const res = await httpClient.get<CourseResponse>(`/api/courses/${id}?${query}`);
     return res && res.data;
 };
@@ -75,7 +72,6 @@ export const getUserCompletions = async ({
     url: string;
     courseId: string | number;
 }): Promise<UserCourseProgressResponse> => {
-    console.log('About to fetch user completion data');
     const res = await httpClient.get<UserCourseProgressResponse>(`/api/user-course-progress/?courseId=${courseId}`);
     return res && res.data;
 };

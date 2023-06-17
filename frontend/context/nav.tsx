@@ -47,7 +47,6 @@ function addToList(item: MenuItem, list: DoublyLinkedList) {
 
 function createList(menuItems: MenuItem[]) {
     const list = new DoublyLinkedList();
-    console.log(menuItems);
     menuItems.forEach((item) => addToList(item, list));
     return list;
 }
@@ -127,8 +126,6 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         }
     }, [pageId, courseSequence]);
 
-    console.log({ error, completionError });
-
     const completionStat = () => {
         if (!usercompletion || !courseSequence) return null;
         const completed = usercompletion.pages.filter((pg) => pg.completed);
@@ -136,8 +133,6 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     };
 
     const courseCompletionStat = usercompletion && courseSequence ? completionStat() : null;
-
-    console.log({ courseCompletionStat });
     const chapterName = courseSequence?.currentPageNode?.data?.parent.chapter?.name;
     const subChapterName = courseSequence?.currentPageNode?.data?.parent.subchapter?.name;
 

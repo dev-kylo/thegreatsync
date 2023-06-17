@@ -31,8 +31,6 @@ export default function CoursePage({ title, type, content, links, current }: Cou
     const { data: session } = useSession();
     setAuthToken((session?.jwt as string) || '');
 
-    console.log({ title, type, content });
-
     const { id, code, text, image, video } = content[0];
     let contentLayout = null;
 

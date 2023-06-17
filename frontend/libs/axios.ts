@@ -20,7 +20,6 @@ httpClient.interceptors.response.use(
 );
 
 export const setAuthToken = (token: string) => {
-    console.log('SETTING AUTH TOKEN');
     if (token) {
         httpClient.defaults.headers.common.Authorization = `Bearer ${token}`;
     } else {

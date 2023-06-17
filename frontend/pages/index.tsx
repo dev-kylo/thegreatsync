@@ -27,7 +27,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (session.jwt) setAuthToken(session.jwt as string);
 
     const resp = await getEnrolledCourses();
-    console.log(resp);
     if (!resp || resp.status !== 200) {
         if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
         if (resp.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);

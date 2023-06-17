@@ -21,8 +21,8 @@ function MyApp({
         <SessionProvider session={pageProps.session}>
             <Head>
                 <title>The Great Sync Course</title>
-                <link href="http://fonts.cdnfonts.com/css/utopia-std" rel="stylesheet" />
-                <link href="http://fonts.cdnfonts.com/css/poppins" rel="stylesheet" />
+                <link href="https://fonts.cdnfonts.com/css/utopia-std" rel="stylesheet" />
+                <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet" />
                 <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
             </Head>
             <main>

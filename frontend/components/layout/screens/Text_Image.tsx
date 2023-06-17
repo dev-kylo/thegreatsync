@@ -36,7 +36,6 @@ export default function Text_Image({ text, image, id, heading, links }: Text_Ima
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="h-auto object-contain"
-                                onLoadingComplete={() => console.log('image loaded!')}
                             />
                         </Block>
                     </div>
