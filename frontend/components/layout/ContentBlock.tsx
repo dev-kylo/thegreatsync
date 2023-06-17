@@ -21,7 +21,6 @@ const ContentBlock = ({
     heading?: string;
     links?: ResourceLink[];
 }) => {
-    console.log({ links });
     return (
         <article
             id={`md-block:${id} `}

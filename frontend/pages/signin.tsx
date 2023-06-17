@@ -23,9 +23,7 @@ export default function SignIn() {
             email,
             password,
         });
-        console.log('------SIGNIN RESULT------', result);
         const redirectUrl = router.query.redirect as string;
-        if (result?.ok) console.log('Everything is okay');
         if (result?.ok) return router.replace(redirectUrl);
         setFormState({ loading: false, error: true });
     };
@@ -35,7 +33,6 @@ export default function SignIn() {
         setFormState({ error: false, loading: true });
         const form = e.target as HTMLFormElement;
         if (!form) return;
-        console.log('getting here');
         const data = Object.fromEntries(new FormData(form)) as unknown as Submission;
         if (!data?.email || !data?.password) setFormState({ error: false, loading: false });
         sendCredentials(data);
@@ -44,16 +41,15 @@ export default function SignIn() {
     return (
         <div className="bg-primary_blue h-screen">
             <div className="flex min-h-full ">
-                <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+                <div className="flex flex-1 flex-col justify-center  sm:py-12 spx-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
                     <div className="mx-auto w-full max-w-sm lg:w-96">
                         <div className="relative w-full h-32">
                             <Image
+                                priority
                                 alt="Mountains"
                                 src={Logo}
                                 layout="fill"
                                 objectFit="contain"
-                                width={3000}
-                                height={2000}
                                 className="aspect-square h-auto w-full top-0 left-1/2"
                             />
                         </div>

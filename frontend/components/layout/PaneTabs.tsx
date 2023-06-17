@@ -11,7 +11,7 @@ const PaneTabs = ({ text, code, image, setVisiblePane }: PaneTabsProps) => (
             <button
                 type="button"
                 onClick={() => setVisiblePane('text')}
-                className="my-4 items-center  justify-center  border-2 border-r-2 border-secondary_lightblue bg-code_bg px-6 py-0.5 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
+                className="my-4 items-center  justify-center  border-2 border-r-2 border-secondary_lightblue px-6 py-0.5 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
             >
                 Text
             </button>
@@ -22,7 +22,7 @@ const PaneTabs = ({ text, code, image, setVisiblePane }: PaneTabsProps) => (
                 onClick={() => setVisiblePane('image')}
                 className={`my-4 items-center justify-center  border-2 ${
                     code ? 'border-r-0' : 'border-r-2'
-                } border-l-0 border-secondary_lightblue bg-code_bg  px-6 py-0.5 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2`}
+                } border-l-0 border-secondary_lightblue  px-6 py-0.5 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2`}
             >
                 Model
             </button>
@@ -31,7 +31,7 @@ const PaneTabs = ({ text, code, image, setVisiblePane }: PaneTabsProps) => (
             <button
                 type="button"
                 onClick={() => setVisiblePane('code')}
-                className="my-4 items-center justify-center  border-2 border-r-2 border-secondary_lightblue  bg-code_bg  px-6 py-0.5 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
+                className="my-4 items-center justify-center  border-2 border-r-2 border-secondary_lightblue   px-6 py-0.5 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
             >
                 Code
             </button>

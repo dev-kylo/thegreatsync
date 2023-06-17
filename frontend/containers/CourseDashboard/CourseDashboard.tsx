@@ -27,7 +27,7 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
                     current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
                 />
             )}
-            <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12 mt-8">
+            <section className="w-full sm:max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12 mt-8">
                 <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 gap-4 ">
                     <div className="sm:col-span-1 w-full">
                         <div className=" bg-gray-900 rounded-lg shadow-lg p-12 flex flex-col justify-center items-center">

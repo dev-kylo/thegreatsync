@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 const useResponsivePanes = () => {
-    const [visiblePane, setVisiblePane] = useState<'image' | 'text' | 'code'>('text');
+    const [visiblePane, setVisiblePane] = useState<'image' | 'text' | 'code'>('image');
     const [resizedToMobile, setResizedToMobile] = useState(false);
     const mql = useRef(typeof window !== 'undefined' && window.matchMedia('(max-width: 1200px)'));
 

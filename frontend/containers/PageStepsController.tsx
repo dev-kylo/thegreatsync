@@ -17,7 +17,6 @@ const PageStepsController = ({ pageContent, type, heading, links, loadingPage }:
     const { nextStep, prevStep, goToStep, currIndex, setStepData, steps, showNextPageButton } = useContext(StepContext);
 
     useEffect(() => {
-        console.log('Ready to set steps?:', !!steps);
         if (pageContent && !steps) setStepData(pageContent);
     }, [pageContent, setStepData, steps]);
 

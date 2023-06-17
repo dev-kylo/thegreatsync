@@ -42,7 +42,6 @@ export default function Text_Image_Code({ text, code, image, id, heading, links 
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="aspect-square h-auto object-contain"
-                                onLoadingComplete={() => console.log('image loaded!')}
                             />
                         </Block>
                     </div>
