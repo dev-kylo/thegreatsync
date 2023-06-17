@@ -76,7 +76,7 @@ function createMenuDropDownLink(menuChildren: MenuItem[], callback: () => void, 
                         key={name}
                         as="a"
                         className={`group flex w-full items-center rounded-md py-3 ${
-                            level === 2 ? 'pl-8' : level === 3 ? 'pl-20' : 'pl-4'
+                            level === 2 ? 'pl-8' : level === 3 ? 'pl-12 sm:pl-20' : 'pl-4'
                         } pr-2 text-md font-medium text-white hover:bg-gray-50 hover:text-gray-900 ${
                             +currentLocation.pageId === +id ? 'bg-gray-50 text-black' : ''
                         }`}
