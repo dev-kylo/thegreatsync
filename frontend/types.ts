@@ -1,4 +1,4 @@
-export type MenuType = 'watch' | 'code' | 'read' | 'draw' | 'imagine' | 'listen' | 'play';
+export type MenuType = 'watch' | 'code' | 'read' | 'draw' | 'imagine' | 'listen' | 'play' | 'share' | 'discover';
 
 export type PageType = 'text_image_code' | 'video' | 'text_image' | 'text';
 

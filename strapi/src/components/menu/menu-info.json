@@ -10,10 +10,13 @@
     "icon": {
       "type": "enumeration",
       "enum": [
-        "write",
         "code",
         "read",
-        "watch"
+        "watch",
+        "discover",
+        "imagine",
+        "share",
+        "draw"
       ]
     },
     "orderNumber": {
