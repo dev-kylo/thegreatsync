@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Logo from '../assets/logo.webp';
 import Alert from '../components/ui/Alert';
 import Spinner from '../components/ui/Spinner';
+import Img from '../assets/Creation_Phase.jpg';
 
 interface Submission {
     email: string;
@@ -132,10 +133,11 @@ export default function SignIn() {
                 <div className="relative hidden w-0 flex-1 lg:block hover:brightness-125">
                     <Image
                         alt=""
-                        src="https://res.cloudinary.com/the-great-sync/image/upload/v1668087776/2000x2000/Creation_Phase_Empty_kpcotv.jpg"
+                        src={Img}
                         layout="fill"
                         objectFit="cover"
                         objectPosition="center"
+                        placeholder="blur"
                     />
                 </div>
             </div>
