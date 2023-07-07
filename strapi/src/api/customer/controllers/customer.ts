@@ -20,7 +20,7 @@ export default {
       }) as Order;
 
       if (!order){ 
-        return ctx.response.forbidden('No order exists');
+        return ctx.response.forbidden('This is an invalid registration url. Please contact Kylo.');
       }
 
       // Check for an existing user

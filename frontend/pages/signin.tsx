@@ -4,6 +4,7 @@ import { SyntheticEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Logo from '../assets/logo.webp';
 import Alert from '../components/ui/Alert';
 import Spinner from '../components/ui/Spinner';
@@ -107,9 +108,11 @@ export default function SignIn() {
                                         </div>
 
                                         <div className="text-sm">
-                                            <a href="#" className="font-medium text-white hover:text-indigo-500">
-                                                Forgot your password?
-                                            </a>
+                                            <Link passHref href="/user/forgottenpassword">
+                                                <a className="font-medium text-white hover:text-indigo-500">
+                                                    Forgot your password?
+                                                </a>
+                                            </Link>
                                         </div>
                                     </div>
 

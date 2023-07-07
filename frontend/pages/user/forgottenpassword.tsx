@@ -3,35 +3,40 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Logo from '../../assets/logo.webp';
 import Alert from '../../components/ui/Alert';
+import { forgotPassword } from '../../services/password';
 
 export default function ForgottenPassword() {
     const [formState, setFormState] = useState({ loading: false, error: false, message: '' });
+    const [emailVal, setEmailVal] = useState('');
 
-    const sendCredentials = (email: string) => {
-        console.log(email);
-        // try {
-        //     const result = await register(payload);
-        //     console.log('------REGISTER RESULT------', result);
-        //     if (!result?.success) throw new Error(result?.error?.message);
-        //     else setFormState({ loading: false, error: false, message: result.message });
-        // } catch (er) {
-        //     if (axios.isAxiosError(er)) {
-        //         const error = er.response?.data as ServerResponse<RegisterResponse>;
-        //         setFormState({ loading: false, error: true, message: error?.error?.message });
-        //     } else if (typeof er === 'string') setFormState({ loading: false, error: true, message: er });
-        //     else setFormState({ loading: false, error: true, message: 'Error' });
-        // }
+    const sendCredentials = async (email: string) => {
+        const errorMessage = 'Failed to send reset email. Please try again';
+        try {
+            const result = await forgotPassword({ email });
+
+            if (!result?.ok) throw new Error(errorMessage);
+
+            setFormState({
+                loading: false,
+                error: false,
+                message: 'A password reset link has been sent to your email.',
+            });
+            setEmailVal('');
+        } catch (er) {
+            setFormState({ loading: false, error: true, message: errorMessage });
+        }
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFormState({ error: false, loading: true, message: '' });
-        const form = e.target as HTMLFormElement;
-        const data = Object.fromEntries(new FormData(form)) as unknown as { email?: string };
-        if (!data?.email) return setFormState({ error: true, loading: false, message: 'Missing email address' });
+        console.log({ emailVal });
+        if (!emailVal) return setFormState({ error: true, loading: false, message: 'Missing email address' });
 
-        sendCredentials(data.email);
+        sendCredentials(emailVal);
     };
+
+    console.log(emailVal);
 
     return (
         <div className="bg-primary_blue h-screen">
@@ -63,6 +68,8 @@ export default function ForgottenPassword() {
                                         </label>
                                         <div className="mt-1">
                                             <input
+                                                value={emailVal}
+                                                onChange={(e) => setEmailVal(e.target.value)}
                                                 id="email"
                                                 name="email"
                                                 type="email"
@@ -76,7 +83,7 @@ export default function ForgottenPassword() {
                                     <button
                                         type="submit"
                                         disabled={formState.loading}
-                                        className="w-full  py-0.5 text-sm md:py-1 md:text-base inline-flex items-center justify-center border border-secondary_lightblue bg-primary_blue  rounded-md font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2 disabled:bg-[#03143f] disabled:text-neutral-500"
+                                        className="w-full py-2 text-sm md:py-1 md:text-base inline-flex items-center justify-center border border-secondary_lightblue bg-primary_blue  rounded-md font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2 disabled:bg-[#03143f] disabled:text-neutral-500"
                                     >
                                         Submit
                                     </button>
@@ -84,11 +91,6 @@ export default function ForgottenPassword() {
                                 {(formState.message || formState.error) && (
                                     <div className="mt-4">
                                         <Alert type={formState.error ? 'error' : 'success'} text={formState.message} />
-                                        {!formState.error && (
-                                            <div className="flex justify-center mt-4">
-                                                A password reset link has been sent to your email.
-                                            </div>
-                                        )}
                                     </div>
                                 )}
                             </div>

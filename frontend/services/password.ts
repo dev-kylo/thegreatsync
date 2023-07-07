@@ -1,8 +1,9 @@
 import axios from 'axios';
-import type { SignInResponse } from '../types';
-import { httpClient } from '../libs/axios';
 
-const strapiUrl = process.env.STRAPI_URL;
+import { httpClient } from '../libs/axios';
+import { SignInResponse } from '../types';
+
+const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
 export type LostPasswordPayload = {
     code: string;
@@ -17,7 +18,7 @@ export type ChangePasswordPayload = {
 };
 
 export async function forgotPassword({ email }: { email: string }) {
-    const res = await axios.post<SignInResponse>(`${strapiUrl}/api/auth/forgot-password`, {
+    const res = await axios.post<{ ok: boolean }>(`${strapiUrl}/api/auth/forgot-password`, {
         email,
     });
     return res.data;
