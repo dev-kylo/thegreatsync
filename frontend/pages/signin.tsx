@@ -4,10 +4,12 @@ import { SyntheticEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Logo from '../assets/logo.webp';
 import Alert from '../components/ui/Alert';
 import Spinner from '../components/ui/Spinner';
 import Img from '../assets/Creation_Phase.jpg';
+import useHoneypot from '../hooks/useHoneypot';
 
 interface Submission {
     email: string;
@@ -17,6 +19,7 @@ interface Submission {
 export default function SignIn() {
     const router = useRouter();
     const [formState, setFormState] = useState({ loading: false, error: false });
+    const { checkForHoney, honeypot } = useHoneypot();
 
     const sendCredentials = async ({ email, password }: Submission) => {
         const result = await signIn('credentials', {
@@ -31,6 +34,7 @@ export default function SignIn() {
 
     const onSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
+        if (checkForHoney()) return;
         setFormState({ error: false, loading: true });
         const form = e.target as HTMLFormElement;
         if (!form) return;
@@ -106,10 +110,14 @@ export default function SignIn() {
                                             </label>
                                         </div>
 
+                                        {honeypot}
+
                                         <div className="text-sm">
-                                            <a href="#" className="font-medium text-white hover:text-indigo-500">
-                                                Forgot your password?
-                                            </a>
+                                            <Link passHref href="/user/forgottenpassword">
+                                                <a className="font-medium text-white hover:text-indigo-500">
+                                                    Forgot your password?
+                                                </a>
+                                            </Link>
                                         </div>
                                     </div>
 

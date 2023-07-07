@@ -20,7 +20,7 @@ export default {
       }) as Order;
 
       if (!order){ 
-        return ctx.response.forbidden('No order exists');
+        return ctx.response.forbidden('This is an invalid registration url. Please contact Kylo.');
       }
 
       // Check for an existing user
@@ -130,7 +130,18 @@ export default {
 
         
         // Send email
+        const d = await strapi.plugin('email').service('email').send({
+          to: data.email,
+          subject: 'Congratulations on joining The Syncer Program.',
+          text: 'Click on the link below to register your new account',
+          html: `<a href='https://learn.thegreatsync.com/register?orderId=${order.order_id}'>https://learn.thegreatsync.com/register?orderId=${order.order_id}</a>`,
+          headers: {
+            'X-PM-Message-Stream': 'purchases'
+          }
+        });
 
+        console.log('EMAIL SENT')
+        console.log(d)
 
         // Return response
         ctx.body = {
