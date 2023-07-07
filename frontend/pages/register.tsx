@@ -9,6 +9,7 @@ import Alert from '../components/ui/Alert';
 import Spinner from '../components/ui/Spinner';
 import { RegisterPayload, register } from '../services/register';
 import type { RegisterResponse, ServerResponse } from '../types';
+import useHoneypot from '../hooks/useHoneypot';
 
 interface Submission {
     email: string;
@@ -20,7 +21,7 @@ export default function Enrollment() {
     const [createNewAccount] = useState(true);
     const router = useRouter();
     const { orderid } = router.query as { orderid: string };
-    console.log(router.query);
+    const { checkForHoney, honeypot } = useHoneypot();
 
     const sendCredentials = async (payload: RegisterPayload) => {
         try {
@@ -39,6 +40,7 @@ export default function Enrollment() {
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (checkForHoney()) return;
         setFormState({ error: false, loading: true, message: '' });
         const form = e.target as HTMLFormElement;
         const data = Object.fromEntries(new FormData(form)) as unknown as Submission;
@@ -94,6 +96,8 @@ export default function Enrollment() {
                                             />
                                         </div>
                                     </div>
+
+                                    {honeypot}
 
                                     {createNewAccount && (
                                         <div className="space-y-1">

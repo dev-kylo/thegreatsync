@@ -4,10 +4,12 @@ import Image from 'next/image';
 import Logo from '../../assets/logo.webp';
 import Alert from '../../components/ui/Alert';
 import { forgotPassword } from '../../services/password';
+import useHoneypot from '../../hooks/useHoneypot';
 
 export default function ForgottenPassword() {
     const [formState, setFormState] = useState({ loading: false, error: false, message: '' });
     const [emailVal, setEmailVal] = useState('');
+    const { checkForHoney, honeypot } = useHoneypot();
 
     const sendCredentials = async (email: string) => {
         const errorMessage = 'Failed to send reset email. Please try again';
@@ -29,6 +31,7 @@ export default function ForgottenPassword() {
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (checkForHoney()) return;
         setFormState({ error: false, loading: true, message: '' });
         console.log({ emailVal });
         if (!emailVal) return setFormState({ error: true, loading: false, message: 'Missing email address' });
@@ -79,6 +82,8 @@ export default function ForgottenPassword() {
                                             />
                                         </div>
                                     </div>
+
+                                    {honeypot}
 
                                     <button
                                         type="submit"

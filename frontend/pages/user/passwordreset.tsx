@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Logo from '../../assets/logo.webp';
 import Alert from '../../components/ui/Alert';
 import { resetLostPassword } from '../../services/password';
+import useHoneypot from '../../hooks/useHoneypot';
 
 export default function PasswordReset() {
     const [formState, setFormState] = useState({ loading: false, error: false, message: '' });
@@ -13,6 +14,7 @@ export default function PasswordReset() {
     const { code } = router.query as { code: string };
     const [passwordVal, setPasswordVal] = useState('');
     const [confirmedVal, setConfirmedVal] = useState('');
+    const { checkForHoney, honeypot } = useHoneypot();
 
     const sendCredentials = async (password: string, passwordConfirmation: string) => {
         const errorMessage = 'Unable to reset your password. Please go back to the login page and restart the process.';
@@ -35,6 +37,7 @@ export default function PasswordReset() {
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (checkForHoney()) return;
         setFormState({ error: false, loading: true, message: '' });
 
         if (!passwordVal || !confirmedVal || passwordVal !== confirmedVal)
@@ -99,6 +102,8 @@ export default function PasswordReset() {
                                             />
                                         </div>
                                     </div>
+
+                                    {honeypot}
 
                                     <button
                                         type="submit"
