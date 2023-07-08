@@ -49,10 +49,11 @@ export default function Text_Image_Code({ text, code, image, id, heading, links 
                     </div>
                 )}
                 {visiblePane === 'code' && (
-                    <div className="bg-violet-800 h-full ">
+                    <div className="bg-violet-800 h-full relative">
                         <Block outerClasses="bg-code_bg" enableScroll>
                             <ContentBlock md={code} id={id} />
                         </Block>
+                        <CopyButton textcode={code} />
                     </div>
                 )}
             </div>
