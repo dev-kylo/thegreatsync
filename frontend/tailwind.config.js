@@ -43,13 +43,15 @@ module.exports = {
         secondary_blue: '#0B349E',
         secondary_red: '#AC3428',
         secondary_pink: '#FFC0CB',
-        code_bg: '#011627'
+        code_bg: '#011627',
+        offwhite: '#dfe8f0'
       },
       fontFamily: {
         sans: ['Utopia Std', 'sans-serif'],
         serif: ['Poppins', 'sans-serif'],
         primary: ['Utopia Std', 'sans-serif'],
         secondary: ['Poppins', 'sans-serif'],
+        mono: ['Menlo', 'Monaco', 'Consolas', 'Courier New', 'monospace'],
       },
     },
   },

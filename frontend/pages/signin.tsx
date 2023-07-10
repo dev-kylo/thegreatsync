@@ -44,7 +44,7 @@ export default function SignIn() {
     };
 
     return (
-        <div className="bg-primary_blue h-screen">
+        <div className="bg-primary_blue h-screen px-8 md:px-0">
             <div className="flex min-h-full ">
                 <div className="flex flex-1 flex-col justify-center  sm:py-12 spx-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
                     <div className="mx-auto w-full max-w-sm lg:w-96">
