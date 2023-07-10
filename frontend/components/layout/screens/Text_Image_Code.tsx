@@ -20,7 +20,6 @@ export default function Text_Image_Code({ text, code, image, id, heading, links 
     const { isMobile, visiblePane, setVisiblePane } = useResponsivePanes();
     const { url, placeholder } = image.data.attributes;
 
-    console.log(code);
     if (isMobile)
         return (
             <div className="p-4 pt-16 relative">

@@ -12,18 +12,18 @@
       "required": true
     },
     "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": false,
-      "required": true
+      ]
     },
     "image_alt": {
-      "type": "string",
+      "type": "text",
       "required": true
     },
     "transparent_image": {

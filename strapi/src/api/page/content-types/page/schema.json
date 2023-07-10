@@ -21,6 +21,7 @@
       "enum": [
         "text_image_code",
         "text_image",
+        "text_code",
         "video",
         "text"
       ],
@@ -32,7 +33,8 @@
         "media.text",
         "media.text-image",
         "media.text-image-code",
-        "media.video"
+        "media.video",
+        "media.text-code"
       ],
       "required": true
     },
