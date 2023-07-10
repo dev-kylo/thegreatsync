@@ -126,6 +126,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
 
     useEffect(() => {
         const list = courseSequence;
+        if (!chapterLocation) setLocation(courseSequence?.currentPageNode?.data);
         if (pageId && list) {
             if (+pageId !== list.currentPageNode?.data.id) {
                 const foundNode = list.getByDataId(+pageId);
@@ -135,7 +136,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
                 }
             }
         }
-    }, [pageId, courseSequence]);
+    }, [pageId, courseSequence, chapterLocation]);
 
     const completionStat = () => {
         if (!usercompletion || !courseSequence) return null;
