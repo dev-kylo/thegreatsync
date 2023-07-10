@@ -17,6 +17,7 @@ import PageStepsController from '../../../../../containers/PageStepsController';
 import Text from '../../../../../components/layout/screens/Text';
 import { authOptions } from '../../../../api/auth/[...nextauth]';
 import { setAuthToken } from '../../../../../libs/axios';
+import Text_Code from '../../../../../components/layout/screens/Text_Code';
 
 type CoursePageProps = {
     title?: string;
@@ -53,6 +54,8 @@ export default function CoursePage({ title, type, content, links, current }: Cou
         );
     else if (type === 'text_image')
         contentLayout = <Text_Image text={text} heading={title} image={image} id={id} links={links} />;
+    else if (type === 'text_code')
+        contentLayout = <Text_Code text={text} code={code!} heading={title} id={id} links={links} />;
     else if (type === 'video' && video) contentLayout = <Video data={video} resources={links} />;
 
     return (
