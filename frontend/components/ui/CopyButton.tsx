@@ -4,7 +4,7 @@ const CopyButton = ({ textcode }: { textcode: string }) => {
     const [copied, setCopied] = useState(false);
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(textcode.replace(/```js|```jsx|```js/g, ''));
+        navigator.clipboard.writeText(textcode.replace(/```(js|jsx)\s*([\s\S]+?)\s*```/g, '$2'));
         setCopied(true);
 
         // Reset the "copied" state after 3 seconds
