@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 
 const CopyButton = ({ textcode }: { textcode: string }) => {
     const [copied, setCopied] = useState(false);
-    const cleanedCode = textcode.replace(/```js|```/g, '');
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(cleanedCode);
+        navigator.clipboard.writeText(textcode.replace(/```(js|jsx)\s*([\s\S]+?)\s*```/g, '$2'));
         setCopied(true);
 
         // Reset the "copied" state after 3 seconds
-        setTimeout(() => {
+        const timer = setTimeout(() => {
             setCopied(false);
+            clearTimeout(timer);
         }, 3000);
     };
 
