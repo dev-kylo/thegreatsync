@@ -69,8 +69,8 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
                         </div>
                     </div>
 
-                    <div className="min-w-sm min-h-[75vh]  bg-[#031b4352] relative rounded-lg sm:col-span-2 px-8 overflow-scroll scrollbar-thin scrollbar-thumb-primary_green overflow-y-scroll">
-                        <div className="absolute top-0 p-8 left-0 w-full h-auto">
+                    <div className="min-w-sm min-h-[auto] p-4 md:min-h-[75vh]  bg-[#031b4352] relative rounded-lg sm:col-span-2 md:px-8 overflow-scroll scrollbar-thin scrollbar-thumb-primary_green overflow-y-scroll">
+                        <div className="relative md:absolute md:p-8  top-0 left-0 w-full h-auto">
                             <ContentBlock md={description || ''} id={5} />
                             <div className="p-16">{video && <Video data={video} noPadding />}</div>
                         </div>
