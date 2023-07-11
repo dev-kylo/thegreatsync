@@ -11,14 +11,15 @@ type Text_Image_Code_Props = {
     text: string;
     code: string;
     image: ImageComp;
+    imageAlt: string;
     id: number;
     links: ResourceLink[];
     heading?: string;
 };
 
-export default function Text_Image_Code({ text, code, image, id, heading, links }: Text_Image_Code_Props) {
+export default function Text_Image_Code({ text, code, image, imageAlt, id, heading, links }: Text_Image_Code_Props) {
     const { isMobile, visiblePane, setVisiblePane } = useResponsivePanes();
-    const { url, placeholder, hash } = image.data.attributes;
+    const { url, placeholder } = image.data.attributes;
 
     if (isMobile)
         return (
@@ -37,7 +38,7 @@ export default function Text_Image_Code({ text, code, image, id, heading, links 
                         <Block hideBorder outerClasses=" h-full relative">
                             <Image
                                 id={`image:${id}`}
-                                alt={`${hash}`}
+                                alt={imageAlt || ''}
                                 src={url}
                                 layout="fill"
                                 placeholder="blur"
@@ -76,7 +77,7 @@ export default function Text_Image_Code({ text, code, image, id, heading, links 
                         <Block hideBorder outerClasses=" h-full relative">
                             <Image
                                 id={`image:${id}`}
-                                alt={`${hash}`}
+                                alt={imageAlt || ''}
                                 src={url}
                                 layout="fill"
                                 placeholder="blur"

@@ -6,11 +6,18 @@ import { ImageComp, ResourceLink } from '../../../types';
 import useResponsivePanes from '../../../hooks/useResponsivePanes';
 import PaneTabs from '../PaneTabs';
 
-type Text_Image_Props = { text: string; image: ImageComp; id: number; heading?: string; links: ResourceLink[] };
+type Text_Image_Props = {
+    text: string;
+    image: ImageComp;
+    imageAlt: string;
+    id: number;
+    heading?: string;
+    links: ResourceLink[];
+};
 
-export default function Text_Image({ text, image, id, heading, links }: Text_Image_Props) {
+export default function Text_Image({ text, image, id, heading, links, imageAlt }: Text_Image_Props) {
     const { isMobile, visiblePane, setVisiblePane } = useResponsivePanes();
-    const { url, placeholder, hash } = image.data.attributes;
+    const { url, placeholder } = image.data.attributes;
 
     if (isMobile)
         return (
@@ -30,7 +37,7 @@ export default function Text_Image({ text, image, id, heading, links }: Text_Ima
                         <Block hideBorder outerClasses="h-full relative">
                             <Image
                                 id={`image:${id}`}
-                                alt={`${hash}`}
+                                alt={imageAlt || ''}
                                 src={url}
                                 layout="fill"
                                 placeholder="blur"
@@ -58,7 +65,7 @@ export default function Text_Image({ text, image, id, heading, links }: Text_Ima
                         <Block hideBorder outerClasses="h-full relative">
                             <Image
                                 id={`image:${id}`}
-                                alt={`${hash}`}
+                                alt={imageAlt || ''}
                                 src={url}
                                 layout="fill"
                                 placeholder="blur"

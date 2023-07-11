@@ -31,7 +31,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
     const { data: session } = useSession();
     setAuthToken((session?.jwt as string) || '');
 
-    const { id, code, text, image, video } = content[0];
+    const { id, code, text, image, video, image_alt } = content[0];
     let contentLayout = null;
 
     const hasPageSteps = content.length > 1;
@@ -49,10 +49,20 @@ export default function CoursePage({ title, type, content, links, current }: Cou
     else if (type === 'text') contentLayout = <Text text={text} heading={title} id={id} links={links} />;
     else if (type === 'text_image_code')
         contentLayout = (
-            <Text_Image_Code code={code!} text={text} heading={title} image={image} id={id} links={links} />
+            <Text_Image_Code
+                code={code!}
+                text={text}
+                heading={title}
+                image={image}
+                imageAlt={image_alt}
+                id={id}
+                links={links}
+            />
         );
     else if (type === 'text_image')
-        contentLayout = <Text_Image text={text} heading={title} image={image} id={id} links={links} />;
+        contentLayout = (
+            <Text_Image text={text} heading={title} image={image} imageAlt={image_alt} id={id} links={links} />
+        );
     else if (type === 'video' && video) contentLayout = <Video data={video} resources={links} />;
 
     return (

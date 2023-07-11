@@ -95,6 +95,7 @@ const PageSteps = ({
                     text={currentTopicStep?.text}
                     image={currentTopicStep?.image}
                     links={links}
+                    imageAlt={currentTopicStep?.image_alt}
                 />
             )}
             {type === 'text_image' && (
@@ -103,6 +104,7 @@ const PageSteps = ({
                     text={currentTopicStep?.text}
                     image={currentTopicStep?.image}
                     links={links}
+                    imageAlt={currentTopicStep?.image_alt}
                 />
             )}
 
