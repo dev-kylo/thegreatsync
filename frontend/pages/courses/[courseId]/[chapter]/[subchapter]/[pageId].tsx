@@ -35,7 +35,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
     const { id, code, text, image, video } = content[0];
     let contentLayout = null;
 
-    const hasPageSteps = content.length > 1;
+    const hasPageSteps = content && content.length > 1;
 
     if (hasPageSteps)
         contentLayout = (
@@ -80,7 +80,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     if (session.jwt) setAuthToken(session.jwt as string);
 
     const { pageId, subchapter, chapter } = context.params as { chapter: string; subchapter: string; pageId: string };
-    const resp = await getPage(pageId);
+    let resp;
+    try {
+        resp = await getPage(pageId);
+    } catch (e) {
+        console.log(e);
+    }
     if (!resp || resp.error || !resp.data) {
         console.log('THERE IS AN ERROR');
         if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
@@ -95,9 +100,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             );
         return serverRedirectObject(
             `/error?redirect=${context.resolvedUrl}&error=${
-                resp.error
-                    ? `${resp.error.name}: ${resp.error.message}`
-                    : 'Failed to fetch page data. Received undefined'
+                resp.error ? `${resp.error.name}: ${resp.error.message}` : 'Failed to fetch page data'
             }`
         );
     }

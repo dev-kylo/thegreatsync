@@ -8,7 +8,10 @@ export type TgsLocallyStoredData = {
     };
 };
 
+const isSSR = () => typeof window === 'undefined';
+
 export function retrieveLocallyStoredValue<T>(key: StorageKeys): T | undefined {
+    if (isSSR()) return;
     try {
         // Get from local storage by key
         const item = window.localStorage.getItem(key);
@@ -22,6 +25,7 @@ export function retrieveLocallyStoredValue<T>(key: StorageKeys): T | undefined {
 }
 
 export function setLocallyStoredValue<T>(key: StorageKeys, value: T | (() => T)): void {
+    if (isSSR()) return;
     try {
         // Allow value to be a function
         const valueToStore = value instanceof Function ? value() : value;
@@ -34,6 +38,7 @@ export function setLocallyStoredValue<T>(key: StorageKeys, value: T | (() => T))
 }
 
 export function removeLocallyStoredValue(key: StorageKeys): void {
+    if (isSSR()) return;
     try {
         // Save to local storage
         window.localStorage.removeItem(key);

@@ -144,8 +144,8 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         return Math.round((completed.length / courseSequence.getTotalNodes()) * 100);
     };
 
-    if (error) console.log(error);
-    if (completionError) console.log(completionError);
+    if (error) console.error(error);
+    if (completionError) console.error(completionError);
 
     const courseCompletionStat = usercompletion && courseSequence ? completionStat() : null;
 
