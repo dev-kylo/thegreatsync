@@ -54,8 +54,8 @@ function SlideOver({ children, open, setOpen, current }: SlideOverProps) {
                                     <div className="flex h-full flex-col overflow-y-scroll bg-primary_blue pt-6 shadow-xl">
                                         <div className="px-4 sm:px-6">
                                             <div className="flex items-start justify-between">
-                                                <Dialog.Title className="text-lg font-medium text-white">
-                                                    The Great Sync
+                                                <Dialog.Title className="text-lg font-medium  bg-green-400 text-primary_blue px-[2rem] py-[0.1rem]">
+                                                    Course Outline
                                                 </Dialog.Title>
                                                 <div className="ml-3 flex h-7 items-center">
                                                     <button

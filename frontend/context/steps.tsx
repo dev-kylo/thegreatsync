@@ -37,32 +37,40 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
 
     const setStepData = useCallback(
         (contentSteps: PageContent[] | PageStep[], completed?: TgsLocallyStoredData) => {
-            const mapped = contentSteps.map((content: PageContent, ind: number) => {
-                const step = { ...content } as Partial<PageStep>;
-                const viewed = completed || viewedSteps;
-                step.status =
-                    viewed && viewed[pageId] && viewed[pageId].stepsCompleted[`${ind}`] ? 'complete' : 'default';
-                return step;
-            }) as PageStep[];
-            setSteps(mapped);
+            try {
+                const mapped = contentSteps.map((content: PageContent, ind: number) => {
+                    const step = { ...content } as Partial<PageStep>;
+                    const viewed = completed || viewedSteps;
+                    step.status =
+                        viewed && viewed[pageId] && viewed[pageId].stepsCompleted[`${ind}`] ? 'complete' : 'default';
+                    return step;
+                }) as PageStep[];
+                setSteps(mapped);
+            } catch (e) {
+                console.error(`Unable to map page content into steps`);
+            }
         },
         [pageId, viewedSteps]
     );
 
     useEffect(() => {
-        if (viewedSteps && viewedSteps[pageId]?.stepsCompleted[stepIndex]) return;
-        const viewed = !viewedSteps
-            ? { [pageId]: { stepsCompleted: { [stepIndex]: true } } }
-            : !viewedSteps[pageId]
-            ? { ...viewedSteps, [pageId]: { stepsCompleted: { [stepIndex]: true } } }
-            : {
-                  ...viewedSteps,
-                  [pageId]: { stepsCompleted: { ...viewedSteps[pageId].stepsCompleted, [stepIndex]: true } },
-              };
+        if (stepIndex && viewedSteps && viewedSteps[pageId]?.stepsCompleted[stepIndex]) return;
+        try {
+            const viewed = !viewedSteps
+                ? { [pageId]: { stepsCompleted: { [stepIndex]: true } } }
+                : !viewedSteps[pageId]
+                ? { ...viewedSteps, [pageId]: { stepsCompleted: { [stepIndex]: true } } }
+                : {
+                      ...viewedSteps,
+                      [pageId]: { stepsCompleted: { ...viewedSteps[pageId].stepsCompleted, [stepIndex]: true } },
+                  };
 
-        setLocallyStoredValue('tgs-page-completion', viewed);
-        setViewedSteps(viewed);
-        if (steps) setStepData(steps, viewed);
+            setLocallyStoredValue('tgs-page-completion', viewed);
+            setViewedSteps(viewed);
+            if (steps) setStepData(steps, viewed);
+        } catch (e) {
+            console.error(`Unable to set viewed page data`);
+        }
     }, [stepIndex, pageId, viewedSteps, steps, setStepData]);
 
     const nextStep = useCallback(() => {
