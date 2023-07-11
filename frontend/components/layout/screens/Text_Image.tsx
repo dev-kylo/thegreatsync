@@ -39,7 +39,7 @@ export default function Text_Image({ text, image, id, heading, links }: Text_Ima
                         <Block hideBorder outerClasses="h-full relative">
                             <Image
                                 id={`image:${id}`}
-                                alt="Mountains"
+                                alt={`${hash}`}
                                 src={url}
                                 layout="fill"
                                 placeholder="blur"
@@ -67,7 +67,7 @@ export default function Text_Image({ text, image, id, heading, links }: Text_Ima
                         <Block hideBorder outerClasses="h-full relative">
                             <Image
                                 id={`image:${id}`}
-                                alt="Mountains"
+                                alt={`${hash}`}
                                 src={url}
                                 layout="fill"
                                 placeholder="blur"
