@@ -24,7 +24,7 @@ const ContentBlock = ({
     return (
         <article
             id={`md-block:${id} `}
-            className="prose prose-strong:text-white prose-em:text-white prose-p:text-white prose-xl prose-headings:text-secondary_lightblue mx-auto prose-pre:p-0 pt-2 prose-code:text-[#7fdbca] prose-code:after:hidden prose-code:before:hidden pb-16"
+            className="prose prose-strong:text-offwhite prose-li:text-offwhite prose-span:text-offwhite   prose-em:text-offwhite prose-p:text-offwhite prose-xl prose-headings:text-secondary_lightblue mx-auto prose-pre:p-0 pt-2 prose-code:text-[#7fdbca] prose-code:font-mono prose-code:after:hidden prose-code:before:hidden pb-16"
         >
             {heading && <h2>{heading}</h2>}
             <ReactMarkdown
@@ -41,9 +41,16 @@ const ContentBlock = ({
                                 PreTag="div"
                             />
                         ) : (
-                            <code {...props} className={`${className} text-lg bg-code_bg`}>
-                                {children}
-                            </code>
+                            <div style={{ display: 'inline' }}>
+                                <SyntaxHighlighter
+                                    {...props}
+                                    children={String(children).replace(/\n$/, '')}
+                                    style={style}
+                                    language="javascript"
+                                    PreTag="div"
+                                    customStyle={{ display: 'inline' }}
+                                />
+                            </div>
                         );
                     },
                 }}

@@ -12,7 +12,7 @@
       "required": true
     },
     "image_alt": {
-      "type": "string",
+      "type": "text",
       "required": true
     },
     "image": {

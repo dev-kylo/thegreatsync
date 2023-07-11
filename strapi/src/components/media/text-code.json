@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_media_text_codes",
+  "info": {
+    "displayName": "text_code",
+    "icon": "columns",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "richtext",
+      "required": true
+    },
+    "code": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}
