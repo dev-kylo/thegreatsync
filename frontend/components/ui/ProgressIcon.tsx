@@ -9,7 +9,7 @@ const ProgressIcon = ({
     completed?: boolean;
     size?: string;
 }) => {
-    if (!amount && !completed) return null;
+    // if (!amount && !completed) return null;
     if (completed)
         return (
             <CheckCircleIcon
@@ -19,6 +19,8 @@ const ProgressIcon = ({
         );
 
     const radius = 9;
+
+    const total = amount || 1;
 
     return (
         <div className={`rotate-[270deg] ${size ? `w-${size} h-${size}` : 'w-7 h-7'}`}>
@@ -36,7 +38,7 @@ const ProgressIcon = ({
                     className="text-green-400"
                     strokeWidth="4"
                     strokeDasharray={radius * 2 * Math.PI}
-                    strokeDashoffset={radius * 2 * Math.PI - ((amount ? +amount : 50) / 100) * (radius * 2 * Math.PI)}
+                    strokeDashoffset={radius * 2 * Math.PI - ((total ? +total : 50) / 100) * (radius * 2 * Math.PI)}
                     strokeLinecap="round"
                     stroke="currentColor"
                     fill="transparent"

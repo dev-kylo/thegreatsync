@@ -11,14 +11,14 @@ const Step = ({ status, id, orderNumber, setCurrent }: StepProps) => {
     const linkStyles = {
         default:
             'group h-6 w-6 border-2 border-gray-300 bg-white hover:border-gray-400  hover:bg-primary_green  hover:text-white hover:scale-110',
-        current: 'h-9 w-9 border-2 border-secondary_red bg-white',
-        complete: 'h-7 w-7 bg-secondary_red hover:bg-primary_green',
+        current: 'h-9 w-9 border-2 border-green-400 bg-white',
+        complete: 'h-7 w-7 bg-green-400 hover:bg-primary_green',
     };
 
     return (
         <>
             <div className="absolute inset-0 flex items-center flex-wrap" aria-hidden="true">
-                <div className={`h-0.5 w-full ${status === 'complete' ? 'bg-secondary_red' : 'bg-gray-200'}`} />
+                <div className={`h-0.5 w-full ${status === 'complete' ? 'bg-green-400' : 'bg-gray-200'}`} />
             </div>
             <div
                 onClick={() => setCurrent(id)}
@@ -29,7 +29,7 @@ const Step = ({ status, id, orderNumber, setCurrent }: StepProps) => {
                         {orderNumber}
                     </div>
                 )}
-                {status === 'complete' && <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />}
+                {status === 'complete' && <CheckIcon className="h-5 w-5 text-black" aria-hidden="true" />}
                 {status === 'default' && (
                     <div className="h-5 w-5 rounded-full flex justify-center items-center p-0 m-0" aria-hidden="true">
                         {orderNumber}
