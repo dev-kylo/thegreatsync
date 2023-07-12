@@ -195,6 +195,7 @@ export interface ImageAttributes {
     title: string;
     placeholder: string;
     size: number;
+    hash: string;
 }
 
 export interface CourseAttributes extends StrapiResponseMetaData {

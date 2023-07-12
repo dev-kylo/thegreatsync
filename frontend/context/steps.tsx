@@ -42,7 +42,7 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
                     const step = { ...content } as Partial<PageStep>;
                     const viewed = completed || viewedSteps;
                     step.status =
-                        viewed && viewed[pageId] && viewed[pageId].stepsCompleted[`${ind}`] ? 'complete' : 'default';
+                        viewed && viewed[pageId] && viewed[pageId]?.stepsCompleted[`${ind}`] ? 'complete' : 'default';
                     return step;
                 }) as PageStep[];
                 setSteps(mapped);
@@ -62,7 +62,7 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
                 ? { ...viewedSteps, [pageId]: { stepsCompleted: { [stepIndex]: true } } }
                 : {
                       ...viewedSteps,
-                      [pageId]: { stepsCompleted: { ...viewedSteps[pageId].stepsCompleted, [stepIndex]: true } },
+                      [pageId]: { stepsCompleted: { ...viewedSteps[pageId]?.stepsCompleted, [stepIndex]: true } },
                   };
 
             setLocallyStoredValue('tgs-page-completion', viewed);
@@ -91,7 +91,7 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
     );
 
     const showNextPageButton = useMemo(
-        () => (!steps || !viewedSteps ? false : !!viewedSteps[pageId].stepsCompleted[`${steps.length - 1}`]),
+        () => (!steps || !viewedSteps ? false : !!viewedSteps[pageId]?.stepsCompleted[`${steps.length - 1}`]),
         [pageId, steps, viewedSteps]
     );
 
