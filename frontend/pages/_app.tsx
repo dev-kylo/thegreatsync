@@ -1,11 +1,18 @@
 import type { AppProps } from 'next/app';
 import '../styles/global.css';
 import 'allotment/dist/style.css';
+import '../styles/nprogress.css';
 import Head from 'next/head';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
+import Router from 'next/router';
+import NProgress from 'nprogress';
 import NavContextProvider from '../context/nav';
 import StepContextProvider from '../context/steps';
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({
     Component,

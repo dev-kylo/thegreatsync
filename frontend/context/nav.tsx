@@ -52,12 +52,11 @@ function createList(menuItems: MenuItem[]) {
 }
 
 const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
-    // const [showNextButton, setNextButton] = useState(true);
-    // const [showPrevButton, setPrevButton] = useState(true);
     const { data: session } = useSession();
     const [loadingPage, setLoadingPage] = useState(false);
     const router = useRouter();
     const { courseId, pageId } = router.query as { courseId: string; pageId: string };
+    const [chapterLocation, setChapterLocation] = useState<{ chapter: string; subchapter: string } | null>();
 
     const { data, error } = useSWR(
         () => (session && !!httpClient.defaults.headers.common.Authorization && courseId ? courseId : null),
@@ -88,6 +87,13 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (session?.jwt) setAuthToken((session?.jwt as string) || '');
     }, [session?.jwt]);
 
+    const setLocation = (menuItem?: MenuItem) => {
+        if (!menuItem) return;
+        const chapterName = menuItem.parent.chapter?.name;
+        const subChapterName = menuItem.parent.subchapter?.name;
+        setChapterLocation({ chapter: chapterName || '', subchapter: subChapterName || '' });
+    };
+
     const nextPage = async () => {
         if (!courseSequence || !courseSequence.currentPageNode) return;
         setLoadingPage(true);
@@ -98,6 +104,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (nextNode) {
             courseSequence.currentPageNode = nextNode;
             setLoadingPage(false);
+            setLocation(nextNode.data);
             router.replace(nextNode.data.href!);
         } else {
             setLoadingPage(false);
@@ -112,19 +119,24 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (prevNode) {
             courseSequence.currentPageNode = prevNode;
             setLoadingPage(false);
+            setLocation(prevNode.data);
             router.replace(prevNode.data.href!);
         } else setLoadingPage(false);
     };
 
     useEffect(() => {
         const list = courseSequence;
+        if (!chapterLocation) setLocation(courseSequence?.currentPageNode?.data);
         if (pageId && list) {
             if (+pageId !== list.currentPageNode?.data.id) {
                 const foundNode = list.getByDataId(+pageId);
-                if (foundNode) list.currentPageNode = foundNode;
+                if (foundNode) {
+                    list.currentPageNode = foundNode;
+                    setLocation(foundNode.data);
+                }
             }
         }
-    }, [pageId, courseSequence]);
+    }, [pageId, courseSequence, chapterLocation]);
 
     const completionStat = () => {
         if (!usercompletion || !courseSequence) return null;
@@ -132,16 +144,17 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         return Math.round((completed.length / courseSequence.getTotalNodes()) * 100);
     };
 
+    if (error) console.error(error);
+    if (completionError) console.error(completionError);
+
     const courseCompletionStat = usercompletion && courseSequence ? completionStat() : null;
-    const chapterName = courseSequence?.currentPageNode?.data?.parent.chapter?.name;
-    const subChapterName = courseSequence?.currentPageNode?.data?.parent.subchapter?.name;
 
     return (
         <NavContext.Provider
             value={{
-                chapterName,
+                chapterName: chapterLocation?.chapter || '',
+                subChapterName: chapterLocation?.subchapter || '',
                 courseId,
-                subChapterName,
                 menuData: menuChapters,
                 courseSequence,
                 courseCompletionStat,
