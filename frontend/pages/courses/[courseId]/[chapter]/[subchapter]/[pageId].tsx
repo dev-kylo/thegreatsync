@@ -61,7 +61,9 @@ export default function CoursePage({ title, type, content, links, current }: Cou
             />
         );
     else if (type === 'text_image')
-        contentLayout = <Text_Image text={text} heading={title} image={image} id={id} links={links} />;
+        contentLayout = (
+            <Text_Image imageAlt={image_alt} text={text} heading={title} image={image} id={id} links={links} />
+        );
     else if (type === 'text_code')
         contentLayout = <Text_Code text={text} code={code!} heading={title} id={id} links={links} />;
     else if (type === 'video' && video) contentLayout = <Video data={video} resources={links} />;
