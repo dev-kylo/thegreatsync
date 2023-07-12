@@ -55,7 +55,14 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
                         </div>
                         <div className="flex justify-center">
                             {courseSequence && (
-                                <Link href={courseSequence.currentPageNode?.data.href || '/courses'} passHref>
+                                <Link
+                                    href={
+                                        courseSequence.currentPageNode?.data.href ||
+                                        courseSequence.head?.data.href ||
+                                        '/courses'
+                                    }
+                                    passHref
+                                >
                                     <button
                                         type="button"
                                         onClick={() => setLoading(true)}
