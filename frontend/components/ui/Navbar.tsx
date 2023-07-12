@@ -31,7 +31,7 @@ export default function Navbar({
                             aria-hidden="true"
                         />
                         <TitleStrip chapterTitle={chapterTitle} subChapterTitle={subChapterTitle} />
-                        <div className="hidden lg:block">
+                        <div className="block">
                             <div className="flex items-center justify-end">
                                 <ProfileDropDown />
                             </div>
