@@ -71,6 +71,12 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
         } catch (e) {
             console.error(`Unable to set viewed page data`);
         }
+            setLocallyStoredValue('tgs-page-completion', viewed);
+            setViewedSteps(viewed);
+            if (steps) setStepData(steps, viewed);
+        } catch (e) {
+            console.error(`Unable to set viewed page data`);
+        }
     }, [stepIndex, pageId, viewedSteps, steps, setStepData]);
 
     const nextStep = useCallback(() => {

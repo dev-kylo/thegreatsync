@@ -36,6 +36,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
     let contentLayout = null;
 
     const hasPageSteps = content && content.length > 1;
+    const hasPageSteps = content && content.length > 1;
 
     if (hasPageSteps)
         contentLayout = (
