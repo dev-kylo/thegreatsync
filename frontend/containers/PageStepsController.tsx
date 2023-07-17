@@ -3,6 +3,7 @@ import type { PageContent, PageType, ResourceLink } from '../types';
 import PageSteps from './PageSteps';
 import { NavContext } from '../context/nav';
 import { StepContext } from '../context/steps';
+import Spinner from '../components/ui/Spinner';
 
 type PageStepsControllerProps = {
     pageContent: PageContent[];
@@ -17,11 +18,15 @@ const PageStepsController = ({ pageContent, type, heading, links, loadingPage }:
     const { nextStep, prevStep, goToStep, currIndex, setStepData, steps, showNextPageButton } = useContext(StepContext);
 
     useEffect(() => {
-        if (pageContent && !steps) setStepData(pageContent);
+        if (pageContent) setStepData(pageContent);
     }, [pageContent, setStepData, steps]);
 
     if (!steps) {
-        return <p>Loading Step Context</p>;
+        return (
+            <div className="h-full w-full flex justify-center items-center">
+                <Spinner />
+            </div>
+        );
     }
 
     return (

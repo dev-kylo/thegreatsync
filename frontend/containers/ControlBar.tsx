@@ -36,6 +36,7 @@ const ControlBar = ({ children, loadingPage, showNext = true, nextPage, prevPage
             <div className="flex items-center w-full mr-30 justify-between">
                 <button
                     onClick={prevPageHandler}
+                    aria-label="Previous Page"
                     type="button"
                     className="w-32 mx-8 px-2 md:px-4 py-0.5 text-sm md:py-1 md:text-base inline-flex items-center justify-center rounded-md border border-secondary_lightblue bg-primary_blue   font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
                 >
@@ -47,6 +48,7 @@ const ControlBar = ({ children, loadingPage, showNext = true, nextPage, prevPage
                     <button
                         type="button"
                         onClick={nextPageHandler}
+                        aria-label="Next Page"
                         className="w-32 mx-8 px-2 md:px-4 py-0.5 text-sm md:py-1 md:text-base inline-flex items-center justify-center rounded-md border border-secondary_lightblue bg-primary_blue   font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
                     >
                         Next
