@@ -119,6 +119,7 @@ const PageSteps = ({
                                 type="button"
                                 className="text-white px-4 hover:text-primary_green"
                                 onClick={handlePrev}
+                                aria-label="Previous Slide"
                             >
                                 <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
                             </button>
@@ -152,6 +153,7 @@ const PageSteps = ({
                                 type="button"
                                 className="text-white px-4 hover:text-primary_green"
                                 onClick={handleNext}
+                                aria-label="Next Slide"
                             >
                                 <ChevronDoubleRightIcon className="m-auto h-8 w-8" aria-hidden="true" />
                             </button>

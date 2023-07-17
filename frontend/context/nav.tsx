@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { mapMenuChapters } from '../libs/helpers';
-import { MenuItem } from '../types';
+import { MenuItem, UserCourseProgressResponse } from '../types';
 import { getChapters, getUserCompletions } from '../services/queries';
 import { DoublyLinkedList } from '../libs/doublyLinkedList';
 import { httpClient, setAuthToken } from '../libs/axios';
@@ -51,12 +51,17 @@ function createList(menuItems: MenuItem[]) {
     return list;
 }
 
+function receivedCompletionData(data?: UserCourseProgressResponse) {
+    return !!(data && data?.pages);
+}
+
 const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
     const { data: session } = useSession();
     const [loadingPage, setLoadingPage] = useState(false);
     const router = useRouter();
     const { courseId, pageId } = router.query as { courseId: string; pageId: string };
     const [chapterLocation, setChapterLocation] = useState<{ chapter: string; subchapter: string } | null>();
+    const [completedSessionPageIds, setCompletedSessionPageIds] = useState<string[]>([]);
 
     const { data, error } = useSWR(
         () => (session && !!httpClient.defaults.headers.common.Authorization && courseId ? courseId : null),
@@ -78,7 +83,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     );
 
     const menuChapters = useMemo(
-        () => (data && usercompletion ? mapMenuChapters(data, usercompletion, courseId) : undefined),
+        () => (data && usercompletion ? mapMenuChapters(data, courseId, usercompletion) : undefined),
         [data, courseId, usercompletion]
     );
     const courseSequence = useMemo(() => menuChapters && createList(menuChapters), [menuChapters]);
@@ -94,22 +99,22 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         setChapterLocation({ chapter: chapterName || '', subchapter: subChapterName || '' });
     };
 
-    const nextPage = async () => {
+    const nextPage = () => {
         if (!courseSequence || !courseSequence.currentPageNode) return;
         setLoadingPage(true);
-        await completePage(courseId, courseSequence.currentPageNode.data.id);
         courseSequence.currentPageNode.data.completed = true;
-        mutate(); // Fetch new completion data
+        if (receivedCompletionData(usercompletion)) mutate(); // Fetch new completion data
         const nextNode = courseSequence.currentPageNode?.next || courseSequence.getFirstUncompleted();
+        let redirectUrl = '/';
         if (nextNode) {
             courseSequence.currentPageNode = nextNode;
-            setLoadingPage(false);
             setLocation(nextNode.data);
-            router.replace(nextNode.data.href!);
+            redirectUrl = nextNode.data.href!;
         } else {
-            setLoadingPage(false);
-            router.replace('/courseCompleted');
+            redirectUrl = '/courseCompleted';
         }
+        setLoadingPage(false);
+        router.replace(redirectUrl);
     };
 
     const prevPage = () => {
@@ -123,6 +128,15 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
             router.replace(prevNode.data.href!);
         } else setLoadingPage(false);
     };
+
+    // On load of a page, update pageId
+    useEffect(() => {
+        if (courseId && !completedSessionPageIds.includes(pageId) && receivedCompletionData(usercompletion)) {
+            completePage(courseId, pageId);
+            setCompletedSessionPageIds([...completedSessionPageIds, pageId]);
+            mutate(); // Fetch new completion data
+        }
+    }, [courseId, pageId, completedSessionPageIds, usercompletion, mutate]);
 
     useEffect(() => {
         const list = courseSequence;
@@ -139,7 +153,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     }, [pageId, courseSequence, chapterLocation]);
 
     const completionStat = () => {
-        if (!usercompletion || !courseSequence) return null;
+        if (!usercompletion || !usercompletion.pages || !courseSequence) return null;
         const completed = usercompletion.pages.filter((pg) => pg.completed);
         return Math.round((completed.length / courseSequence.getTotalNodes()) * 100);
     };
@@ -147,7 +161,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     if (error) console.error(error);
     if (completionError) console.error(completionError);
 
-    const courseCompletionStat = usercompletion && courseSequence ? completionStat() : null;
+    const courseCompletionStat = receivedCompletionData(usercompletion) && courseSequence ? completionStat() : null;
 
     return (
         <NavContext.Provider

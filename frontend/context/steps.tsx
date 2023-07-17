@@ -35,49 +35,28 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
         retrieveLocallyStoredValue<TgsLocallyStoredData>('tgs-page-completion')
     );
 
-    const setStepData = useCallback(
-        (contentSteps: PageContent[] | PageStep[], completed?: TgsLocallyStoredData) => {
-            try {
-                const mapped = contentSteps.map((content: PageContent, ind: number) => {
-                    const step = { ...content } as Partial<PageStep>;
-                    const viewed = completed || viewedSteps;
-                    step.status =
-                        viewed && viewed[pageId] && viewed[pageId]?.stepsCompleted[`${ind}`] ? 'complete' : 'default';
-                    return step;
-                }) as PageStep[];
-                setSteps(mapped);
-            } catch (e) {
-                console.error(`Unable to map page content into steps`);
-            }
-        },
-        [pageId, viewedSteps]
-    );
+    // When a page loads, it calls this API
+    const setStepData = (contentSteps: PageContent[]) => {
+        setSteps(contentSteps as PageStep[]);
+    };
 
+    // Handle adding the current PageId to viewsteps
     useEffect(() => {
-        if (stepIndex && viewedSteps && viewedSteps[pageId]?.stepsCompleted[stepIndex]) return;
         try {
-            const viewed = !viewedSteps
-                ? { [pageId]: { stepsCompleted: { [stepIndex]: true } } }
-                : !viewedSteps[pageId]
-                ? { ...viewedSteps, [pageId]: { stepsCompleted: { [stepIndex]: true } } }
-                : {
-                      ...viewedSteps,
-                      [pageId]: { stepsCompleted: { ...viewedSteps[pageId]?.stepsCompleted, [stepIndex]: true } },
-                  };
+            const viewed = viewedSteps || {};
+            const existingViewedPage = viewed[pageId];
+            if (!existingViewedPage) {
+                viewed[pageId] = { stepsCompleted: { [stepIndex]: true } };
+            } else {
+                viewed[pageId].stepsCompleted = { ...viewed[pageId].stepsCompleted, [stepIndex]: true };
+            }
 
             setLocallyStoredValue('tgs-page-completion', viewed);
             setViewedSteps(viewed);
-            if (steps) setStepData(steps, viewed);
         } catch (e) {
-            console.error(`Unable to set viewed page data`);
+            console.error(`Unable to add the current viewed page`);
         }
-            setLocallyStoredValue('tgs-page-completion', viewed);
-            setViewedSteps(viewed);
-            if (steps) setStepData(steps, viewed);
-        } catch (e) {
-            console.error(`Unable to set viewed page data`);
-        }
-    }, [stepIndex, pageId, viewedSteps, steps, setStepData]);
+    }, [stepIndex, pageId, viewedSteps]);
 
     const nextStep = useCallback(() => {
         if (steps && +stepIndex === steps.length - 1) return;
@@ -101,17 +80,39 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
         [pageId, steps, viewedSteps]
     );
 
+    const stepData = useMemo(() => {
+        let finalSteps;
+        try {
+            if (!steps) {
+                console.log('We should not be in this block');
+                return;
+            }
+            const cloned = [...steps];
+            const mapped = cloned.map((content: PageContent, ind: number) => {
+                const step = { ...content } as Partial<PageStep>;
+                const viewed = viewedSteps;
+                step.status =
+                    viewed && viewed[pageId] && viewed[pageId]?.stepsCompleted[`${ind}`] ? 'complete' : 'default';
+                return step;
+            }) as PageStep[];
+            finalSteps = mapped;
+        } catch (e) {
+            console.error(`Unable to merge step completions with step data`);
+        }
+        return finalSteps;
+    }, [viewedSteps, steps, pageId]);
+
     const contextVals = useMemo(() => {
         return {
             currIndex: stepIndex ? +stepIndex : 0,
-            steps,
+            steps: stepData,
             showNextPageButton,
             setStepData,
             nextStep,
             prevStep,
             goToStep,
         };
-    }, [goToStep, nextStep, prevStep, setStepData, showNextPageButton, stepIndex, steps]);
+    }, [goToStep, nextStep, prevStep, stepData, showNextPageButton, stepIndex]);
 
     return <StepContext.Provider value={contextVals}>{children}</StepContext.Provider>;
 };
