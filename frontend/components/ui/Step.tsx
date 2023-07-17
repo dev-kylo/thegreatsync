@@ -19,8 +19,6 @@ const Step = ({ status, id, orderNumber, currentNumber, setCurrent }: StepProps)
                 : 'group h-6 w-6 border-2 border-gray-300 bg-white hover:border-gray-400  hover:bg-primary_green  hover:text-white hover:scale-110',
     };
 
-    console.log(`currentNumber : ${currentNumber} < orderNumber : ${orderNumber}`);
-
     return (
         <>
             <div className="absolute inset-0 flex items-center flex-wrap" aria-hidden="true">

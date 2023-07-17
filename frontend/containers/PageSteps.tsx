@@ -44,6 +44,7 @@ const PageSteps = ({
     const stepsContainer = useRef<HTMLOListElement>(null);
 
     const [shownKeysMsg, setShownKeysMsg] = useState(false);
+    const [direction, setDirection] = useState('next');
 
     const currentTopicStep = pageSteps[currIndex];
     const isLastStep = currIndex === pageSteps.length - 1;
@@ -57,16 +58,18 @@ const PageSteps = ({
 
     useEffect(() => {
         function scrollIntoView(indx: number) {
-            if (stepsContainer.current && !isLastStep) {
+            console.log(indx);
+            if (stepsContainer.current && direction === 'prev' && indx > 0)
+                stepsContainer.current.querySelector(`#step_${indx - 1}`)!.scrollIntoView({ behavior: 'smooth' });
+            if (stepsContainer.current && direction === 'next' && !isLastStep)
                 stepsContainer.current.querySelector(`#step_${indx + 1}`)!.scrollIntoView({ behavior: 'smooth' });
-            }
         }
+
         scrollIntoView(currIndex);
-    }, [currIndex, isLastStep]);
+    }, [currIndex, isLastStep, direction]);
 
     useEffect(() => {
         function handleKeyPress(e: KeyboardEvent) {
-            console.log('KEYDOWN');
             if (e.key === 'ArrowLeft') prevStep();
             else if (e.key === 'ArrowRight') nextStep();
         }
@@ -79,11 +82,13 @@ const PageSteps = ({
     const handleNext = (e: SyntheticEvent<HTMLButtonElement>) => {
         e.preventDefault();
         nextStep();
+        setDirection('next');
     };
 
     const handlePrev = (e: SyntheticEvent<HTMLButtonElement>) => {
         e.preventDefault();
         prevStep();
+        setDirection('prev');
     };
 
     return (
@@ -118,14 +123,14 @@ const PageSteps = ({
                         <nav aria-label="Progress" className="flex items-center justify-center relative z-50 py-2">
                             <button
                                 type="button"
-                                className="text-white px-4 hover:text-primary_green"
+                                className="text-white px-4 enabled:hover:text-primary_green disabled:hover:text-gray-400"
                                 onClick={handlePrev}
                                 aria-label="Previous Slide"
                                 disabled={currIndex === 0}
                             >
                                 <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
                             </button>
-                            <div className="max-w-[16rem] relative overflow-hidden md:max-w-md">
+                            <div className="max-w-[16rem] relative overflow-hidden md:max-w-[28rem]">
                                 {pageSteps.length > 6 && currIndex > 2 && <BlurEdge position="left" />}
                                 <ol ref={stepsContainer} className="flex items-center ">
                                     {pageSteps.map((step: PageStep, stepIdx: number) => (
@@ -154,7 +159,7 @@ const PageSteps = ({
                             </div>
                             <button
                                 type="button"
-                                className="text-white px-4 hover:text-primary_green"
+                                className="text-white px-4 enabled:hover:text-primary_green disabled:hover:text-gray-400"
                                 onClick={handleNext}
                                 aria-label="Next Slide"
                                 disabled={isLastStep}
