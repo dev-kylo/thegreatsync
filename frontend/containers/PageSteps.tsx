@@ -140,6 +140,7 @@ const PageSteps = ({
                                         >
                                             <Step
                                                 {...step}
+                                                currentNumber={currIndex + 1}
                                                 orderNumber={stepIdx + 1}
                                                 setCurrent={() => goToStep(stepIdx)}
                                                 status={stepIdx === currIndex ? 'current' : step?.status}
