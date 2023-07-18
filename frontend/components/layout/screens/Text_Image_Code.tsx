@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Image from 'next/image';
 import { Allotment } from 'allotment';
 import Block from '../Block';
@@ -7,6 +8,7 @@ import useResponsivePanes from '../../../hooks/useResponsivePanes';
 import PaneTabs from '../PaneTabs';
 import CopyButton from '../../ui/CopyButton';
 import Spinner from '../../ui/Spinner';
+import ImageLoader from '../../ui/ImageLoader';
 
 type Text_Image_Code_Props = {
     text: string;
@@ -20,9 +22,14 @@ type Text_Image_Code_Props = {
 
 export default function Text_Image_Code({ text, code, image, imageAlt, id, heading, links }: Text_Image_Code_Props) {
     const { isMobile, visiblePane, setVisiblePane } = useResponsivePanes();
+    const [isLoading, setIsLoading] = useState(true);
     const { url, placeholder } = image.data.attributes;
 
     const isSSR = () => typeof window === 'undefined';
+
+    const handleLoad = () => {
+        setIsLoading(false);
+    };
 
     if (isSSR())
         return (
@@ -46,6 +53,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                     {visiblePane === 'image' && (
                         <div className=" h-full flex align-middle items-center ">
                             <Block hideBorder outerClasses=" h-full relative">
+                                {isLoading && <ImageLoader />}
                                 <Image
                                     id={`image:${id}`}
                                     alt="Mountains"
@@ -54,6 +62,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                                     placeholder="blur"
                                     blurDataURL={placeholder}
                                     className="aspect-square h-auto object-contain"
+                                    onLoad={handleLoad}
                                 />
                             </Block>
                         </div>
@@ -85,6 +94,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                 <Allotment.Pane minSize={200}>
                     <div id="two" className=" h-full flex align-middle items-center ">
                         <Block hideBorder outerClasses=" h-full relative">
+                            {isLoading && <ImageLoader />}
                             <Image
                                 id={`image:${id}`}
                                 alt={imageAlt || ''}
@@ -93,7 +103,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="aspect-square h-auto object-cover"
-                                onLoadingComplete={() => console.log('image loaded!')}
+                                onLoad={handleLoad}
                             />
                         </Block>
                     </div>
