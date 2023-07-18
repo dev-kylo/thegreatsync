@@ -22,7 +22,6 @@ export default function Navbar({
 }) {
     const [openMenu, setOpenMenu] = useState(false);
 
-    console.log(pageType);
     return (
         <>
             <Disclosure as="nav" className="flex-shrink-0 bg-primary_blue">
@@ -46,6 +45,7 @@ export default function Navbar({
                 </div>
             </Disclosure>
             <SlideOver open={openMenu} setOpen={setOpenMenu} current={current}>
+                <ProfileDropDown mobile />
                 {menuData && <Menu menuData={menuData} closeMenu={() => setOpenMenu(false)} current={current} />}
             </SlideOver>
         </>
