@@ -24,7 +24,7 @@ const ContentBlock = ({
     return (
         <article
             id={`md-block:${id} `}
-            className="prose prose-strong:text-offwhite prose-li:text-offwhite prose-span:text-offwhite   prose-em:text-offwhite prose-p:text-offwhite prose-xl prose-headings:text-secondary_lightblue mx-auto prose-pre:p-0 pt-2 prose-code:text-[#7fdbca] prose-code:font-mono prose-code:after:hidden prose-code:before:hidden pb-16"
+            className="prose prose-strong:text-offwhite prose-li:text-offwhite prose-span:text-offwhite  prose-a:text-green-500   prose-em:text-offwhite prose-p:text-offwhite prose-xl prose-headings:text-secondary_lightblue mx-auto prose-pre:p-0 pt-2 prose-code:text-[#7fdbca] prose-code:font-mono prose-code:after:hidden prose-code:before:hidden pb-16"
         >
             {heading && <h2>{heading}</h2>}
             <ReactMarkdown
@@ -59,7 +59,7 @@ const ContentBlock = ({
                 <div>
                     <Divider />
                     <h3 className="text-center pt-12 py-2"> Links & Resources</h3>
-                    <ul className="pl-4 ml-0 max-w-xl">
+                    <ul className="pl-4 max-w-md m-auto">
                         {links.map((link) => (
                             <li className="flex items-center justify-between py-2  pr-5 text-sm leading-6">
                                 <ExternalLink

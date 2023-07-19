@@ -13,7 +13,7 @@ const ExternalLink = ({ type, title, subtitle, link }: ExternalLinkProps) => (
         <div className="flex w-0 flex-1 items-center">
             <PaperClipIcon className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
             <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                <span className="truncate font-medium">{title}</span>
+                <span className="truncate font-medium ">{title}</span>
 
                 <span className="flex-shrink-0 text-gray-400 lowercase">
                     {type === 'link' && !subtitle ? getDomainName(link) : subtitle}
@@ -25,7 +25,7 @@ const ExternalLink = ({ type, title, subtitle, link }: ExternalLinkProps) => (
                 <a
                     href={link}
                     download="sds.js"
-                    className="font-medium flex text-xs no-underline text-green-400 hover:text-secondary_blue uppercase"
+                    className="font-medium flex text-xs no-underline text-green-400 hover:text-secondary_red uppercase"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ const ExternalLink = ({ type, title, subtitle, link }: ExternalLinkProps) => (
             {type === 'link' && (
                 <a
                     href={link}
-                    className="font-medium flex text-xs no-underline text-green-400 hover:text-secondary_blue uppercase"
+                    className="font-medium flex text-xs no-underline text-green-400 hover:text-secondary_red uppercase"
                     target="_blank"
                     rel="noopener noreferrer"
                 >

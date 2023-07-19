@@ -33,7 +33,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
 
     if (isMobile) {
         return (
-            <div className="p-4 pt-16 relative">
+            <div className="p-4 pt-16 relative max-h-[85%] md:max-h-full">
                 <PaneTabs text image code setVisiblePane={setVisiblePane} />
                 <div className="h-full">
                     {visiblePane === 'text' && (
@@ -86,6 +86,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                     <div id="two" className=" h-full flex align-middle items-center ">
                         <Block hideBorder outerClasses=" h-full relative">
                             <Image
+                                key={`image:${id}`}
                                 id={`image:${id}`}
                                 alt={imageAlt || ''}
                                 src={url}
@@ -93,7 +94,6 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="aspect-square h-auto object-cover"
-                                onLoadingComplete={() => console.log('image loaded!')}
                             />
                         </Block>
                     </div>

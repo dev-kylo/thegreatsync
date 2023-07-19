@@ -20,6 +20,7 @@ const AllCourses = ({ courses }: { courses: CourseByUser[] }) => {
                 chapterTitle="A list of purchased courses"
                 subChapterTitle="The Great Sync"
                 current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
+                pageType="listing"
             />
             <section className="max-w-sm mx-auto px-4 mt-4 sm:px-6 lg:px-6 py-12">
                 <ul className="grid grid-cols-1">

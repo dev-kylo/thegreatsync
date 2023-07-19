@@ -45,6 +45,7 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                     <div id="two" className=" h-full flex align-middle items-center ">
                         <Block hideBorder outerClasses="h-full relative">
                             <Image
+                                key={`image:${id}`}
                                 id={`image:${id}`}
                                 alt={imageAlt || ''}
                                 src={url}
@@ -80,7 +81,6 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="h-auto object-cover"
-                                onLoadingComplete={() => console.log('image loaded!')}
                             />
                         </Block>
                     </div>
