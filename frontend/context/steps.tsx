@@ -22,15 +22,28 @@ export const StepContext = React.createContext<StepProviderValues>({
     goToStep: () => {},
 });
 
+function updateStepParam(stepIndex: number | string) {
+    if (!window) return;
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const queryParams = new URLSearchParams(url.search);
+    // Update the URL query parameter
+    queryParams.set('step', `${stepIndex}`);
+    url.search = queryParams.toString();
+    // Update the browser URL without navigating to the page
+    window.history.pushState({}, '', url.toString());
+}
+
 const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
     const [steps, setSteps] = useState<PageStep[]>();
     const router = useRouter();
-    const { stepIndex = 0, pageId } = router.query as {
+    const { step = 0, pageId } = router.query as {
         chapter: string;
         subchapter: string;
         pageId: string;
-        stepIndex: string;
+        step: string;
     };
+    const [stepIndex, setStepIndex] = useState(step || 0);
     const [viewedSteps, setViewedSteps] = useState<TgsLocallyStoredData | undefined>(
         retrieveLocallyStoredValue<TgsLocallyStoredData>('tgs-page-completion')
     );
@@ -60,20 +73,22 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
 
     const nextStep = useCallback(() => {
         if (steps && +stepIndex === steps.length - 1) return;
-        router.replace(`${window.location.pathname}?stepIndex=${+stepIndex + 1}`);
-    }, [router, stepIndex, steps]);
+        const newIndex = +stepIndex + 1;
+        setStepIndex(newIndex);
+        updateStepParam(newIndex);
+    }, [stepIndex, steps]);
 
     const prevStep = useCallback(() => {
         if (+stepIndex < 1) return;
-        router.replace(`${window.location.pathname}?stepIndex=${+stepIndex - 1}`);
-    }, [router, stepIndex]);
+        const newIndex = Math.max(0, +stepIndex - 1);
+        setStepIndex(newIndex);
+        updateStepParam(newIndex);
+    }, [stepIndex]);
 
-    const goToStep = useCallback(
-        (index: number) => {
-            router.replace(`${window.location.pathname}?stepIndex=${index}`);
-        },
-        [router]
-    );
+    const goToStep = useCallback((index: number) => {
+        setStepIndex(index);
+        updateStepParam(index);
+    }, []);
 
     const showNextPageButton = useMemo(
         () => (!steps || !viewedSteps ? false : !!viewedSteps[pageId]?.stepsCompleted[`${steps.length - 1}`]),
@@ -84,16 +99,16 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
         let finalSteps;
         try {
             if (!steps) {
-                console.log('We should not be in this block');
+                console.log('No step data');
                 return;
             }
             const cloned = [...steps];
             const mapped = cloned.map((content: PageContent, ind: number) => {
-                const step = { ...content } as Partial<PageStep>;
+                const clonedStep = { ...content } as Partial<PageStep>;
                 const viewed = viewedSteps;
-                step.status =
+                clonedStep.status =
                     viewed && viewed[pageId] && viewed[pageId]?.stepsCompleted[`${ind}`] ? 'complete' : 'default';
-                return step;
+                return clonedStep;
             }) as PageStep[];
             finalSteps = mapped;
         } catch (e) {

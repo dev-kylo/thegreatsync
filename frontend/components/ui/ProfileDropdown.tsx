@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Fragment, useContext } from 'react';
-import { Menu, Transition, Disclosure } from '@headlessui/react';
+import { Menu, Transition } from '@headlessui/react';
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';

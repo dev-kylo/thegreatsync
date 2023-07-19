@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Image from 'next/image';
 import { Allotment } from 'allotment';
 import ContentBlock from '../ContentBlock';
@@ -7,7 +6,6 @@ import { ImageComp, ResourceLink } from '../../../types';
 import useResponsivePanes from '../../../hooks/useResponsivePanes';
 import PaneTabs from '../PaneTabs';
 import Spinner from '../../ui/Spinner';
-import ImageLoader from '../../ui/ImageLoader';
 
 type Text_Image_Props = {
     text: string;
@@ -20,13 +18,8 @@ type Text_Image_Props = {
 
 export default function Text_Image({ text, image, id, heading, links, imageAlt }: Text_Image_Props) {
     const { isMobile, visiblePane, setVisiblePane } = useResponsivePanes();
-    const [isLoading, setIsLoading] = useState(true);
     const { url, placeholder } = image.data.attributes;
     const isSSR = () => typeof window === 'undefined';
-
-    const handleLoad = () => {
-        setIsLoading(false);
-    };
 
     if (isSSR())
         return (
@@ -51,8 +44,8 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                 {visiblePane === 'image' && (
                     <div id="two" className=" h-full flex align-middle items-center ">
                         <Block hideBorder outerClasses="h-full relative">
-                            {isLoading && <ImageLoader />}
                             <Image
+                                key={`image:${id}`}
                                 id={`image:${id}`}
                                 alt={imageAlt || ''}
                                 src={url}
@@ -60,7 +53,6 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="h-auto object-contain"
-                                onLoad={handleLoad}
                             />
                         </Block>
                     </div>
@@ -81,7 +73,6 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                 <Allotment.Pane minSize={500}>
                     <div id="two" className=" h-full flex align-middle items-center ">
                         <Block hideBorder outerClasses="h-full relative">
-                            {isLoading && <ImageLoader />}
                             <Image
                                 id={`image:${id}`}
                                 alt={imageAlt || ''}
@@ -90,7 +81,6 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="h-auto object-cover"
-                                onLoad={handleLoad}
                             />
                         </Block>
                     </div>
