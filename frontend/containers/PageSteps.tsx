@@ -96,8 +96,8 @@ const PageSteps = ({
             {type === 'text_image_code' && (
                 <Text_Image_Code
                     heading={currIndex === 0 ? heading : undefined}
-                    code={currentTopicStep.code!}
-                    id={+currentTopicStep.id}
+                    code={currentTopicStep?.code || ''}
+                    id={currentTopicStep?.id}
                     text={currentTopicStep?.text}
                     image={currentTopicStep?.image}
                     links={links}

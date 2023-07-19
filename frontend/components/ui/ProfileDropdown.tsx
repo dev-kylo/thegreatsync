@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Fragment, useContext } from 'react';
-import { Menu, Transition, Disclosure } from '@headlessui/react';
+import { Menu, Transition } from '@headlessui/react';
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,28 +13,24 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
 
     if (mobile)
         return (
-            <>
-                <Disclosure.Button
-                    as="a"
-                    href="#"
-                    className="block rounded-md px-3 py-2 text-base font-medium text-indigo-200 hover:bg-indigo-600 hover:text-indigo-100"
-                >
-                    Your Profile
-                </Disclosure.Button>
-                <Disclosure.Button
-                    as="a"
-                    href="#"
-                    className="mt-1 block rounded-md px-3 py-2 text-base font-medium text-indigo-200 hover:bg-indigo-600 hover:text-indigo-100"
-                >
-                    Settings
-                </Disclosure.Button>
-                <Disclosure.Button
+            <div className="block md:hidden">
+                <Link passHref href="/courses">
+                    <a href="#" className={` block px-4 py-3 text-[1rem] text-white`}>
+                        All Courses
+                    </a>
+                </Link>
+                <a href="#" className={` block px-4 py-3 text-[1rem] text-white`}>
+                    Dashboard
+                </a>
+                <a
+                    type="button"
                     onClick={() => signOut()}
-                    className="mt-1 block rounded-md px-3 py-2 text-base font-medium text-indigo-200 hover:bg-indigo-600 hover:text-indigo-100"
+                    className={` block px-4 py-3 text-[1rem] text-white hover:cursor-pointer`}
                 >
-                    Sign out
-                </Disclosure.Button>
-            </>
+                    Logout
+                </a>
+                <div className="w-[90%] mx-auto my-2 border-b-2 text-slate-500" />
+            </div>
         );
 
     return (
