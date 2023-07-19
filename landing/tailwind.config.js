@@ -23,11 +23,8 @@ module.exports = {
             h3: {
               fontSize: '22px'
             }, 
-            'pre > h2, pre > h3': {
-              marginBottom: '1.5em!important'
-            },
-            'code:before': {
-              content: 'l!important'
+            p: {
+              fontSize: '18px'
             }
           }
         }
@@ -53,5 +50,7 @@ module.exports = {
       // },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
