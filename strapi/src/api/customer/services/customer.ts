@@ -1,5 +1,5 @@
 import { factories } from '@strapi/strapi'; 
-import type { CustomData, ChapterCompletion, PageCompletion, SubchapterCompletion, CustomerService, Course, User } from '../../../../custom-types'
+import type { CustomPaddleData, ChapterCompletion, PageCompletion, SubchapterCompletion, CustomerService, Course, User, Order } from '../../../../custom-types'
 import { createSubchapterCompletion } from '../../../utils/user-course-completion';
 
 
@@ -7,11 +7,11 @@ import { createSubchapterCompletion } from '../../../utils/user-course-completio
 export default factories.createCoreService<CustomerService>('api::customer.customer', ({ strapi }) =>  ({
 
 
-    async createUserEnrollment(customData: CustomData, userId: string|number) {
+    async createUserEnrollment(order: Order, userId: string|number) {
   
         console.log('Starting enrollment service')
 
-        if (!customData) throw new Error('Attempted completion data failed: No custom data attached to this order');
+        if (!order) throw new Error('Attempted completion data failed: No custom data attached to this order');
 
         //The order must already have an attached user record
         if (!userId) throw new Error('Attempted completion data failed: No user is linked to this order');
@@ -20,8 +20,8 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
 
         //Find the course attached to the order
         const course= await strapi.db.query('api::course.course').findOne({
-        where: {  id: customData.courseId },
-        populate: ['chapters', 'chapters.subchapters', 'chapters.subchapters.pages']
+            where: {  id: order.release_course_id },
+            populate: ['chapters', 'chapters.subchapters', 'chapters.subchapters.pages']
         }) as Course;
 
         //The order data must link to a course with existing chapters.
@@ -31,7 +31,7 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
 
         // Check for an existing user completion for that user and course
         const existing = await strapi.db.query('api::user-course-progress.user-course-progress').findOne({
-        where: {  course: customData.courseId, user: userId },
+            where: {  course: order.release_course_id, user: userId },
         }) as User;
 
         if (existing) throw new Error('Attempted completion data failed: a user-course-progress record already exists for this user and course.');
@@ -40,7 +40,7 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
 
         // Preparing all of the completion data to be stored as data
         const chapterCourseCompletion:ChapterCompletion[] = course.chapters.map(crs => {
-        return {id: crs.id, completed: false, course: customData.courseId}
+            return {id: crs.id, completed: false, course: +order.release_course_id}
         }) 
         // flatten subchapters array and add the chapter ID to each chapter
         const subchapters = course.chapters.reduce(((acc, curr) => { return acc = [...acc, ...(curr.subchapters.map(sb =>{ return {...sb, chapter: curr.id}}))]}), []);
@@ -68,8 +68,8 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
         await strapi.entityService.create('api::enrollment.enrollment', { data: {
             user: userId,
             course: course.id,
-            date: customData.date,
-            price: customData.price
+            date: order.release_date,
+            price: order.release_price
         }});
 
       

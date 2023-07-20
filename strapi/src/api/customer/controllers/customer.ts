@@ -2,7 +2,8 @@
  * A set of functions called "actions" for `purchase`
  */
 
-import {  CustomerService, Order, PaddleOrder, User } from "../../../../custom-types";
+import {  CustomPaddleData, CustomerService, Order, PaddleFulfillment, User } from "../../../../custom-types";
+import { mapPaddleOrder } from "../../../utils/orderMappings";
 
 
 // User will have a checkbox to use an existing account. Just has to supply an email address with orderId to look up, then must login
@@ -65,9 +66,8 @@ export default {
         });
 
         console.log('User Updated')
-
           // Enroll User In Course 
-        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order.custom_data, user.id);
+        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order, user.id);
 
         ctx.body = {
           success: true,
@@ -99,8 +99,9 @@ export default {
           },
         });
 
-        // Enroll User In Course 
-        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order.custom_data, user.id);
+          // Enroll User In Course 
+        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order, user.id);
+  
 
         ctx.body = {
           success: true,
@@ -116,32 +117,31 @@ export default {
     }
   },
   	createOrder: async (ctx, next) => {
-      console.log('Create Order')
+      console.log('Create Order');
+      const data = ctx.request.body as PaddleFulfillment;
+      let trackingOrderId;
       try {
         // Verify Order
 
         // Extract values
-        const data = ctx.request.body as PaddleOrder;
-        const payload = (({ email,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,sale_gross,used_price_override,alert_name,receipt_url}) =>({ email,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,sale_gross,used_price_override,alert_name, receipt_url}))(data);
-
+        const payload = mapPaddleOrder(data);
+        console.log(payload)
         
         // Create Order - No need to check for existing order, orderId must be unique anyway
         const order = await strapi.entityService.create('api::order.order', {data: payload}) as Order;
-
-        
+        trackingOrderId = order.id;
         // Send email
         const d = await strapi.plugin('email').service('email').send({
-          to: data.email,
+          to: payload.email,
           subject: 'Congratulations on joining The Syncer Program.',
           text: 'Click on the link below to register your new account',
-          html: `<a href='https://learn.thegreatsync.com/register?orderId=${order.order_id}'>https://learn.thegreatsync.com/register?orderId=${order.order_id}</a>`,
+          html: `<a href='${process.env.TGS_FE_URL}/register?orderId=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderId=${order.order_id}</a>`,
           headers: {
             'X-PM-Message-Stream': 'purchases'
           }
         });
 
         console.log('EMAIL SENT')
-        console.log(d)
 
         // Return response
         ctx.body = {
@@ -151,6 +151,7 @@ export default {
         };
           
       } catch(err){
+          console.log(`Subject: Error Creating Order: Provider Order: ${data.p_order_id}. Created Order Id: ${trackingOrderId || 'none'}. Date: ${data.event_time}`)
           ctx.body = err;
       }
 	} 

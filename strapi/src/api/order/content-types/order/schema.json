@@ -16,18 +16,6 @@
       "type": "email",
       "required": true
     },
-    "balance_fee": {
-      "type": "string"
-    },
-    "balance_gross": {
-      "type": "string"
-    },
-    "balance_tax": {
-      "type": "string"
-    },
-    "checkout_id": {
-      "type": "string"
-    },
     "country": {
       "type": "string"
     },
@@ -44,13 +32,10 @@
       "type": "string",
       "required": true
     },
-    "earnings": {
+    "account_credited": {
       "type": "string"
     },
     "fee": {
-      "type": "string"
-    },
-    "event_time": {
       "type": "string"
     },
     "marketing_consent": {
@@ -62,38 +47,11 @@
       "required": true,
       "unique": true
     },
-    "payment_method": {
-      "type": "enumeration",
-      "enum": [
-        "free",
-        "card",
-        "paypal",
-        "wire-transfer",
-        "apple-pay",
-        "google-pay",
-        "ideal",
-        "alipay"
-      ]
-    },
-    "payment_tax": {
-      "type": "string"
-    },
-    "product_id": {
+    "tax": {
       "type": "string"
     },
     "sale_gross": {
       "type": "string"
-    },
-    "used_price_override": {
-      "type": "boolean"
-    },
-    "alert_name": {
-      "type": "enumeration",
-      "enum": [
-        "payment_succeeded",
-        "payment_refunded",
-        "locker_processed"
-      ]
     },
     "user": {
       "type": "relation",
@@ -101,8 +59,17 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "orders"
     },
-    "receipt_url": {
+    "release_date": {
+      "type": "date"
+    },
+    "release_course_id": {
       "type": "string"
+    },
+    "release_price": {
+      "type": "string"
+    },
+    "event_time": {
+      "type": "datetime"
     }
   }
 }
