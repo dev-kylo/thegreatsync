@@ -16,7 +16,7 @@ const Course = ({ course }: CourseProps) => {
     const { data: session } = useSession();
 
     console.log('-----COURSE------');
-    console.log(course);
+    console.log({ course, session });
 
     if (!session?.jwt) return <LoadingQuote />;
     return <CourseDashboard title={course.title} description={course.description} video={course?.video || undefined} />;
