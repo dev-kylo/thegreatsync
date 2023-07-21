@@ -2,7 +2,9 @@
  * A set of functions called "actions" for `purchase`
  */
 
-import {  CustomerService, Order, PaddleOrder, User } from "../../../../custom-types";
+import {  CustomerService, Order, PaddleFulfillment, User } from "../../../../custom-types";
+import { getErrorString } from "../../../utils/getErrorString";
+import { mapPaddleOrder } from "../../../utils/orderMappings";
 
 
 // User will have a checkbox to use an existing account. Just has to supply an email address with orderId to look up, then must login
@@ -10,10 +12,11 @@ import {  CustomerService, Order, PaddleOrder, User } from "../../../../custom-t
 
 export default {
   register: async (ctx, next) => {
+    
+    const data = ctx.request.body as { username: string, password?: string, orderId: string, existingAccount: boolean}
+    let locatedOrderId;
     try {
-      const data = ctx.request.body as { username: string, password?: string, orderId: string, existingAccount: boolean}
       // Find order
-      console.log('Finding Order')
       const order = await strapi.db.query('api::order.order').findOne({
         where: { order_id: data.orderId },
         populate: ['user']
@@ -23,12 +26,13 @@ export default {
         return ctx.response.forbidden('This is an invalid registration url. Please contact Kylo.');
       }
 
-      // Check for an existing user
-      console.log('Searching for User')
+      locatedOrderId = order.id;
+
      let user =  await strapi.db.query('plugin::users-permissions.user').findOne({
         where: { email: data.username }
       }) as User;
 
+      if (user) console.log('--- USER FOUND. UPDATING ORDER ---')
 
       // Check if order already has a user assigned to it
       if (order?.user) {
@@ -64,10 +68,11 @@ export default {
           },
         });
 
-        console.log('User Updated')
-
+        console.log('--- ORDER UPDATED ---')
           // Enroll User In Course 
-        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order.custom_data, user.id);
+        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order, user.id);
+        
+        console.log('--- USER ENROLLED IN COURSE ---')
 
         ctx.body = {
           success: true,
@@ -80,7 +85,7 @@ export default {
         // Create new User
         // Get Enrollment from Order
         // Add enrollment to payload
-        console.log('Creating new user')
+        console.log('--- USER NOT FOUND. CREATING NEW USER ---')
         user = await strapi.plugins['users-permissions'].services.user.add({
           blocked: false,
           confirmed: true, 
@@ -92,15 +97,17 @@ export default {
           updated_by: 1, //user admin id
           role: 1, //role id
         });
-        console.log('NEW USER CREATED'); 
+
+        console.log('--- NEW USER CREATED ---'); 
         await strapi.entityService.update('api::order.order', order.id, {
           data: {
             user: user.id
           },
         });
 
-        // Enroll User In Course 
-        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order.custom_data, user.id);
+          // Enroll User In Course 
+        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order, user.id);
+        console.log('--- USER ENROLLED IN COURSE ---')
 
         ctx.body = {
           success: true,
@@ -110,47 +117,78 @@ export default {
       }
 
     } catch (err) {
-      console.log('Caught')
+      console.log(' --- Unsuccessful registration attempt ----');
+      await strapi.plugin('email').service('email').send({
+        to: process.env.CONTACT_ADDRESS,
+        subject: 'Error Registering Account',
+        text: '',
+        html: `<p>Error Registering Account: Provided Order: ${data.orderId}.</p>
+          <p> Created Order Id: ${locatedOrderId || 'none'} </p>
+          <p> Error: ${getErrorString(err)}</p>
+          `,
+        headers: {
+          'X-PM-Message-Stream': 'purchases'
+        }
+      });
       console.log(err)
       ctx.body = err;
     }
   },
   	createOrder: async (ctx, next) => {
-      console.log('Create Order')
+      console.log('Create Order');
+      const data = ctx.request.body as PaddleFulfillment;
+      let trackingOrderId;
       try {
         // Verify Order
 
+        console.log('--- WEBHOOK VERIFIED ---')
         // Extract values
-        const data = ctx.request.body as PaddleOrder;
-        const payload = (({ email,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,sale_gross,used_price_override,alert_name,receipt_url}) =>({ email,balance_fee,balance_gross,balance_tax,checkout_id,country,coupon,currency,custom_data,customer_name,earnings,fee,event_time,marketing_consent,order_id,payment_method,payment_tax,product_id,sale_gross,used_price_override,alert_name, receipt_url}))(data);
-
+        const payload = mapPaddleOrder(data);
         
         // Create Order - No need to check for existing order, orderId must be unique anyway
         const order = await strapi.entityService.create('api::order.order', {data: payload}) as Order;
-
-        
+        trackingOrderId = order.id;
+        console.log('--- ORDER CREATED ---')
+       
         // Send email
-        const d = await strapi.plugin('email').service('email').send({
-          to: data.email,
+        await strapi.plugin('email').service('email').send({
+          to: payload.email,
           subject: 'Congratulations on joining The Syncer Program.',
-          text: 'Click on the link below to register your new account',
-          html: `<a href='https://learn.thegreatsync.com/register?orderId=${order.order_id}'>https://learn.thegreatsync.com/register?orderId=${order.order_id}</a>`,
+          text: '',
+          html: `
+          <p>Amazing news! You are about to start an exciting journey into the realm of JavaScript!</p>
+          <p> Click the link below to register and access the platform: >/p>
+          <a href='${process.env.TGS_FE_URL}/register?orderId=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderId=${order.order_id}</a>`,
           headers: {
             'X-PM-Message-Stream': 'purchases'
           }
         });
-
-        console.log('EMAIL SENT')
-        console.log(d)
+        console.log('--- EMAIL SENT TO CUSTOMER ---');
 
         // Return response
         ctx.body = {
           success: true,
           orderId: order.order_id,
-          message: `You have been emailed a link to complete the registration and access the course. If you do not receive this email please contact Kylo.`
+          message: `You have been emailed a link to complete the registration and access the course.`
         };
           
       } catch(err){
+
+        console.log(`--- Error Creating Order: Provider Order: ${data.p_order_id}. Created Order Id: ${trackingOrderId || 'none'}. Date: ${data.event_time} ---`)
+        await strapi.plugin('email').service('email').send({
+          to: process.env.CONTACT_ADDRESS,
+          subject: 'Error Creating Order',
+          text: '',
+          html: `<p>Error Creating Order: Provider Order: ${data.p_order_id}.</p>
+            <p> Created Order Id: ${trackingOrderId || 'none'} </p>
+            <p> Date: ${data.event_time}</p>
+            <p> Error: ${getErrorString(err)}</p>
+            `,
+          headers: {
+            'X-PM-Message-Stream': 'purchases'
+          }
+        });
+
           ctx.body = err;
       }
 	} 

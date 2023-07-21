@@ -20,8 +20,8 @@ import {
   ComponentAttribute,
   UIDAttribute,
   DynamicZoneAttribute,
-  DateAttribute,
   SingleTypeSchema,
+  DateAttribute,
   ComponentSchema,
   MediaAttribute,
   RichTextAttribute,
@@ -690,6 +690,35 @@ export interface ApiCourseCourse extends CollectionTypeSchema {
   };
 }
 
+export interface ApiCustomerCustomer extends SingleTypeSchema {
+  info: {
+    singularName: 'customer';
+    pluralName: 'customers';
+    displayName: 'customer';
+  };
+  options: {
+    draftAndPublish: true;
+    comment: '';
+  };
+  attributes: {
+    createdAt: DateTimeAttribute;
+    updatedAt: DateTimeAttribute;
+    publishedAt: DateTimeAttribute;
+    createdBy: RelationAttribute<
+      'api::customer.customer',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+    updatedBy: RelationAttribute<
+      'api::customer.customer',
+      'oneToOne',
+      'admin::user'
+    > &
+      PrivateAttribute;
+  };
+}
+
 export interface ApiEnrollmentEnrollment extends CollectionTypeSchema {
   info: {
     singularName: 'enrollment';
@@ -764,45 +793,26 @@ export interface ApiOrderOrder extends CollectionTypeSchema {
   };
   attributes: {
     email: EmailAttribute & RequiredAttribute;
-    balance_fee: StringAttribute;
-    balance_gross: StringAttribute;
-    balance_tax: StringAttribute;
-    checkout_id: StringAttribute;
     country: StringAttribute;
     coupon: StringAttribute;
     currency: StringAttribute;
     custom_data: JSONAttribute;
     customer_name: StringAttribute & RequiredAttribute;
-    earnings: StringAttribute;
+    account_credited: StringAttribute;
     fee: StringAttribute;
     event_time: StringAttribute;
     marketing_consent: BooleanAttribute & RequiredAttribute;
     order_id: StringAttribute & RequiredAttribute & UniqueAttribute;
-    payment_method: EnumerationAttribute<
-      [
-        'free',
-        'card',
-        'paypal',
-        'wire-transfer',
-        'apple-pay',
-        'google-pay',
-        'ideal',
-        'alipay'
-      ]
-    >;
-    payment_tax: StringAttribute;
-    product_id: StringAttribute;
+    tax: StringAttribute;
     sale_gross: StringAttribute;
-    used_price_override: BooleanAttribute;
-    alert_name: EnumerationAttribute<
-      ['payment_succeeded', 'payment_refunded', 'locker_processed']
-    >;
     user: RelationAttribute<
       'api::order.order',
       'manyToOne',
       'plugin::users-permissions.user'
     >;
-    receipt_url: StringAttribute;
+    release_date: DateAttribute;
+    release_course_id: StringAttribute;
+    release_price: StringAttribute;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
@@ -834,11 +844,17 @@ export interface ApiPagePage extends CollectionTypeSchema {
   attributes: {
     title: StringAttribute & RequiredAttribute;
     type: EnumerationAttribute<
-      ['text_image_code', 'text_image', 'video', 'text']
+      ['text_image_code', 'text_image', 'text_code', 'video', 'text']
     > &
       RequiredAttribute;
     content: DynamicZoneAttribute<
-      ['media.text', 'media.text-image', 'media.text-image-code', 'media.video']
+      [
+        'media.text',
+        'media.text-image',
+        'media.text-image-code',
+        'media.video',
+        'media.text-code'
+      ]
     > &
       RequiredAttribute;
     menu: ComponentAttribute<'menu.menu-info'>;
@@ -938,12 +954,26 @@ export interface MediaLink extends ComponentSchema {
   info: {
     displayName: 'link';
     icon: 'link';
+    description: '';
   };
   attributes: {
     file: MediaAttribute;
-    type: EnumerationAttribute<['download', 'external']> & RequiredAttribute;
+    type: EnumerationAttribute<['download', 'link']> & RequiredAttribute;
     external_url: StringAttribute;
     title: StringAttribute & RequiredAttribute;
+    subtitle: StringAttribute;
+  };
+}
+
+export interface MediaTextCode extends ComponentSchema {
+  info: {
+    displayName: 'text_code';
+    icon: 'columns';
+    description: '';
+  };
+  attributes: {
+    text: RichTextAttribute & RequiredAttribute;
+    code: RichTextAttribute & RequiredAttribute;
   };
 }
 
@@ -955,7 +985,7 @@ export interface MediaTextImageCode extends ComponentSchema {
   };
   attributes: {
     text: RichTextAttribute & RequiredAttribute;
-    image_alt: StringAttribute & RequiredAttribute;
+    image_alt: TextAttribute & RequiredAttribute;
     image: MediaAttribute & RequiredAttribute;
     code: RichTextAttribute & RequiredAttribute;
     transparent_image: BooleanAttribute;
@@ -971,7 +1001,7 @@ export interface MediaTextImage extends ComponentSchema {
   attributes: {
     text: RichTextAttribute & RequiredAttribute;
     image: MediaAttribute & RequiredAttribute;
-    image_alt: StringAttribute & RequiredAttribute;
+    image_alt: TextAttribute & RequiredAttribute;
     transparent_image: BooleanAttribute;
   };
 }
@@ -1009,7 +1039,9 @@ export interface MenuMenuInfo extends ComponentSchema {
     description: '';
   };
   attributes: {
-    icon: EnumerationAttribute<['write', 'code', 'read', 'watch']>;
+    icon: EnumerationAttribute<
+      ['code', 'read', 'watch', 'discover', 'imagine', 'share', 'draw']
+    >;
     orderNumber: IntegerAttribute & RequiredAttribute;
   };
 }
@@ -1030,6 +1062,7 @@ declare global {
       'plugin::mux-video-uploader.mux-asset': PluginMuxVideoUploaderMuxAsset;
       'api::chapter.chapter': ApiChapterChapter;
       'api::course.course': ApiCourseCourse;
+      'api::customer.customer': ApiCustomerCustomer;
       'api::enrollment.enrollment': ApiEnrollmentEnrollment;
       'api::menu.menu': ApiMenuMenu;
       'api::order.order': ApiOrderOrder;
@@ -1037,6 +1070,7 @@ declare global {
       'api::subchapter.subchapter': ApiSubchapterSubchapter;
       'api::user-course-progress.user-course-progress': ApiUserCourseProgressUserCourseProgress;
       'media.link': MediaLink;
+      'media.text-code': MediaTextCode;
       'media.text-image-code': MediaTextImageCode;
       'media.text-image': MediaTextImage;
       'media.text': MediaText;
