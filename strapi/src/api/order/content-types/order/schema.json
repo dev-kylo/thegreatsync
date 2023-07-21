@@ -32,9 +32,6 @@
       "type": "string",
       "required": true
     },
-    "account_credited": {
-      "type": "string"
-    },
     "fee": {
       "type": "string"
     },

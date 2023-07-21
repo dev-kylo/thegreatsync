@@ -29,9 +29,7 @@ export type PaddleFulfillment = {
     passthrough: string;
     p_signature: string;
     p_custom_data: CustomPaddleData;
-    marketing_consent?: boolean;
-    email?: string;
-}
+} & CustomPaddleData
 
 
 

@@ -9,14 +9,12 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
 
     async createUserEnrollment(order: Order, userId: string|number) {
   
-        console.log('Starting enrollment service')
+        console.log('--- Starting enrollment service ---')
 
         if (!order) throw new Error('Attempted completion data failed: No custom data attached to this order');
 
         //The order must already have an attached user record
         if (!userId) throw new Error('Attempted completion data failed: No user is linked to this order');
-
-        console.log('Service: Finding Course')
 
         //Find the course attached to the order
         const course= await strapi.db.query('api::course.course').findOne({
@@ -27,8 +25,6 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
         //The order data must link to a course with existing chapters.
         if (!course || !course.chapters) throw new Error('Attempted completion data failed: Either no course or no course chapters found');
 
-        console.log('Service: Finding User Completion')
-
         // Check for an existing user completion for that user and course
         const existing = await strapi.db.query('api::user-course-progress.user-course-progress').findOne({
             where: {  course: order.release_course_id, user: userId },
@@ -36,7 +32,7 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
 
         if (existing) throw new Error('Attempted completion data failed: a user-course-progress record already exists for this user and course.');
         
-        console.log('Service: Preparing User Completion')
+        console.log('--- Service: Preparing User Completion ----')
 
         // Preparing all of the completion data to be stored as data
         const chapterCourseCompletion:ChapterCompletion[] = course.chapters.map(crs => {
@@ -53,8 +49,6 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
             return { id: sub.id, completed: false, subchapter: sub.subchapter}
         })
 
-        console.log('Service: Creating User Course Progress')
-
         await strapi.entityService.create('api::user-course-progress.user-course-progress', { data: {
             user: userId,
             course: course.id,
@@ -62,7 +56,8 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
             subchapters: JSON.stringify(subchapterCourseCompletion ),
             pages:  JSON.stringify(pageCourseCompletion)
         }});
-        console.log(`user-course-progress record created for userID: ${userId}.`)
+
+        console.log(`--- User Completion Stats Successful, userID: ${userId} ---`)
 
         // Create a new enrollment for that course and user 
         await strapi.entityService.create('api::enrollment.enrollment', { data: {

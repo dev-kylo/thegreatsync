@@ -1,4 +1,5 @@
 import { PageCompletion, UserCourseProgress } from "../../../../custom-types";
+import { getErrorString } from "../../../utils/getErrorString";
 
 
 // Create a function with generic type, and params for arrays
@@ -26,7 +27,8 @@ export default {
     },
 
     async updateUserCompletionData(ctx, next) {
-        try{
+        let foundUserId;
+        try {
 
         console.log('Updating User-Course-Progress')
         // Receive completed pageID and courseID
@@ -38,6 +40,7 @@ export default {
 
         // Get User's completion data for that course
         const { id: userId } = ctx.state.user;
+        foundUserId = userId;
         const userCompletion =  await strapi.db.query('api::user-course-progress.user-course-progress').findOne({
             where: {  user: userId, course: courseId },
         }) as UserCourseProgress
@@ -86,6 +89,18 @@ export default {
         next();
       
         } catch(err){
+            await strapi.plugin('email').service('email').send({
+                to: process.env.CONTACT_ADDRESS,
+                subject: 'Error Updating Course Progress',
+                text: '',
+                html: `
+                  <p> UserId: ${foundUserId || 'none'} </p>  
+                  <p> Error: ${getErrorString(err)}</p>
+                  `,
+                headers: {
+                  'X-PM-Message-Stream': 'purchases'
+                }
+              });
             ctx.body = err;
         }
         // return response;
