@@ -26,7 +26,10 @@ export default function Price() {
 
 
   useEffect(() => {
-    if(typeof window !== 'undefined')  (window as any).Paddle!.Setup({ vendor: ''});
+    if(typeof window !== 'undefined'){{  
+      // (window as any).Paddle!.Environment.set('sandbox');
+      (window as any).Paddle!.Setup({ vendor: ''});
+    }}
   }, [])
  
     const openCheckout  = () => { 
