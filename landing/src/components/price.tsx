@@ -28,7 +28,8 @@ export default function Price() {
   useEffect(() => {
     if(typeof window !== 'undefined'){{  
       // (window as any).Paddle!.Environment.set('sandbox');
-      (window as any).Paddle!.Setup({ vendor: ''});
+      const vendorId = process.env.NEXT_PUBLIC_VENDORID || '1';
+      (window as any).Paddle!.Setup({ vendor: +vendorId});
     }}
   }, [])
  
