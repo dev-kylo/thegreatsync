@@ -1,4 +1,4 @@
-import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid'
+
 
 export default function Credibility() {
   return (
@@ -8,7 +8,7 @@ export default function Credibility() {
     <article className="prose lg:prose-2xl">
  
         <div className='flex flex-col items-center'>
-            <span className='text-6xl font-bold tracking-tight '>Hi, I'm Kylo </span>
+            <span className='text-6xl font-bold tracking-tight '>Hi, I&lsquo;m Kylo </span>
         
         </div>
         <p>

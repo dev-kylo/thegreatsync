@@ -19,10 +19,10 @@ export default function Hero() {
               Struggling to grasp JavaScript? 
             </h1>
             <h2 className="text-3xl text-white mt-4 font-bold tracking-tight  sm:text-3xl">
-              It's time to visualize and see the big picture.
+              ItI&lsquo;ms time to visualize and see the big picture.
             </h2>
             <p className="mt-6 text-2xl text-white leading-8 ">
-              You're trying to level up, build projects, and turn web development into an exciting career. All that stands in your way is JavaScript. 
+              YouI&lsquo;mre trying to level up, build projects, and turn web development into an exciting career. All that stands in your way is JavaScript. 
             </p>
             <div className="bg-primary_blue p-4 mt-8 w-fit m-auto">
               <p className=" text-2xl text-white leading-8 "> What if you had the confidence to build anything?</p>
