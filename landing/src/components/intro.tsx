@@ -1,4 +1,3 @@
-import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid'
 
 const posts = [
   {
@@ -39,20 +38,18 @@ export default function Intro() {
             <span className='mt-4 font-bold'>Level Up With Visual & Memorable JavaScript</span>
         </div>
         <p>Introducing The Great Sync: a complete visual mental model for learning JavaScript concepts and applying them to projects, code challenges, documentation, and any JavaScript you encounter. </p>
-        <p> It's designed specifically to help you overcome any barriers and mental blocks about using JavaScript confidently.</p>
+        <p> ItI&lsquo;ms designed specifically to help you overcome any barriers and mental blocks about using JavaScript confidently.</p>
         <span className='text-xl font-bold tracking-tight mb-0 pb-0 '>Does any of this sound like YOU?</span>
         <ul className=''>
           <li className='my-0 py-0'>I felt confident after HTML & CSS. And then JavaScript made me miserable.</li>
-          <li>I've used JS for months, even years, and I STILL blindly copy-paste. </li>
-          <li>I know some of the fundamentals. I can't build anything.</li>
+          <li>II&lsquo;mve used JS for months, even years, and I STILL blindly copy-paste. </li>
+          <li>I know some of the fundamentals. I canI&lsquo;mt build anything.</li>
           <li>I am so frustrated with it.</li>
-          <li>I am afraid I will never get the hang of it. Maybe this isn't for me...</li>
-          <li> Maybe this isn't for me...</li>
+          <li>I am afraid I will never get the hang of it. Maybe this isnI&lsquo;mt for me...</li>
+          <li> Maybe this isnI&lsquo;mt for me...</li>
         </ul>
-        <span className='text-xl font-bold tracking-tight mb-0 pb-0 '>       That last one is <strong>HAUNTING</strong>.</span>
-        <p>
-  
-        "Maybe this isn't for me...". When I hear those words, it truly makes me sad. Because you CAN do it.</p>
+        <span className='text-xl font-bold tracking-tight mb-0 pb-0 '> That last one is <strong>HAUNTING</strong>.</span>
+        <p> Maybe this isnI&lsquo;mt for me.... When I hear those words, it truly makes me sad. Because you CAN do it.</p>
 
         <ul role="list" className="mt-8  text-gray-600">
             <li className="">
@@ -70,12 +67,12 @@ export default function Intro() {
             <li className="">
  
               <span>
-                <strong className="font-semibold text-gray-900">Even if....</strong> you have been learning for months and can't build a basic program.
+                <strong className="font-semibold text-gray-900">Even if....</strong> you have been learning for months and canI&lsquo;mt build a basic program.
               </span>
             </li>            <li className="">
  
               <span>
-                <strong className="font-semibold text-gray-900">Even if....</strong> you're that person who always has computer issues. And yet you want to be a developer.
+                <strong className="font-semibold text-gray-900">Even if....</strong> youI&lsquo;mre that person who always has computer issues. And yet you want to be a developer.
               </span>
             </li>
           </ul>

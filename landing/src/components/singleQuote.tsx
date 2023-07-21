@@ -9,7 +9,7 @@ export default function SingleQuote() {
                  I would often have to go back to them repeatedly, and it felt like I was making little progress. 
                  Then, I came across The Great Sync. 
                  My initial thoughts were that it was too good to be true. 
-                 I couldn't imagine learning JavaScript visually. 
+                 I couldnI&lsquo;mt imagine learning JavaScript visually. 
                  Fortunately, it turned out to be everything I needed to effortlessly grasp JavaScript concepts.”
               </p>
             </blockquote>

@@ -26,7 +26,7 @@ export default function Vision() {
             <figure className="border-l border-indigo-600 pl-8">
               <blockquote className="text-xl font-semibold leading-8 tracking-tight text-gray-900">
                 <p>
-                  “Kylo taught me some of the most critical concepts in JavaScript and my confidence just skyrocketed. I wasn't scared of the errors anymore; I could understand the errors better and debugging became fun!”
+                  “Kylo taught me some of the most critical concepts in JavaScript and my confidence just skyrocketed. I wasnI&lsquo;mt scared of the errors anymore; I could understand the errors better and debugging became fun!”
                 </p>
               </blockquote>
               <figcaption className="mt-8 flex gap-x-4">
