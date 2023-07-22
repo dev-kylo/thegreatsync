@@ -23,7 +23,7 @@ export default function Feedback() {
                 current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
                 pageType="listing"
             />
-            <section className="max-w-[40rem] w-[30rem] p-8 mx-auto my-12 max-h-[30rem] bg-[#031b4352] shadow-2xl rounded-md">
+            <section className="w-[90%] max-h-[auto] max-w-[40rem] md:w-[30rem] p-8 mx-auto my-12 md:max-h-[30rem] bg-[#031b4352] shadow-2xl rounded-md">
                 <form className="max-w-lg w-full mx-auto ">
                     <div className="mb-8">
                         <label htmlFor="name" className="block font-medium text-white">
