@@ -22,6 +22,11 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                 <a href="#" className={` block px-4 py-3 text-[1rem] text-white`}>
                     Dashboard
                 </a>
+                <Link href="/user/account">
+                    <a href="#" className={` block px-4 py-3 text-[1rem] text-white`}>
+                        Profile
+                    </a>
+                </Link>
                 <a
                     type="button"
                     onClick={() => signOut()}
@@ -84,6 +89,18 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                             </Menu.Item>
                         </Link>
                     )}
+                    <Menu.Item>
+                        {({ active }) => (
+                            <Link passHref href="/user/account">
+                                <a
+                                    href="#"
+                                    className={`${active ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
+                                >
+                                    Profile
+                                </a>
+                            </Link>
+                        )}
+                    </Menu.Item>
                     <Menu.Item>
                         {({ active }) => (
                             <a
