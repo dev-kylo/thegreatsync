@@ -24,7 +24,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                 </a>
                 <Link href="/user/account">
                     <a href="#" className={` block px-4 py-3 text-[1rem] text-white`}>
-                        Profile
+                        Account
                     </a>
                 </Link>
                 <a
@@ -96,7 +96,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                                     href="#"
                                     className={`${active ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
                                 >
-                                    Profile
+                                    Account
                                 </a>
                             </Link>
                         )}
