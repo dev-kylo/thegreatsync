@@ -23,38 +23,17 @@ export default function Feedback() {
                 current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
                 pageType="listing"
             />
-            <section className="w-[90%] max-h-[auto] max-w-[40rem] md:w-[30rem] p-8 mx-auto my-12 md:max-h-[30rem] bg-[#031b4352] shadow-2xl rounded-md">
+            <section className="w-[90%] max-h-[auto] max-w-[40rem] md:w-[30rem] p-8 mx-auto my-12 md:max-h-[20rem] bg-[#031b4352] shadow-2xl rounded-md">
                 <form className="max-w-lg w-full mx-auto ">
                     <div className="mb-8">
-                        <label htmlFor="name" className="block font-medium text-white">
-                            Name
-                        </label>
-                        <input
-                            type="text"
-                            id="name"
-                            className="mt-1 px-4 py-2 border rounded-lg w-full focus:outline-none focus:ring focus:border-[#4ade80]"
-                            required
-                        />
-                    </div>
-                    <div className="mb-8">
-                        <label htmlFor="email" className="block font-medium text-white">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            className="mt-1 px-4 py-2 border rounded-lg w-full focus:outline-none focus:ring focus:border-[#4ade80]"
-                            required
-                        />
-                    </div>
-                    <div className="mb-8">
                         <label htmlFor="feedback" className="block font-medium text-white">
-                            Feedback
+                            What do you think?
                         </label>
                         <textarea
                             id="feedback"
                             className="mt-1 px-4 py-2 border rounded-lg w-full h-32 resize-none focus:outline-none focus:ring focus:border-[#4ade80]"
                             required
+                            placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
                         />
                     </div>
                     <button
