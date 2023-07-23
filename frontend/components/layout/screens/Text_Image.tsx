@@ -43,9 +43,9 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
 
                 {visiblePane === 'image' && (
                     <div id="two" className=" h-full flex align-middle items-center ">
-                        <Block hideBorder outerClasses="h-full relative">
+                        <Block hideBorder outerClasses="h-full relative" key={`mobileimageblock:${image.data.id}-${id}`}>
                             <Image
-                                key={`image:${id}`}
+                                key={`image:${image.data.id}-${id}`}
                                 id={`image:${id}`}
                                 alt={imageAlt || ''}
                                 src={url}
@@ -72,9 +72,10 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                 </Allotment.Pane>
                 <Allotment.Pane minSize={500}>
                     <div id="two" className=" h-full flex align-middle items-center ">
-                        <Block hideBorder outerClasses="h-full relative">
+                        <Block hideBorder outerClasses="h-full relative" key={`imageblock:${image.data.id}-${id}`}>
                             <Image
                                 id={`image:${id}`}
+                                key={`image:${image.data.id}-${id}`}
                                 alt={imageAlt || ''}
                                 src={url}
                                 layout="fill"
