@@ -24,7 +24,7 @@ export default function Navbar({
 
     return (
         <>
-            <Disclosure as="nav" className="flex-shrink-0 bg-primary_blue">
+            <Disclosure as="nav" className="flex-shrink-0 bg-primary_blue min-h-[5rem]">
                 <div className="mx-auto max-w-8xl px-2 sm:px-4 lg:px-8 h-full flex justify-center flex-col">
                     <div className="relative flex items-center justify-between">
                         {/* Course Menu Button */}
