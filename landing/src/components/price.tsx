@@ -9,10 +9,12 @@ const tiers = [
     id: 'tier-enterprise',
     href: '#',
     priceMonthly: '$97',
-    description: 'Dedicated support and infrastructure for your company.',
+    description: 'Step into The Great Sync visual model and discover an unforgettable way of learning JavaScript.',
     features: [
-      'Unlimited products',
-      'Unlimited subscribers',
+      '35 videos',
+      '60+ pages',
+      '25+ illustrations',
+      'Syncer commnunity support'
     ],
     featured: true,
   },
@@ -54,12 +56,11 @@ export default function Price() {
       </div>
       <div className="mx-auto max-w-2xl text-center lg:max-w-4xl">
         <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-          ItI&lsquo;ms time to level up!
+          It&lsquo;s time to level up!
         </p>
       </div>
       <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
-        Qui iusto aut est earum eos quae. Eligendi est at nam aliquid ad quo reprehenderit in aliquid fugiat dolorum
-        voluptatibus.
+        Have you decided that a career spent blindly copy-pasting and never being able to build anything with confidence is not for you?
       </p>
       <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-2xl lg:grid-cols-1">
         {tiers.map((tier, tierIdx) => (
