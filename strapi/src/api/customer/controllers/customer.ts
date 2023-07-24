@@ -150,15 +150,37 @@ export default {
         trackingOrderId = order.id;
         console.log('--- ORDER CREATED ---')
        
-        // Send email
+        // Send welcome email
         await strapi.plugin('email').service('email').send({
           to: payload.email,
-          subject: 'Congratulations on joining The Syncer Program.',
+          subject: 'Welcome to The Syncer Program',
           text: '',
           html: `
-          <p>Amazing news! You are about to start an exciting journey into the realm of JavaScript!</p>
-          <p> Click the link below to register and access the platform: >/p>
-          <a href='${process.env.TGS_FE_URL}/register?orderId=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderId=${order.order_id}</a>`,
+          <p>Amazing news!</p>
+          <p>Congratulations on joining <em>The Syncer Program - Level Up With Visual and Memorable Javascript </em>. You are about to start an exciting journey into the realm of JavaScript!</p>
+          <p> Click the link below to register and access the platform: </p>
+          <a href='${process.env.TGS_FE_URL}/register?orderId=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderId=${order.order_id}</a>
+          <p> Also look out for an email containing the <strong>Discord Invitation to The Syncer Community </strong>. You can also find this in the navigation menu on the platform.</p>
+          <p> See you there! </p>
+          <p> Kylo </p>
+          `,
+          headers: {
+            'X-PM-Message-Stream': 'purchases'
+          }
+        });
+        console.log('--- EMAIL SENT TO CUSTOMER ---');
+
+        // Send Discord Invite
+        await strapi.plugin('email').service('email').send({
+          to: payload.email,
+          subject: 'Your Discord invitation to The Syncer Community',
+          text: '',
+          html: `
+          <p>Hi!</p>
+          <p> Click the link below to gain access to The Syncer Community on Discord. If the link does not work, download the Discord application first</p>
+          <a href='${process.env.DISCORD_INVITE}'>${process.env.DISCORD_INVITE}</a>
+          <p> Remember to introduce yourself! </p>
+          <p> Kylo </p>`,
           headers: {
             'X-PM-Message-Stream': 'purchases'
           }
@@ -175,6 +197,7 @@ export default {
       } catch(err){
 
         console.log(`--- Error Creating Order: Provider Order: ${data.p_order_id}. Created Order Id: ${trackingOrderId || 'none'}. Date: ${data.event_time} ---`)
+        
         await strapi.plugin('email').service('email').send({
           to: process.env.CONTACT_ADDRESS,
           subject: 'Error Creating Order',
