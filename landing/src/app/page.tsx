@@ -1,6 +1,7 @@
 
 import Credibility from "@/components/credibility";
 import Faqs from "@/components/faqs";
+import Footer from "@/components/footer";
 import Hero from "@/components/hero";
 import Intro from "@/components/intro";
 import Model from "@/components/model";
@@ -9,7 +10,7 @@ import SingleQuote from "@/components/singleQuote";
 import SingleQuote2 from "@/components/singleQuote2";
 import Vision from "@/components/vision";
 import WhoAmI from "@/components/whoami";
-import { useEffect } from "react";
+
 
 export default function Home() {
 
@@ -25,6 +26,7 @@ export default function Home() {
         <SingleQuote2 />
         <Price />
         <Faqs />
+        <Footer />
         
 
     </main>

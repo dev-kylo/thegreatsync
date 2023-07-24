@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Logo from '../../assets/logo.webp';
 import Alert from '../../components/ui/Alert';
 import { forgotPassword } from '../../services/password';
@@ -23,6 +24,7 @@ export default function ForgottenPassword() {
                 error: false,
                 message: 'A password reset link has been sent to your email.',
             });
+
             setEmailVal('');
         } catch (er) {
             setFormState({ loading: false, error: true, message: errorMessage });
@@ -94,8 +96,15 @@ export default function ForgottenPassword() {
                                     </button>
                                 </form>
                                 {(formState.message || formState.error) && (
-                                    <div className="mt-4">
+                                    <div className="mt-4 text-center">
                                         <Alert type={formState.error ? 'error' : 'success'} text={formState.message} />
+                                        {!formState.error && (
+                                            <Link passHref href="/signin">
+                                                <a href="#" className={` block px-4 py-3 text-[1rem] text-white`}>
+                                                    Go back to Login page
+                                                </a>
+                                            </Link>
+                                        )}
                                     </div>
                                 )}
                             </div>
