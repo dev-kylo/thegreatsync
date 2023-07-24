@@ -25,14 +25,16 @@ const ContentBlock = ({
     const contentContaier = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const elem = document.querySelector(`#md-block-${id}`);
+        const elem = document.querySelector(`#content-${id}`);
         if (elem) elem.scrollIntoView({ behavior: 'smooth' });
     }, [id]);
 
     return (
         <div ref={contentContaier}>
+            <span id={`content-${id}`} />
             <article
                 id={`md-block-${id} `}
+                key={`md-block-${id} `}
                 className="prose prose-strong:text-offwhite prose-li:text-offwhite prose-span:text-offwhite   prose-em:text-offwhite prose-p:text-offwhite prose-xl prose-headings:text-secondary_lightblue mx-auto prose-pre:p-0 pt-2 prose-code:text-[#7fdbca] prose-code:font-mono prose-code:after:hidden prose-code:before:hidden pb-16"
             >
                 {heading && <h2>{heading}</h2>}
@@ -70,7 +72,10 @@ const ContentBlock = ({
                         <h3 className="text-center pt-12 py-2"> Links & Resources</h3>
                         <ul className="pl-4 ml-0 max-w-xl">
                             {links.map((link) => (
-                                <li className="flex items-center justify-between py-2  pr-5 text-sm leading-6 h-[100vh]">
+                                <li
+                                    key={`link-${link.title}`}
+                                    className="flex items-center justify-between py-2  pr-5 text-sm leading-6"
+                                >
                                     <ExternalLink
                                         type={link.type}
                                         link={link.external_url || link.file.data?.attributes.url || ''}
