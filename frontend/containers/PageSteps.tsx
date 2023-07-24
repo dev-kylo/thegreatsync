@@ -58,7 +58,6 @@ const PageSteps = ({
 
     useEffect(() => {
         function scrollIntoView(indx: number) {
-            console.log(indx);
             if (stepsContainer.current && direction === 'prev' && indx > 0)
                 stepsContainer.current.querySelector(`#step_${indx - 1}`)!.scrollIntoView({ behavior: 'smooth' });
             if (stepsContainer.current && direction === 'next' && !isLastStep)
@@ -145,7 +144,6 @@ const PageSteps = ({
                                         >
                                             <Step
                                                 {...step}
-                                                currentNumber={currIndex + 1}
                                                 orderNumber={stepIdx + 1}
                                                 setCurrent={() => goToStep(stepIdx)}
                                                 status={stepIdx === currIndex ? 'current' : step?.status}

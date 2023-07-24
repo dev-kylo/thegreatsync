@@ -91,8 +91,12 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
     }, []);
 
     const showNextPageButton = useMemo(
-        () => (!steps || !viewedSteps ? false : !!viewedSteps[pageId]?.stepsCompleted[`${steps.length - 1}`]),
-        [pageId, steps, viewedSteps]
+        () =>
+            !steps || !viewedSteps
+                ? false
+                : !!viewedSteps[pageId]?.stepsCompleted[`${steps.length - 1}`] ||
+                  (stepIndex ? +stepIndex : 0) === steps.length - 1,
+        [pageId, steps, viewedSteps, stepIndex]
     );
 
     const stepData = useMemo(() => {
