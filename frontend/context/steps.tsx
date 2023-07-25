@@ -56,14 +56,14 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
     // Handle adding the current PageId to viewsteps
     useEffect(() => {
         try {
-            const viewed = viewedSteps || {};
+            const viewed = viewedSteps ? { ...viewedSteps } : {};
             const existingViewedPage = viewed[pageId];
             if (!existingViewedPage) {
-                viewed[pageId] = { stepsCompleted: { [stepIndex]: true } };
+                viewed[pageId] = { stepsCompleted: { [`${stepIndex}`]: true } };
             } else {
-                viewed[pageId].stepsCompleted = { ...viewed[pageId].stepsCompleted, [stepIndex]: true };
+                viewed[pageId] = { ...existingViewedPage };
+                viewed[pageId].stepsCompleted = { ...viewed[pageId].stepsCompleted, [`${stepIndex}`]: true };
             }
-
             setLocallyStoredValue('tgs-page-completion', viewed);
             setViewedSteps(viewed);
         } catch (e) {
@@ -91,8 +91,12 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
     }, []);
 
     const showNextPageButton = useMemo(
-        () => (!steps || !viewedSteps ? false : !!viewedSteps[pageId]?.stepsCompleted[`${steps.length - 1}`]),
-        [pageId, steps, viewedSteps]
+        () =>
+            !steps || !viewedSteps
+                ? false
+                : !!viewedSteps[pageId]?.stepsCompleted[`${steps.length - 1}`] ||
+                  (stepIndex ? +stepIndex : 0) === steps.length - 1,
+        [pageId, steps, viewedSteps, stepIndex]
     );
 
     const stepData = useMemo(() => {
