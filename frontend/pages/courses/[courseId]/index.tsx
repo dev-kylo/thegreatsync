@@ -15,9 +15,6 @@ type CourseProps = { course: CourseData };
 const Course = ({ course }: CourseProps) => {
     const { data: session } = useSession();
 
-    console.log('-----COURSE------');
-    console.log({ course, session });
-
     if (!session?.jwt) return <LoadingQuote />;
     return <CourseDashboard title={course.title} description={course.description} video={course?.video || undefined} />;
 };
@@ -52,7 +49,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
     const descriptionItems = resp.data.attributes.description;
-    console.log(descriptionItems);
     const text = descriptionItems.find((item) => item.__component === 'media.text')?.text;
     const video = descriptionItems.find((item) => item.__component === 'media.video')?.video;
 

@@ -132,7 +132,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     // On load of a page, update pageId
     useEffect(() => {
         if (courseId && !completedSessionPageIds.includes(pageId) && receivedCompletionData(usercompletion)) {
-            completePage(courseId, pageId);
+            if (courseId && pageId) completePage(courseId, pageId);
             setCompletedSessionPageIds([...completedSessionPageIds, pageId]);
             mutate(); // Fetch new completion data
         }
