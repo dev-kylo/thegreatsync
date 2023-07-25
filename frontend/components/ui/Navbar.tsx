@@ -6,6 +6,7 @@ import SlideOver from './SlideOver';
 import TitleStrip from './TitleStrip';
 import Menu from './Menu';
 import { CurrentLocation, MenuItem } from '../../types';
+import Spinner from './Spinner';
 
 export default function Navbar({
     chapterTitle,
@@ -36,7 +37,7 @@ export default function Navbar({
                             />
                         )}
                         <TitleStrip chapterTitle={chapterTitle} subChapterTitle={subChapterTitle} pageType={pageType} />
-                        <div className="block">
+                        <div className="hidden md:block">
                             <div className="flex items-center justify-end">
                                 <ProfileDropDown />
                             </div>
@@ -46,7 +47,14 @@ export default function Navbar({
             </Disclosure>
             <SlideOver open={openMenu} setOpen={setOpenMenu} current={current}>
                 <ProfileDropDown mobile />
-                {menuData && <Menu menuData={menuData} closeMenu={() => setOpenMenu(false)} current={current} />}
+
+                {menuData ? (
+                    <Menu menuData={menuData} closeMenu={() => setOpenMenu(false)} current={current} />
+                ) : (
+                    <div className="m-8 flex justify-center">
+                        <Spinner />
+                    </div>
+                )}
             </SlideOver>
         </>
     );

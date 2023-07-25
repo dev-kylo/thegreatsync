@@ -8,7 +8,7 @@ const TitleStrip = ({
     pageType?: string;
 }) => (
     <div
-        className={`flex flex-col ${
+        className={`flex flex-col mx-4 md:mx-0 ${
             pageType !== 'listing'
                 ? 'items-end md:items-center justify-center'
                 : 'items-start md:items-start justify-start'

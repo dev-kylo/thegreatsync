@@ -4,7 +4,7 @@ import Spinner from '../components/ui/Spinner';
 const LoadingQuote = () => (
     <Layout>
         <div className="w-full h-screen flex flex-col justify-center items-center">
-            <div className="mb-8">
+            <div className="mb-8 mx-8">
                 <span className="text-secondary_lightblue m-0 p-0 text-lg block">
                     Knowledge is limited. Imagination encircles the world.
                 </span>
