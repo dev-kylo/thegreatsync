@@ -60,6 +60,8 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
             const existingViewedPage = viewed[pageId];
             if (!existingViewedPage) {
                 viewed[pageId] = { stepsCompleted: { [`${stepIndex}`]: true } };
+            } else if (Object.keys(existingViewedPage.stepsCompleted).includes(`${stepIndex}`)) {
+                return;
             } else {
                 viewed[pageId] = { ...existingViewedPage };
                 viewed[pageId].stepsCompleted = { ...viewed[pageId].stepsCompleted, [`${stepIndex}`]: true };
