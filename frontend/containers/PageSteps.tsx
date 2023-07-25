@@ -16,6 +16,8 @@ type PageStepsProps = {
     heading?: string;
     links: ResourceLink[];
     loadingPage: boolean;
+    showNext: boolean;
+    showPrev: boolean;
     nextPage: () => void;
     prevPage: () => void;
     nextStep: () => void;
@@ -35,6 +37,8 @@ const PageSteps = ({
     heading,
     links,
     loadingPage,
+    showPrev,
+    showNext,
     nextPage,
     prevPage,
     nextStep,
@@ -117,7 +121,13 @@ const PageSteps = ({
                 <div className="hidden xl:block absolute xl:top-[-1rem] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 my-1 p-0 text-white mx-auto text-center text-sm">
                     {!shownKeysMsg && <span>Use your arrow keys</span>}
                 </div>
-                <ControlBar loadingPage={loadingPage} showNext={showNextButton} nextPage={nextPage} prevPage={prevPage}>
+                <ControlBar
+                    showPrev={showPrev}
+                    showNext={showNext && showNextButton}
+                    loadingPage={loadingPage}
+                    nextPage={nextPage}
+                    prevPage={prevPage}
+                >
                     {!loadingPage && (
                         <nav aria-label="Progress" className="flex items-center justify-center relative z-50 py-2">
                             <button
