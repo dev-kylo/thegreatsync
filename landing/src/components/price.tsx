@@ -26,23 +26,6 @@ function classNames(...classes: string[]) {
 
 export default function Price() {
 
-
-  useEffect(() => {
-    if(typeof window !== 'undefined'){{  
-      // (window as any).Paddle!.Environment.set('sandbox');
-      const vendorId = process.env.NEXT_PUBLIC_VENDORID || '1';
-      (window as any).Paddle!.Setup({ vendor: +vendorId});
-    }}
-  }, [])
- 
-    const openCheckout  = () => { 
-        if (typeof window === 'undefined') return;
-        (window as any).Paddle.Checkout.open({ product: 842496});
-    }
-
-
-
-
   return (
     <div className="relative isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
       <div className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden px-36 blur-3xl" aria-hidden="true">
@@ -117,9 +100,8 @@ export default function Price() {
               ))}
             </ul>
             <a
-              href={tier.href}
-              aria-describedby={tier.id}
-              onClick={openCheckout}
+              href={`${process.env.NEXT_PUBLIC_CHECKOUT_URL}`}
+ 
               className={classNames(
                 tier.featured
                   ? 'bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500'

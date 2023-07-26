@@ -7,6 +7,7 @@ import Step from '../components/ui/Step';
 import ControlBar from './ControlBar';
 import Text_Image from '../components/layout/screens/Text_Image';
 import BlurEdge from '../components/ui/BlurEdge';
+import Text_Code from '../components/layout/screens/Text_Code';
 
 type PageStepsProps = {
     currIndex: number;
@@ -114,6 +115,15 @@ const PageSteps = ({
                     image={currentTopicStep?.image}
                     links={links}
                     imageAlt={currentTopicStep?.image_alt}
+                />
+            )}
+
+            {type === 'text_code' && (
+                <Text_Code
+                    id={+currentTopicStep.id}
+                    text={currentTopicStep?.text}
+                    code={currentTopicStep?.code || ''}
+                    links={links}
                 />
             )}
 

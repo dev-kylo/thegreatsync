@@ -5,6 +5,7 @@
 import {  CustomerService, Order, PaddleFulfillment, User } from "../../../../custom-types";
 import { getErrorString } from "../../../utils/getErrorString";
 import { mapPaddleOrder } from "../../../utils/orderMappings";
+// import { validateWebhook } from "../../../utils/verifyPadelWebook";
 
 
 // User will have a checkbox to use an existing account. Just has to supply an email address with orderId to look up, then must login
@@ -76,7 +77,7 @@ export default {
 
         ctx.body = {
           success: true,
-          message: 'Your account has been updated with the new course. Proceed to login.'
+          message: 'Your account has been updated with the new course. Login below.'
         };
 
         return next()
@@ -112,7 +113,7 @@ export default {
         ctx.body = {
           success: true,
           orderId: order.order_id,
-          message: 'You have successfully registered. Proceed to login.'
+          message: 'You have successfully registered. Login below.'
         };
       }
 
@@ -135,11 +136,13 @@ export default {
     }
   },
   	createOrder: async (ctx, next) => {
+
       console.log('Create Order');
       const data = ctx.request.body as PaddleFulfillment;
       let trackingOrderId;
       try {
         // Verify Order
+        // if (!validateWebhook(data, process.env.PADDLE_PUBLIC_KEY)) return ctx.forbidden('Invalid webhook signature');
 
         console.log('--- WEBHOOK VERIFIED ---')
         // Extract values
@@ -156,13 +159,13 @@ export default {
           subject: 'Welcome to The Syncer Program',
           text: '',
           html: `
-          <p>Amazing news!</p>
-          <p>Congratulations on joining <em>The Syncer Program - Level Up With Visual and Memorable Javascript </em>. You are about to start an exciting journey into the realm of JavaScript!</p>
-          <p> Click the link below to register and access the platform: </p>
-          <a href='${process.env.TGS_FE_URL}/register?orderId=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderId=${order.order_id}</a>
-          <p> Also look out for an email containing the <strong>Discord Invitation to The Syncer Community </strong>. You can also find this in the navigation menu on the platform.</p>
-          <p> See you there! </p>
-          <p> Kylo </p>
+            <p>Amazing news!</p>
+            <p>Congratulations on joining <em>The Syncer Program - Level Up With Visual and Memorable Javascript </em>. You are about to start an exciting journey into the realm of JavaScript!</p>
+            <p> Click the link below to register and access the platform: </p>
+            <a href='${process.env.TGS_FE_URL}/register?orderid=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderId=${order.order_id}</a>
+            <p> Also look out for an email containing the <strong>Discord Invitation to The Syncer Community </strong>. You can also find this in the navigation menu on the platform.</p>
+            <p> See you there! </p>
+            <p> Kylo </p>
           `,
           headers: {
             'X-PM-Message-Stream': 'purchases'
@@ -211,7 +214,7 @@ export default {
             'X-PM-Message-Stream': 'purchases'
           }
         });
-
+          // ctx.status = 403;
           ctx.body = err;
       }
 	} 
