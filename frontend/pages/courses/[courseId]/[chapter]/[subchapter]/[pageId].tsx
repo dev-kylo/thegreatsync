@@ -27,7 +27,8 @@ type CoursePageProps = {
     current: CurrentLocation;
 };
 export default function CoursePage({ title, type, content, links, current }: CoursePageProps) {
-    const { menuData, chapterName, subChapterName, loadingPage, nextPage, prevPage } = useContext(NavContext);
+    const { menuData, chapterName, subChapterName, loadingPage, nextPage, prevPage, showNext, showPrev } =
+        useContext(NavContext);
 
     const { data: session } = useSession();
     setAuthToken((session?.jwt as string) || '');
@@ -78,7 +79,15 @@ export default function CoursePage({ title, type, content, links, current }: Cou
                     menuData={menuData}
                 />
                 {contentLayout}
-                {!hasPageSteps && <ControlBar loadingPage={loadingPage} nextPage={nextPage} prevPage={prevPage} />}
+                {!hasPageSteps && (
+                    <ControlBar
+                        loadingPage={loadingPage}
+                        showNext={showNext}
+                        showPrev={showPrev}
+                        nextPage={nextPage}
+                        prevPage={prevPage}
+                    />
+                )}
             </Layout>
         </Protected>
     );

@@ -132,7 +132,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     // On load of a page, update pageId
     useEffect(() => {
         if (courseId && !completedSessionPageIds.includes(pageId) && receivedCompletionData(usercompletion)) {
-            completePage(courseId, pageId);
+            if (courseId && pageId) completePage(courseId, pageId);
             setCompletedSessionPageIds([...completedSessionPageIds, pageId]);
             mutate(); // Fetch new completion data
         }
@@ -172,8 +172,8 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
                 menuData: menuChapters,
                 courseSequence,
                 courseCompletionStat,
-                showNext: !!courseSequence?.currentPageNode?.next,
-                showPrev: true,
+                showNext: !courseSequence?.currentPageNode ? false : !(`${courseSequence?.tail?.data?.id}` === pageId),
+                showPrev: !courseSequence?.currentPageNode ? false : !(`${courseSequence?.head?.data?.id}` === pageId),
                 loadingPage,
                 setLoadingPage,
                 nextPage,

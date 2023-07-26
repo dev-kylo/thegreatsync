@@ -14,7 +14,7 @@ type PageStepsControllerProps = {
 };
 
 const PageStepsController = ({ pageContent, type, heading, links, loadingPage }: PageStepsControllerProps) => {
-    const { nextPage, prevPage } = useContext(NavContext);
+    const { nextPage, prevPage, showNext, showPrev } = useContext(NavContext);
     const { nextStep, prevStep, goToStep, currIndex, setStepData, steps, showNextPageButton } = useContext(StepContext);
 
     useEffect(() => {
@@ -40,6 +40,8 @@ const PageStepsController = ({ pageContent, type, heading, links, loadingPage }:
             showNextButton={showNextPageButton}
             type={type}
             loadingPage={loadingPage}
+            showNext={showNext}
+            showPrev={showPrev}
             nextPage={nextPage}
             prevPage={prevPage}
             goToStep={goToStep}

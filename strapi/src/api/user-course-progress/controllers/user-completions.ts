@@ -46,15 +46,20 @@ export default {
         }) as UserCourseProgress
 
         // Exit if no user completion data found
-        if (!userCompletion) return ctx.response.notFound('No user course progress data found')
+        if(!userCompletion || !userCompletion?.pages || !userCompletion?.chapters || !userCompletion?.subchapters){
+            return ctx.response.notFound('No user course progress data found')
+        }
 
         // Set page completion to true
         const pageCompletion = userCompletion.pages;
         const targetPageIndex = userCompletion.pages.findIndex((page: PageCompletion) => page.id === +pageId);
         
+        const completedPage = pageCompletion[targetPageIndex];
+        if (!completedPage) return ctx.response.notFound('This page does not exist in completion data')
+
         // If page is already completed, early exit
-        if (pageCompletion[targetPageIndex].completed) return ctx.body = { success: true }
-        pageCompletion[targetPageIndex].completed = true; 
+        if (completedPage?.completed) return ctx.body = { success: true }
+        completedPage.completed = true; 
         
         // For each subchapter
         userCompletion.subchapters.forEach(sb => {
@@ -82,6 +87,7 @@ export default {
                 chapters: userCompletion.chapters
             },
         });
+        
         ctx.response.status = 202;
         ctx.body = {
             success: true

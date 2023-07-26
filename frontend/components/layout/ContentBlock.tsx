@@ -48,7 +48,7 @@ const ContentBlock = ({
                                     style={style}
                                     language="javascript"
                                     PreTag="div"
-                                    customStyle={{ display: 'inline' }}
+                                    customStyle={{ display: 'inline', padding: ' 0.2rem 0.5rem' }}
                                 />
                             </div>
                         );
@@ -61,7 +61,10 @@ const ContentBlock = ({
                     <h3 className="text-center pt-12 py-2"> Links & Resources</h3>
                     <ul className="pl-4 max-w-md m-auto">
                         {links.map((link) => (
-                            <li className="flex items-center justify-between py-2  pr-5 text-sm leading-6">
+                            <li
+                                className="flex items-center justify-between py-2  pr-5 text-sm leading-6"
+                                key={link.id}
+                            >
                                 <ExternalLink
                                     type={link.type}
                                     link={link.external_url || link.file.data?.attributes.url || ''}
