@@ -12,18 +12,15 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: { 
-            h1 : {
-              fontSize: '36px!important',
-              paddingTop: '1rem'
-            },
+
             h2: {
-              fontSize: '32px!important',
+              // fontSize: '32px!important',
               margin: '1.2rem 0!important',
               lineHeight: '1!important',
               fontWeight: '800',
             }, 
             h3: {
-              fontSize: '22px'
+              // fontSize: '22px'
             }, 
             'pre > h2, pre > h3': {
               marginBottom: '1.5em!important'

@@ -36,14 +36,24 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                 {visiblePane === 'text' && (
                     <div className="bg-black h-full">
                         <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll>
-                            <ContentBlock md={text} id={id} heading={heading} links={links} />
+                            <ContentBlock
+                                md={text}
+                                id={id}
+                                heading={heading}
+                                links={links}
+                                key={`mobiletext-block:-${id}`}
+                            />
                         </Block>
                     </div>
                 )}
 
                 {visiblePane === 'image' && (
                     <div id="two" className=" h-full flex align-middle items-center ">
-                        <Block hideBorder outerClasses="h-full relative" key={`mobileimageblock:${image.data.id}-${id}`}>
+                        <Block
+                            hideBorder
+                            outerClasses="h-full relative"
+                            key={`mobileimageblock:${image.data.id}-${id}`}
+                        >
                             <Image
                                 key={`image:${image.data.id}-${id}`}
                                 id={`image:${id}`}
@@ -65,7 +75,7 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
             <Allotment defaultSizes={[1, 2]}>
                 <Allotment.Pane>
                     <div id="one" className="bg-black h-full">
-                        <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll>
+                        <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll key={`text-block:-${id}`}>
                             <ContentBlock md={text} id={id} heading={heading} links={links} />
                         </Block>
                     </div>

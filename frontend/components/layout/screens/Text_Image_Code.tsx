@@ -38,14 +38,23 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                 <div className="h-full">
                     {visiblePane === 'text' && (
                         <div className="bg-black h-full w-full">
-                            <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll>
+                            <Block
+                                outerClasses="bg-code_bg"
+                                innerClasses="p-4"
+                                enableScroll
+                                key={`mobiletext-block:-${id}`}
+                            >
                                 <ContentBlock md={text} id={id} heading={heading} links={links} />
                             </Block>
                         </div>
                     )}
                     {visiblePane === 'image' && (
                         <div className=" h-full flex align-middle items-center ">
-                            <Block hideBorder outerClasses=" h-full relative" key={`mobileimageblock:${image.data.id}-${id}`} >
+                            <Block
+                                hideBorder
+                                outerClasses=" h-full relative"
+                                key={`mobileimageblock:${image.data.id}-${id}`}
+                            >
                                 <Image
                                     id={`image:${image.data.id}`}
                                     key={`image:${image.data.id}-${id}`}
@@ -77,7 +86,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
             <Allotment defaultSizes={[1, 1.5, 1]}>
                 <Allotment.Pane>
                     <div id="one" className="bg-black h-full w-full ">
-                        <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll>
+                        <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll key={`text-block:-${id}`}>
                             <ContentBlock md={text} id={id} heading={heading} links={links} />
                         </Block>
                     </div>
@@ -102,7 +111,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
 
                 <Allotment.Pane>
                     <div id="three" className="bg-violet-800 h-full ">
-                        <Block outerClasses="bg-code_bg" enableScroll>
+                        <Block outerClasses="bg-code_bg" enableScroll key={`code-block:-${id}`}>
                             <ContentBlock md={code} id={id} />
                         </Block>
                         <CopyButton textcode={code} />
