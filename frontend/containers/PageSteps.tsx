@@ -104,7 +104,7 @@ const PageSteps = ({
                     id={currentTopicStep?.id}
                     text={currentTopicStep?.text}
                     image={currentTopicStep?.image}
-                    links={links}
+                    links={isLastStep ? links : []}
                     imageAlt={currentTopicStep?.image_alt}
                 />
             )}
@@ -113,7 +113,7 @@ const PageSteps = ({
                     id={+currentTopicStep.id}
                     text={currentTopicStep?.text}
                     image={currentTopicStep?.image}
-                    links={links}
+                    links={isLastStep ? links : []}
                     imageAlt={currentTopicStep?.image_alt}
                 />
             )}
@@ -123,7 +123,7 @@ const PageSteps = ({
                     id={+currentTopicStep.id}
                     text={currentTopicStep?.text}
                     code={currentTopicStep?.code || ''}
-                    links={links}
+                    links={isLastStep ? links : []}
                 />
             )}
 
