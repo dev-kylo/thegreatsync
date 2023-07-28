@@ -10,7 +10,7 @@ export default function WhoAmI() {
               <blockquote className="text-lg font-semibold leading-6 text-gray-900 sm:text-2xl sm:leading-8 mb-4">
     
                 <p>
-                  I don&lsquo;t have a background in computer science. I studied Journalism... But it turns out it&lsquo;s not an indepth knowledge of computers you need. It&lsquo;s your creativity!
+                  I don&lsquo;t have a background in computer science. I studied Journalism... But it turns out it&lsquo;s not an in depth knowledge of computers you need. It&lsquo;s your creativity!
                 </p>
               </blockquote>
             </div>
