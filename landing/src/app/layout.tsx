@@ -15,8 +15,12 @@ export default function RootLayout({
     <html lang="en">
       <head>
       <script async src="https://cdn.paddle.com/paddle/paddle.js"></script>
+  
+
       </head>
       <body>{children}</body>
     </html>
   )
 }
+      // window.Paddle.Environment.set('sandbox');
+            // Sandbox product 54653

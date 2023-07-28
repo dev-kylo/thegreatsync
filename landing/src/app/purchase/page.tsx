@@ -6,13 +6,13 @@ const Purchase = () => {
 
     useEffect(() => {
 
-        (window as any).Paddle.Setup({ vendor: 13136});
-        (window as any).Paddle.Environment.set('sandbox');
+        // (window as any).Paddle.Setup({ vendor: 13136});
+        // (window as any).Paddle.Environment.set('sandbox');
         // Sandbox product 54653
         //842496
     
-        //const vendorId = process.env.NEXT_PUBLIC_VENDORID || '1';
-        // (window as any).Paddle.Setup({ vendor: +vendorId});
+        const vendorId = process.env.NEXT_PUBLIC_VENDORID || '1';
+        (window as any).Paddle.Setup({ vendor: +vendorId});
     
         (window as any).Paddle.Checkout.open({
         method: 'inline', // set to `inline`

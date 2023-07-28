@@ -1,6 +1,7 @@
 "use client"
 
 import { CheckIcon } from '@heroicons/react/20/solid'
+import Link from 'next/link'
 import { useEffect } from 'react'
 
 const tiers = [
@@ -11,10 +12,10 @@ const tiers = [
     priceMonthly: '$97',
     description: 'Step into The Great Sync visual model and discover an unforgettable way of learning JavaScript.',
     features: [
-      '35 videos',
-      '60+ pages',
-      '25+ illustrations',
-      'Syncer commnunity support'
+      '40+ videos',
+      '80+ pages',
+      '35+ illustrations',
+      'The Syncer community'
     ],
     featured: true,
   },
@@ -27,16 +28,8 @@ function classNames(...classes: string[]) {
 export default function Price() {
 
   return (
-    <div className="relative isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
-      <div className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden px-36 blur-3xl" aria-hidden="true">
-        <div
-          className="mx-auto aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
-          style={{
-            clipPath:
-              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-          }}
-        />
-      </div>
+    <div className="relative isolate bg-white px-6 py-24 sm:py-12 lg:px-8">
+
       <div className="mx-auto max-w-2xl text-center lg:max-w-4xl">
         <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
           It&lsquo;s time to level up!
@@ -68,16 +61,24 @@ export default function Price() {
             >
               {tier.name}
             </h3>
-            <p className="mt-4 flex items-baseline gap-x-2">
+            <p className="mt-4 flex items-baseline flex-col sm:flex-row gap-x-2">
+              <span
+                className={classNames(
+                  tier.featured ? 'text-white' : 'text-gray-900',
+                  'text-4xl font-bold tracking-tight line-through'
+                )}
+              >
+                1.00
+              </span>
               <span
                 className={classNames(
                   tier.featured ? 'text-white' : 'text-gray-900',
                   'text-5xl font-bold tracking-tight'
                 )}
               >
-                {tier.priceMonthly}
+                $0.50
               </span>
-              <span className={classNames(tier.featured ? 'text-gray-400' : 'text-gray-500', 'text-base')}> for lifetime access</span>
+              <span className='text-gray-500 block'> 50% off for this first launch</span>
             </p>
             <p className={classNames(tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-6 text-base leading-7')}>
               {tier.description}
@@ -99,18 +100,17 @@ export default function Price() {
                 </li>
               ))}
             </ul>
-            <a
-              href={`${process.env.NEXT_PUBLIC_CHECKOUT_URL}`}
- 
-              className={classNames(
+
+            <Link href="/purchase" passHref className={classNames(
                 tier.featured
                   ? 'bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500'
                   : 'text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300 focus-visible:outline-indigo-600',
                 'mt-8 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:mt-10'
-              )}
-            >
+              )}>
+
               GET INSTANT ACCESS
-            </a>
+         
+            </Link>
           </div>
         ))}
       </div>

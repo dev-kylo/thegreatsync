@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function SingleQuote() {
     return (
       <section className="relative isolate overflow-hidden bg-primary_blue px-6 py-24 sm:py-32 lg:px-8">
@@ -14,11 +16,15 @@ export default function SingleQuote() {
               </p>
             </blockquote>
             <figcaption className="mt-10">
-              <img
+              <Image
                 className="mx-auto h-28 w-28 rounded-full"
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src="https://res.cloudinary.com/the-great-sync/image/upload/v1690481761/Carl_Bebli_piodpj.jpg"
                 alt=""
-              />
+                width={600}
+                height={600}
+
+/>
+      
               <div className="mt-4 flex items-center justify-center space-x-3 text-base">
                 <div className="font-semibold text-white"> Carl Bebli</div>
                 <svg viewBox="0 0 2 2" width={3} height={3} aria-hidden="true" className="fill-gray-900">
