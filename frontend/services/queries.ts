@@ -1,14 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import qs from 'qs';
 import { AxiosResponse } from 'axios';
-import {
-    ChaptersResponse,
-    CourseData,
-    CourseResponse,
-    CoursesByUserResponse,
-    PageResponse,
-    UserCourseProgressResponse,
-} from '../types';
+import { ChaptersResponse, CourseData, CourseResponse, PageResponse, UserCourseProgressResponse } from '../types';
 
 import { httpClient } from '../libs/axios';
 
@@ -31,7 +24,7 @@ export const getChapters = async (courseId: string | number): Promise<ChaptersRe
     );
     console.log('Querying CHAPTERS data');
     const res = await httpClient.get<ChaptersResponse>(`/api/chapters?${query}`);
-    return res && res.data;
+    return res && res?.data;
 };
 
 export const getPage = async (id: string | number): Promise<PageResponse> => {
@@ -45,7 +38,7 @@ export const getPage = async (id: string | number): Promise<PageResponse> => {
     );
     console.log('Querying PAGE data');
     const res = await httpClient.get<PageResponse>(`/api/pages/${id}?${query}`);
-    return res && res.data;
+    return res && res?.data;
 };
 
 export const getEnrolledCourses = async (): Promise<AxiosResponse<CourseData[]>> => {
@@ -63,7 +56,7 @@ export const getCourse = async (id: string | number): Promise<CourseResponse> =>
         }
     );
     const res = await httpClient.get<CourseResponse>(`/api/courses/${id}?${query}`);
-    return res && res.data;
+    return res && res?.data;
 };
 
 export const getUserCompletions = async ({
@@ -74,5 +67,5 @@ export const getUserCompletions = async ({
 }): Promise<UserCourseProgressResponse> => {
     console.log('Querying USER data');
     const res = await httpClient.get<UserCourseProgressResponse>(`/api/user-course-progress/?courseId=${courseId}`);
-    return res && res.data;
+    return res && res?.data;
 };

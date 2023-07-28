@@ -102,11 +102,11 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const nextPage = () => {
         if (!courseSequence || !courseSequence.currentPageNode) return;
         setLoadingPage(true);
-        courseSequence.currentPageNode.data.completed = true;
+        if (courseSequence.currentPageNode?.data) courseSequence.currentPageNode.data.completed = true;
         if (receivedCompletionData(usercompletion)) mutate(); // Fetch new completion data
         const nextNode = courseSequence.currentPageNode?.next || courseSequence.getFirstUncompleted();
         let redirectUrl = '/';
-        if (nextNode) {
+        if (nextNode && nextNode?.data) {
             courseSequence.currentPageNode = nextNode;
             setLocation(nextNode.data);
             redirectUrl = nextNode.data.href!;
@@ -121,7 +121,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (!courseSequence) return;
         setLoadingPage(true);
         const prevNode = courseSequence.currentPageNode?.previous;
-        if (prevNode) {
+        if (prevNode && prevNode?.data) {
             courseSequence.currentPageNode = prevNode;
             setLoadingPage(false);
             setLocation(prevNode.data);
@@ -142,9 +142,9 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         const list = courseSequence;
         if (!chapterLocation) setLocation(courseSequence?.currentPageNode?.data);
         if (pageId && list) {
-            if (+pageId !== list.currentPageNode?.data.id) {
+            if (+pageId !== list.currentPageNode?.data?.id) {
                 const foundNode = list.getByDataId(+pageId);
-                if (foundNode) {
+                if (foundNode && foundNode?.data) {
                     list.currentPageNode = foundNode;
                     setLocation(foundNode.data);
                 }
