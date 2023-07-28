@@ -18,7 +18,12 @@ export default function Text_Code({ text, code, id, heading, links }: Text_Code_
 
                 {visiblePane === 'text' && (
                     <div className="bg-black h-full">
-                        <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll>
+                        <Block
+                            outerClasses="bg-code_bg"
+                            innerClasses="p-4"
+                            enableScroll
+                            key={`mobiletext-block:-${id}`}
+                        >
                             <ContentBlock md={text} id={id} heading={heading} links={links} />
                         </Block>
                     </div>
@@ -26,7 +31,7 @@ export default function Text_Code({ text, code, id, heading, links }: Text_Code_
 
                 {visiblePane === 'code' && (
                     <div className="bg-violet-800 h-full relative">
-                        <Block outerClasses="bg-code_bg" enableScroll>
+                        <Block outerClasses="bg-code_bg" enableScroll key={`mobilecode-block:-${id}`}>
                             <ContentBlock md={code} id={id} />
                         </Block>
                         <CopyButton textcode={code} />
@@ -40,14 +45,14 @@ export default function Text_Code({ text, code, id, heading, links }: Text_Code_
             <Allotment defaultSizes={[1, 1]}>
                 <Allotment.Pane minSize={500}>
                     <div id="one" className="bg-black h-full">
-                        <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll>
+                        <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll key={`text-block:-${id}`}>
                             <ContentBlock md={text} id={id} heading={heading} links={links} />
                         </Block>
                     </div>
                 </Allotment.Pane>
                 <Allotment.Pane>
                     <div className="bg-violet-800 h-full relative ml-6">
-                        <Block outerClasses="bg-code_bg" enableScroll>
+                        <Block outerClasses="bg-code_bg" enableScroll key={`code-block:-${id}`}>
                             <ContentBlock md={code} id={id} />
                         </Block>
                         <CopyButton textcode={code} />
