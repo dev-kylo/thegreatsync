@@ -71,6 +71,17 @@ a {
     }
 }
 
-pre {
+/* 
+[id*='md-article-block:35'] pre {
+    height: 100% !important;
+} */
+
+
+#md-code-block pre {
     height: 100% !important;
 }
+
+/* md-article-block:35 */
+/* #md-block:35 pre {
+    height: 100% !important;
+} */
