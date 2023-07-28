@@ -76,9 +76,9 @@ export default function Price() {
                   'text-5xl font-bold tracking-tight'
                 )}
               >
-                $0.50
+                $0.70
               </span>
-              <span className='text-gray-500 block'> 50% off for this first launch</span>
+              <span className='text-gray-500 block'> 20% off for this first launch</span>
             </p>
             <p className={classNames(tier.featured ? 'text-gray-300' : 'text-gray-600', 'mt-6 text-base leading-7')}>
               {tier.description}
