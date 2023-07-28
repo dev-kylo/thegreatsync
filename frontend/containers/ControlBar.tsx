@@ -55,7 +55,15 @@ const ControlBar = ({
                 ) : (
                     <div />
                 )}
-                {loadingPage && <Spinner />}
+
+                {loadingPage ? (
+                    <Spinner />
+                ) : !showNext && !showPrev ? (
+                    <div className="flex justify-center md:justify-end md:mr-12 w-full ">
+                        <Spinner />
+                    </div>
+                ) : null}
+
                 {showNext && (
                     <button
                         type="button"
