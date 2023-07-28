@@ -82,7 +82,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
     }
 
     return (
-        <div className="p-4">
+        <div className="p-4 ">
             <Allotment defaultSizes={[1, 1.5, 1]}>
                 <Allotment.Pane>
                     <div id="one" className="bg-black h-full w-full ">
@@ -93,7 +93,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                 </Allotment.Pane>
 
                 <Allotment.Pane minSize={200}>
-                    <div id="two" className=" h-full flex align-middle items-center ">
+                    <div id="two" className="h-full flex align-middle items-center ">
                         <Block hideBorder outerClasses=" h-full relative" key={`imageblock:${image.data.id}-${id}`}>
                             <Image
                                 key={`image:${image.data.id}-${id}`}
