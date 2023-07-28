@@ -105,7 +105,7 @@ export function mapMenuChapters(
     courseUid: string,
     completionData?: UserCourseProgressResponse
 ): MenuItem[] {
-    const chapters = chaptersResponse.data?.data;
+    const chapters = chaptersResponse?.data?.data;
     if (!Array.isArray(chapters) || !chapters || chapters.length === 0) return [];
 
     console.log(completionData);
@@ -118,7 +118,7 @@ export function mapMenuChapters(
             const { id: chapterId, attributes } = chapter;
             const chapterTitle = attributes.title;
             const parentData = { chapter: { id: chapterId, name: chapterTitle } };
-            const subchapters = attributes.subchapters.data;
+            const subchapters = attributes.subchapters?.data;
             const mappedChapter = {} as Partial<MenuItem>;
             mappedChapter.name = chapterTitle;
             mappedChapter.completed = completed && completed.chapters.find((chp) => chp.id === chapter.id)?.completed;

@@ -13,38 +13,31 @@ export default function Mnemonics() {
 
           <div className="max-w-xl text-base leading-7 text-gray-700 lg:col-span-7">
           <h2 className="mt-8 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">The Syncer Program</h2>
-          <span className='pt-8 font-bold'>Level Up With Visual & Memorable JavaScript</span>
+          <span className='block mt-4  font-bold'>Level Up With Visual & Memorable JavaScript</span>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          I often get asked by students to explain one of JavaScript’s more tricky concepts, like closures or prototypal inheritance. I reply by asking them to first explain something basic, like how objects can store other objects.
+            Together we journey through an imagined JavaScript universe, with one ultimate objective: providing you with a blue print to build applications.
           </p>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          The reaction is almost always the same. “I know these basics, I want to learn more advanced stuff”.
+           This course will give you a firm foundation to continue learning intermediate/advanced web development.
           </p>
+          <h2 className="mt-8 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">The course includes:</h2>
+          <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">40+ videos</h3>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          But do you know the basics, Gerald? Do you?
+           There are videos in every section, each between 5 and 10 minutes long.
           </p>
+          <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">80+ written pages</h3>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          The turning point in your learning journey is the moment you begin to deconstruct JavaScript - to really understand each piece of the puzzle. 
+          Along with video comes a lot of written content. I am firm believer in the importance of practicing reading technical documentation. Developers spend a large part of their day doing exactly this.
           </p>
+          <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">35+ illustrations</h3>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          That’s how you can piece it all back together again.  That’s how you start to see patterns.
+            These illustrations are the backbone of the course, and they come in various shapes and sizes. They are the layers of JavaScript we will piece together.
           </p>
+          <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">The Syncer Community</h3>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          The problem is, how do you remember each piece? 
+            You will gain access to a private community on Discord where you can interact with fellow learners and grow your craft together.
           </p>
-          <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">The Great Sync Learning Method</h3>
-          <p className="mt-6 text-xl leading-8 text-gray-700">
-          The key is to look at each concept with a different perspective. Code is not two dimensional. It occupies space and time. It is a physical, moving force. 
-          </p>
-          <p className="mt-6 text-xl leading-8 text-gray-700">
-          Using the power of our imagination, we can paint a vivid picture of what each line of code does. We can construct a beautiful, memorable representation of JavaScript, and refer to it whenever we write or read code.
-          </p>
-          <p className="mt-6 text-xl leading-8 text-gray-700">
-          They’re not simply analogies. They are mental models. Each conveys the relationship between concepts, linking them together and explaining how everything fits.
-          </p>
-          {/* <p className="mt-6 text-xl leading-8 text-gray-700">
-           Memory is the foundation of knowledge and skill, and we draw on mnemonic memory techniques principles to make what we’re learning easier to remember.
-          </p> */}
+   
           </div>
           <div className="relative lg:order-last lg:col-span-5 ">
           <div className="relative w-full h-auto pt-8">

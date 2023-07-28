@@ -7,5 +7,5 @@ export const completePage = async (
     const res = await httpClient.put<{ success: boolean }>(
         `/api/user-course-progress?courseId=${courseId}&pageId=${pageId}`
     );
-    return res && res.data;
+    return res && res?.data;
 };
