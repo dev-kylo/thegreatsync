@@ -105,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     } catch (e) {
         console.log(e);
     }
-    if (!resp || resp.error || !resp.data) {
+    if (!resp || resp.error || !resp?.data) {
         console.log('THERE IS AN ERROR');
         if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
         if (resp.error?.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
