@@ -204,7 +204,7 @@ export default {
         // Notify Customer of Failure
         if (data?.email){
           await strapi.plugin('email').service('email').send({
-            to: process.env.CONTACT_ADDRESS,
+            to: data.email,
             subject: 'There is a delay processing your order',
             text: '',
             html: `<h2>Hi! 👋</h2> 
