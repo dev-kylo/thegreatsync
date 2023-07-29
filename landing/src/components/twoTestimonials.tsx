@@ -33,7 +33,7 @@ export default function TwoTestimonials() {
               <figure className="mt-10 flex flex-auto flex-col justify-between">
                 <blockquote className="text-lg leading-8 text-gray-900">
                   <p>
-                    “Kylo is a great teacher and a lot of care and thought has gone into the JavaScript mental modal in a fun and interesting way! If you struggle to understand some of the more complex JavaScript concepts, definitely give The Great Sync a go! - Annie🦄⚡️”
+                    “Kylo is a great teacher and a lot of care and thought has gone into the JavaScript mental model in a fun and interesting way! If you struggle to understand some of the more complex JavaScript concepts, definitely give The Great Sync a go! - Annie🦄⚡️”
                   </p>
                 </blockquote>
                 <figcaption className="mt-10 flex items-center gap-x-6">

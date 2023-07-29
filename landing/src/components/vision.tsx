@@ -23,7 +23,7 @@ export default function Vision() {
             <figure className="border-l border-indigo-600 pl-8 mt-32">
               <blockquote className="text-xl font-semibold leading-8 tracking-tight text-gray-900">
                 <p>
-                  “Kylo taught me some of the most critical concepts in JavaScript and my confidence just skyrocketed. I wasnI&lsquo;mt scared of the errors anymore; I could understand the errors better and debugging became fun!”
+                  “Kylo taught me some of the most critical concepts in JavaScript and my confidence just skyrocketed. I wasn&lsquo;t scared of the errors anymore; I could understand the errors better and debugging became fun!”
                 </p>
               </blockquote>
               <figcaption className="mt-8 flex gap-x-4">
@@ -54,7 +54,7 @@ export default function Vision() {
           You sit at your desk, and begin planning the day&lsquo;s work. You&lsquo;re quite new in the job, but already they need you to urgently fix a bug in the application.
           </p>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          This is first time you&lsquo;re seeing the code. There&lsquo;s a lot of it!  You smile and remember a time this would cause panic and stress.
+          This is the first time you&lsquo;re seeing the code. There&lsquo;s a lot of it!  You smile and remember a time this would cause panic and stress.
           </p>
           <p className="mt-6 text-xl leading-8 text-gray-700">
           Now, it&lsquo;s just a challenge - a satisfying exercise to fix something with the knowledge you have. It&lsquo;s only plain ol&lsquo; JavaScript. The patterns are all the same 

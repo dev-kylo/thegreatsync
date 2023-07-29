@@ -11,12 +11,12 @@ export default function Credibility() {
         <div className='flex flex-col items-center'>
             <span className='text-6xl font-bold tracking-tight mb-8'>Hi, I&lsquo;m Kylo </span>
         </div>
-        <p> I am not an engineer at Google or Netflix. I do not work on the React team or a world famous library.</p>
-        <p> But I am a senior Javascript developer who a few years ago career-transitioned. My journey begn by learning on the side of a day-job and giving every spare hour to coding.</p>
-        <p> I went on to build a career I love. It has allowed me to work in three different countries, and develop many platforms and applications I’m proud of. </p>
-        <p>Having the skills to build any web app is not the only reason I love what I do. I also have the privilege of helping others, and over the years I have mentored and coached dozens of students into professional developers.</p>
-        <p>Working in tech teams with so many backgrounds and skill sets has taught me to appreciate every individual&lsquo;s unique way of thinking.</p>
-        <p>It turns out you don’t need to think like a computer. And the visual teaching methods I use actively encourages you to bring your own creative perspective to any problem.</p>
+        <p className="mt-6 text-xl leading-8 text-gray-700"> I am not an engineer at Google or Netflix. I do not work on the React team or a world famous library.</p>
+        <p className="mt-6 text-xl leading-8 text-gray-700"> But I am a senior Javascript developer who a few years ago career-transitioned. My journey began by learning on the side of a day-job and giving every spare hour to coding.</p>
+        <p className="mt-6 text-xl leading-8 text-gray-700"> I went on to build a career I love. It has allowed me to work in three different countries, and develop many platforms and applications I&lsquo;m proud of. </p>
+        <p className="mt-6 text-xl leading-8 text-gray-700">Having the skills to build any web app is not the only reason I love what I do. I also have the privilege of helping others, and over the years I have mentored and coached dozens of students into professional developers.</p>
+        <p className="mt-6 text-xl leading-8 text-gray-700">Working in tech teams with so many backgrounds and skill sets has taught me to appreciate every individual&lsquo;s unique way of thinking.</p>
+        <p className="mt-6 text-xl leading-8 text-gray-700">It turns out you don’t need to think like a computer. And the visual teaching methods I use actively encourages you to bring your own creative perspective to any problem.</p>
         <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-12">
         <h2 className="text-center text-lg font-semibold leading-8 text-gray-900">
           My work is featured in
