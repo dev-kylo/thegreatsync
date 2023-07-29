@@ -50,6 +50,7 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
 
     // When a page loads, it calls this API
     const setStepData = (contentSteps: PageContent[]) => {
+        setStepIndex(0);
         setSteps(contentSteps as PageStep[]);
     };
 

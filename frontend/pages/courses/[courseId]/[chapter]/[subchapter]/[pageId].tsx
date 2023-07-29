@@ -46,6 +46,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
                 pageContent={content}
                 type={type}
                 links={links}
+                pageId={`${current.pageId}`}
             />
         );
     else if (type === 'text') contentLayout = <Text text={text} heading={title} id={id} links={links} />;

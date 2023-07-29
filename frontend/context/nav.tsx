@@ -51,8 +51,12 @@ function createList(menuItems: MenuItem[]) {
     return list;
 }
 
-function receivedCompletionData(data?: UserCourseProgressResponse) {
-    return !!(data && data?.pages);
+function receivedCompletionData(completionData?: UserCourseProgressResponse) {
+    return !!(completionData && completionData?.pages);
+}
+
+function isAlreadyCompleted(courseSequence: DoublyLinkedList) {
+    return !!(courseSequence && courseSequence?.currentPageNode?.data && courseSequence.currentPageNode.data.completed);
 }
 
 const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
@@ -103,7 +107,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (!courseSequence || !courseSequence.currentPageNode) return;
         setLoadingPage(true);
         if (courseSequence.currentPageNode?.data) courseSequence.currentPageNode.data.completed = true;
-        if (receivedCompletionData(usercompletion)) mutate(); // Fetch new completion data
+        // if (receivedCompletionData(usercompletion)) mutate(); // Fetch new completion data
         const nextNode = courseSequence.currentPageNode?.next || courseSequence.getFirstUncompleted();
         let redirectUrl = '/';
         if (nextNode && nextNode?.data) {

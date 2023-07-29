@@ -70,7 +70,7 @@ function createMenuDropDownLink(menuChildren: MenuItem[], callback: () => void, 
         const { level, type, name, completed, children, href, current, id } = subItem;
         if (!children) {
             return (
-                <Link href={href || '/'} passHref>
+                <Link href={href || '/'} passHref key={id}>
                     <Disclosure.Button
                         onClick={() => callback()}
                         key={name}
