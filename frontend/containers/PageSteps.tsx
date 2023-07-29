@@ -154,7 +154,7 @@ const PageSteps = ({
                                 <ol ref={stepsContainer} className="flex items-center ">
                                     {pageSteps.map((step: PageStep, stepIdx: number) => (
                                         <li
-                                            key={step.id}
+                                            key={`step_${step.id}`}
                                             id={`step_${stepIdx}`}
                                             className={classNames(
                                                 stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-10' : '',

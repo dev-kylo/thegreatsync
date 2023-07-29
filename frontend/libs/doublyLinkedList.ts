@@ -34,8 +34,8 @@ export class DoublyLinkedList {
         this.tail = newTail;
         if (!this.head) this.head = newTail;
         if (
-            (this.currentPageNode && this.currentPageNode.data.completed && !newTail.data.completed) ||
-            newTail.data.completed
+            (this.currentPageNode && this.currentPageNode?.data.completed && !newTail?.data.completed) ||
+            newTail?.data.completed
         ) {
             this.currentPageNode = newTail;
         }

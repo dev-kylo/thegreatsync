@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import type { PageContent, PageType, ResourceLink } from '../types';
 import PageSteps from './PageSteps';
 import { NavContext } from '../context/nav';
@@ -8,18 +8,25 @@ import Spinner from '../components/ui/Spinner';
 type PageStepsControllerProps = {
     pageContent: PageContent[];
     loadingPage: boolean;
+    pageId: string;
     heading?: string;
     type: PageType;
     links: ResourceLink[];
 };
 
-const PageStepsController = ({ pageContent, type, heading, links, loadingPage }: PageStepsControllerProps) => {
+const PageStepsController = ({ pageContent, type, heading, links, loadingPage, pageId }: PageStepsControllerProps) => {
     const { nextPage, prevPage, showNext, showPrev } = useContext(NavContext);
     const { nextStep, prevStep, goToStep, currIndex, setStepData, steps, showNextPageButton } = useContext(StepContext);
+    const loadedPages = useRef<{ [key: string]: boolean }>({});
 
     useEffect(() => {
-        if (pageContent) setStepData(pageContent);
-    }, [pageContent, setStepData, steps]);
+        if (pageContent) {
+            if (loadedPages.current && !loadedPages.current[pageId]) {
+                setStepData(pageContent);
+                loadedPages.current = { ...loadedPages.current, [pageId]: true };
+            }
+        }
+    }, [pageContent, setStepData, pageId]);
 
     if (!steps) {
         return (
@@ -28,6 +35,16 @@ const PageStepsController = ({ pageContent, type, heading, links, loadingPage }:
             </div>
         );
     }
+
+    const goBack = () => {
+        loadedPages.current = {};
+        prevPage();
+    };
+
+    const goForward = () => {
+        loadedPages.current = {};
+        nextPage();
+    };
 
     return (
         <PageSteps
@@ -42,8 +59,8 @@ const PageStepsController = ({ pageContent, type, heading, links, loadingPage }:
             loadingPage={loadingPage}
             showNext={showNext}
             showPrev={showPrev}
-            nextPage={nextPage}
-            prevPage={prevPage}
+            nextPage={goForward}
+            prevPage={goBack}
             goToStep={goToStep}
         />
     );
