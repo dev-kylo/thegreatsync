@@ -17,7 +17,8 @@ export default function Chapter({posts, title, description} : ChapterProps) {
               {description}
             </p>
           </div>
-          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+          <p className="mt-16 text-md leading-8 text-secondary_blue font-bold">This chapter includes these pages and much more!</p>
+          <div className="mx-auto mt-4 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-10 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             {posts.map((post) => (
                <ChapterScreen title={post.title} id={post.id} imageUrl={post.imageUrl} key={post.id} />
             ))}

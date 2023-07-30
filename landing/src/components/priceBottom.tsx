@@ -24,25 +24,10 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Price() {
+export default function PriceBottom() {
 
   return (
     <div className="relative isolate bg-white px-6 py-24 sm:py-12 lg:px-8">
-
-      <div className="mx-auto max-w-2xl text-center lg:max-w-4xl">
-        <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-          It&lsquo;s time to level up!
-        </p>
-      </div>
-      <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
-        Have you decided that a career spent blindly copy-pasting and never being able to build anything with confidence is not for you? 
-      </p>
-      <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
-      This is your opportunity to transform your understanding of JavaScript and create the foundation you need for building a successful career in web development.
-      </p>
-      <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
-      Since this is the very first launch, and the Exploring Async chapter is not yet ready, I am offering a <strong>41% discount!</strong>
-      </p>
       <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:max-w-2xl lg:grid-cols-1">
         {tiers.map((tier, tierIdx) => (
           <div

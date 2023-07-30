@@ -16,7 +16,7 @@ const Purchase = () => {
     
         (window as any).Paddle.Checkout.open({
         method: 'inline', // set to `inline`
-        product: 842496, // replace with a product ID or plan ID
+        product: 844435, // replace with a product ID or plan ID
         allowQuantity: false,
         disableLogout: true,
         frameTarget: 'checkout-container', // className of your checkout <div>

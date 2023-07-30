@@ -19,7 +19,8 @@ export default function Hero() {
           {/* <div className="w-full absolute opacity-30 md:h-[26rem] bg-slate-400 top-0 "></div> */}
           <div className="text-center w-full z-50 ">
             <h1 className="text-5xl text-white drop-shadow-lg font-bold sm:text-7xl">
-              Struggling to grasp JavaScript? 
+              {/* Struggling to grasp JavaScript?  */}
+             Struggling to remember and apply JavaScript?
             </h1>
             <h2 className="text-3xl text-white drop-shadow-lg mt-4 font-bold tracking-tight  sm:text-3xl">
               It&lsquo;s time to visualize and see the big picture.
