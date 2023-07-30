@@ -57,7 +57,7 @@ export default function Vision() {
           This is the first time you&lsquo;re seeing the code. There&lsquo;s a lot of it!  You smile and remember a time this would cause panic and stress.
           </p>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          Now, it&lsquo;s just a challenge - a satisfying exercise to fix something with the knowledge you have. It&lsquo;s only plain ol&lsquo; JavaScript. The patterns are all the same 
+          Now, it&lsquo;s just a challenge - a satisfying exercise to fix something with the knowledge you have. It&lsquo;s only plain JavaScript. The patterns are all the same 
           </p>
           <p className="mt-6 text-xl leading-8 text-gray-700">
           It&lsquo;s the same patterns you used to learn the latest framework quickly.

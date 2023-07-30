@@ -40,6 +40,24 @@ const chapterone = [
     },
     {
       id: 33,
+      title: 'Grouped expressions',
+      imageUrl:
+        'https://res.cloudinary.com/the-great-sync/image/upload/v1690714507/Screen_Shot_2023-07-30_at_2.53.39_PM_p05t3j.png',
+    },
+    {
+      id: 11,
+      title: 'Postfix and Prefix operations',
+      imageUrl:
+        'https://res.cloudinary.com/the-great-sync/image/upload/v1690714755/Screen_Shot_2023-07-30_at_2.56.51_PM_fpc6th.png',
+    },
+    {
+      id: 22,
+      title: 'Write the logic for a game',
+      imageUrl:
+        'https://res.cloudinary.com/the-great-sync/image/upload/v1690714815/Screen_Shot_2023-07-30_at_3.00.04_PM_jvdthl.png',
+    },
+    {
+      id: 33,
       title: 'Write expressions like a senior',
       imageUrl:
         'https://res.cloudinary.com/the-great-sync/image/upload/v1690541061/Screen_Shot_2023-07-28_at_2.44.06_PM_hulxdz.png',
@@ -60,10 +78,28 @@ const chapterone = [
         'https://res.cloudinary.com/the-great-sync/image/upload/v1690541238/Screen_Shot_2023-07-28_at_2.47.03_PM_mtx2ml.png',
     },
     {
+      id: 222,
+      title: 'A pattern for all loops',
+      imageUrl:
+        'https://res.cloudinary.com/the-great-sync/image/upload/v1690714985/Screen_Shot_2023-07-30_at_3.02.14_PM_uxgmtj.png',
+    },
+    {
+      id: 333,
+      title: 'The problem inheritance solves',
+      imageUrl:
+        'https://res.cloudinary.com/the-great-sync/image/upload/v1690715346/Screen_Shot_2023-07-30_at_3.08.54_PM_jb4huj.png',
+    },
+    {
       id: 333,
       title: 'Function pattern identification in React Js',
       imageUrl:
         'https://res.cloudinary.com/the-great-sync/image/upload/v1690541405/Screen_Shot_2023-07-28_at_2.49.40_PM_nt47x4.png',
+    },
+    {
+      id: 333,
+      title: 'The Creation Phase of execution contects',
+      imageUrl:
+        'https://res.cloudinary.com/the-great-sync/image/upload/v1690715478/Screen_Shot_2023-07-30_at_3.10.34_PM_n7bysr.png',
     },
   ]
 
@@ -79,6 +115,24 @@ const chapterone = [
       title: 'How the DOM fits in with JavaScript',
       imageUrl:
         'https://res.cloudinary.com/the-great-sync/image/upload/v1690135230/3000x2000/APIs-cc_c5pov3.jpg',
+    },
+    {
+      id: 3333,
+      title: 'Junior vs senior functions',
+      imageUrl:
+        'https://res.cloudinary.com/the-great-sync/image/upload/v1690715801/Screen_Shot_2023-07-30_at_3.16.26_PM_wsse11.png',
+    },
+    {
+      id: 1111,
+      title: 'Recognizing the pattern in other apps',
+      imageUrl:
+        'https://res.cloudinary.com/the-great-sync/image/upload/v1690715801/Screen_Shot_2023-07-30_at_3.16.26_PM_wsse11.png',
+    },
+    {
+      id: 2222,
+      title: 'What a closure really looks like',
+      imageUrl:
+        'https://res.cloudinary.com/the-great-sync/image/upload/v1690715966/Screen_Shot_2023-07-30_at_3.19.05_PM_erh2cq.png',
     },
     {
       id: 3333,

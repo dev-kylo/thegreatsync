@@ -40,7 +40,7 @@ export default function Intro() {
             <span className='text-7xl font-bold tracking-tight '>The Syncer Program</span>
             <span className='mt-4 font-bold'>Level Up With Visual & Memorable JavaScript</span>
         </div>
-        <p className="mt-6 text-xl leading-8 text-gray-700">The Great Sync: a complete visual mental model for learning JavaScript concepts and applying them to projects, code challenges, documentation, and any JavaScript you encounter. </p>
+        <p className="mt-6 text-xl leading-8 text-gray-700">The Great Sync is a complete visual mental model for learning JavaScript concepts and applying them to projects, code challenges, documentation, and any JavaScript you encounter. </p>
         <p className="mt-6 text-xl leading-8 text-gray-700"> It&lsquo;s designed specifically to help you overcome any barriers and mental blocks about using JavaScript confidently.</p>
         <span className='text-2xl font-bold tracking-tight mb-0 pb-0 '>Does any of this sound like YOU?</span>
         <ul className=''>

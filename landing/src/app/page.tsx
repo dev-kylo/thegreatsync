@@ -1,7 +1,5 @@
 
-import ChapterOne from "@/components/chapterOne";
 import AllChapters from "@/components/chapterOne";
-import Chapter from "@/components/chapterOne";
 import Credibility from "@/components/credibility";
 import Faqs from "@/components/faqs";
 import Footer from "@/components/footer";
@@ -11,9 +9,11 @@ import Mnemonics from "@/components/mnemonics";
 import Model from "@/components/model";
 import Model2 from "@/components/model2";
 import Price from "@/components/price";
+import PriceBottom from "@/components/priceBottom";
 import Quote from "@/components/quote";
 import SingleQuote from "@/components/singleQuote";
 import SingleQuote2 from "@/components/singleQuote2";
+import SingleQuote3 from "@/components/singleQuote3";
 import TheProblem from "@/components/theproblem";
 import TwoTestimonials from "@/components/twoTestimonials";
 import Vision from "@/components/vision";
@@ -39,6 +39,8 @@ export default function Home() {
         <TwoTestimonials />
         <Price />
         <Faqs />
+        <SingleQuote3 />
+        <PriceBottom />
         <Footer />
         
 
