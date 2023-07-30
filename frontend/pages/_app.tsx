@@ -27,7 +27,8 @@ function MyApp({
     return (
         <SessionProvider session={pageProps.session}>
             <Head>
-                <title>The Great Sync Course</title>
+                <title>The Great Sync Learning Platform</title>
+                <meta name="description" content="Learn JavaScript visually and memorably" />
                 <link href="https://fonts.cdnfonts.com/css/utopia-std" rel="stylesheet" />
                 <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet" />
                 <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
