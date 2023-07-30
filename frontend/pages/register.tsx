@@ -16,6 +16,23 @@ interface Submission {
     password: string;
 }
 
+type ValidationError = {
+    name: 'ValidationError';
+    message: string;
+    details: any;
+};
+
+function getErrorMessage(result: RegisterResponse | ValidationError) {
+    if (!result) return;
+    if (axios.isAxiosError(result)) {
+        console.log('si axios');
+        const error = result.response?.data as ServerResponse<RegisterResponse>;
+        return error?.error?.message;
+    }
+    if ('error' in result) return result.error?.message;
+    if ('details' in result) return result.message;
+}
+
 export default function Enrollment() {
     const [formState, setFormState] = useState({ loading: false, error: false, message: '' });
     const [createNewAccount] = useState(true);
@@ -26,14 +43,17 @@ export default function Enrollment() {
     const sendCredentials = async (payload: RegisterPayload) => {
         try {
             const result = await register(payload);
-            if (!result?.success) throw new Error(result?.error?.message);
-            else setFormState({ loading: false, error: false, message: result.message });
+
+            if (!result?.success) {
+                console.log('Abput to throw error');
+                console.log(getErrorMessage(result));
+                throw new Error(getErrorMessage(result) || 'Error');
+            } else setFormState({ loading: false, error: false, message: result.message });
         } catch (er) {
-            if (axios.isAxiosError(er)) {
-                const error = er.response?.data as ServerResponse<RegisterResponse>;
-                setFormState({ loading: false, error: true, message: error?.error?.message });
-            } else if (typeof er === 'string') setFormState({ loading: false, error: true, message: er });
-            else setFormState({ loading: false, error: true, message: 'Error' });
+            const erObj = er as { message: string };
+            let erMsg = erObj?.message;
+            if (typeof erMsg !== 'string') erMsg = 'Error';
+            setFormState({ loading: false, error: true, message: erMsg });
         }
     };
 
@@ -74,6 +94,14 @@ export default function Enrollment() {
                         <h2 className="mt-6 text-xl font-bold tracking-tight text-white text-center">
                             Set up your account
                         </h2>
+                        <p className="text-md text-center mt-4 text-white font-bold">
+                            Already have an account?{' '}
+                            <Link href="/" passHref>
+                                <a href="#" className="text-green-400">
+                                    Login
+                                </a>
+                            </Link>
+                        </p>
 
                         <div className="mt-8">
                             <div className="mt-6">

@@ -127,7 +127,7 @@ export default function SignIn() {
                                             disabled={formState.loading}
                                             className="flex w-full justify-center rounded-md border border-transparent bg-secondary_red py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                         >
-                                            {formState.loading ? <Spinner /> : 'Signin'}
+                                            {formState.loading ? <Spinner /> : 'Sign in'}
                                         </button>
                                     </div>
                                 </form>
