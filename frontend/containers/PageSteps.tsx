@@ -110,6 +110,7 @@ const PageSteps = ({
             )}
             {type === 'text_image' && (
                 <Text_Image
+                    heading={currIndex === 0 ? heading : undefined}
                     id={+currentTopicStep.id}
                     text={currentTopicStep?.text}
                     image={currentTopicStep?.image}
@@ -120,6 +121,7 @@ const PageSteps = ({
 
             {type === 'text_code' && (
                 <Text_Code
+                    heading={currIndex === 0 ? heading : undefined}
                     id={+currentTopicStep.id}
                     text={currentTopicStep?.text}
                     code={currentTopicStep?.code || ''}

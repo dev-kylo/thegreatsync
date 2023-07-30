@@ -160,10 +160,11 @@ export default {
           text: '',
           html: `
             <p>Amazing news!</p>
-            <p>Congratulations on joining <em>The Syncer Program - Level Up With Visual and Memorable Javascript </em>. You are about to start an exciting journey into the realm of JavaScript!</p>
+            <p>Congratulations on joining <em>The Syncer Program - Level Up With Visual and Memorable JavaScript </em>. You are about to start an exciting journey into the realm of JavaScript and The Great Sync!</p>
             <p> Click the link below to register and access the platform: </p>
             <a href='${process.env.TGS_FE_URL}/register?orderid=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderId=${order.order_id}</a>
-            <p> Also look out for an email containing the <strong>Discord Invitation to The Syncer Community </strong>. You can also find this in the navigation menu on the platform.</p>
+            <p>You can also bookmark the  <a href='${process.env.TGS_FE_URL}> homepage link.</a></p>
+            <p> Look out for an email containing the <strong>Discord Invitation to The Syncer Community </strong>. You can find this in the navigation menu on the platform too.</p>
             <p> See you there! </p>
             <p> Kylo </p>
           `,
