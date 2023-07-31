@@ -10,7 +10,6 @@ import { NavContext } from '../../context/nav';
 
 const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
     const { courseId } = useContext(NavContext);
-
     if (mobile)
         return (
             <div className="block md:hidden">
