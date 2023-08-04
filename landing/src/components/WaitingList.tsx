@@ -1,6 +1,11 @@
 import Image from "next/image";
 
+
 export default function WaitingList() {
+
+
+    const url ='https://thegreatsync.us7.list-manage.com/subscribe/post?u=4d0492b044ab95eee11a945a2&amp;id=5649b5fa7d&amp;f_id=0028d8e4f0';
+
   return (
     <div className="bg-red">
       
@@ -25,7 +30,14 @@ export default function WaitingList() {
             <h2 className="text-3xl text-white drop-shadow-lg mt-4 font-bold tracking-tight  sm:text-3xl">
               Join the waiting list and be the first to know when it re-opens
             </h2>
-    
+            <a
+                href="https://thegreatsync.com/subscribe"
+                type="button"
+                className="rounded-md mt-8 bg-secondary_blue px-3.5 py-2.5 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+                Join the waiting list
+            </a>
+            
   
           </div>
         </div>
