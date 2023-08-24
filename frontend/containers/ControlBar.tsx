@@ -12,9 +12,6 @@ type ControlBarProps = {
     loadingPage: boolean;
 };
 
-// bottom: 50px;
-//     background: #03143f;
-
 const ControlBar = ({
     children,
     loadingPage,
@@ -37,6 +34,7 @@ const ControlBar = ({
     const prevPageHandler = () => {
         prevPage();
     };
+
     return (
         <div className="relative h-full bg-[#03143f] flex flex-col justify-center">
             {stepsControls}

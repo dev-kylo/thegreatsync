@@ -24,7 +24,7 @@ export default function Text_Code({ text, code, id, heading, links }: Text_Code_
                             enableScroll
                             key={`mobiletext-block:-${id}`}
                         >
-                            <ContentBlock md={text} type="text" id={id} heading={heading} links={links} />
+                            <ContentBlock md={text} textType="block" id={id} heading={heading} links={links} />
                         </Block>
                     </div>
                 )}
@@ -46,7 +46,7 @@ export default function Text_Code({ text, code, id, heading, links }: Text_Code_
                 <Allotment.Pane minSize={500}>
                     <div id="one" className="bg-black h-full">
                         <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll key={`text-block:-${id}`}>
-                            <ContentBlock md={text} type="text" id={id} heading={heading} links={links} />
+                            <ContentBlock md={text} textType="block" id={id} heading={heading} links={links} />
                         </Block>
                     </div>
                 </Allotment.Pane>

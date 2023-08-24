@@ -44,7 +44,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                                 enableScroll
                                 key={`mobiletext-block:-${id}`}
                             >
-                                <ContentBlock type="text" md={text} id={id} heading={heading} links={links} />
+                                <ContentBlock textType="block" md={text} id={id} heading={heading} links={links} />
                             </Block>
                         </div>
                     )}
@@ -87,7 +87,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                 <Allotment.Pane>
                     <div id="one" className="bg-black h-full w-full ">
                         <Block outerClasses="bg-code_bg" innerClasses="p-4" enableScroll key={`text-block:-${id}`}>
-                            <ContentBlock type="text" md={text} id={id} heading={heading} links={links} />
+                            <ContentBlock textType="block" md={text} id={id} heading={heading} links={links} />
                         </Block>
                     </div>
                 </Allotment.Pane>
