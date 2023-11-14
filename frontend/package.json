@@ -13,7 +13,7 @@
     "@headlessui/react": "^1.7.2",
     "@heroicons/react": "^2.0.11",
     "@mux/mux-video-react": "^0.7.0",
-    "@sentry/nextjs": "^7.60.1",
+    "@sentry/nextjs": "^7.77.0",
     "@types/nprogress": "^0.2.0",
     "@types/qs": "^6.9.7",
     "allotment": "^1.19.0",
