@@ -32,8 +32,8 @@ export default {
 
         console.log('Updating User-Course-Progress')
         // Receive completed pageID and courseID
-        const qry = ctx.request.query as {courseId: string; pageId: string};
-        const {courseId, pageId } = qry;
+        const qry = ctx.request.query as {courseId: string; pageId: string, unMarkPage?: string};
+        const { courseId, pageId, unMarkPage } = qry;
 
         // Exit if these are not here
         if (!courseId || !pageId) return ctx.badRequest('Invalid query paramaters');
@@ -46,7 +46,7 @@ export default {
         }) as UserCourseProgress
 
         // Exit if no user completion data found
-        if(!userCompletion || !userCompletion?.pages || !userCompletion?.chapters || !userCompletion?.subchapters){
+        if (!userCompletion || !userCompletion?.pages || !userCompletion?.chapters || !userCompletion?.subchapters){
             return ctx.response.notFound('No user course progress data found')
         }
 
@@ -57,9 +57,10 @@ export default {
         const completedPage = pageCompletion[targetPageIndex];
         if (!completedPage) return ctx.response.notFound('This page does not exist in completion data')
 
+        const markIncompleted = unMarkPage && unMarkPage === 'true'
         // If page is already completed, early exit
-        if (completedPage?.completed) return ctx.body = { success: true }
-        completedPage.completed = true; 
+        if (completedPage?.completed && !markIncompleted) return ctx.body = { success: true }
+        completedPage.completed = !markIncompleted 
         
         // For each subchapter
         userCompletion.subchapters.forEach(sb => {
@@ -68,6 +69,7 @@ export default {
             const completed = all.filter(page => page.completed);
             // if all pages of subchapter are complete set subchapter to TRUE
             if (all.length === completed.length) sb.completed = true;
+            else sb.completed = false;
         })
 
         // For each chapter
@@ -77,6 +79,7 @@ export default {
             const completed = all.filter(sub => sub.completed);
             // if all pages of subchapter are complete set subchapter to TRUE
             if (all.length === completed.length) chp.completed = true;
+            else chp.completed = false;
         })
 
         // Update 
