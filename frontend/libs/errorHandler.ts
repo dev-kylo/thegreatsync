@@ -7,5 +7,5 @@ export function logError(e: ErrorData | string) {
 
 export function createErrorString(e?: ErrorData, fallback?: string) {
     if (e) return `${e.name}: ${e.message}`;
-    return fallback;
+    return fallback || '';
 }

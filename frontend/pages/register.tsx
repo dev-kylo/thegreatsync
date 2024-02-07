@@ -45,7 +45,6 @@ export default function Enrollment() {
             const result = await register(payload);
 
             if (!result?.success) {
-                console.log('Abput to throw error');
                 console.log(getErrorMessage(result));
                 throw new Error(getErrorMessage(result) || 'Error');
             } else setFormState({ loading: false, error: false, message: result.message });

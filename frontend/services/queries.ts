@@ -43,6 +43,7 @@ export const getPage = async (id: string | number): Promise<PageResponse> => {
 
 export const getEnrolledCourses = async (): Promise<AxiosResponse<CourseData[]>> => {
     const res = await httpClient.get<CourseData[]>(`/api/coursesByUser`);
+    console.log(res);
     return res;
 };
 
