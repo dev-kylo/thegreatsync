@@ -8,6 +8,8 @@ import { authOptions } from './api/auth/[...nextauth]';
 import { setAuthToken } from '../libs/axios';
 import AllCourses from '../containers/AllCourses';
 import LoadingQuote from '../containers/LoadingQuote';
+import type { ErrorResponse } from '../types';
+import { createErrorString } from '../libs/errorHandler';
 
 type HomeProps = { courses: CourseByUser[] };
 
@@ -28,15 +30,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const resp = await getEnrolledCourses();
     if (!resp || resp.status !== 200) {
+        const er = resp?.data as unknown as ErrorResponse;
         if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
         if (resp.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
-        if (resp.status === 403) return serverRedirectObject(`/notallowed`);
+        if (resp.status === 403)
+            return serverRedirectObject(`/notallowed?error=${encodeURIComponent(createErrorString(er?.error))}`);
         if (resp.status === 500)
             return serverRedirectObject(
-                `/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down!'`
+                `/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down! ${encodeURIComponent(
+                    createErrorString(er?.error)
+                )}'`
             );
         return serverRedirectObject(
-            `/error?redirect=${context.resolvedUrl}&error=Failed to fetch course data. Received undefined`
+            `/error?redirect=${context.resolvedUrl}&error=Failed to fetch course data. ${encodeURIComponent(
+                createErrorString(er?.error)
+            )}`
         );
     }
     // Redirect to dashboard if there is only one course

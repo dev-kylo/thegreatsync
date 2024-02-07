@@ -107,6 +107,9 @@ coverage
 ############################
 
 .env
+.env.supabase
+.env.prod
+
 license.txt
 exports
 *.cache

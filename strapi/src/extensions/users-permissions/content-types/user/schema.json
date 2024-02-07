@@ -63,12 +63,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "enrollments": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::enrollment.enrollment",
-      "mappedBy": "user"
-    },
     "orders": {
       "type": "relation",
       "relation": "oneToMany",
@@ -80,6 +74,12 @@
       "relation": "oneToMany",
       "target": "api::user-course-progress.user-course-progress",
       "mappedBy": "user"
+    },
+    "enrollments": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::enrollment.enrollment",
+      "inversedBy": "users"
     }
   }
 }
