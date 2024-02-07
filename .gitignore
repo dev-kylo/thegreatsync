@@ -114,6 +114,7 @@ build
 .strapi-updater.json
 .env.devcopy
 .env.prod
+.env.supabase
 
 ############################
 # Certificates

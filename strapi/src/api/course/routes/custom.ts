@@ -4,7 +4,7 @@ export default {
         {
             method: "GET",
             path: "/coursesByUser",
-            handler: "custom.findByUser",
+            handler: "custom.coursesByUser",
             config: {
                 policies: []
             }
