@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
@@ -65,7 +65,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const router = useRouter();
     const { courseId, pageId } = router.query as { courseId: string; pageId: string };
     const [chapterLocation, setChapterLocation] = useState<{ chapter: string; subchapter: string } | null>();
-    const [completedSessionPageIds, setCompletedSessionPageIds] = useState<string[]>([]);
+    const lastCompletedPage = useRef<string | number>('');
 
     const { data, error } = useSWR(
         () => (session && !!httpClient.defaults.headers.common.Authorization && courseId ? courseId : null),
@@ -133,14 +133,25 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         } else setLoadingPage(false);
     };
 
+    // const markPage =  (pageId: string, chapterId: string) => {
+
+    // }
+
     // On load of a page, update pageId
     useEffect(() => {
-        if (courseId && !completedSessionPageIds.includes(pageId) && receivedCompletionData(usercompletion)) {
-            if (courseId && pageId) completePage(courseId, pageId);
-            setCompletedSessionPageIds([...completedSessionPageIds, pageId]);
+        if (
+            courseId &&
+            receivedCompletionData(usercompletion) &&
+            !usercompletion?.pages.find((cm) => cm.id === +pageId)?.completed &&
+            lastCompletedPage.current !== pageId
+        ) {
+            if (courseId && pageId) {
+                completePage(courseId, pageId);
+                lastCompletedPage.current = pageId;
+            }
             mutate(); // Fetch new completion data
         }
-    }, [courseId, pageId, completedSessionPageIds, usercompletion, mutate]);
+    }, [courseId, pageId, usercompletion, mutate]);
 
     useEffect(() => {
         const list = courseSequence;
