@@ -29,7 +29,7 @@ type CoursePageProps = {
     current: CurrentLocation;
 };
 export default function CoursePage({ title, type, content, links, current }: CoursePageProps) {
-    const { menuData, chapterName, subChapterName, loadingPage, nextPage, prevPage, showNext, showPrev } =
+    const { menuData, chapterName, subChapterName, loadingPage, nextPage, prevPage, markPage, showNext, showPrev } =
         useContext(NavContext);
 
     const { data: session } = useSession();
@@ -80,6 +80,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
                     chapterTitle={chapterName || ''}
                     subChapterTitle={subChapterName || ''}
                     menuData={menuData}
+                    markPage={markPage}
                 />
                 {contentLayout}
                 {!hasPageSteps && (

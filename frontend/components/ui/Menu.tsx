@@ -4,12 +4,23 @@ import Link from 'next/link';
 import type { CurrentLocation, MenuItem } from '../../types';
 import MenuIcon from './MenuIcon';
 import ProgressIcon from './ProgressIcon';
+import HoverAction from './HoverAction';
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
-function MenuDropDown({ item, callback, current }: { item: MenuItem; callback: () => void; current: CurrentLocation }) {
+function MenuDropDown({
+    item,
+    callback,
+    current,
+    markPage,
+}: {
+    item: MenuItem;
+    callback: () => void;
+    current: CurrentLocation;
+    markPage: (page: string | number, unMark?: boolean) => Promise<void>;
+}) {
     return (
         <Disclosure as="div" key={item.name} className="space-y-1">
             {({ open }) => (
@@ -39,12 +50,12 @@ function MenuDropDown({ item, callback, current }: { item: MenuItem; callback: (
                         </svg>
                     </Disclosure.Button>
                     <Disclosure.Panel className="space-y-1">
-                        {/* {item.children && createMenuDropDownLink(item.children, callback, current)} */}
                         {item.children && (
                             <MenuDropDownLink
                                 menuChildren={item.children}
                                 callback={callback}
                                 currentLocation={current}
+                                markPage={markPage}
                             />
                         )}
                     </Disclosure.Panel>
@@ -58,14 +69,17 @@ function MenuDropDownLink({
     menuChildren,
     callback,
     currentLocation,
+    markPage,
 }: {
     menuChildren: MenuItem[];
     callback: () => void;
     currentLocation: CurrentLocation;
+    markPage: (page: string | number, unMark?: boolean) => Promise<void>;
 }) {
     const links = menuChildren.map((subItem) => {
         const { level, type, name, completed, children, href, current, id } = subItem;
         if (!children) {
+            const isActive = !!current || +currentLocation.pageId === +id;
             return (
                 <Link href={href || '/'} passHref key={id}>
                     <Disclosure.Button
@@ -80,11 +94,9 @@ function MenuDropDownLink({
                     >
                         <button type="button" id={`menu-${level}-${id}`} onClick={() => console.log('Clicked')}>
                             {type && (
-                                <MenuIcon
-                                    type={type}
-                                    completed={!!completed}
-                                    active={!!current || +currentLocation.pageId === +id}
-                                />
+                                <HoverAction pageId={id} action={markPage} unMark={!!completed}>
+                                    <MenuIcon type={type} completed={!!completed} active={isActive} />
+                                </HoverAction>
                             )}
                         </button>
                         {name}
@@ -92,7 +104,7 @@ function MenuDropDownLink({
                 </Link>
             );
         }
-        return <MenuDropDown item={subItem} callback={callback} current={currentLocation} />;
+        return <MenuDropDown item={subItem} callback={callback} current={currentLocation} markPage={markPage} />;
     });
 
     return <div>{links}</div>;
@@ -110,7 +122,12 @@ const Menu = ({
     current: CurrentLocation;
 }) => {
     const menuLinks = menuData.map((item) => (
-        <MenuDropDownLink menuChildren={item.children!} callback={closeMenu} currentLocation={current} />
+        <MenuDropDownLink
+            menuChildren={item.children!}
+            callback={closeMenu}
+            currentLocation={current}
+            markPage={markPage}
+        />
     ));
     return <div>{menuLinks}</div>;
 };

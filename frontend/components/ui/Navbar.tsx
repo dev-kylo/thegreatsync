@@ -14,12 +14,14 @@ export default function Navbar({
     menuData,
     current,
     pageType,
+    markPage,
 }: {
     chapterTitle: string;
     subChapterTitle: string;
     current: CurrentLocation;
     menuData?: MenuItem[];
     pageType?: string;
+    markPage: (page: string | number, unMark?: boolean) => Promise<void>;
 }) {
     const [openMenu, setOpenMenu] = useState(false);
 
@@ -49,7 +51,12 @@ export default function Navbar({
                 <ProfileDropDown mobile />
 
                 {menuData ? (
-                    <Menu menuData={menuData} closeMenu={() => setOpenMenu(false)} current={current} />
+                    <Menu
+                        markPage={markPage}
+                        menuData={menuData}
+                        closeMenu={() => setOpenMenu(false)}
+                        current={current}
+                    />
                 ) : (
                     <div className="m-8 flex justify-center">
                         <Spinner />

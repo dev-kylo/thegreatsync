@@ -18,6 +18,7 @@ type NavProviderValues = {
     courseSequence?: DoublyLinkedList | null;
     nextPage: () => void;
     prevPage: () => void;
+    markPage: (page: string | number, unMark?: boolean) => Promise<void>;
     setLoadingPage: (val: boolean) => void;
     loadingPage: boolean;
     showNext: boolean;
@@ -33,6 +34,7 @@ export const NavContext = React.createContext<NavProviderValues>({
     courseSequence: null,
     nextPage: () => {},
     prevPage: () => {},
+    markPage: () => Promise.resolve(),
     setLoadingPage: () => {},
     loadingPage: false,
     showNext: false,
@@ -53,10 +55,6 @@ function createList(menuItems: MenuItem[]) {
 
 function receivedCompletionData(completionData?: UserCourseProgressResponse) {
     return !!(completionData && completionData?.pages);
-}
-
-function isAlreadyCompleted(courseSequence: DoublyLinkedList) {
-    return !!(courseSequence && courseSequence?.currentPageNode?.data && courseSequence.currentPageNode.data.completed);
 }
 
 const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
@@ -107,16 +105,14 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (!courseSequence || !courseSequence.currentPageNode) return;
         setLoadingPage(true);
         if (courseSequence.currentPageNode?.data) courseSequence.currentPageNode.data.completed = true;
-        // if (receivedCompletionData(usercompletion)) mutate(); // Fetch new completion data
         const nextNode = courseSequence.currentPageNode?.next || courseSequence.getFirstUncompleted();
         let redirectUrl = '/';
         if (nextNode && nextNode?.data) {
             courseSequence.currentPageNode = nextNode;
             setLocation(nextNode.data);
             redirectUrl = nextNode.data.href!;
-        } else {
-            redirectUrl = '/courseCompleted';
-        }
+        } else redirectUrl = '/courseCompleted';
+
         setLoadingPage(false);
         router.replace(redirectUrl);
     };
@@ -133,9 +129,11 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         } else setLoadingPage(false);
     };
 
-    // const markPage =  (pageId: string, chapterId: string) => {
-
-    // }
+    // mark a page complete
+    const markPage = async (page: string, unMark?: boolean) => {
+        await completePage(courseId, page, unMark);
+        await mutate();
+    };
 
     // On load of a page, update pageId
     useEffect(() => {
@@ -193,6 +191,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
                 setLoadingPage,
                 nextPage,
                 prevPage,
+                markPage,
             }}
         >
             {children}
