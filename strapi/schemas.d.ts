@@ -515,11 +515,6 @@ export interface PluginUsersPermissionsUser extends CollectionTypeSchema {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    enrollments: RelationAttribute<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::enrollment.enrollment'
-    >;
     orders: RelationAttribute<
       'plugin::users-permissions.user',
       'oneToMany',
@@ -529,6 +524,11 @@ export interface PluginUsersPermissionsUser extends CollectionTypeSchema {
       'plugin::users-permissions.user',
       'oneToMany',
       'api::user-course-progress.user-course-progress'
+    >;
+    enrollments: RelationAttribute<
+      'plugin::users-permissions.user',
+      'manyToMany',
+      'api::enrollment.enrollment'
     >;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
@@ -731,9 +731,9 @@ export interface ApiEnrollmentEnrollment extends CollectionTypeSchema {
   };
   attributes: {
     date: DateAttribute & RequiredAttribute;
-    user: RelationAttribute<
+    users: RelationAttribute<
       'api::enrollment.enrollment',
-      'manyToOne',
+      'manyToMany',
       'plugin::users-permissions.user'
     >;
     course: RelationAttribute<
@@ -798,9 +798,7 @@ export interface ApiOrderOrder extends CollectionTypeSchema {
     currency: StringAttribute;
     custom_data: JSONAttribute;
     customer_name: StringAttribute & RequiredAttribute;
-    account_credited: StringAttribute;
     fee: StringAttribute;
-    event_time: StringAttribute;
     marketing_consent: BooleanAttribute & RequiredAttribute;
     order_id: StringAttribute & RequiredAttribute & UniqueAttribute;
     tax: StringAttribute;
@@ -810,9 +808,9 @@ export interface ApiOrderOrder extends CollectionTypeSchema {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
-    release_date: DateAttribute;
     release_course_id: StringAttribute;
-    release_price: StringAttribute;
+    event_time: DateTimeAttribute;
+    release_enrolment_id: StringAttribute;
     createdAt: DateTimeAttribute;
     updatedAt: DateTimeAttribute;
     publishedAt: DateTimeAttribute;
