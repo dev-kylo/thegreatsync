@@ -21,7 +21,7 @@ export default function Navbar({
     current: CurrentLocation;
     menuData?: MenuItem[];
     pageType?: string;
-    markPage: (page: string | number, unMark?: boolean) => Promise<void>;
+    markPage?: (page: string | number, unMark?: boolean) => Promise<void>;
 }) {
     const [openMenu, setOpenMenu] = useState(false);
 

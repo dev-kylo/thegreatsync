@@ -130,7 +130,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     };
 
     // mark a page complete
-    const markPage = async (page: string, unMark?: boolean) => {
+    const markPage = async (page: string | number, unMark?: boolean) => {
         await completePage(courseId, page, unMark);
         await mutate();
     };

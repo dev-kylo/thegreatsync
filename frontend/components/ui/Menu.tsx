@@ -19,7 +19,7 @@ function MenuDropDown({
     item: MenuItem;
     callback: () => void;
     current: CurrentLocation;
-    markPage: (page: string | number, unMark?: boolean) => Promise<void>;
+    markPage?: (page: string | number, unMark?: boolean) => Promise<void>;
 }) {
     return (
         <Disclosure as="div" key={item.name} className="space-y-1">
@@ -74,7 +74,7 @@ function MenuDropDownLink({
     menuChildren: MenuItem[];
     callback: () => void;
     currentLocation: CurrentLocation;
-    markPage: (page: string | number, unMark?: boolean) => Promise<void>;
+    markPage?: (page: string | number, unMark?: boolean) => Promise<void>;
 }) {
     const links = menuChildren.map((subItem) => {
         const { level, type, name, completed, children, href, current, id } = subItem;
@@ -93,7 +93,7 @@ function MenuDropDownLink({
                         }`}
                     >
                         <button type="button" id={`menu-${level}-${id}`} onClick={() => console.log('Clicked')}>
-                            {type && (
+                            {type && markPage && (
                                 <HoverAction pageId={id} action={markPage} unMark={!!completed}>
                                     <MenuIcon type={type} completed={!!completed} active={isActive} />
                                 </HoverAction>
@@ -118,7 +118,7 @@ const Menu = ({
 }: {
     menuData: MenuItem[];
     closeMenu: () => void;
-    markPage: (page: string, unMark?: boolean) => void;
+    markPage?: (page: string | number, unMark?: boolean) => Promise<void>;
     current: CurrentLocation;
 }) => {
     const menuLinks = menuData.map((item) => (
