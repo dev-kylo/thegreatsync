@@ -112,9 +112,8 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
             setLocation(nextNode.data);
             redirectUrl = nextNode.data.href!;
         } else redirectUrl = '/courseCompleted';
-
         setLoadingPage(false);
-        router.replace(redirectUrl);
+        router.push(redirectUrl);
     };
 
     const prevPage = () => {
@@ -125,7 +124,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
             courseSequence.currentPageNode = prevNode;
             setLoadingPage(false);
             setLocation(prevNode.data);
-            router.replace(prevNode.data.href!);
+            router.push(prevNode.data.href!);
         } else setLoadingPage(false);
     };
 

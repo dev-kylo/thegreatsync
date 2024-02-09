@@ -2,10 +2,6 @@ import { PaddleFulfillment} from "../../custom-types";
 
 export function mapPaddleOrder(order: PaddleFulfillment, ){
     const extracted = order.p_custom_data;
-    const dateObject = new Date(order.release_date);
-
-    // Now, to format the Date object into the desired form (ISO 8601):
-    const formattedDate = dateObject.toISOString().slice(0, 10);
     return {
         email: order.email,
         country: order.p_country,
@@ -18,9 +14,8 @@ export function mapPaddleOrder(order: PaddleFulfillment, ){
         order_id: order.p_order_id,
         tax: order.p_tax_amount,
         sale_gross: order.p_sale_gross,
-        release_price: order.release_price,
-        release_date: formattedDate,
         release_course_id: `${order.release_course_id}`,
+        release_enrolment_id: `${order.release_enrolment_id}`,
         customData: extracted
     }
 }

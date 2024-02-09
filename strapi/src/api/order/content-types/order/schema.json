@@ -56,17 +56,14 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "orders"
     },
-    "release_date": {
-      "type": "date"
-    },
     "release_course_id": {
-      "type": "string"
-    },
-    "release_price": {
       "type": "string"
     },
     "event_time": {
       "type": "datetime"
+    },
+    "release_enrolment_id": {
+      "type": "string"
     }
   }
 }
