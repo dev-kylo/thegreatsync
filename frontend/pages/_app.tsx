@@ -7,6 +7,7 @@ import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import Router from 'next/router';
 import NProgress from 'nprogress';
+import Script from 'next/script';
 import NavContextProvider from '../context/nav';
 import StepContextProvider from '../context/steps';
 
@@ -33,6 +34,14 @@ function MyApp({
                 <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet" />
                 <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
             </Head>
+            <Script id="google-tag-manager" strategy="afterInteractive">
+                {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                    })(window,document,'script','dataLayer','GTM-5LD8VXKM');
+                `}
+            </Script>
             <main>
                 <NavContextProvider>
                     {isStepPage ? (
