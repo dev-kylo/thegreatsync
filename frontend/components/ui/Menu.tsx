@@ -4,30 +4,23 @@ import Link from 'next/link';
 import type { CurrentLocation, MenuItem } from '../../types';
 import MenuIcon from './MenuIcon';
 import ProgressIcon from './ProgressIcon';
+import HoverAction from './HoverAction';
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
-function createMenuLink(item: MenuItem) {
-    return (
-        <Link
-            key={item.name}
-            href={item.href!}
-            className={classNames(
-                item.current
-                    ? 'bg-gray-100 text-gray-900'
-                    : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                'group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md'
-            )}
-        >
-            Icon
-            {item.name}
-        </Link>
-    );
-}
-
-function createMenuDropDown(item: MenuItem, callback: () => void, current: CurrentLocation) {
+function MenuDropDown({
+    item,
+    callback,
+    current,
+    markPage,
+}: {
+    item: MenuItem;
+    callback: () => void;
+    current: CurrentLocation;
+    markPage?: (page: string | number, unMark?: boolean) => Promise<void>;
+}) {
     return (
         <Disclosure as="div" key={item.name} className="space-y-1">
             {({ open }) => (
@@ -57,7 +50,14 @@ function createMenuDropDown(item: MenuItem, callback: () => void, current: Curre
                         </svg>
                     </Disclosure.Button>
                     <Disclosure.Panel className="space-y-1">
-                        {item.children && createMenuDropDownLink(item.children, callback, current)}
+                        {item.children && (
+                            <MenuDropDownLink
+                                menuChildren={item.children}
+                                callback={callback}
+                                currentLocation={current}
+                                markPage={markPage}
+                            />
+                        )}
                     </Disclosure.Panel>
                 </div>
             )}
@@ -65,10 +65,21 @@ function createMenuDropDown(item: MenuItem, callback: () => void, current: Curre
     );
 }
 
-function createMenuDropDownLink(menuChildren: MenuItem[], callback: () => void, currentLocation: CurrentLocation) {
-    return menuChildren.map((subItem) => {
+function MenuDropDownLink({
+    menuChildren,
+    callback,
+    currentLocation,
+    markPage,
+}: {
+    menuChildren: MenuItem[];
+    callback: () => void;
+    currentLocation: CurrentLocation;
+    markPage?: (page: string | number, unMark?: boolean) => Promise<void>;
+}) {
+    const links = menuChildren.map((subItem) => {
         const { level, type, name, completed, children, href, current, id } = subItem;
         if (!children) {
+            const isActive = !!current || +currentLocation.pageId === +id;
             return (
                 <Link href={href || '/'} passHref key={id}>
                     <Disclosure.Button
@@ -81,39 +92,43 @@ function createMenuDropDownLink(menuChildren: MenuItem[], callback: () => void, 
                             +currentLocation.pageId === +id ? 'bg-gray-50 text-black' : ''
                         }`}
                     >
-                        <div id={`menu-${level}-${id}`}>
-                            {type && (
-                                <MenuIcon
-                                    type={type}
-                                    completed={!!completed}
-                                    active={!!current || +currentLocation.pageId === +id}
-                                />
+                        <button type="button" id={`menu-${level}-${id}`} onClick={() => console.log('Clicked')}>
+                            {type && markPage && (
+                                <HoverAction pageId={id} action={markPage} unMark={!!completed}>
+                                    <MenuIcon type={type} completed={!!completed} active={isActive} />
+                                </HoverAction>
                             )}
-                        </div>
+                        </button>
                         {name}
                     </Disclosure.Button>
                 </Link>
             );
         }
-        return createMenuDropDown(subItem, callback, currentLocation);
+        return <MenuDropDown item={subItem} callback={callback} current={currentLocation} markPage={markPage} />;
     });
+
+    return <div>{links}</div>;
 }
 
 const Menu = ({
     menuData,
     closeMenu,
+    markPage,
     current,
 }: {
     menuData: MenuItem[];
     closeMenu: () => void;
+    markPage?: (page: string | number, unMark?: boolean) => Promise<void>;
     current: CurrentLocation;
 }) => {
-    // const router = useRouter();
-    // const { chapter, subchapter, pageId } = router.query as { chapter: string; pageId: string; subchapter: string };
-
-    const menuLinks = menuData.map((item) =>
-        !item.children ? createMenuLink(item) : createMenuDropDown(item, closeMenu, current)
-    );
+    const menuLinks = menuData.map((item) => (
+        <MenuDropDownLink
+            menuChildren={item.children!}
+            callback={closeMenu}
+            currentLocation={current}
+            markPage={markPage}
+        />
+    ));
     return <div>{menuLinks}</div>;
 };
 

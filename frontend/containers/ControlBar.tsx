@@ -53,7 +53,7 @@ const ControlBar = ({
                 ) : (
                     <div />
                 )}
-
+                {/* If your first page is a Steps page, you will see this spinner without a showNext and showPrev */}
                 {loadingPage ? (
                     <Spinner />
                 ) : !showNext && !showPrev ? (
@@ -61,7 +61,6 @@ const ControlBar = ({
                         <Spinner />
                     </div>
                 ) : null}
-
                 {showNext && (
                     <button
                         type="button"

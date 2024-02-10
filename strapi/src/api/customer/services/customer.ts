@@ -8,13 +8,38 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
 
 
     async createUserEnrollment(order: Order, userId: string|number) {
-  
-        console.log('--- Starting enrollment service ---')
 
-        if (!order) throw new Error('Attempted completion data failed: No custom data attached to this order');
+    
+        if (!order || !order?.release_enrolment_id) throw new Error('Attempted completion data failed: No custom data attached to this order');
 
         //The order must already have an attached user record
         if (!userId) throw new Error('Attempted completion data failed: No user is linked to this order');
+
+        const enrolmentId = order.release_enrolment_id;
+
+        console.log(enrolmentId)
+
+        // Get the current enrollment
+
+        
+        const enrolment = await strapi.db.query('api::enrollment.enrollment').findOne({
+            where: {  id: +enrolmentId },
+            populate: ['users']
+        });
+        
+        if (enrolment) {
+            console.log('---- Enrolment found ----');
+            // Append the userId to the users array
+            enrolment.users.push(userId);
+
+            // Attach user to the given enrolment's users
+            await strapi.entityService.update('api::enrollment.enrollment', +enrolmentId, { data: {
+                users: enrolment.users
+            }});
+
+            console.log('---- Enrolment updated ----');
+
+        }   
 
         //Find the course attached to the order
         const course= await strapi.db.query('api::course.course').findOne({
@@ -58,14 +83,6 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
         }});
 
         console.log(`--- User Completion Stats Successful, userID: ${userId} ---`)
-
-        // Create a new enrollment for that course and user 
-        await strapi.entityService.create('api::enrollment.enrollment', { data: {
-            user: userId,
-            course: course.id,
-            date: order.release_date,
-            price: order.release_price
-        }});
 
       
     },

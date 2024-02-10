@@ -8,6 +8,8 @@ import { VideoT } from '../../../types';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { setAuthToken } from '../../../libs/axios';
 import LoadingQuote from '../../../containers/LoadingQuote';
+import type { ErrorResponse } from '../../../types';
+import { createErrorString } from '../../../libs/errorHandler';
 
 type CourseData = { title: string; description?: string; video: VideoT | null };
 type CourseProps = { course: CourseData };
@@ -31,20 +33,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const resp = await getCourse(courseId);
 
     if (!resp || resp.error || !resp.data) {
+        const er = resp?.data as unknown as ErrorResponse;
         if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
         if (resp.error?.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
         if (resp.error?.status === 403)
             return serverRedirectObject(
-                `/error?redirect=${context.resolvedUrl}&error='You do not have the correct permissions to view this course'`
+                `/error?redirect=${
+                    context.resolvedUrl
+                }&error='You do not have the correct permissions to view this course. ${encodeURIComponent(
+                    createErrorString(er?.error)
+                )}'`
             );
         if (resp.error?.status === 500)
             return serverRedirectObject(
-                `/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down!'`
+                `/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down! ${encodeURIComponent(
+                    createErrorString(er?.error)
+                )}'`
             );
         return serverRedirectObject(
-            `/error?redirect=${context.resolvedUrl}&error=${
-                resp.error ? `${resp.error.name}: ${resp.error.message}` : 'Failed to fetch course data.'
-            }`
+            `/error?redirect=${context.resolvedUrl}&error=${encodeURIComponent(createErrorString(er?.error))}`
         );
     }
 

@@ -12,7 +12,7 @@ import type { VideoT } from '../../types';
 import Spinner from '../../components/ui/Spinner';
 
 const CourseDashboard = ({ description, title, video }: { title: string; description?: string; video?: VideoT }) => {
-    const { menuData, courseSequence, courseCompletionStat } = useContext(NavContext);
+    const { menuData, courseSequence, courseCompletionStat, markPage } = useContext(NavContext);
     const [loading, setLoading] = useState(false);
 
     const isProgressing = !Number.isNaN(courseCompletionStat) && courseCompletionStat && courseCompletionStat > 0;
@@ -24,6 +24,7 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
                 subChapterTitle="The Great Sync"
                 menuData={menuData}
                 current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
+                markPage={markPage}
             />
             <section className="w-full sm:max-w-6xl mx-auto px-4 sm:px-6 lg:px-4 py-12 mt-8">
                 <div className="grid grid-cols-1 sm:grid-cols-3 sm:gap-6 gap-4 ">

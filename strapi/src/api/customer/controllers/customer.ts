@@ -24,7 +24,7 @@ export default {
       }) as Order;
 
       if (!order){ 
-        return ctx.response.forbidden('This is an invalid registration url. Please contact Kylo.');
+        return ctx.response.forbidden('This is an invalid registration url. Please contact Kylo.'); 
       }
 
       locatedOrderId = order.id;
@@ -77,7 +77,7 @@ export default {
 
         ctx.body = {
           success: true,
-          message: 'Your account has been updated with the new course. Login below.'
+          message: 'The account has been updated with the new course. Login below.'
         };
 
         return next()
@@ -113,7 +113,7 @@ export default {
         ctx.body = {
           success: true,
           orderId: order.order_id,
-          message: 'You have successfully registered. Login below.'
+          message: 'Successful registration. Login below.'
         };
       }
 
@@ -149,7 +149,7 @@ export default {
         const payload = mapPaddleOrder(data);
         
         // Create Order - No need to check for existing order, orderId must be unique anyway
-        const order = await strapi.entityService.create('api::order.order', {data: payload}) as Order;
+        const order = await strapi.entityService.create('api::order.order', { data: payload }) as Order;
         trackingOrderId = order.id;
         console.log('--- ORDER CREATED ---')
        

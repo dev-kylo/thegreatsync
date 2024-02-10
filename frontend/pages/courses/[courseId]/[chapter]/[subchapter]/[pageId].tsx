@@ -18,6 +18,8 @@ import Text from '../../../../../components/layout/screens/Text';
 import { authOptions } from '../../../../api/auth/[...nextauth]';
 import { setAuthToken } from '../../../../../libs/axios';
 import Text_Code from '../../../../../components/layout/screens/Text_Code';
+import type { ErrorResponse } from '../../../../../types';
+import { createErrorString } from '../../../../../libs/errorHandler';
 
 type CoursePageProps = {
     title?: string;
@@ -27,7 +29,7 @@ type CoursePageProps = {
     current: CurrentLocation;
 };
 export default function CoursePage({ title, type, content, links, current }: CoursePageProps) {
-    const { menuData, chapterName, subChapterName, loadingPage, nextPage, prevPage, showNext, showPrev } =
+    const { menuData, chapterName, subChapterName, loadingPage, nextPage, prevPage, markPage, showNext, showPrev } =
         useContext(NavContext);
 
     const { data: session } = useSession();
@@ -78,6 +80,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
                     chapterTitle={chapterName || ''}
                     subChapterTitle={subChapterName || ''}
                     menuData={menuData}
+                    markPage={markPage}
                 />
                 {contentLayout}
                 {!hasPageSteps && (
@@ -107,21 +110,25 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         console.log(e);
     }
     if (!resp || resp.error || !resp?.data) {
-        console.log('THERE IS AN ERROR');
+        const er = resp?.data as unknown as ErrorResponse;
         if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
         if (resp.error?.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
         if (resp.error?.status === 403)
             return serverRedirectObject(
-                `/error?redirect=${context.resolvedUrl}&error='You do not have the correct permissions to view this course'`
+                `/error?redirect=${
+                    context.resolvedUrl
+                }&error='You do not have the correct permissions to view this course. ${encodeURIComponent(
+                    createErrorString(er?.error)
+                )}'`
             );
         if (resp.error?.status === 500)
             return serverRedirectObject(
-                `/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down!'`
+                `/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down! ${encodeURIComponent(
+                    createErrorString(er?.error)
+                )}'`
             );
         return serverRedirectObject(
-            `/error?redirect=${context.resolvedUrl}&error=${
-                resp.error ? `${resp.error.name}: ${resp.error.message}` : 'Failed to fetch page data'
-            }`
+            `/error?redirect=${context.resolvedUrl}&error=${encodeURIComponent(createErrorString(er?.error))}`
         );
     }
 

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
@@ -18,6 +18,7 @@ type NavProviderValues = {
     courseSequence?: DoublyLinkedList | null;
     nextPage: () => void;
     prevPage: () => void;
+    markPage: (page: string | number, unMark?: boolean) => Promise<void>;
     setLoadingPage: (val: boolean) => void;
     loadingPage: boolean;
     showNext: boolean;
@@ -33,6 +34,7 @@ export const NavContext = React.createContext<NavProviderValues>({
     courseSequence: null,
     nextPage: () => {},
     prevPage: () => {},
+    markPage: () => Promise.resolve(),
     setLoadingPage: () => {},
     loadingPage: false,
     showNext: false,
@@ -55,17 +57,13 @@ function receivedCompletionData(completionData?: UserCourseProgressResponse) {
     return !!(completionData && completionData?.pages);
 }
 
-function isAlreadyCompleted(courseSequence: DoublyLinkedList) {
-    return !!(courseSequence && courseSequence?.currentPageNode?.data && courseSequence.currentPageNode.data.completed);
-}
-
 const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] }) => {
     const { data: session } = useSession();
     const [loadingPage, setLoadingPage] = useState(false);
     const router = useRouter();
     const { courseId, pageId } = router.query as { courseId: string; pageId: string };
     const [chapterLocation, setChapterLocation] = useState<{ chapter: string; subchapter: string } | null>();
-    const [completedSessionPageIds, setCompletedSessionPageIds] = useState<string[]>([]);
+    const lastCompletedPage = useRef<string | number>('');
 
     const { data, error } = useSWR(
         () => (session && !!httpClient.defaults.headers.common.Authorization && courseId ? courseId : null),
@@ -107,18 +105,15 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (!courseSequence || !courseSequence.currentPageNode) return;
         setLoadingPage(true);
         if (courseSequence.currentPageNode?.data) courseSequence.currentPageNode.data.completed = true;
-        // if (receivedCompletionData(usercompletion)) mutate(); // Fetch new completion data
         const nextNode = courseSequence.currentPageNode?.next || courseSequence.getFirstUncompleted();
         let redirectUrl = '/';
         if (nextNode && nextNode?.data) {
             courseSequence.currentPageNode = nextNode;
             setLocation(nextNode.data);
             redirectUrl = nextNode.data.href!;
-        } else {
-            redirectUrl = '/courseCompleted';
-        }
+        } else redirectUrl = '/courseCompleted';
         setLoadingPage(false);
-        router.replace(redirectUrl);
+        router.push(redirectUrl);
     };
 
     const prevPage = () => {
@@ -129,18 +124,31 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
             courseSequence.currentPageNode = prevNode;
             setLoadingPage(false);
             setLocation(prevNode.data);
-            router.replace(prevNode.data.href!);
+            router.push(prevNode.data.href!);
         } else setLoadingPage(false);
+    };
+
+    // mark a page complete
+    const markPage = async (page: string | number, unMark?: boolean) => {
+        await completePage(courseId, page, unMark);
+        await mutate();
     };
 
     // On load of a page, update pageId
     useEffect(() => {
-        if (courseId && !completedSessionPageIds.includes(pageId) && receivedCompletionData(usercompletion)) {
-            if (courseId && pageId) completePage(courseId, pageId);
-            setCompletedSessionPageIds([...completedSessionPageIds, pageId]);
+        if (
+            courseId &&
+            receivedCompletionData(usercompletion) &&
+            !usercompletion?.pages.find((cm) => cm.id === +pageId)?.completed &&
+            lastCompletedPage.current !== pageId
+        ) {
+            if (courseId && pageId) {
+                completePage(courseId, pageId);
+                lastCompletedPage.current = pageId;
+            }
             mutate(); // Fetch new completion data
         }
-    }, [courseId, pageId, completedSessionPageIds, usercompletion, mutate]);
+    }, [courseId, pageId, usercompletion, mutate]);
 
     useEffect(() => {
         const list = courseSequence;
@@ -182,6 +190,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
                 setLoadingPage,
                 nextPage,
                 prevPage,
+                markPage,
             }}
         >
             {children}
