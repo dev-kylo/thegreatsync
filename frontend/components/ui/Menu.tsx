@@ -122,12 +122,7 @@ const Menu = ({
     current: CurrentLocation;
 }) => {
     const menuLinks = menuData.map((item) => (
-        <MenuDropDownLink
-            menuChildren={item.children!}
-            callback={closeMenu}
-            currentLocation={current}
-            markPage={markPage}
-        />
+        <MenuDropDown item={item} callback={closeMenu} current={current} markPage={markPage} />
     ));
     return <div>{menuLinks}</div>;
 };
