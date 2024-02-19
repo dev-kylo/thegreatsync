@@ -7,7 +7,7 @@ export default function SingleQuote() {
           <figure className="mt-10">
             <blockquote className="text-center text-xl font-semibold leading-8 text-gray-900 sm:text-2xl sm:leading-9">
               <p className="text-white">
-                “When I pivoted into software development and had to learn JavaScript, I was faced with a lot of theoretical concepts that were difficult to remember even after weeks of learning.
+                “When I pivoted into software development and had to learn JavaScript, I was faced with a lot of theoretical concepts that were difficult to remember.
                  I would often have to go back to them repeatedly, and it felt like I was making little progress. 
                  Then, I came across The Great Sync. 
                  My initial thoughts were that it was too good to be true. 

@@ -5,7 +5,7 @@ const posts = [
     id: 1,
     title: 'Build a foundation of visual, memorable concepts.',
     description:
-      'Every concept will have a visual, mnemonic image that represents it. They will build on top of another until we can see a full picture of how the language works.  ',
+      'Every concept will have a visual, mnemonic image that represents it. They will build on top of another until we can see a full picture of how a concept works.  ',
     imageUrl:
       'https://res.cloudinary.com/the-great-sync/image/upload/v1682000194/Closure_ahwz9m.jpg',
   },
@@ -13,7 +13,7 @@ const posts = [
     id: 2,
     title: 'Apply every concept',
     description:
-      'You will write code, draw code, correct code, even read library source code. High coding standards and senior principles will be applied throughout.',
+      'Practise writing, reading and even drawing code while referring back to the visuals. Build a mental model.',
     imageUrl:
       'https://res.cloudinary.com/the-great-sync/image/upload/v1689935186/model_xg5f95.png',
   },
@@ -21,7 +21,7 @@ const posts = [
     id: 3,
     title: 'Learn The Universal Pattern',
     description:
-      'Learn the pattern and blueprint that can be applied to building any application from scratch, with or without a framework.',
+      'All the visual models and concepts combine into a blueprint that can be applied to building any project or application from scratch.',
     imageUrl:
       'https://res.cloudinary.com/the-great-sync/image/upload/v1686602909/A-program-execution_gw1mm7.jpg',
   },
@@ -47,9 +47,7 @@ export default function Intro() {
           <li className="mt-6 text-xl leading-8 text-gray-700">I felt confident after HTML & CSS. And then JavaScript made me miserable.</li>
           <li className="mt-6 text-xl leading-8 text-gray-700">I&lsquo;ve used JS for months, even years, and I STILL blindly copy-paste. </li>
           <li className="mt-6 text-xl leading-8 text-gray-700">I know some of the fundamentals. I can&lsquo;t build anything.</li>
-          <li className="mt-6 text-xl leading-8 text-gray-700">I am so frustrated with it.</li>
-          <li className="mt-6 text-xl leading-8 text-gray-700">I am afraid I will never get the hang of it.</li>
-          <li className="mt-6 text-xl leading-8 text-gray-700"> Maybe this isn&lsquo;t for me...</li>
+          <li className="mt-6 text-xl leading-8 text-gray-700">I&lsquo;m stuck. Maybe this isn&lsquo;t for me...</li>
         </ul>
         <span className='text-xl font-bold tracking-tight mb-0 pb-0 '> That last one is <strong>HAUNTING</strong>.</span>
         <p className="mt-6 text-xl leading-8 text-gray-700  mb-0"> When I hear those words, it truly makes me sad. Because you CAN do it.</p>
@@ -59,7 +57,7 @@ export default function Intro() {
             <li className="mt-6 text-xl leading-8 text-gray-700">
  
               <span >
-                <strong className="font-semibold text-gray-900 ">Even if...</strong> you never studied computer science.
+                <strong className="font-semibold text-gray-900 ">Even if...</strong> you struggle to code without a tutorial.
               </span>
             </li>
             <li className="mt-6 text-xl leading-8 text-gray-700">
@@ -71,13 +69,15 @@ export default function Intro() {
             <li className="mt-6 text-xl leading-8 text-gray-700">
  
               <span>
-                <strong className="font-semibold text-gray-900">Even if....</strong> you have been learning for months and can&lsquo;t build a basic program.
+                <strong className="font-semibold text-gray-900">Even if....</strong> you have been completely stuck for months.
               </span>
             </li>            
           </ul>
  
       <h2 className="pt-12"> The Syncer Program&lsquo;s novel approach to learning</h2>
-
+      <p className="text-xl leading-8 text-gray-600"> This is a systematic learning program with a clearly defined goal: 
+      learn the patterns, and the fundamentals in those patterns, that build applications. </p>
+      <p className="text-xl leading-8 text-gray-600"> There are 3 main steps: </p>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:max-w-4xl">
           <div className="space-y-10">
@@ -96,7 +96,7 @@ export default function Intro() {
                 </div>
                 <div>
                   <div className="group relative max-w-xl mt-8">
-                    <span className=" text-xl font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                    <span className=" text-xl font-semibold leading-6 text-gray-900 ">
                         {post.title}
                     </span>
                     <p className="mt-3 text-md leading-6 text-gray-600">{post.description}</p>

@@ -1,5 +1,4 @@
 import Chapter from "./Chapter"
-import { ChapterScreen } from "./chapterScreen"
 
 const chapterone = [
     {
@@ -11,7 +10,7 @@ const chapterone = [
       },
     {
         id: 2,
-        title: 'Spot the Imp',
+        title: 'Spot the Imp (Imposter Syndrome)',
         imageUrl:
           'https://res.cloudinary.com/the-great-sync/image/upload/v1690486823/Misx/Screen_Shot_2023-07-27_at_11.40.03_PM_cyr7ej.png',
 
@@ -173,11 +172,11 @@ const chapterone = [
     return (
       <>
         <h2 className="mt-16 md:mt-24 text-4xl text-center font-bold tracking-tight text-gray-900 sm:text-6xl">The Course Sections</h2>
-        <Chapter posts={chapterone} title="How to learn JavaScript" description="Learning strategy is key to not feeling lost and directionless. In this section we look at how to optimize your learning, and when memory techniques should and should not be used." />
-        <Chapter posts={stepIntoFlow} title="Step into the flow of a JavaScript program" description="We begin understanding what makes a program run, and how we pass data around it. By the end of this chapter, you are writing clean, readable conditional flow for a gaming app where a player can move around a grid using a keyboard." />
-        <Chapter posts={constructables} title="A deep dive into objects and functions" description="Using visual imagimodels, we deconstruct objects, arrays and functions and learn what their role is in an application. We then apply this knowledge to loops, prototypal inheritance, composition and even a complete visualization of a call stack. You will need to sketch code, fix beginner code, complete short exercises, and read library source code.   " />
-        <Chapter posts={universalPattern} title="Learn the Universal Pattern for apps" description="Using all the visual layers we have built up in previous sections, we paint a picture of what an application looks like. We learn this pattern, and then start applying it! We begin by reading other people's code and identifying it. Then we practice developing with it, using a blueprint that can be applied to building anything!" />
-        <Chapter posts={asyncAwait} title="Exploring async - [ SEPTEMBER ]" description="This section will only be released in September. We use visual models to explain asynchronous functions, promises and async/await. We adapt The Universal Pattern for handling async events." />
+        <Chapter posts={chapterone} title="1. How to learn JavaScript" description="The aim is to learn systematically, with an end goal in sight. We look at how to optimize your learning, and when memory techniques should and should not be used." />
+        <Chapter posts={stepIntoFlow} title="2. Step into the flow of a JavaScript program" description="We begin understanding what makes a program run, and how we pass data around it. By the end of this chapter, you are writing clean, readable conditional flow for a gaming app where a player can move around a grid using a keyboard." />
+        <Chapter posts={constructables} title="3. A deep dive into objects and functions" description="Using visual imagimodels, we deconstruct objects, arrays and functions and learn what their role is in an application. We then apply this knowledge to loops, prototypal inheritance, composition and even a complete visualization of a call stack. You will need to sketch code, fix beginner code, complete short exercises, and read library source code.   " />
+        <Chapter posts={universalPattern} title="4. Learn the Universal Pattern for apps" description="Using all the visual layers we have built up in previous sections, we paint a picture of what an application looks like. We learn this pattern, and then start applying it! We begin by reading other people's code and identifying it. Then we practice developing with it, using a blueprint that can be applied to building anything!" />
+        <Chapter posts={asyncAwait} title="5. Step out the flow with async" description="We use visual models to explain asynchronous functions, promises and the event loop. TO BE RELEASED SOON: promises, async/await syntax, and how we adapt The Universal Pattern for handling async events." />
       </>
     )
   }

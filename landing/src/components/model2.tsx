@@ -12,7 +12,7 @@ export default function Model2() {
          
 
           <div className="max-w-xl text-base leading-7 text-gray-700 lg:col-span-7">
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">How to see the JavaScript BIG picture</h2>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">How to see the BIG picture</h2>
           <p className="mt-6 text-xl leading-8 text-gray-700">
           I often get asked by students to explain one of JavaScript’s more tricky concepts, like closures or prototypal inheritance. I reply by asking them to first explain something basic, like how objects can store other objects.
           </p>
@@ -20,7 +20,7 @@ export default function Model2() {
           The reaction is almost always the same. “I know these basics, I want to learn more advanced stuff”.
           </p>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          But do you know the basics, Gerald? Do you?
+          But do you know the basics? Do you really?
           </p>
           <p className="mt-6 text-xl leading-8 text-gray-700">
           The turning point in your learning journey is the moment you begin to deconstruct JavaScript - to really understand each piece of the puzzle. 

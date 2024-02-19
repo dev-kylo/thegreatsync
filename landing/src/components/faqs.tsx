@@ -3,13 +3,13 @@ const faqs = [
       id: 1,
       question: "Is this course aimed at beginners or intermediates?",
       answer:
-        "The Syncer Program is designed with one aim in mind: to help you gain the confidence and fundamental knowledge to build projects at a high standard. Whether you've started trying to build vanilla JS projects but currently stuck, or you possess basic knowledge and feel ready to advance, this course is perfect for you. Much of it focuses on 'senior-level' best practices. That means you need some familiarity with JavaScript already.",
+        "If you are brand new to JavaScript, or still learning the basic fundamentals for the first time, this course is not for you. It is meant to help anyone 'level up' their skills and not to learn from scratch. If you've started trying to build vanilla JS projects but currently stuck, or you possess basic knowledge and feel ready to advance, this course is perfect for you.",
     },
     {
         id: 2,
         question: "What if I am an absolute beginner?",
         answer:
-          "As the name suggests, the course is meant to help anyone 'level up' their skills. and not to learn from scratch. While the first part does explain the basics very well for a beginner, the focus shifts to applying those concepts at a good standard. Your first aim as an absolute beginner should be fluency, not writing good maintable code. Later this year there will a coaching opportunity specifically for absolute beginners, be sure to look out for that. ",
+          " While the first section does explain the basics very well for a beginner, the focus shifts to applying those concepts at a good standard. Your first aim as an absolute beginner should be fluency, not writing good maintable code. You can still use The Syncer Program, but you may need other resources to help you. ",
       },
       {
         id: 2,
