@@ -1,4 +1,3 @@
-import { CloudArrowUpIcon, LockClosedIcon, ServerIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
 
 export default function Mnemonics() {
@@ -14,12 +13,6 @@ export default function Mnemonics() {
           <div className="max-w-xl text-base leading-7 text-gray-700 lg:col-span-7">
           <h2 className="mt-8 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">The Syncer Program</h2>
           <span className='block mt-4  font-bold'>Level Up With Visual & Memorable JavaScript</span>
-          <p className="mt-6 text-xl leading-8 text-gray-700">
-            Together we journey through an imagined JavaScript universe, with one ultimate objective: providing you with a blue print to build applications.
-          </p>
-          <p className="mt-6 text-xl leading-8 text-gray-700">
-           This course will give you a firm foundation to continue learning intermediate/advanced web development.
-          </p>
           <h2 className="mt-8 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">The course includes:</h2>
           <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">40+ videos</h3>
           <p className="mt-6 text-xl leading-8 text-gray-700">
@@ -27,15 +20,15 @@ export default function Mnemonics() {
           </p>
           <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">80+ written pages</h3>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          Along with video comes a lot of written content. I am a firm believer in the importance of practicing reading technical documentation. Developers spend a large part of their day doing exactly this.
+          Along with video comes a lot of written content. Reading technical text is an important skill. Except this time, you're simultaneously using your imagination.
           </p>
           <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">35+ illustrations</h3>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-            These illustrations are the backbone of the course, and they come in various shapes and sizes. They are the layers of JavaScript we will piece together.
+            These illustrations are the backbone of the course, and are used throughout to explain and link concepts. They are the layers of JavaScript we will piece together.
           </p>
-          <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">The Syncer Community</h3>
+          <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">The Syncer Discord Community</h3>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-            You will gain access to a private community on Discord where you can interact with fellow learners and grow your craft together.
+            You will gain access to a private community on Discord where you can interact with fellow learners, post your exercise solutions and grow your craft together!
           </p>
    
           </div>

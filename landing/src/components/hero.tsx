@@ -20,16 +20,13 @@ export default function Hero() {
           <div className="text-center w-full z-50 ">
             <h1 className="text-5xl text-white drop-shadow-lg font-bold sm:text-7xl">
               {/* Struggling to grasp JavaScript?  */}
-             Struggling to remember and apply JavaScript?
+            No confidence with JavaScript?
             </h1>
-            <h2 className="text-3xl text-white drop-shadow-lg mt-4 font-bold tracking-tight  sm:text-3xl">
-              It&lsquo;s time to visualize and see the big picture.
-            </h2>
             <p className="mt-6 sm:text-xl  font-bold text-white drop-shadow-2xl leading-6 sm:leading-8 ">
-              You&lsquo;re trying to level up, build projects, and turn web development into an exciting career. All that stands in your way is JavaScript. 
+              You&lsquo;re trying to grasp concepts, build projects, and turn web development into an exciting career. But you're stuck!
             </p>
             <div className="bg-primary_blue p-4 mt-8 w-fit m-auto">
-              <p className=" text-2xl text-white leading-8 "> What if you had the confidence to build anything?</p>
+              <p className=" text-2xl text-white leading-8 "> Imagine knowing how to see the big picture!</p>
             </div>
           </div>
         </div>
