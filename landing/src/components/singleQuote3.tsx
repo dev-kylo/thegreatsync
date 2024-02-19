@@ -7,7 +7,7 @@ export default function SingleQuote3() {
           <figure className="mt-10">
             <blockquote className="text-center text-xl font-semibold leading-8 text-gray-900 sm:text-2xl sm:leading-9">
               <p className="text-white">
-                “As a visual learner, I was captivated by how the course weaves together JavaScript concepts and memory techniques, forming a systematic yet vivid mental models for learning JavaScript. Kylo, the course creator, has discovered the perfect blend for effective learning. The exercises not only test my grasp of key concepts but also build up my ability to write clean code. Throughout the journey, Kylo's unwavering support has been a constant source of motivation. It's a transformative experience for anyone looking to delve into the world of JavaScript.”
+                “As a visual learner, I was captivated by how the course weaves together JavaScript concepts and memory techniques, forming a systematic yet vivid mental models for learning JavaScript. Kylo, the course creator, has discovered the perfect blend for effective learning. The exercises not only test my grasp of key concepts but also build up my ability to write clean code. Throughout the journey, Kylo&lsquo;s unwavering support has been a constant source of motivation. It&lsquo;s a transformative experience for anyone looking to delve into the world of JavaScript.”
               </p>
             </blockquote>
             <figcaption className="mt-10">

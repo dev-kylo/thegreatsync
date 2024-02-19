@@ -32,7 +32,7 @@ export default function Vision() {
             <figure className="border-l border-indigo-600 pl-8 mt-32">
               <blockquote className="text-xl font-semibold leading-8 tracking-tight text-gray-900">
                 <p>
-                  The Great Sync has given me a huge confidence boost in my ability to read, write and reflect on code. I now have a much clearer, bigger picture understanding. I highly recommend taking Kylo's course. Just don't rush through the content, it's worth it!"
+                  The Great Sync has given me a huge confidence boost in my ability to read, write and reflect on code. I now have a much clearer, bigger picture understanding. I highly recommend taking Kylo&lsquo;s course. Just don&lsquo;t rush through the content, it&lsquo;s worth it!
                 </p>
               </blockquote>
               <figcaption className="mt-8 flex gap-x-4">
@@ -43,7 +43,7 @@ export default function Vision() {
             </figure>
           </div>
           <div className="max-w-xl text-base leading-7 text-gray-700 lg:col-span-7">
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">What if it wasn't like this?</h2>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">What if it wasn&lsquo;t like this?</h2>
           <p className="mt-6 text-xl leading-8 text-gray-700">
           Let&lsquo;s imagine what being a professional JavaScript developer CAN and SHOULD look like.
           </p>

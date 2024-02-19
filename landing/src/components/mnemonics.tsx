@@ -20,7 +20,7 @@ export default function Mnemonics() {
           </p>
           <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">80+ written pages</h3>
           <p className="mt-6 text-xl leading-8 text-gray-700">
-          Along with video comes a lot of written content. Reading technical text is an important skill. Except this time, you're simultaneously using your imagination.
+          Along with video comes a lot of written content. Reading technical text is an important skill. Except this time, yo&lsquo;re simultaneously using your imagination.
           </p>
           <h3 className="mt-8 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">35+ illustrations</h3>
           <p className="mt-6 text-xl leading-8 text-gray-700">

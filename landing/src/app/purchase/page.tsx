@@ -31,7 +31,7 @@ const Purchase = () => {
             router.push('/#checkout')
           }
         });
-      }, [])
+      }, [router])
 
     return (
         <div className="relative isolate px-6 pt-14 lg:px-8 min-h-screen w-auto bg-[url('https://res.cloudinary.com/the-great-sync/image/upload/c_crop,w_2000,h_1000/v1689097216/3000x2000/Execution_Closure_Scene_yobija.jpg')] ">

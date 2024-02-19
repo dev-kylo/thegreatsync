@@ -23,7 +23,7 @@ export default function Hero() {
             No confidence with JavaScript?
             </h1>
             <p className="mt-6 sm:text-xl  font-bold text-white drop-shadow-2xl leading-6 sm:leading-8 ">
-              You&lsquo;re trying to grasp concepts, build projects, and turn web development into an exciting career. But you're stuck!
+              You&lsquo;re trying to grasp concepts, build projects, and turn web development into an exciting career. But you&lsquo;re stuck!
             </p>
             <div className="bg-primary_blue p-4 mt-8 w-fit m-auto">
               <p className=" text-2xl text-white leading-8 "> Imagine knowing how to see the big picture!</p>

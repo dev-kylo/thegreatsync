@@ -47,7 +47,7 @@ export default function Intro() {
           <li className="mt-6 text-xl leading-8 text-gray-700">I felt confident after HTML & CSS. And then JavaScript made me miserable.</li>
           <li className="mt-6 text-xl leading-8 text-gray-700">I&lsquo;ve used JS for months, even years, and I STILL blindly copy-paste. </li>
           <li className="mt-6 text-xl leading-8 text-gray-700">I know some of the fundamentals. I can&lsquo;t build anything.</li>
-          <li className="mt-6 text-xl leading-8 text-gray-700">I'm stuck. Maybe this isn&lsquo;t for me...</li>
+          <li className="mt-6 text-xl leading-8 text-gray-700">I&lsquo;m stuck. Maybe this isn&lsquo;t for me...</li>
         </ul>
         <span className='text-xl font-bold tracking-tight mb-0 pb-0 '> That last one is <strong>HAUNTING</strong>.</span>
         <p className="mt-6 text-xl leading-8 text-gray-700  mb-0"> When I hear those words, it truly makes me sad. Because you CAN do it.</p>
