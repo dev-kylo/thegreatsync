@@ -9,8 +9,8 @@ const Purchase = () => {
 
     useEffect(() => {
 
-        (window as any).Paddle.Setup({ vendor: 13136});
-        (window as any).Paddle.Environment.set('sandbox');
+        // (window as any).Paddle.Setup({ vendor: 13136});
+        // (window as any).Paddle.Environment.set('sandbox');
         // Sandbox product 54653
         // Sandbox upsell 67894
         // 844435
