@@ -162,7 +162,7 @@ export default {
             <p>Amazing news!</p>
             <p>Congratulations on joining <em>The Syncer Program - Level Up With Visual and Memorable JavaScript </em>. You are about to start an exciting journey into the realm of JavaScript and The Great Sync!</p>
             <p> Click the link below to register and access the platform: </p>
-            <a href='${process.env.TGS_FE_URL}/register?orderid=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderId=${order.order_id}</a>
+            <a href='${process.env.TGS_FE_URL}/register?orderid=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderid=${order.order_id}</a>
             <p>You can also bookmark the <a href='${process.env.TGS_FE_URL}'> homepage link.</a></p>
             <p>Look out for an email containing the <strong>Discord Invitation to The Syncer Community </strong>. You can find this in the navigation menu on the platform too.</p>
             <p>See you there!</p>
@@ -183,7 +183,8 @@ export default {
           <p>Hi!</p>
           <p> Click the link below to gain access to The Syncer Community on Discord. If the link does not work, download the Discord application first</p>
           <a href='${process.env.DISCORD_INVITE}'>${process.env.DISCORD_INVITE}</a>
-          <p> Remember to introduce yourself! </p>
+          <p> This is where you can post your exercises and receive feedback, as well as meet and support the other Syncer students. </p>
+          <p> Remember to introduce yourself 😉! </p>
           <p> Kylo </p>`,
           headers: {
             'X-PM-Message-Stream': 'purchases'
