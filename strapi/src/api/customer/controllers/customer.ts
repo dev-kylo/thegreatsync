@@ -165,6 +165,7 @@ export default {
             <a href='${process.env.TGS_FE_URL}/register?orderid=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderid=${order.order_id}</a>
             <p>You can also bookmark the <a href='${process.env.TGS_FE_URL}'> homepage link.</a></p>
             <p>Look out for an email containing the <strong>Discord Invitation to The Syncer Community </strong>. You can find this in the navigation menu on the platform too.</p>
+            <p>If you included 1:1 coaching sessions with me, I will contact you separately to arrange.</p>
             <p>See you there!</p>
             <p>Kylo</p>
           `,
@@ -212,7 +213,7 @@ export default {
             html: `<h2>Hi! 👋</h2> 
               <p>I received your order to join The Syncer Program, and super excited to have you on board.</p>
               <p> Unfortunately, there is a system delay in processing your order and you might not yet have received the links to the course platform. </p>
-              <p> Apologies for this! As this is the first launch, I am still fixing unexpected bugs. <strong> You will receive the access emails within a few hours</strong></p>
+              <p> Apologies for this!<strong>You will receive the access emails within a few hours</strong></p>
               <p> In the meantime, join The Syncer Community on Discord and introduce yourself. If the link doesn't work, download the Discord application first.</p>
               <a href='${process.env.DISCORD_INVITE}'>${process.env.DISCORD_INVITE}</a>
               <p> You will be hearing from me very soon.  Reply to this email if you need to contact me.</p>
