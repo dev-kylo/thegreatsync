@@ -26,7 +26,7 @@ const Purchase = () => {
           disableLogout: true,
           upsell: 873686,
           upsellTitle: 'LIMITED OFFER: Video Coaching',
-          upsellText: 'Include 5x 1 hour personal video coaching sessions.',
+          upsellText: 'Include 5x 1 hour personal video coaching sessions for $497.00',
           closeCallback: () => {
             router.push('/#checkout')
           }
