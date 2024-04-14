@@ -109,6 +109,8 @@ coverage
 .env
 .env.supabase
 .env.prod
+.env.development
+.env.production
 
 license.txt
 exports

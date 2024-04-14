@@ -115,6 +115,8 @@ build
 .env.devcopy
 .env.prod
 .env.supabase
+.env.development
+.env.production
 
 ############################
 # Certificates
