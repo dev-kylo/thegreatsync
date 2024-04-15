@@ -1,5 +1,4 @@
 import type { ApiChapterChapter, ApiOrderOrder, ApiPagePage, ApiSubchapterSubchapter, PluginUsersPermissionsUser } from "./schemas";
-import type { Service } from '@strapi/strapi/lib/core-api/service';
 import { ApiCourseCourse } from "./schemas";
 
 export type CustomPaddleData = {
@@ -50,7 +49,7 @@ export type ChapterCompletion = CompletionProgress & { course?: number }
 export type UserCourseProgress = { chapters: ChapterCompletion[], pages: PageCompletion[], subchapters: SubchapterCompletion[], id: number, user: number}
 
 
-export type CustomerService = Service & {
+export type CustomerService = {
     createUserEnrollment?(order: Order, userId: string|number): Promise<void>;
     createUserCourseCompletionEntry?(order: Order, userId: string|number): Promise<void>;
 };

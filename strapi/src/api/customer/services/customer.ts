@@ -1,10 +1,10 @@
-import { factories } from '@strapi/strapi'; 
-import type { CustomPaddleData, ChapterCompletion, PageCompletion, SubchapterCompletion, CustomerService, Course, User, Order } from '../../../../custom-types'
+import { Attribute, factories } from '@strapi/strapi'; 
+import type {  ChapterCompletion, PageCompletion, SubchapterCompletion, Course, User, Order } from '../../../../custom-types'
 import { createSubchapterCompletion } from '../../../utils/user-course-completion';
+import content_schemas from '../../../../general-schemas';
 
 
-
-export default factories.createCoreService<CustomerService>('api::customer.customer', ({ strapi }) =>  ({
+export default factories.createCoreService('api::customer.customer', ({ strapi }) =>  ({
 
 
     async createUserEnrollment(order: Order, userId: string|number) {
