@@ -1,0 +1,13 @@
+{
+  "name": "thegreatsync",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "hub:dev": "pnpm --filter coursehub run dev",
+    "strapi:dev": "pnpm --filter strapi run develop"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

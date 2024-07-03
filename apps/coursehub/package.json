@@ -1,5 +1,5 @@
 {
-  "name": "thegreatsync",
+  "name": "coursehub",
   "private": true,
   "scripts": {
     "dev": "next dev",
