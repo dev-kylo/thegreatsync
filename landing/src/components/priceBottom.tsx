@@ -91,7 +91,7 @@ export default function PriceBottom() {
               ))}
             </ul>
 
-            <Link href="/purchase" passHref className={classNames(
+            <Link href="/purchase" className={classNames(
                 tier.featured
                   ? 'bg-indigo-500 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline-indigo-500'
                   : 'text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300 focus-visible:outline-indigo-600',

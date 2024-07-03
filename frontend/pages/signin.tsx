@@ -53,9 +53,8 @@ export default function SignIn() {
                                 priority
                                 alt="Mountains"
                                 src={Logo}
-                                layout="fill"
-                                objectFit="contain"
-                                className="aspect-square h-auto w-full top-0 left-1/2"
+                                fill
+                                className="aspect-square object-contain h-auto w-full top-0 left-1/2"
                             />
                         </div>
                         <h2 className="mt-6 text-xl font-bold tracking-tight text-white text-center">
@@ -113,10 +112,8 @@ export default function SignIn() {
                                         {honeypot}
 
                                         <div className="text-sm">
-                                            <Link passHref href="/user/forgottenpassword">
-                                                <a className="font-medium text-white hover:text-indigo-500">
+                                            <Link passHref href="/user/forgottenpassword" className="font-medium text-white hover:text-indigo-500">
                                                     Forgot your password?
-                                                </a>
                                             </Link>
                                         </div>
                                     </div>
@@ -142,9 +139,8 @@ export default function SignIn() {
                     <Image
                         alt=""
                         src={Img}
-                        layout="fill"
-                        objectFit="cover"
-                        objectPosition="center"
+                        fill
+                        className='object-cover object-center'
                         placeholder="blur"
                     />
                 </div>

@@ -60,7 +60,7 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                                 id={`image:${id}`}
                                 alt={imageAlt || ''}
                                 src={url}
-                                layout="fill"
+                                fill
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="h-auto object-contain"
@@ -89,7 +89,7 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                                 key={`image:${image.data.id}-${id}`}
                                 alt={imageAlt || ''}
                                 src={url}
-                                layout="fill"
+                                fill
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="h-auto object-cover"

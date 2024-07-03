@@ -9,9 +9,8 @@ const ErrorScreen = ({ statusCode, backUrl }: { statusCode?: string | number; ba
                 <Image
                     alt=""
                     src="https://res.cloudinary.com/the-great-sync/image/upload/v1673003212/2000x2000/volcanic_landscape_k02d6p.png"
-                    layout="fill"
-                    objectFit="cover"
-                    objectPosition="top"
+                    fill
+                    className='object-cover object-top'
                 />
             </div>
             <div className="flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">

@@ -5,7 +5,7 @@ import Ocean from '../assets/Ocean.png';
 const Custom404 = () => (
     <div className="h-screen w-screen relative">
         <div className="h-full w-full absolute">
-            <Image alt="" src={Ocean} placeholder="blur" layout="fill" objectFit="cover" objectPosition="top" />
+            <Image alt="" src={Ocean} placeholder="blur" fill className='object-cover object-top' />
         </div>
         <div className="flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <div className="bg-[#ffffffbd]  p-4">

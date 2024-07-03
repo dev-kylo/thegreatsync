@@ -60,7 +60,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                                     key={`image:${image.data.id}-${id}`}
                                     alt={imageAlt || ''}
                                     src={url}
-                                    layout="fill"
+                                    fill
                                     placeholder="blur"
                                     blurDataURL={placeholder}
                                     className="aspect-square h-auto object-contain"
@@ -100,7 +100,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                                 id={`image:${id}`}
                                 alt={imageAlt || ''}
                                 src={url}
-                                layout="fill"
+                                fill
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="aspect-square h-auto object-cover"
