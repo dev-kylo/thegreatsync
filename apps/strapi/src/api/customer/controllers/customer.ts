@@ -24,7 +24,7 @@ export default {
       }) as Order;
 
       if (!order){ 
-        return ctx.response.forbidden('This is an invalid registration url. Please contact Kylo.'); 
+        return ctx.response.forbidden('This is an invalid registration url.'); 
       }
 
       locatedOrderId = order.id;
@@ -66,12 +66,12 @@ export default {
         await strapi.entityService.update('api::order.order', order.id, {
           data: {
             user: user.id
-          },
+          } as Order,
         });
 
         console.log('--- ORDER UPDATED ---')
           // Enroll User In Course 
-        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order, user.id);
+        await strapi.service('api::customer.customer').createUserEnrollment(order, user.id);
         
         console.log('--- USER ENROLLED IN COURSE ---')
 
@@ -103,11 +103,11 @@ export default {
         await strapi.entityService.update('api::order.order', order.id, {
           data: {
             user: user.id
-          },
+          } as Order,
         });
 
           // Enroll User In Course 
-        await strapi.service<CustomerService>('api::customer.customer').createUserEnrollment(order, user.id);
+        await strapi.service('api::customer.customer').createUserEnrollment(order, user.id);
         console.log('--- USER ENROLLED IN COURSE ---')
 
         ctx.body = {

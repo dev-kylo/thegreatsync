@@ -13,24 +13,12 @@ module.exports = factories.createCoreController('api::chapter.chapter', ({ strap
         console.log('-------- USER DATA ----------');
         // console.log(ctx.state)
 
-        // some logic here
         const { data, meta } = await super.find(ctx);
-        // some more logic
-
-
-        // const completedPages = await strapi.entityService.findMany('api::enrollment.enrollment', {
-        //     fields: ['id', 'description'],
-        //     filters: { title: 'Hello World' },
-        //     sort: { createdAt: 'DESC' },
-        //     populate: { category: true },
-        //   });
 
         const completedPages = await strapi.entityService.findMany('api::enrollment.enrollment', {
             fields: ['id'],
-            sort: { createdAt: 'DESC' },
+            sort: { createdAt: 'desc' },
         });
-
-
 
         data.enrollments = [];
         const resp = {

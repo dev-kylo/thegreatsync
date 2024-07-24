@@ -1,10 +1,10 @@
 import { factories } from '@strapi/strapi'; 
-import type { CustomPaddleData, ChapterCompletion, PageCompletion, SubchapterCompletion, CustomerService, Course, User, Order } from '../../../../custom-types'
+import type { CustomPaddleData, ChapterCompletion, PageCompletion, SubchapterCompletion, CustomerService, Course, User, Order, Enrollment } from '../../../../custom-types'
 import { createSubchapterCompletion } from '../../../utils/user-course-completion';
 
 
 
-export default factories.createCoreService<CustomerService>('api::customer.customer', ({ strapi }) =>  ({
+export default factories.createCoreService('api::customer.customer', ({ strapi }) =>  ({
 
 
     async createUserEnrollment(order: Order, userId: string|number) {
@@ -33,9 +33,11 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
             enrolment.users.push(userId);
 
             // Attach user to the given enrolment's users
-            await strapi.entityService.update('api::enrollment.enrollment', +enrolmentId, { data: {
-                users: enrolment.users
-            }});
+            await strapi.entityService.update('api::enrollment.enrollment', +enrolmentId, { 
+                data: {
+                    users: enrolment.users
+                } as Enrollment
+            });
 
             console.log('---- Enrolment updated ----');
 
@@ -84,7 +86,6 @@ export default factories.createCoreService<CustomerService>('api::customer.custo
 
         console.log(`--- User Completion Stats Successful, userID: ${userId} ---`)
 
-      
     },
 
 

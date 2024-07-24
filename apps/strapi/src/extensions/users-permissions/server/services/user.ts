@@ -5,8 +5,8 @@ module.exports = {
    */
   fetchAuthenticatedUser(id) {
     console.log('Custom fetch user')
-    return strapi.entityService
-      .query('plugin::users-permissions.user')
-      .findOne({ where: { id }, populate: ['role', 'enrollments'] });
+    return strapi.entityService.findOne('plugin::users-permissions.user', id, {
+      populate: ['role', 'enrollments']
+    });
   },
 };

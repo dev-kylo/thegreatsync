@@ -88,7 +88,7 @@ export default {
                 pages: userCompletion.pages,
                 subchapters: userCompletion.subchapters,
                 chapters: userCompletion.chapters
-            },
+            } as UserCourseProgress,
         });
         
         ctx.response.status = 202;

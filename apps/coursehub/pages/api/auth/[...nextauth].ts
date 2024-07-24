@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
                     });
                     return { ...user, jwt } as unknown as User;
                 } catch (error) {
-                    console.log('SIGN IN FAIL');
+                    console.log('SIGN IN FAIL', error);
                     return null;
                 }
             },

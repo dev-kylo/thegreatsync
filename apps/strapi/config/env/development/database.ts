@@ -10,10 +10,10 @@ export default ({ env }) => ({
             database: env('LOCAL_DATABASE_NAME'),
             user: env('LOCAL_DATABASE_USERNAME'),
             password: env('LOCAL_DATABASE_PASSWORD'),
-            ssl: false
-            // ssl: {
-            //     rejectUnauthorized: env.bool('DATABASE_SSL_SELF', false), // For self-signed certificates
-            // }, 
+            // ssl: false
+            ssl: {
+                rejectUnauthorized: env.bool('DATABASE_SSL_SELF', false), // For self-signed certificates
+            }, 
         },
     },
 });

@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { CurrentLocation } from '../../types';
@@ -7,25 +7,12 @@ type SlideOverProps = {
     children: React.ReactNode;
     open: boolean;
     setOpen: (open: boolean) => void;
-    current: CurrentLocation;
 };
 
-function SlideOver({ children, open, setOpen, current }: SlideOverProps) {
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (current && current.pageId) {
-                const chapterLink = document.getElementById(`menu-1-${current.chapterId}`);
-                if (chapterLink) chapterLink.click();
-                const subchapterLink = document.getElementById(`menu-2-${current.subchapterId}`);
-                if (subchapterLink) subchapterLink.click();
-            }
-            clearTimeout(timer);
-        }, 100);
-    }, [open, current]);
-
+function SlideOver({ children, open, setOpen }: SlideOverProps) {
     return (
         <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="relative z-10 " onClose={setOpen}>
+            <Dialog as="div" className="relative z-10 " onClose={() => setOpen(false)}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-500"

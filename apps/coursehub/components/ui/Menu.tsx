@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Disclosure } from '@headlessui/react';
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import Link from 'next/link';
 import type { CurrentLocation, MenuItem } from '../../types';
 import MenuIcon from './MenuIcon';
@@ -21,11 +21,16 @@ function MenuDropDown({
     current: CurrentLocation;
     markPage?: (page: string | number, unMark?: boolean) => Promise<void>;
 }) {
+    // check if submenu should be open
+    const isActive =
+        (current?.chapterId && item.level === 1 && +current.chapterId === +item.id) ||
+        (current?.subchapterId && item.level === 2 && +current.subchapterId === +item.id);
+
     return (
-        <Disclosure as="div" key={item.name} className="space-y-1">
+        <Disclosure as="div" key={item.name} className="space-y-1" defaultOpen={!!isActive}>
             {({ open }) => (
                 <div>
-                    <Disclosure.Button
+                    <DisclosureButton
                         className={classNames(
                             item.current
                                 ? `py-3 bg-gray-100 text-white pl-[${item.level}rem]`
@@ -48,8 +53,8 @@ function MenuDropDown({
                         >
                             <path d="M6 6L14 10L6 14V6Z" fill="currentColor" />
                         </svg>
-                    </Disclosure.Button>
-                    <Disclosure.Panel className="space-y-1">
+                    </DisclosureButton>
+                    <DisclosurePanel className="space-y-1">
                         {item.children && (
                             <MenuDropDownLink
                                 menuChildren={item.children}
@@ -58,7 +63,7 @@ function MenuDropDown({
                                 markPage={markPage}
                             />
                         )}
-                    </Disclosure.Panel>
+                    </DisclosurePanel>
                 </div>
             )}
         </Disclosure>
@@ -81,18 +86,18 @@ function MenuDropDownLink({
         if (!children) {
             const isActive = !!current || +currentLocation.pageId === +id;
             return (
-                <Link href={href || '/'} passHref key={id}>
-                    <Disclosure.Button
+                <Link href={href || '/'} passHref key={`menu-${level}-${id}`}>
+                    <DisclosureButton
                         onClick={() => callback()}
                         key={name}
-                        as="a"
+                        as="span"
                         className={`group flex w-full items-center rounded-md py-3 ${
                             level === 2 ? 'pl-8' : level === 3 ? 'pl-12 sm:pl-20' : 'pl-4'
-                        } pr-2 text-md font-medium text-white hover:bg-gray-50 hover:text-gray-900 ${
-                            +currentLocation.pageId === +id ? 'bg-gray-50 text-black' : ''
+                        } pr-2 text-md font-medium hover:bg-gray-50 hover:text-gray-900 ${
+                            isActive ? 'bg-gray-50 text-black' : 'text-white'
                         }`}
                     >
-                        <button type="button" id={`menu-${level}-${id}`} onClick={() => console.log('Clicked')}>
+                        <button type="button" id={`menu-${level}-${id}`} onClick={() => console.log('menu opened')}>
                             {type && markPage && (
                                 <HoverAction pageId={id} action={markPage} unMark={!!completed}>
                                     <MenuIcon type={type} completed={!!completed} active={isActive} />
@@ -100,11 +105,19 @@ function MenuDropDownLink({
                             )}
                         </button>
                         {name}
-                    </Disclosure.Button>
+                    </DisclosureButton>
                 </Link>
             );
         }
-        return <MenuDropDown item={subItem} callback={callback} current={currentLocation} markPage={markPage} />;
+        return (
+            <MenuDropDown
+                key={`menu-${level}-${id}`}
+                item={subItem}
+                callback={callback}
+                current={currentLocation}
+                markPage={markPage}
+            />
+        );
     });
 
     return <div>{links}</div>;
@@ -122,7 +135,7 @@ const Menu = ({
     current: CurrentLocation;
 }) => {
     const menuLinks = menuData.map((item) => (
-        <MenuDropDown item={item} callback={closeMenu} current={current} markPage={markPage} />
+        <MenuDropDown key={`${item.id}-1`} item={item} callback={closeMenu} current={current} markPage={markPage} />
     ));
     return <div>{menuLinks}</div>;
 };

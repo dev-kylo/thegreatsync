@@ -47,7 +47,7 @@ export default function Navbar({
                     </div>
                 </div>
             </Disclosure>
-            <SlideOver open={openMenu} setOpen={setOpenMenu} current={current}>
+            <SlideOver open={openMenu} setOpen={setOpenMenu}>
                 <ProfileDropDown mobile />
 
                 {menuData ? (

@@ -1,4 +1,3 @@
-const { sanitize } = require('@strapi/utils');
 
 export default {
     coursesByUser: async (ctx, next) => {
@@ -20,9 +19,9 @@ export default {
         else {
              // returns the course linked to each enrolment
             const courses = enrolments.map(enrolment => enrolment.course);
-            const unresolved = courses.map(async (course) => await sanitize.contentAPI.output(course));
-            const sanitizedCourses = await Promise.all(unresolved);
-            ctx.response.body = sanitizedCourses;
+            // const unresolved = courses.map(async (course) => await sanitize.contentAPI.output(course));
+            // const sanitizedCourses = await Promise.all(unresolved);
+            ctx.response.body = courses;
         }
 
         await next();

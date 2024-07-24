@@ -13,18 +13,14 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
     if (mobile)
         return (
             <div className="block md:hidden">
-                <Link passHref href="/courses">
-                    <a href="#" className={` block px-4 py-3 text-[1rem] text-white`}>
+                <Link href="/courses" className={`block px-4 py-3 text-[1rem] text-white`}>
                         All Courses
-                    </a>
                 </Link>
-                <a href="#" className={` block px-4 py-3 text-[1rem] text-white`}>
+                <a href="#" className={`block px-4 py-3 text-[1rem] text-white`}>
                     Dashboard
                 </a>
-                <Link href="/user/account">
-                    <a href="#" className={` block px-4 py-3 text-[1rem] text-white`}>
-                        Account
-                    </a>
+                <Link href="/user/account" className={` block px-4 py-3 text-[1rem] text-white`}>
+                    Account
                 </Link>
                 <a
                     type="button"
@@ -61,40 +57,34 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
             >
                 <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     {courseId && (
-                        <Link passHref href={`/courses/${courseId}`}>
+                        <Link href={`/courses/${courseId}`}>
                             <Menu.Item>
-                                {({ active }) => (
-                                    <a
-                                        href="#"
+                                {({ focus }) => (
+                                    <span
                                         className={`${
-                                            active ? 'bg-gray-100' : ''
+                                            focus ? 'bg-gray-100' : ''
                                         } block px-4 py-2 text-sm text-gray-700`}
                                     >
                                         Dashboard
-                                    </a>
+                                    </span>
                                 )}
                             </Menu.Item>
                         </Link>
                     )}
 
                     <Menu.Item>
-                        {({ active }) => (
-                            <Link passHref href="/courses">
-                                <a
-                                    href="#"
-                                    className={`${active ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
-                                >
-                                    All Courses
-                                </a>
+                        {({ focus }) => (
+                            <Link passHref href="/courses" className={`${focus ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}>
+                                All Courses
                             </Link>
                         )}
                     </Menu.Item>
 
                     <Menu.Item>
-                        {({ active }) => (
+                        {({ focus }) => (
                             <a
                                 href={`${process.env.NEXT_PUBLIC_DISCORD_INVITE}`}
-                                className={`${active ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
+                                className={`${focus ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
@@ -104,24 +94,19 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                     </Menu.Item>
 
                     <Menu.Item>
-                        {({ active }) => (
-                            <Link passHref href="/user/account">
-                                <a
-                                    href="#"
-                                    className={`${active ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
-                                >
-                                    Account
-                                </a>
+                        {({ focus }) => (
+                            <Link href="/user/account" className={`${focus ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}>
+                                Account
                             </Link>
                         )}
                     </Menu.Item>
                     <Menu.Item>
-                        {({ active }) => (
+                        {({ focus }) => (
                             <a
                                 type="button"
                                 onClick={() => signOut()}
                                 className={`${
-                                    active ? 'bg-gray-100' : ''
+                                    focus ? 'bg-gray-100' : ''
                                 } block px-4 py-2 text-sm text-gray-700 hover:cursor-pointer`}
                             >
                                 Logout
