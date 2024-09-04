@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "hub:dev": "pnpm --filter coursehub run dev",
-    "strapi:dev": "pnpm --filter strapi run develop"
+    "strapi:dev": "pnpm --filter strapi run develop",
+    "strapi": "pnpm --filter strapi",
+    "hub": "pnpm --filter coursehub"
   },
   "keywords": [],
   "author": "",
