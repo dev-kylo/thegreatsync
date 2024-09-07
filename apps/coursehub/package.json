@@ -1,0 +1,58 @@
+{
+  "name": "coursehub",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "eslint . --fix",
+    "test": "jest --watch"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.1.1",
+    "@heroicons/react": "^2.1.4",
+    "@mux/mux-video-react": "^0.11.0",
+    "@types/nprogress": "^0.2.0",
+    "@types/qs": "^6.9.7",
+    "allotment": "^1.19.0",
+    "axios": "^1.1.3",
+    "msw": "^1.2.1",
+    "next": "14.2.5",
+    "next-auth": "^4.24.7",
+    "nprogress": "^0.2.0",
+    "prismjs": "^1.29.0",
+    "qs": "^6.11.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-markdown": "^9.0.1",
+    "react-resizable": "^3.0.5",
+    "react-syntax-highlighter": "^15.5.0",
+    "swr": "^1.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/preset-react": "^7.24.7",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/typography": "^0.5.7",
+    "@types/node": "^20.14.9",
+    "@types/prismjs": "^1.26.0",
+    "@types/react": "18.3.3",
+    "@types/react-syntax-highlighter": "^15.5.6",
+    "autoprefixer": "^10.4.12",
+    "babel-plugin-macros": "^3.1.0",
+    "eslint": "^8.39.0",
+    "eslint-config-next": "14.2.5",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-wesbos": "^3.2.3",
+    "postcss": "^8.4.16",
+    "prettier": "^2.8.8",
+    "tailwind-scrollbar": "^2.0.1",
+    "tailwindcss": "^3.1.8",
+    "typescript": "^4.9.5"
+  },
+  "msw": {
+    "workerDirectory": "public"
+  }
+}

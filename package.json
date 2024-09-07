@@ -1,0 +1,19 @@
+{
+  "name": "thegreatsync",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "hub:dev": "pnpm --filter coursehub run dev",
+    "strapi:dev": "pnpm --filter strapi run develop",
+    "strapi": "pnpm --filter strapi",
+    "hub": "pnpm --filter coursehub"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@strapi/typescript-utils": "^4.25.2",
+    "next": "14.2.5"
+  }
+}
