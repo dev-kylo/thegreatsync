@@ -12,7 +12,7 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { SVGProps } from 'react';
 import type { MenuType } from '../../types';
 
-type IconType = (props: SVGProps<SVGSVGElement>) => JSX.Element;
+type IconType = React.ForwardRefExoticComponent<SVGProps<SVGSVGElement> & { title?: string; titleId?: string }>;
 
 const iconLookup: { [key: string]: React.ReactNode | IconType } = {
     watch: VideoCameraIcon,

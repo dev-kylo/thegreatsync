@@ -10,7 +10,13 @@ const Custom403 = () => {
     return (
         <div className="h-screen w-screen relative">
             <div className="h-full w-full absolute">
-                <Image alt="" src={Ocean} placeholder="blur" fill className='object-cover object-top'/>
+                <Image
+                    alt=""
+                    src={Ocean as unknown as string}
+                    placeholder="blur"
+                    fill
+                    className="object-cover object-top"
+                />
             </div>
             <div className="flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 <div className="bg-[#ffffffbd]  p-4">

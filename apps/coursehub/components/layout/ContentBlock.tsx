@@ -4,11 +4,41 @@ import ReactMarkdown from 'react-markdown';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import js from 'react-syntax-highlighter/dist/cjs/languages/hljs/javascript';
 import style from 'react-syntax-highlighter/dist/cjs/styles/hljs/night-owl';
+import { ClassAttributes, HTMLAttributes } from 'react';
 import Divider from '../ui/Divider';
 import ExternalLink from '../ui/ExternalLink';
 import type { ResourceLink } from '../../types';
 
 SyntaxHighlighter.registerLanguage('javascript', js);
+
+type CodeProps = ClassAttributes<HTMLElement> & HTMLAttributes<HTMLElement> & { [key: string]: any };
+
+const CodeComponent = ({ inline, children, ...props }: CodeProps) => {
+    return !inline ? (
+        <SyntaxHighlighter
+            {...props}
+            children={String(children).replace(/\n$/, '')}
+            style={style}
+            language="javascript"
+            PreTag="div"
+            className="scrollbar-thin scrollbar-thumb-primary_green overflow-y-scroll overflow-x-scroll"
+            customStyle={{ height: '100%' }}
+            ref={props.ref as React.LegacyRef<SyntaxHighlighter>}
+        />
+    ) : (
+        <div style={{ display: 'inline' }}>
+            <SyntaxHighlighter
+                {...props}
+                children={String(children).replace(/\n$/, '')}
+                style={style}
+                language="javascript"
+                PreTag="div"
+                customStyle={{ display: 'inline', padding: ' 0.2rem 0.5rem' }}
+                ref={props.ref as React.LegacyRef<SyntaxHighlighter>}
+            />
+        </div>
+    );
+};
 
 const ContentBlock = ({
     md,
@@ -40,31 +70,7 @@ const ContentBlock = ({
             <ReactMarkdown
                 children={md}
                 components={{
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    code({ node, inline, className, children, ...props }) {
-                        return !inline ? (
-                            <SyntaxHighlighter
-                                {...props}
-                                children={String(children).replace(/\n$/, '')}
-                                style={style}
-                                language="javascript"
-                                PreTag="div"
-                                className="scrollbar-thin scrollbar-thumb-primary_green overflow-y-scroll overflow-x-scroll"
-                                customStyle={{ height: '100%' }}
-                            />
-                        ) : (
-                            <div style={{ display: 'inline' }}>
-                                <SyntaxHighlighter
-                                    {...props}
-                                    children={String(children).replace(/\n$/, '')}
-                                    style={style}
-                                    language="javascript"
-                                    PreTag="div"
-                                    customStyle={{ display: 'inline', padding: ' 0.2rem 0.5rem' }}
-                                />
-                            </div>
-                        );
-                    },
+                    code: CodeComponent,
                 }}
             />
             {links && links.length > 0 && (

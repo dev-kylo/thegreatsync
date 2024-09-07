@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Fragment, useContext } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -13,10 +13,10 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
     if (mobile)
         return (
             <div className="block md:hidden">
-                <Link href="/courses" className={`block px-4 py-3 text-[1rem] text-white`}>
-                        All Courses
+                <Link href="/courses" className="block px-4 py-3 text-[1rem] text-white">
+                    All Courses
                 </Link>
-                <a href="#" className={`block px-4 py-3 text-[1rem] text-white`}>
+                <a href="#" className="block px-4 py-3 text-[1rem] text-white">
                     Dashboard
                 </a>
                 <Link href="/user/account" className={` block px-4 py-3 text-[1rem] text-white`}>
@@ -36,7 +36,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
     return (
         <Menu as="div" className="relative flex-shrink-0">
             <div className="hover:scale-110">
-                <Menu.Button className="flex rounded-full bg-indigo-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700">
+                <MenuButton className="flex rounded-full bg-indigo-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700">
                     <span className="sr-only">Open user menu</span>
                     <Image
                         src="https://res.cloudinary.com/the-great-sync/image/upload/c_fit,w_50/v1684818397/Scope_Sphere_rrzm5s.png"
@@ -44,7 +44,7 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                         width="50"
                         height="50"
                     />
-                </Menu.Button>
+                </MenuButton>
             </div>
             <Transition
                 as={Fragment}
@@ -55,10 +55,10 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     {courseId && (
                         <Link href={`/courses/${courseId}`}>
-                            <Menu.Item>
+                            <MenuItem>
                                 {({ focus }) => (
                                     <span
                                         className={`${
@@ -68,19 +68,23 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                                         Dashboard
                                     </span>
                                 )}
-                            </Menu.Item>
+                            </MenuItem>
                         </Link>
                     )}
 
-                    <Menu.Item>
+                    <MenuItem>
                         {({ focus }) => (
-                            <Link passHref href="/courses" className={`${focus ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}>
+                            <Link
+                                passHref
+                                href="/courses"
+                                className={`${focus ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
+                            >
                                 All Courses
                             </Link>
                         )}
-                    </Menu.Item>
+                    </MenuItem>
 
-                    <Menu.Item>
+                    <MenuItem>
                         {({ focus }) => (
                             <a
                                 href={`${process.env.NEXT_PUBLIC_DISCORD_INVITE}`}
@@ -91,16 +95,19 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                                 Syncer Community
                             </a>
                         )}
-                    </Menu.Item>
+                    </MenuItem>
 
-                    <Menu.Item>
+                    <MenuItem>
                         {({ focus }) => (
-                            <Link href="/user/account" className={`${focus ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}>
+                            <Link
+                                href="/user/account"
+                                className={`${focus ? 'bg-gray-100' : ''} block px-4 py-2 text-sm text-gray-700`}
+                            >
                                 Account
                             </Link>
                         )}
-                    </Menu.Item>
-                    <Menu.Item>
+                    </MenuItem>
+                    <MenuItem>
                         {({ focus }) => (
                             <a
                                 type="button"
@@ -112,8 +119,8 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                                 Logout
                             </a>
                         )}
-                    </Menu.Item>
-                </Menu.Items>
+                    </MenuItem>
+                </MenuItems>
             </Transition>
         </Menu>
     );

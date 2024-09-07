@@ -112,8 +112,12 @@ export default function SignIn() {
                                         {honeypot}
 
                                         <div className="text-sm">
-                                            <Link passHref href="/user/forgottenpassword" className="font-medium text-white hover:text-indigo-500">
-                                                    Forgot your password?
+                                            <Link
+                                                passHref
+                                                href="/user/forgottenpassword"
+                                                className="font-medium text-white hover:text-indigo-500"
+                                            >
+                                                Forgot your password?
                                             </Link>
                                         </div>
                                     </div>
@@ -136,13 +140,7 @@ export default function SignIn() {
                     </div>
                 </div>
                 <div className="relative hidden w-0 flex-1 lg:block hover:brightness-125">
-                    <Image
-                        alt=""
-                        src={Img}
-                        fill
-                        className='object-cover object-center'
-                        placeholder="blur"
-                    />
+                    <Image alt="" src={Img} fill className="object-cover object-center" placeholder="blur" />
                 </div>
             </div>
         </div>

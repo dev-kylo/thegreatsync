@@ -51,10 +51,8 @@ export default function ForgottenPassword() {
                         <div className="relative w-full h-32">
                             <Image
                                 alt="The Great Sync Logo"
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                                src={Logo}
+                                src={Logo as unknown as string}
                                 fill
-                               
                                 width={3000}
                                 height={2000}
                                 className="aspect-square object-contain h-auto w-full top-0 left-1/2"
@@ -100,9 +98,7 @@ export default function ForgottenPassword() {
                                         <Alert type={formState.error ? 'error' : 'success'} text={formState.message} />
                                         {!formState.error && (
                                             <Link href="/signin" className={` block px-4 py-3 text-[1rem] text-white`}>
-
-                                                    Go back to Login page
-                                                
+                                                Go back to Login page
                                             </Link>
                                         )}
                                     </div>

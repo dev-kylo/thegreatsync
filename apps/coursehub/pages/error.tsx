@@ -17,7 +17,7 @@ const Error = () => {
                     alt=""
                     src="https://res.cloudinary.com/the-great-sync/image/upload/v1673003212/2000x2000/volcanic_landscape_k02d6p.png"
                     fill
-                    className='object-cover object-top'
+                    className="object-cover object-top"
                 />
             </div>
             <div className="flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">

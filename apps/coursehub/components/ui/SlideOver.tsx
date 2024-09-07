@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { CurrentLocation } from '../../types';
 
 type SlideOverProps = {
     children: React.ReactNode;
@@ -11,9 +10,9 @@ type SlideOverProps = {
 
 function SlideOver({ children, open, setOpen }: SlideOverProps) {
     return (
-        <Transition.Root show={open} as={Fragment}>
+        <Transition show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10 " onClose={() => setOpen(false)}>
-                <Transition.Child
+                <TransitionChild
                     as={Fragment}
                     enter="ease-in-out duration-500"
                     enterFrom="opacity-0"
@@ -23,12 +22,12 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                     leaveTo="opacity-0"
                 >
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-                </Transition.Child>
+                </TransitionChild>
 
                 <div className="fixed inset-0 overflow-hidden">
                     <div className="absolute inset-0 overflow-hidden">
                         <div className="pointer-events-none fixed inset-y-0 left-0 flex max-w-full pr-10">
-                            <Transition.Child
+                            <TransitionChild
                                 as={Fragment}
                                 enter="transform transition ease-in-out duration-500 sm:duration-700"
                                 enterFrom="-translate-x-full"
@@ -37,13 +36,13 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                                 leaveFrom="translate-x-0"
                                 leaveTo="-translate-x-full"
                             >
-                                <Dialog.Panel className="pointer-events-auto w-screen max-w-xl">
+                                <DialogPanel className="pointer-events-auto w-screen max-w-xl">
                                     <div className="flex h-full flex-col overflow-y-scroll bg-primary_blue pt-6 shadow-xl">
                                         <div className="px-4 sm:px-6">
                                             <div className="flex items-start justify-between">
-                                                <Dialog.Title className="text-lg font-medium  bg-green-400 text-primary_blue px-[2rem] py-[0.1rem]">
+                                                <DialogTitle className="text-lg font-medium  bg-green-400 text-primary_blue px-[2rem] py-[0.1rem]">
                                                     Course Outline
-                                                </Dialog.Title>
+                                                </DialogTitle>
                                                 <div className="ml-3 flex h-7 items-center">
                                                     <button
                                                         type="button"
@@ -62,13 +61,13 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                                             {/* /End slide content */}
                                         </div>
                                     </div>
-                                </Dialog.Panel>
-                            </Transition.Child>
+                                </DialogPanel>
+                            </TransitionChild>
                         </div>
                     </div>
                 </div>
             </Dialog>
-        </Transition.Root>
+        </Transition>
     );
 }
 
