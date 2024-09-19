@@ -36,8 +36,8 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                                 leaveFrom="translate-x-0"
                                 leaveTo="-translate-x-full"
                             >
-                                <DialogPanel className="pointer-events-auto w-screen max-w-xl">
-                                    <div className="flex h-full flex-col overflow-y-scroll bg-primary_blue pt-6 shadow-xl">
+                                <DialogPanel className="pointer-events-auto w-screen max-w-xl ">
+                                    <div className="flex h-full flex-col overflow-y-scroll bg-primary_blue pt-6 shadow-xl pb-24">
                                         <div className="px-4 sm:px-6">
                                             <div className="flex items-start justify-between">
                                                 <DialogTitle className="text-lg font-medium  bg-green-400 text-primary_blue px-[2rem] py-[0.1rem]">
@@ -55,9 +55,12 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="relative mt-6 flex-1 ">
+                                        <div className="relative mt-6 flex-1">
                                             {/* slide content */}
-                                            <div className="absolute inset-0 bg-primary_blue">{children}</div>
+                                            <div className="absolute inset-0 bg-primary_blue">
+                                                {children}
+                                                <div className="h-48" />
+                                            </div>
                                             {/* /End slide content */}
                                         </div>
                                     </div>
