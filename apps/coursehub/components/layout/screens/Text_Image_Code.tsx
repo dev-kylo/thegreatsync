@@ -20,17 +20,16 @@ type Text_Image_Code_Props = {
 
 export default function Text_Image_Code({ text, code, image, imageAlt, id, heading, links }: Text_Image_Code_Props) {
     const { isMobile, visiblePane, setVisiblePane } = useResponsivePanes();
-    const { url, placeholder } = image.data.attributes;
-
     const isSSR = () => typeof window === 'undefined';
 
-    if (isSSR())
+    if (isSSR() || !image?.data?.attributes)
         return (
             <div className="w-full h-screen flex flex-col justify-center items-center">
                 <Spinner />
             </div>
         );
 
+    const { url, placeholder } = image.data.attributes;
     if (isMobile) {
         return (
             <div className="p-4 pt-16 relative max-h-[85%] md:max-h-full">

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
@@ -65,29 +65,28 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const [chapterLocation, setChapterLocation] = useState<{ chapter: string; subchapter: string } | null>();
     const lastCompletedPage = useRef<string | number>('');
 
-    const { data, error } = useSWR(
-        () => (session && !!httpClient.defaults.headers.common.Authorization && courseId ? courseId : null),
-        getChapters,
-        { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
-    );
+    console.log({ session, auth: httpClient.defaults.headers.common.Authorization, courseId });
+    const { data, error } = useSWR(() => (session && courseId ? courseId : null), getChapters, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        shouldRetryOnError: false,
+    });
 
     const {
         data: usercompletion,
         error: completionError,
         mutate,
-    } = useSWR(
-        () =>
-            session && !!httpClient.defaults.headers.common.Authorization && courseId
-                ? { url: '/api/getUserCompletions', courseId }
-                : null,
-        getUserCompletions,
-        { revalidateOnFocus: false, revalidateOnReconnect: false, shouldRetryOnError: false }
-    );
+    } = useSWR(() => (session && courseId ? { url: '/api/getUserCompletions', courseId } : null), getUserCompletions, {
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        shouldRetryOnError: false,
+    });
 
     const menuChapters = useMemo(
         () => (data && usercompletion ? mapMenuChapters(data, courseId, usercompletion) : undefined),
         [data, courseId, usercompletion]
     );
+
     const courseSequence = useMemo(() => menuChapters && createList(menuChapters), [menuChapters]);
 
     useEffect(() => {
@@ -101,7 +100,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         setChapterLocation({ chapter: chapterName || '', subchapter: subChapterName || '' });
     };
 
-    const nextPage = () => {
+    const nextPage = useCallback(() => {
         if (!courseSequence || !courseSequence.currentPageNode) return;
         setLoadingPage(true);
         if (courseSequence.currentPageNode?.data) courseSequence.currentPageNode.data.completed = true;
@@ -114,9 +113,9 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         } else redirectUrl = '/courseCompleted';
         setLoadingPage(false);
         router.push(redirectUrl);
-    };
+    }, [courseSequence, router]);
 
-    const prevPage = () => {
+    const prevPage = useCallback(() => {
         if (!courseSequence) return;
         setLoadingPage(true);
         const prevNode = courseSequence.currentPageNode?.previous;
@@ -126,13 +125,16 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
             setLocation(prevNode.data);
             router.push(prevNode.data.href!);
         } else setLoadingPage(false);
-    };
+    }, [courseSequence, router]);
 
     // mark a page complete
-    const markPage = async (page: string | number, unMark?: boolean) => {
-        await completePage(courseId, page, unMark);
-        await mutate();
-    };
+    const markPage = useCallback(
+        async (page: string | number, unMark?: boolean) => {
+            await completePage(courseId, page, unMark);
+            await mutate();
+        },
+        [courseId, mutate]
+    );
 
     // On load of a page, update pageId
     useEffect(() => {
@@ -174,6 +176,8 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     if (completionError) console.error(completionError);
 
     const courseCompletionStat = receivedCompletionData(usercompletion) && courseSequence ? completionStat() : null;
+
+    console.log({ courseCompletionStat, courseSequence, data, usercompletion });
 
     return (
         <NavContext.Provider
