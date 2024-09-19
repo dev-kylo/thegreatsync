@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import js from 'react-syntax-highlighter/dist/cjs/languages/hljs/javascript';
 import style from 'react-syntax-highlighter/dist/cjs/styles/hljs/night-owl';
-import { ClassAttributes, HTMLAttributes } from 'react';
+import { ClassAttributes, HTMLAttributes, useEffect, useState } from 'react';
 import Divider from '../ui/Divider';
 import ExternalLink from '../ui/ExternalLink';
 import type { ResourceLink } from '../../types';
@@ -20,23 +20,23 @@ const CodeComponent = ({ inline, children, ...props }: CodeProps) => {
             children={String(children).replace(/\n$/, '')}
             style={style}
             language="javascript"
-            PreTag="div"
+            PreTag="span"
             className="scrollbar-thin scrollbar-thumb-primary_green overflow-y-scroll overflow-x-scroll"
             customStyle={{ height: '100%' }}
             ref={props.ref as React.LegacyRef<SyntaxHighlighter>}
         />
     ) : (
-        <div style={{ display: 'inline' }}>
+        <span style={{ display: 'inline' }}>
             <SyntaxHighlighter
                 {...props}
                 children={String(children).replace(/\n$/, '')}
                 style={style}
                 language="javascript"
-                PreTag="div"
+                PreTag="span"
                 customStyle={{ display: 'inline', padding: ' 0.2rem 0.5rem' }}
                 ref={props.ref as React.LegacyRef<SyntaxHighlighter>}
             />
-        </div>
+        </span>
     );
 };
 
@@ -53,6 +53,12 @@ const ContentBlock = ({
     textType?: 'page' | 'block';
     links?: ResourceLink[];
 }) => {
+    const [rendered, setRendered] = useState(false);
+
+    useEffect(() => {
+        setRendered(true);
+    }, []);
+
     return (
         <article
             id={`md-${textType ? 'carticle' : 'code'}-block`}
@@ -67,12 +73,14 @@ const ContentBlock = ({
         >
             {heading && <h1>{heading}</h1>}
 
-            <ReactMarkdown
-                children={md}
-                components={{
-                    code: CodeComponent,
-                }}
-            />
+            {rendered && (
+                <ReactMarkdown
+                    children={md}
+                    components={{
+                        code: CodeComponent,
+                    }}
+                />
+            )}
             {links && links.length > 0 && (
                 <div>
                     <Divider />
