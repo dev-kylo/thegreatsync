@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Allotment } from 'allotment';
+import { useEffect, useState } from 'react';
 import Block from '../Block';
 import ContentBlock from '../ContentBlock';
 import { ImageComp, ResourceLink } from '../../../types';
@@ -21,8 +22,13 @@ type Text_Image_Code_Props = {
 export default function Text_Image_Code({ text, code, image, imageAlt, id, heading, links }: Text_Image_Code_Props) {
     const { isMobile, visiblePane, setVisiblePane } = useResponsivePanes();
     const isSSR = () => typeof window === 'undefined';
+    const [hydrated, setHydrated] = useState(false);
 
-    if (isSSR() || !image?.data?.attributes)
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+
+    if (isSSR() || !image?.data?.attributes || !hydrated)
         return (
             <div className="w-full h-screen flex flex-col justify-center items-center">
                 <Spinner />

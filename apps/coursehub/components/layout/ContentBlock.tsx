@@ -65,11 +65,11 @@ const ContentBlock = ({
             key={`md-${textType ? 'article' : 'code'}-block:${id}`}
             className={`prose ${
                 !textType
-                    ? 'h-full pb-2'
+                    ? 'h-full pb-24 max-w-full prose-lg'
                     : textType === 'page'
-                    ? 'pb-16 prose-h1:text-5xl prose-h2:pt-12'
-                    : 'pb-16 prose-h1:text-[2.5rem] '
-            } prose-xl prose-h2:text-4xl prose-h3:text-2xl prose-strong:text-[#c792ea] prose-strong:font-extrabold prose-li:text-offwhite prose-span:text-offwhite  prose-a:text-green-500 prose-em:text-offwhite prose-p:text-offwhite prose-headings:text-secondary_lightblue mx-auto prose-pre:p-0 pt-2 prose-code:text-[#7fdbca] prose-code:font-mono prose-code:after:hidden prose-code:before:hidden`}
+                    ? 'pb-16 prose-h1:text-5xl prose-h2:pt-12 prose-xl'
+                    : 'prose-lg pb-16 prose-h1:text-[2.5rem] max-w-full'
+            } prose-h2:text-4xl prose-h3:text-2xl prose-strong:text-[#c792ea] prose-strong:font-extrabold prose-li:text-offwhite prose-span:text-offwhite  prose-a:text-green-500 prose-em:text-offwhite prose-p:text-offwhite prose-headings:text-secondary_lightblue mx-auto prose-pre:p-0 pt-2 prose-code:text-[#7fdbca] prose-code:font-mono prose-code:after:hidden prose-code:before:hidden`}
         >
             {heading && <h1>{heading}</h1>}
 

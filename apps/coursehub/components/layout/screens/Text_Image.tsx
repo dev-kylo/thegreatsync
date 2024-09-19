@@ -94,6 +94,7 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="h-auto object-cover"
+                                priority
                             />
                         </Block>
                     </div>
