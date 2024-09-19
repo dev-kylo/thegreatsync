@@ -63,6 +63,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                                     placeholder="blur"
                                     blurDataURL={placeholder}
                                     className="aspect-square h-auto object-contain"
+                                    priority
                                 />
                             </Block>
                         </div>
@@ -103,6 +104,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                                 placeholder="blur"
                                 blurDataURL={placeholder}
                                 className="aspect-square h-auto object-cover"
+                                priority
                             />
                         </Block>
                     </div>
