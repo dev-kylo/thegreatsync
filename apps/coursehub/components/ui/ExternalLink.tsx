@@ -11,7 +11,7 @@ type ExternalLinkProps = {
 const ExternalLink = ({ type, title, subtitle, link }: ExternalLinkProps) => (
     <>
         <div className="flex w-0 flex-1 items-center">
-            <PaperClipIcon className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
+            <PaperClipIcon className="h-6 w-6 flex-shrink-0 text-gray-400" aria-hidden="true" />
             <div className="ml-4 flex min-w-0 flex-1 gap-2">
                 <span className="truncate font-medium ">{title}</span>
 
@@ -20,12 +20,12 @@ const ExternalLink = ({ type, title, subtitle, link }: ExternalLinkProps) => (
                 </span>
             </div>
         </div>
-        <div className="ml-4 flex-shrink-0">
+        <div className="ml-1 flex-shrink-0 bg-code_bg p-2">
             {type === 'download' && (
                 <a
                     href={link}
                     download="sds.js"
-                    className="font-medium flex text-xs no-underline text-green-400 hover:text-secondary_red uppercase"
+                    className="font-medium flex text-xs no-underline text-green-400 hover:text-offwhite uppercase"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
