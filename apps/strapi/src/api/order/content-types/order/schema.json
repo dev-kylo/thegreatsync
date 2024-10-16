@@ -64,6 +64,18 @@
     },
     "release_enrolment_id": {
       "type": "string"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "tax_deducted": {
+      "type": "decimal"
+    },
+    "fee_deducted": {
+      "type": "decimal"
+    },
+    "amount_received": {
+      "type": "decimal"
     }
   }
 }

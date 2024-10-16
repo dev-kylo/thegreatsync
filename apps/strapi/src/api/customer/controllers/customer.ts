@@ -145,8 +145,11 @@ export default {
         // if (!validateWebhook(data, process.env.PADDLE_PUBLIC_KEY)) return ctx.forbidden('Invalid webhook signature');
 
         console.log('--- WEBHOOK VERIFIED ---')
+        console.log(data)
         // Extract values
         const payload = mapPaddleOrder(data);
+
+        console.log('payload', payload);
         
         // Create Order - No need to check for existing order, orderId must be unique anyway
         const order = await strapi.entityService.create('api::order.order', { data: payload }) as Order;

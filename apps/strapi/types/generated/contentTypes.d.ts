@@ -1121,6 +1121,10 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     release_course_id: Attribute.String;
     event_time: Attribute.DateTime;
     release_enrolment_id: Attribute.String;
+    price: Attribute.Decimal;
+    tax_deducted: Attribute.Decimal;
+    fee_deducted: Attribute.Decimal;
+    amount_received: Attribute.Decimal;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
