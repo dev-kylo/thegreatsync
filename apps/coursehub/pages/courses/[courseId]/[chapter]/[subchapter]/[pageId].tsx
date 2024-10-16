@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession, unstable_getServerSession } from 'next-auth/next';
 import { useContext } from 'react';
 import { useSession } from 'next-auth/react';
 import Protected from '../../../../../containers/Protected';
@@ -98,7 +98,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
+    const session = await getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     if (session.jwt) setAuthToken(session.jwt as string);
 

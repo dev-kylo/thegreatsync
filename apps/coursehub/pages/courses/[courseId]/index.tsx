@@ -1,4 +1,4 @@
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession, unstable_getServerSession } from 'next-auth/next';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 import CourseDashboard from '../../../containers/CourseDashboard/CourseDashboard';
@@ -24,7 +24,7 @@ const Course = ({ course }: CourseProps) => {
 export default Course;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
+    const session = await getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     if (session.jwt) setAuthToken(session.jwt as string);
 
