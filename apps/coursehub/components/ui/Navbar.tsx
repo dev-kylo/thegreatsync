@@ -9,14 +9,14 @@ import { CurrentLocation, MenuItem } from '../../types';
 import Spinner from './Spinner';
 
 export default function Navbar({
-    chapterTitle,
+    pageTitle,
     subChapterTitle,
     menuData,
     current,
     pageType,
     markPage,
 }: {
-    chapterTitle: string;
+    pageTitle: string;
     subChapterTitle: string;
     current: CurrentLocation;
     menuData?: MenuItem[];
@@ -38,7 +38,7 @@ export default function Navbar({
                                 aria-hidden="true"
                             />
                         )}
-                        <TitleStrip chapterTitle={chapterTitle} subChapterTitle={subChapterTitle} pageType={pageType} />
+                        <TitleStrip primaryTitle={subChapterTitle} secondaryTitle={pageTitle} pageType={pageType} />
                         <div className="hidden md:block">
                             <div className="flex items-center justify-end">
                                 <ProfileDropDown />

@@ -13,6 +13,7 @@ import { completePage } from '../services/mutations';
 type NavProviderValues = {
     courseId?: string | number;
     subChapterName?: string;
+    pageName?: string;
     chapterName?: string;
     menuData?: MenuItem[];
     courseSequence?: DoublyLinkedList | null;
@@ -30,6 +31,7 @@ export const NavContext = React.createContext<NavProviderValues>({
     courseId: undefined,
     subChapterName: '',
     chapterName: '',
+    pageName: '',
     menuData: undefined,
     courseSequence: null,
     nextPage: () => {},
@@ -184,6 +186,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
             value={{
                 chapterName: chapterLocation?.chapter || '',
                 subChapterName: chapterLocation?.subchapter || '',
+                pageName: courseSequence?.currentPageNode?.data?.name || '',
                 courseId,
                 menuData: menuChapters,
                 courseSequence,

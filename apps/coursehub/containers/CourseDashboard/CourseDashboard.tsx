@@ -20,7 +20,7 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
     return (
         <Layout>
             <Navbar
-                chapterTitle="Course Dashboard"
+                pageTitle="Course Dashboard"
                 subChapterTitle="The Great Sync"
                 menuData={menuData}
                 current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}

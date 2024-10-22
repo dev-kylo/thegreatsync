@@ -1,10 +1,10 @@
 const TitleStrip = ({
-    chapterTitle,
-    subChapterTitle,
+    primaryTitle,
+    secondaryTitle,
     pageType,
 }: {
-    chapterTitle: string;
-    subChapterTitle: string;
+    primaryTitle: string;
+    secondaryTitle: string;
     pageType?: string;
 }) => (
     <div
@@ -14,9 +14,9 @@ const TitleStrip = ({
                 : 'items-start md:items-start justify-start'
         }`}
     >
-        <span className="text-secondary_lightblue text-md m-0 p-0 md:text-xl block">{chapterTitle}</span>
+        <span className="text-secondary_lightblue text-md m-0 p-0 md:text-xl block">{primaryTitle}</span>
         <span className=" m-0 mt-1 p-0 text-right md:text-center text-xs block uppercase text-green-400 font-bold">
-            {subChapterTitle}
+            {secondaryTitle}
         </span>
     </div>
 );
