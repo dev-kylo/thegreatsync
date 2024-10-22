@@ -141,7 +141,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (
             courseId &&
             receivedCompletionData(usercompletion) &&
-            !usercompletion?.pages.find((cm) => cm.id === +pageId)?.completed &&
+            !usercompletion?.pages?.find((cm) => cm.id === +pageId)?.completed &&
             lastCompletedPage.current !== pageId
         ) {
             if (courseId && pageId) {
