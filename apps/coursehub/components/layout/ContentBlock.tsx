@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import js from 'react-syntax-highlighter/dist/cjs/languages/hljs/javascript';
 import style from 'react-syntax-highlighter/dist/cjs/styles/hljs/night-owl';
-import { ClassAttributes, HTMLAttributes, useEffect, useState } from 'react';
+import React, { ClassAttributes, HTMLAttributes, useEffect, useState } from 'react';
 import Divider from '../ui/Divider';
 import ExternalLink from '../ui/ExternalLink';
 import type { ResourceLink } from '../../types';
@@ -46,10 +46,12 @@ const ContentBlock = ({
     heading,
     links,
     textType,
+    blocks,
 }: {
-    md: string;
+    md?: string;
     id: number;
     heading?: string;
+    blocks?: React.ReactNode[];
     textType?: 'page' | 'block';
     links?: ResourceLink[];
 }) => {
@@ -73,7 +75,9 @@ const ContentBlock = ({
         >
             {heading && <h1>{heading}</h1>}
 
-            {rendered && (
+            {blocks}
+
+            {md && rendered && (
                 <ReactMarkdown
                     children={md}
                     components={{

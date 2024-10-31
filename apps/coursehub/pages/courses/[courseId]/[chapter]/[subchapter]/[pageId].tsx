@@ -20,6 +20,7 @@ import { setAuthToken } from '../../../../../libs/axios';
 import Text_Code from '../../../../../components/layout/screens/Text_Code';
 import type { ErrorResponse } from '../../../../../types';
 import { createErrorString } from '../../../../../libs/errorHandler';
+import Blocks from '../../../../../components/layout/screens/Blocks';
 
 type CoursePageProps = {
     title?: string;
@@ -37,10 +38,14 @@ export default function CoursePage({ title, type, content, links, current }: Cou
 
     const { id, code, text, image, video, image_alt } = content[0];
     let contentLayout = null;
-
     const hasPageSteps = content && content.length > 1;
 
-    if (hasPageSteps)
+    console.log({ content, type });
+
+    if (type === 'blocks')
+        contentLayout = <Blocks blocks={content} text={text} id={id} links={links} heading={title} />;
+
+    else if (hasPageSteps)
         contentLayout = (
             <PageStepsController
                 loadingPage={loadingPage}

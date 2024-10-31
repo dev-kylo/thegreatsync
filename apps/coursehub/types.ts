@@ -1,6 +1,6 @@
 export type MenuType = 'watch' | 'code' | 'read' | 'draw' | 'imagine' | 'listen' | 'play' | 'share' | 'discover';
 
-export type PageType = 'text_image_code' | 'video' | 'text_image' | 'text' | 'text_code';
+export type PageType = 'text_image_code' | 'video' | 'text_image' | 'text' | 'text_code' | 'blocks';
 
 export type MenuParentSubchapter = {
     subchapter?: {
@@ -162,10 +162,27 @@ export type ResourceLink = {
     subtitle: string;
     file: ExternalFile;
 };
+export interface CodeFile {
+    id: number;
+    fileExtension: string;
+    code: string;
+}
+
+export interface CodeEditorContent {
+    showLineNumbers: boolean;
+    showPreview: boolean;
+    file: CodeFile[];
+}
 
 export interface PageContent {
     id: number;
-    __component: string;
+    __component:
+        | 'media.text'
+        | 'media.video'
+        | 'media.image'
+        | 'media.text_image_code'
+        | 'media.text_image'
+        | 'media.code-editor';
     code?: string;
     image_alt: string;
     transparent_image?: boolean;
@@ -173,6 +190,7 @@ export interface PageContent {
     orderNumber?: number;
     image: ImageComp;
     video?: VideoT;
+    codeEditorContent?: CodeEditorContent;
 }
 
 export type PageStep = PageContent & {
