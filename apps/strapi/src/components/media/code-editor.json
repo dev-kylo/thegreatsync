@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_media_code_editors",
+  "info": {
+    "displayName": "CodeEditor",
+    "icon": "layout"
+  },
+  "options": {},
+  "attributes": {
+    "file": {
+      "type": "component",
+      "repeatable": true,
+      "component": "media.code-file"
+    },
+    "showLineNumbers": {
+      "type": "boolean"
+    },
+    "showPreview": {
+      "type": "boolean"
+    }
+  }
+}

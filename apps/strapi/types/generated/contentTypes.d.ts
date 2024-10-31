@@ -1157,7 +1157,7 @@ export interface ApiPagePage extends Schema.CollectionType {
   attributes: {
     title: Attribute.String & Attribute.Required;
     type: Attribute.Enumeration<
-      ['text_image_code', 'text_image', 'text_code', 'video', 'text']
+      ['text_image_code', 'text_image', 'text_code', 'video', 'text', 'blocks']
     > &
       Attribute.Required;
     content: Attribute.DynamicZone<
@@ -1166,7 +1166,8 @@ export interface ApiPagePage extends Schema.CollectionType {
         'media.text-image',
         'media.text-image-code',
         'media.video',
-        'media.text-code'
+        'media.text-code',
+        'media.code-editor'
       ]
     > &
       Attribute.Required;

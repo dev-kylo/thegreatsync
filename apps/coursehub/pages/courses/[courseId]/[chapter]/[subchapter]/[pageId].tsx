@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { getServerSession, unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { useContext } from 'react';
 import { useSession } from 'next-auth/react';
 import Protected from '../../../../../containers/Protected';

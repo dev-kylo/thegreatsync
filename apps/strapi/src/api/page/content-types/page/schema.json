@@ -23,7 +23,8 @@
         "text_image",
         "text_code",
         "video",
-        "text"
+        "text",
+        "blocks"
       ],
       "required": true
     },
@@ -34,7 +35,8 @@
         "media.text-image",
         "media.text-image-code",
         "media.video",
-        "media.text-code"
+        "media.text-code",
+        "media.code-editor"
       ],
       "required": true
     },

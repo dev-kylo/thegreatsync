@@ -36,8 +36,8 @@ export const getPage = async (id: string | number): Promise<PageResponse> => {
             encodeValuesOnly: true, // prettify URL
         }
     );
-    console.log('Querying PAGE data');
     const res = await httpClient.get<PageResponse>(`/api/pages/${id}?${query}`);
+    console.log({ pageData: res?.data });
     return res && res?.data;
 };
 

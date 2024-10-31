@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_media_code_files",
+  "info": {
+    "displayName": "CodeFile",
+    "icon": "folder"
+  },
+  "options": {},
+  "attributes": {
+    "fileExtension": {
+      "type": "enumeration",
+      "enum": [
+        ".js",
+        ".jsx",
+        ".ts",
+        ".tsx",
+        ".css",
+        ".html",
+        ".scss"
+      ]
+    },
+    "code": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}
