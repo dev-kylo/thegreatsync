@@ -1,19 +1,26 @@
-import { PageContent, ResourceLink } from '../../../types';
+import { ImageData, PageContent, ResourceLink } from '../../../types';
 import Block from '../Block';
 import CodeEditorBlock from '../blocks/CodeEditorBlock';
+import ImageBlock from '../blocks/ImageBlock';
 import MarkdownBlock from '../blocks/MarkdownBlock';
 import ContentBlock from '../ContentBlock';
 
-type BlocksProps = { text: string; id: number; links: ResourceLink[]; heading?: string; blocks: PageContent[] };
+type BlocksProps = { id: number; links: ResourceLink[]; heading?: string; blocks: PageContent[] };
 
-const Blocks = ({ blocks, text, id, links, heading }: BlocksProps) => {
+const Blocks = ({ blocks, id, links, heading }: BlocksProps) => {
     const blockCmps = blocks.map((block, index) => {
         const key = `pageblock-${block.__component}-${index}`;
         switch (block.__component) {
             case 'media.text':
                 return <MarkdownBlock key={key} md={block?.text} />;
-            case 'media.video':
-                return <MarkdownBlock md={block?.text} />;
+            case 'media.image':
+                return (
+                    <ImageBlock
+                        image={(block?.image?.data as ImageData[])[0]}
+                        id={block?.id}
+                        imageAlt={block?.image_alt}
+                    />
+                );
             case 'media.code-editor':
                 return <CodeEditorBlock />;
             default:

@@ -1,8 +1,9 @@
 {
   "collectionName": "components_media_code_editors",
   "info": {
-    "displayName": "CodeEditor",
-    "icon": "layout"
+    "displayName": "Code_editor",
+    "icon": "layout",
+    "description": ""
   },
   "options": {},
   "attributes": {

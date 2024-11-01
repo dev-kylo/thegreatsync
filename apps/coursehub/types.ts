@@ -198,7 +198,7 @@ export type PageStep = PageContent & {
 };
 
 export interface ImageComp {
-    data: ImageData;
+    data: ImageData | ImageData[];
 }
 
 export interface ImageData {

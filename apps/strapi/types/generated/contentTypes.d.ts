@@ -1167,7 +1167,8 @@ export interface ApiPagePage extends Schema.CollectionType {
         'media.text-image-code',
         'media.video',
         'media.text-code',
-        'media.code-editor'
+        'media.code-editor',
+        'media.image'
       ]
     > &
       Attribute.Required;

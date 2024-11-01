@@ -3,8 +3,9 @@ import type { Schema, Attribute } from '@strapi/strapi';
 export interface MediaCodeEditor extends Schema.Component {
   collectionName: 'components_media_code_editors';
   info: {
-    displayName: 'CodeEditor';
+    displayName: 'Code_editor';
     icon: 'layout';
+    description: '';
   };
   attributes: {
     file: Attribute.Component<'media.code-file', true>;
@@ -24,6 +25,18 @@ export interface MediaCodeFile extends Schema.Component {
       ['.js', '.jsx', '.ts', '.tsx', '.css', '.html', '.scss']
     >;
     code: Attribute.RichText & Attribute.Required;
+  };
+}
+
+export interface MediaImage extends Schema.Component {
+  collectionName: 'components_media_images';
+  info: {
+    displayName: 'Image';
+    icon: 'picture';
+  };
+  attributes: {
+    image: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
+    image_alt: Attribute.String;
   };
 }
 
@@ -136,6 +149,7 @@ declare module '@strapi/types' {
     export interface Components {
       'media.code-editor': MediaCodeEditor;
       'media.code-file': MediaCodeFile;
+      'media.image': MediaImage;
       'media.link': MediaLink;
       'media.text-code': MediaTextCode;
       'media.text-image-code': MediaTextImageCode;
