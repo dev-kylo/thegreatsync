@@ -18,7 +18,7 @@ export default function Feedback() {
     return (
         <Layout>
             <Navbar
-                chapterTitle="Feedback Form"
+                pageTitle="Feedback Form"
                 subChapterTitle="The Great Sync"
                 current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
                 pageType="listing"

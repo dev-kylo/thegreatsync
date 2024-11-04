@@ -16,7 +16,7 @@ const AllCourses = ({ courses }: { courses: CourseByUser[] }) => {
     return (
         <Layout>
             <Navbar
-                chapterTitle="A list of purchased courses"
+                pageTitle="A list of purchased courses"
                 subChapterTitle="The Great Sync"
                 current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
                 pageType="listing"

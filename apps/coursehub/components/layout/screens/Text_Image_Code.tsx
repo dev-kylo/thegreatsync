@@ -60,7 +60,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                             <Block
                                 hideBorder
                                 outerClasses=" h-full relative"
-                                key={`mobileimageblock:${image.data.id}-${id}`}
+                                key={`mobileimageblock:${imageData.id}-${id}`}
                             >
                                 <Image
                                     id={`image:${imageData.id}`}

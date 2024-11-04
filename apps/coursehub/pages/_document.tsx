@@ -15,7 +15,7 @@ export default function Document() {
                 <meta name="msapplication-TileColor" content="#2b5797" />
                 <meta name="theme-color" content="#031440" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link
                     href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
                     rel="stylesheet"

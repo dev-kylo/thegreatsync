@@ -1,4 +1,4 @@
-import { getServerSession, unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 import CourseDashboard from '../../../containers/CourseDashboard/CourseDashboard';
