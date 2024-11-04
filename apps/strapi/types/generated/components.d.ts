@@ -19,12 +19,14 @@ export interface MediaCodeFile extends Schema.Component {
   info: {
     displayName: 'CodeFile';
     icon: 'folder';
+    description: '';
   };
   attributes: {
     fileExtension: Attribute.Enumeration<
       ['.js', '.jsx', '.ts', '.tsx', '.css', '.html', '.scss']
     >;
     code: Attribute.RichText & Attribute.Required;
+    fileName: Attribute.String;
   };
 }
 

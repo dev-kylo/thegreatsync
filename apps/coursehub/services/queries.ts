@@ -37,7 +37,6 @@ export const getPage = async (id: string | number): Promise<PageResponse> => {
         }
     );
     const res = await httpClient.get<PageResponse>(`/api/pages/${id}?${query}`);
-    console.log({ pageData: res?.data });
     return res && res?.data;
 };
 
@@ -65,7 +64,6 @@ export const getUserCompletions = async ({
     url: string;
     courseId: string | number;
 }): Promise<UserCourseProgressResponse> => {
-    console.log('Querying USER data');
     const res = await httpClient.get<UserCourseProgressResponse>(`/api/user-course-progress/?courseId=${courseId}`);
     return res && res?.data;
 };

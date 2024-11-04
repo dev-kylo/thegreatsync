@@ -164,14 +164,9 @@ export type ResourceLink = {
 };
 export interface CodeFile {
     id: number;
+    fileName: string;
     fileExtension: string;
     code: string;
-}
-
-export interface CodeEditorContent {
-    showLineNumbers: boolean;
-    showPreview: boolean;
-    file: CodeFile[];
 }
 
 export interface PageContent {
@@ -190,7 +185,9 @@ export interface PageContent {
     orderNumber?: number;
     image: ImageComp;
     video?: VideoT;
-    codeEditorContent?: CodeEditorContent;
+    showLineNumbers?: boolean;
+    showPreview?: boolean;
+    file?: CodeFile[];
 }
 
 export type PageStep = PageContent & {

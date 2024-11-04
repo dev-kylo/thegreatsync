@@ -38,13 +38,9 @@ export default function CoursePage({ title, type, content, links, current }: Cou
 
     const { id, code, text, image, video, image_alt } = content[0];
     let contentLayout = null;
-    const hasPageSteps = content && content.length > 1;
+    const hasPageSteps = content && content.length > 1 && type !== 'blocks';
 
-    console.log({ content, type });
-
-    if (type === 'blocks')
-        contentLayout = <Blocks blocks={content} text={text} id={id} links={links} heading={title} />;
-
+    if (type === 'blocks') contentLayout = <Blocks blocks={content} id={id} links={links} heading={title} />;
     else if (hasPageSteps)
         contentLayout = (
             <PageStepsController

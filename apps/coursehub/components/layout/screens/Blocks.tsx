@@ -22,7 +22,7 @@ const Blocks = ({ blocks, id, links, heading }: BlocksProps) => {
                     />
                 );
             case 'media.code-editor':
-                return <CodeEditorBlock />;
+                return <CodeEditorBlock files={block.file!} showLineNumbers={block?.showLineNumbers} />;
             default:
                 return null;
         }

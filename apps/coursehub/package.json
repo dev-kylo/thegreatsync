@@ -10,6 +10,8 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "@codesandbox/sandpack-react": "^2.19.9",
+    "@codesandbox/sandpack-themes": "^2.0.21",
     "@headlessui/react": "^2.1.1",
     "@heroicons/react": "^2.1.4",
     "@mux/mux-video-react": "^0.11.0",

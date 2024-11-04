@@ -67,7 +67,6 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const [chapterLocation, setChapterLocation] = useState<{ chapter: string; subchapter: string } | null>();
     const lastCompletedPage = useRef<string | number>('');
 
-    console.log({ session, auth: httpClient.defaults.headers.common.Authorization, courseId });
     const { data, error } = useSWR(() => (session && courseId ? courseId : null), getChapters, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -178,8 +177,6 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     if (completionError) console.error(completionError);
 
     const courseCompletionStat = receivedCompletionData(usercompletion) && courseSequence ? completionStat() : null;
-
-    console.log({ courseCompletionStat, courseSequence, data, usercompletion });
 
     return (
         <NavContext.Provider

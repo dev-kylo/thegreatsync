@@ -26,9 +26,22 @@ a {
     cursor: url(https://res.cloudinary.com/the-great-sync/image/upload/c_scale,w_40/v1692892980/icons8-resize-horizontal-100_rxf52i.png) 20 20, col-resize !important
 }
 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Sandbox code editor*/
+.sp-icon-standalone {
+    background: #49de80 !important;
+    color: black !important;
+}
+
+.sp-icon-standalone:hover {
+    background: unset !important;
+    color: inherit !important;
+}
 
 .loader {
     margin: 5px 0;
