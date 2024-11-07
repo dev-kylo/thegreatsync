@@ -24,7 +24,8 @@
         "text_code",
         "video",
         "text",
-        "blocks"
+        "blocks",
+        "reflection"
       ],
       "required": true
     },

@@ -7,7 +7,7 @@ import { mapMenuChapters } from '../libs/helpers';
 import { MenuItem, UserCourseProgressResponse } from '../types';
 import { getChapters, getUserCompletions } from '../services/queries';
 import { DoublyLinkedList } from '../libs/doublyLinkedList';
-import { httpClient, setAuthToken } from '../libs/axios';
+import { setAuthToken } from '../libs/axios';
 import { completePage } from '../services/mutations';
 
 type NavProviderValues = {

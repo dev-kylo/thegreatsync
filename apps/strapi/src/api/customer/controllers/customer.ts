@@ -145,7 +145,6 @@ export default {
         // if (!validateWebhook(data, process.env.PADDLE_PUBLIC_KEY)) return ctx.forbidden('Invalid webhook signature');
 
         console.log('--- WEBHOOK VERIFIED ---')
-        console.log(data)
         // Extract values
         const payload = mapPaddleOrder(data);
 

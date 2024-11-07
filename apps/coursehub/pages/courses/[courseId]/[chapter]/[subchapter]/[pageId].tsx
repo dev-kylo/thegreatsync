@@ -21,6 +21,7 @@ import Text_Code from '../../../../../components/layout/screens/Text_Code';
 import type { ErrorResponse } from '../../../../../types';
 import { createErrorString } from '../../../../../libs/errorHandler';
 import Blocks from '../../../../../components/layout/screens/Blocks';
+import Reflection from '../../../../../components/layout/screens/Reflection';
 
 type CoursePageProps = {
     title?: string;
@@ -53,6 +54,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
             />
         );
     else if (type === 'text') contentLayout = <Text text={text} heading={title} id={id} links={links} />;
+    else if (type === 'reflection') contentLayout = <Reflection id={id} image={image} imageAlt={image_alt} />;
     else if (type === 'text_image_code')
         contentLayout = (
             <Text_Image_Code

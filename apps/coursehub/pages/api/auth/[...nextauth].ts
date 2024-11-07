@@ -35,7 +35,7 @@ export const authOptions: NextAuthOptions = {
     // secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         session: async ({ session, token }) => {
-            console.log('SESSION CALLBACK');
+            console.log('ss');
             session.id = token.id as string;
             session.jwt = token.jwt as string;
             return Promise.resolve(session);

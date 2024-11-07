@@ -11,8 +11,14 @@ export default function Feedback() {
 
     const handleSubmit = (e: SyntheticEvent) => {
         e.preventDefault();
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+
+        const formValues = Object.fromEntries(formData.entries());
+
         setFormState({ loading: false, error: true });
-        router.push(`${query.nextpage}`);
+        console.log({ router, query, formValues });
+        // router.push(`${query.nextpage}`);
     };
 
     return (
@@ -24,8 +30,8 @@ export default function Feedback() {
                 pageType="listing"
             />
             <section className="w-[90%] max-h-[auto] max-w-[40rem] md:w-[30rem] p-8 mx-auto my-12 md:max-h-[30rem] bg-[#031b4352] shadow-2xl rounded-md">
-                <form className="max-w-lg w-full mx-auto ">
-                    <div className="mb-8">
+                <form onSubmit={handleSubmit} className="max-w-lg w-full mx-auto">
+                    {/* <div className="mb-8">
                         <label htmlFor="name" className="block font-medium text-white">
                             Name
                         </label>
@@ -46,13 +52,25 @@ export default function Feedback() {
                             className="mt-1 px-4 py-2 border rounded-lg w-full focus:outline-none focus:ring focus:border-[#4ade80]"
                             required
                         />
+                    </div> */}
+                    <div className="mb-8">
+                        <label htmlFor="reflections" className="block font-medium text-white">
+                            Reflect on what you learnt in this section
+                        </label>
+                        <textarea
+                            id="reflections"
+                            name="reflections"
+                            className="mt-1 px-4 py-2 border rounded-lg w-full h-32 resize-none focus:outline-none focus:ring focus:border-[#4ade80]"
+                            required
+                        />
                     </div>
                     <div className="mb-8">
                         <label htmlFor="feedback" className="block font-medium text-white">
-                            Feedback
+                            Any other thoughts, comments or feedback?
                         </label>
                         <textarea
                             id="feedback"
+                            name="feedback"
                             className="mt-1 px-4 py-2 border rounded-lg w-full h-32 resize-none focus:outline-none focus:ring focus:border-[#4ade80]"
                             required
                         />
@@ -60,7 +78,6 @@ export default function Feedback() {
                     <button
                         type="submit"
                         className="flex w-full justify-center rounded-md border border-transparent transition ease-in-out bg-secondary_red py-2 px-4 text-sm font-medium text-white shadow-sm hover:border-bg-primary_green focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        onClick={handleSubmit}
                     >
                         {formState.loading ? <Spinner /> : 'Submit Feedback'}
                     </button>

@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reflections",
+  "info": {
+    "singularName": "reflection",
+    "pluralName": "reflections",
+    "displayName": "Reflection",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "reflection": {
+      "type": "text"
+    },
+    "chapter": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::chapter.chapter"
+    },
+    "subchapter": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::subchapter.subchapter"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "reflections"
+    },
+    "comment": {
+      "type": "text"
+    },
+    "course": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::course.course"
+    }
+  }
+}
