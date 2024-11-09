@@ -11,6 +11,8 @@ export interface MediaCodeEditor extends Schema.Component {
     file: Attribute.Component<'media.code-file', true>;
     showLineNumbers: Attribute.Boolean;
     showPreview: Attribute.Boolean;
+    explanation: Attribute.RichText;
+    explanationType: Attribute.Enumeration<['explanation', 'answer']>;
   };
 }
 

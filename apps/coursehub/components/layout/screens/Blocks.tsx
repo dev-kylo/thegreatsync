@@ -10,6 +10,7 @@ type BlocksProps = { id: number; links: ResourceLink[]; heading?: string; blocks
 const Blocks = ({ blocks, id, links, heading }: BlocksProps) => {
     const blockCmps = blocks.map((block, index) => {
         const key = `pageblock-${block.__component}-${index}`;
+        console.log(block);
         switch (block.__component) {
             case 'media.text':
                 return <MarkdownBlock key={key} md={block?.text} />;
@@ -22,7 +23,14 @@ const Blocks = ({ blocks, id, links, heading }: BlocksProps) => {
                     />
                 );
             case 'media.code-editor':
-                return <CodeEditorBlock files={block.file!} showLineNumbers={block?.showLineNumbers} />;
+                return (
+                    <CodeEditorBlock
+                        files={block.file!}
+                        showLineNumbers={block?.showLineNumbers}
+                        explanation={block?.explanation}
+                        explanationType={block?.explanationType}
+                    />
+                );
             default:
                 return null;
         }

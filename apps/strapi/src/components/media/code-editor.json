@@ -17,6 +17,16 @@
     },
     "showPreview": {
       "type": "boolean"
+    },
+    "explanation": {
+      "type": "richtext"
+    },
+    "explanationType": {
+      "type": "enumeration",
+      "enum": [
+        "explanation",
+        "answer"
+      ]
     }
   }
 }
