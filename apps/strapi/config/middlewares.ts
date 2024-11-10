@@ -12,6 +12,8 @@ export default [
             'data:',
             'blob:',
             'dl.airtable.com',
+            'the-great-sync-bucket.s3.amazonaws.com',
+            'the-great-sync.s3.us-east-1.amazonaws.com',
             'the-great-sync.s3.amazonaws.com',
 
           ],
@@ -20,6 +22,8 @@ export default [
             'data:',
             'blob:',
             'dl.airtable.com',
+            'the-great-sync-bucket.s3.amazonaws.com',
+            'the-great-sync.s3.us-east-1.amazonaws.com',
             'the-great-sync.s3.amazonaws.com',
           ],
           upgradeInsecureRequests: null,
