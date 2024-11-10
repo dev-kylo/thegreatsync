@@ -17,7 +17,7 @@ const CopyButton = ({ textcode }: { textcode: string }) => {
     return (
         <div className="absolute bottom-8 right-4 sm:bottom-4">
             <button
-                className="text-sm bg-code_bg rounded-[4px] border border-l-stone-100 text-white px-3 py-1 transition ease-in-out hover:bg-[#008579]"
+                className="text-xs bg-code_bg rounded-[4px] border border-l-stone-100 text-white px-2 py-1 transition ease-in-out hover:bg-[#008579]"
                 type="button"
                 onClick={copyToClipboard}
             >
@@ -28,7 +28,7 @@ const CopyButton = ({ textcode }: { textcode: string }) => {
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                             fill="currentColor"
-                            className="size-3 w-5 h-5 ml-2"
+                            className="size-3 w-3 h-3 ml-2"
                         >
                             <path
                                 fillRule="evenodd"
@@ -47,7 +47,7 @@ const CopyButton = ({ textcode }: { textcode: string }) => {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="size-6 w-5 h-5"
+                        className="size-6 w-3 h-3"
                     >
                         <path
                             fillRule="evenodd"
