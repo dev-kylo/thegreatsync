@@ -23,7 +23,9 @@
         "text_image",
         "text_code",
         "video",
-        "text"
+        "text",
+        "blocks",
+        "reflection"
       ],
       "required": true
     },
@@ -34,7 +36,9 @@
         "media.text-image",
         "media.text-image-code",
         "media.video",
-        "media.text-code"
+        "media.text-code",
+        "media.code-editor",
+        "media.image"
       ],
       "required": true
     },

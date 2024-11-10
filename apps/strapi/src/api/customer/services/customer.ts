@@ -17,8 +17,6 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
 
         const enrolmentId = order.release_enrolment_id;
 
-        console.log(enrolmentId)
-
         // Get the current enrollment
 
         
@@ -28,7 +26,7 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
         });
         
         if (enrolment) {
-            console.log('---- Enrolment found ----');
+            console.log('---- Enrolment found ----', enrolmentId);
             // Append the userId to the users array
             enrolment.users.push(userId);
 
@@ -39,7 +37,7 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
                 } as Enrollment
             });
 
-            console.log('---- Enrolment updated ----');
+            console.log('---- Enrolment updated ----', enrolmentId);
 
         }   
 
@@ -79,9 +77,9 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
         await strapi.entityService.create('api::user-course-progress.user-course-progress', { data: {
             user: userId,
             course: course.id,
-            chapters: JSON.stringify(chapterCourseCompletion),
-            subchapters: JSON.stringify(subchapterCourseCompletion ),
-            pages:  JSON.stringify(pageCourseCompletion)
+            chapters: chapterCourseCompletion,
+            subchapters: subchapterCourseCompletion,
+            pages: pageCourseCompletion
         }});
 
         console.log(`--- User Completion Stats Successful, userID: ${userId} ---`)

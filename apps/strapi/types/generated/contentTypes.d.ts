@@ -787,6 +787,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToMany',
       'api::enrollment.enrollment'
     >;
+    reflections: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::reflection.reflection'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1121,6 +1126,10 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     release_course_id: Attribute.String;
     event_time: Attribute.DateTime;
     release_enrolment_id: Attribute.String;
+    price: Attribute.Decimal;
+    tax_deducted: Attribute.Decimal;
+    fee_deducted: Attribute.Decimal;
+    amount_received: Attribute.Decimal;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1153,7 +1162,15 @@ export interface ApiPagePage extends Schema.CollectionType {
   attributes: {
     title: Attribute.String & Attribute.Required;
     type: Attribute.Enumeration<
-      ['text_image_code', 'text_image', 'text_code', 'video', 'text']
+      [
+        'text_image_code',
+        'text_image',
+        'text_code',
+        'video',
+        'text',
+        'blocks',
+        'reflection'
+      ]
     > &
       Attribute.Required;
     content: Attribute.DynamicZone<
@@ -1162,7 +1179,9 @@ export interface ApiPagePage extends Schema.CollectionType {
         'media.text-image',
         'media.text-image-code',
         'media.video',
-        'media.text-code'
+        'media.text-code',
+        'media.code-editor',
+        'media.image'
       ]
     > &
       Attribute.Required;
@@ -1175,6 +1194,58 @@ export interface ApiPagePage extends Schema.CollectionType {
     createdBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::page.page', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiReflectionReflection extends Schema.CollectionType {
+  collectionName: 'reflections';
+  info: {
+    singularName: 'reflection';
+    pluralName: 'reflections';
+    displayName: 'Reflection';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    reflection: Attribute.Text;
+    chapter: Attribute.Relation<
+      'api::reflection.reflection',
+      'oneToOne',
+      'api::chapter.chapter'
+    >;
+    subchapter: Attribute.Relation<
+      'api::reflection.reflection',
+      'oneToOne',
+      'api::subchapter.subchapter'
+    >;
+    user: Attribute.Relation<
+      'api::reflection.reflection',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    comment: Attribute.Text;
+    course: Attribute.Relation<
+      'api::reflection.reflection',
+      'oneToOne',
+      'api::course.course'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::reflection.reflection',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::reflection.reflection',
+      'oneToOne',
+      'admin::user'
+    > &
       Attribute.Private;
   };
 }
@@ -1288,6 +1359,7 @@ declare module '@strapi/types' {
       'api::menu.menu': ApiMenuMenu;
       'api::order.order': ApiOrderOrder;
       'api::page.page': ApiPagePage;
+      'api::reflection.reflection': ApiReflectionReflection;
       'api::subchapter.subchapter': ApiSubchapterSubchapter;
       'api::user-course-progress.user-course-progress': ApiUserCourseProgressUserCourseProgress;
     }

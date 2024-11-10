@@ -1,6 +1,7 @@
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
+import Head from 'next/head';
 import CourseDashboard from '../../../containers/CourseDashboard/CourseDashboard';
 import { serverRedirectObject } from '../../../libs/helpers';
 import { getCourse } from '../../../services/queries';
@@ -18,13 +19,20 @@ const Course = ({ course }: CourseProps) => {
     const { data: session } = useSession();
 
     if (!session?.jwt) return <LoadingQuote />;
-    return <CourseDashboard title={course.title} description={course.description} video={course?.video || undefined} />;
+    return (
+        <>
+            <Head>
+                <title>{course.title} - Dashboard</title>
+            </Head>
+            <CourseDashboard title={course.title} description={course.description} video={course?.video || undefined} />
+        </>
+    );
 };
 
 export default Course;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
+    const session = await getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     if (session.jwt) setAuthToken(session.jwt as string);
 

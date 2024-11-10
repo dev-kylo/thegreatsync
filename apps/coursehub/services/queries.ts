@@ -22,7 +22,6 @@ export const getChapters = async (courseId: string | number): Promise<ChaptersRe
             encodeValuesOnly: true, // prettify URL
         }
     );
-    console.log('Querying CHAPTERS data');
     const res = await httpClient.get<ChaptersResponse>(`/api/chapters?${query}`);
     return res && res?.data;
 };
@@ -30,13 +29,12 @@ export const getChapters = async (courseId: string | number): Promise<ChaptersRe
 export const getPage = async (id: string | number): Promise<PageResponse> => {
     const query = qs.stringify(
         {
-            populate: ['content', 'content.image', 'content.video', 'links', 'links.file'],
+            populate: ['content', 'content.image', 'content.video', 'links', 'links.file', 'content.file'],
         },
         {
             encodeValuesOnly: true, // prettify URL
         }
     );
-    console.log('Querying PAGE data');
     const res = await httpClient.get<PageResponse>(`/api/pages/${id}?${query}`);
     return res && res?.data;
 };
@@ -65,7 +63,6 @@ export const getUserCompletions = async ({
     url: string;
     courseId: string | number;
 }): Promise<UserCourseProgressResponse> => {
-    console.log('Querying USER data');
     const res = await httpClient.get<UserCourseProgressResponse>(`/api/user-course-progress/?courseId=${courseId}`);
     return res && res?.data;
 };

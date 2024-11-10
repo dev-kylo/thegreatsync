@@ -1,8 +1,9 @@
 // @refresh reset
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { ChevronDoubleRightIcon, ChevronDoubleLeftIcon } from '@heroicons/react/20/solid';
+import Image from 'next/image';
 import Text_Image_Code from '../components/layout/screens/Text_Image_Code';
-import type { PageStep, PageType, ResourceLink } from '../types';
+import type { ImageData, PageStep, PageType, ResourceLink } from '../types';
 import Step from '../components/ui/Step';
 import ControlBar from './ControlBar';
 import Text_Image from '../components/layout/screens/Text_Image';
@@ -189,6 +190,25 @@ const PageSteps = ({
                         </nav>
                     )}
                 </ControlBar>
+                {/* To preload images */}
+                <div style={{ visibility: 'hidden', position: 'absolute', width: 0, height: 0 }} aria-hidden="true">
+                    {pageSteps.map((step) => {
+                        if (type === 'text_image_code' || type === 'text_image') {
+                            const imageData = step.image.data as ImageData;
+                            return (
+                                <Image
+                                    src={imageData.attributes.url}
+                                    alt={step.image_alt}
+                                    fill
+                                    placeholder="blur"
+                                    blurDataURL={imageData.attributes.placeholder}
+                                    loading="lazy"
+                                />
+                            );
+                        }
+                        return null;
+                    })}
+                </div>
             </div>
         </>
     );

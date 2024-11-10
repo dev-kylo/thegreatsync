@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Allotment } from 'allotment';
 import ContentBlock from '../ContentBlock';
 import Block from '../Block';
-import { ImageComp, ResourceLink } from '../../../types';
+import { ImageComp, ImageData, ResourceLink } from '../../../types';
 import useResponsivePanes from '../../../hooks/useResponsivePanes';
 import PaneTabs from '../PaneTabs';
 import Spinner from '../../ui/Spinner';
@@ -18,7 +18,9 @@ type Text_Image_Props = {
 
 export default function Text_Image({ text, image, id, heading, links, imageAlt }: Text_Image_Props) {
     const { isMobile, visiblePane, setVisiblePane } = useResponsivePanes();
-    const { url, placeholder } = image.data.attributes;
+
+    const imageData = image.data as ImageData;
+    const { url, placeholder } = imageData.attributes;
     const isSSR = () => typeof window === 'undefined';
 
     if (isSSR())
@@ -50,13 +52,9 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
 
                 {visiblePane === 'image' && (
                     <div id="two" className=" h-full flex align-middle items-center ">
-                        <Block
-                            hideBorder
-                            outerClasses="h-full relative"
-                            key={`mobileimageblock:${image.data.id}-${id}`}
-                        >
+                        <Block hideBorder outerClasses="h-full relative" key={`mobileimageblock:${imageData.id}-${id}`}>
                             <Image
-                                key={`image:${image.data.id}-${id}`}
+                                key={`image:${imageData.id}-${id}`}
                                 id={`image:${id}`}
                                 alt={imageAlt || ''}
                                 src={url}
@@ -84,10 +82,10 @@ export default function Text_Image({ text, image, id, heading, links, imageAlt }
                 </Allotment.Pane>
                 <Allotment.Pane minSize={500}>
                     <div id="two" className=" h-full flex align-middle items-center ">
-                        <Block hideBorder outerClasses="h-full relative" key={`imageblock:${image.data.id}-${id}`}>
+                        <Block hideBorder outerClasses="h-full relative" key={`imageblock:${imageData.id}-${id}`}>
                             <Image
                                 id={`image:${id}`}
-                                key={`image:${image.data.id}-${id}`}
+                                key={`image:${imageData.id}-${id}`}
                                 alt={imageAlt || ''}
                                 src={url}
                                 fill

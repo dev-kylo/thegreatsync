@@ -39,7 +39,7 @@ const ControlBar = ({
         <div className="relative h-full bg-[#03143f] flex flex-col justify-center">
             {stepsControls}
 
-            <div className="flex items-center py-3 bg-[#03143f] w-full mr-30 justify-between">
+            <div className="flex items-center py-3 bg-[#03143f] w-full mr-30 justify-between max-w-[1200px] m-auto">
                 {showPrev ? (
                     <button
                         onClick={prevPageHandler}
@@ -57,7 +57,8 @@ const ControlBar = ({
                 {loadingPage ? (
                     <Spinner />
                 ) : !showNext && !showPrev ? (
-                    <div className="flex justify-center md:justify-end md:mr-12 w-full ">
+                    <div className="flex justify-between  md:mr-12 w-full ">
+                        <Spinner />
                         <Spinner />
                     </div>
                 ) : null}

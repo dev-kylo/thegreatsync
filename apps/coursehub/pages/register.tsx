@@ -84,8 +84,6 @@ export default function Enrollment() {
                                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                                 src={Logo}
                                 fill
-                                width={3000}
-                                height={2000}
                                 className="aspect-square object-contain h-auto w-full top-0 left-1/2"
                             />
                         </div>
@@ -155,26 +153,28 @@ export default function Enrollment() {
                                         </div>
                                     </div> */}
 
-                                    <button
-                                        type="submit"
-                                        disabled={formState.loading || !orderid}
-                                        className="w-full  py-0.5 text-sm md:py-1 md:text-base inline-flex items-center justify-center border border-secondary_lightblue bg-primary_blue  rounded-md font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2 disabled:bg-[#03143f] disabled:text-neutral-500"
-                                    >
-                                        {formState.loading ? (
-                                            <Spinner />
-                                        ) : createNewAccount ? (
-                                            'Create my account'
-                                        ) : (
-                                            'Use my existing account'
-                                        )}
-                                    </button>
+                                    {!formState.message && (
+                                        <button
+                                            type="submit"
+                                            disabled={formState.loading || !orderid}
+                                            className="w-full  py-0.5 text-sm md:py-1 md:text-base inline-flex items-center justify-center border border-secondary_lightblue bg-primary_blue  rounded-md font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2 disabled:bg-[#03143f] disabled:text-neutral-500"
+                                        >
+                                            {formState.loading ? (
+                                                <Spinner />
+                                            ) : createNewAccount ? (
+                                                'Create my account'
+                                            ) : (
+                                                'Use my existing account'
+                                            )}
+                                        </button>
+                                    )}
                                 </form>
                                 {(formState.message || formState.error) && (
                                     <div className="mt-4">
                                         <Alert type={formState.error ? 'error' : 'success'} text={formState.message} />
                                         {!formState.error && (
                                             <div className="flex justify-center mt-4">
-                                                <Link href="/" passHref>
+                                                <Link href="/">
                                                     <button
                                                         type="button"
                                                         className="w-32 mx-8 px-2 md:px-4 py-0.5 text-sm md:py-1 md:text-base inline-flex items-center justify-center rounded-md border border-secondary_lightblue bg-primary_blue   font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"

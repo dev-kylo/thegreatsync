@@ -21,7 +21,6 @@ const Video = ({ data, resources, noPadding }: VideoProps) => {
                 metadata={{
                     video_id: asset_id,
                     video_title: title,
-                    // viewer_user_id: 'user-id-bc-789',
                 }}
                 streamType="on-demand"
                 controls

@@ -35,7 +35,6 @@ export default function ForgottenPassword() {
         e.preventDefault();
         if (checkForHoney()) return;
         setFormState({ error: false, loading: true, message: '' });
-        console.log({ emailVal });
         if (!emailVal) return setFormState({ error: true, loading: false, message: 'Missing email address' });
 
         sendCredentials(emailVal);

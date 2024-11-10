@@ -1,6 +1,7 @@
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
+import Head from 'next/head';
 import { serverRedirectObject } from '../../libs/helpers';
 import { getEnrolledCourses } from '../../services/queries';
 import { CourseByUser, ErrorResponse } from '../../types';
@@ -17,13 +18,20 @@ const UserCourses = ({ courses }: HomeProps) => {
 
     if (!session?.jwt || !courses) return <LoadingQuote />;
 
-    return <AllCourses courses={courses} />;
+    return (
+        <>
+            <Head>
+                <title>All Courses</title>
+            </Head>
+            <AllCourses courses={courses} />;
+        </>
+    );
 };
 
 export default UserCourses;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
+    const session = await getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     if (session.jwt) setAuthToken(session.jwt as string);
 

@@ -9,7 +9,7 @@ export default function Account() {
     return (
         <Layout>
             <Navbar
-                chapterTitle="User Account"
+                pageTitle="User Account"
                 subChapterTitle="The Great Sync"
                 current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
                 pageType="listing"

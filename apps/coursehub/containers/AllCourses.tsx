@@ -13,38 +13,33 @@ const bgMap: { [key: string]: string } = {
 };
 
 const AllCourses = ({ courses }: { courses: CourseByUser[] }) => {
-    const [loading, setLoading] = useState(false);
     return (
         <Layout>
             <Navbar
-                chapterTitle="A list of purchased courses"
+                pageTitle="A list of purchased courses"
                 subChapterTitle="The Great Sync"
                 current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
                 pageType="listing"
             />
-            <section className="max-w-sm mx-auto px-4 mt-4 sm:px-6 lg:px-6 py-12">
-                <ul className="grid grid-cols-1">
+            <section className="max-w-xl mx-auto px-4 mt-4 sm:px-6 lg:px-6 py-12">
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {courses.map((course) => (
                         <Link key={course.id} href={`courses/${course.id}`} passHref>
-                            <li className="relative hover:cursor-pointer">
-                                <div className="min-w-[340px]flex flex-col group">
-                                    <div className="h-100 sm:h-48 md:h-56 lg:h-[25rem] w-full bg-primary_blue border-2 border-white flex items-center justify-center text-white text-base mb-3 md:mb-5 overflow-hidden relative">
-                                        <Image
-                                            src={bgMap[course.id]}
-                                            className="object-cover w-full h-full scale-100 group-hover:scale-110 transition-all duration-400"
-                                            alt=""
-                                            width={800}
-                                            height={1000}
-                                            onClick={() => setLoading(true)}
-                                        />
-                                        <div className="absolute z-10 border-4 border-primary w-[95%] h-[95%] invisible group-hover:visible opacity-0 group-hover:opacity-100 group-hover:scale-90 transition-all duration-500" />
-                                    </div>
-
-                                    <p className="mb-4 font-light  text-sm md:text-lg text-center text-white">
-                                        {course.title}
-                                        <div className="mx-auto"> {loading && <Spinner />}</div>
-                                    </p>
+                            <li className="relative hover:cursor-pointer group">
+                                <div className="h-full bg-primary_blue border-2 border-white flex items-center justify-center text-white text-base mb-3 md:mb-5 overflow-hidden relative">
+                                    <Image
+                                        src={bgMap[course.id]}
+                                        className="object-cover w-full h-full scale-100 group-hover:scale-110 transition-all duration-400"
+                                        alt=""
+                                        width={800}
+                                        height={1000}
+                                    />
+                                    <div className="absolute z-10 border-4 border-primary w-[95%] h-[95%] invisible group-hover:visible opacity-0 group-hover:opacity-100 group-hover:scale-90 transition-all duration-500" />
                                 </div>
+
+                                <p className="mb-4 font-light  text-sm md:text-lg text-center text-white">
+                                    {course.title}
+                                </p>
                             </li>
                         </Link>
                     ))}

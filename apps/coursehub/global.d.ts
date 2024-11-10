@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { User } from 'next-auth';
 
 /** Example on how to extend the built-in session types */
 declare module 'next-auth' {
@@ -9,6 +9,6 @@ declare module 'next-auth' {
         /** This is an example. You can find me in types/next-auth.d.ts */
         id?: string;
         jwt?: string;
-
+        user?: User
     }
 }

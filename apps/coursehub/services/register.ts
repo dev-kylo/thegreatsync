@@ -10,7 +10,6 @@ export type RegisterPayload = {
 const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
 export async function register(payload: RegisterPayload) {
-    console.log(strapiUrl);
     const res = await axios.post<RegisterResponse>(`${strapiUrl}/api/customer/register`, { ...payload });
     return res.data;
 }

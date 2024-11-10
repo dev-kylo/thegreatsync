@@ -20,7 +20,7 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
     return (
         <Layout>
             <Navbar
-                chapterTitle="Course Dashboard"
+                pageTitle="Course Dashboard"
                 subChapterTitle="The Great Sync"
                 menuData={menuData}
                 current={{ pageId: 0, subchapterId: 0, chapterId: 0 }}
@@ -66,7 +66,7 @@ const CourseDashboard = ({ description, title, video }: { title: string; descrip
                                         type="button"
                                         onClick={() => setLoading(true)}
                                         disabled={loading}
-                                        className="my-4 inline-flex items-center justify-center rounded-md border border-green-400 bg-primary_blue  px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
+                                        className="my-4 w-48 inline-flex items-center justify-center rounded-md border border-green-400 bg-primary_blue  px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-primary_green focus:outline-none focus:ring-2 focus:ring-primary_green focus:ring-offset-2"
                                     >
                                         {loading ? <Spinner /> : !isProgressing ? 'Start Learning' : 'Resume Learning'}
                                     </button>

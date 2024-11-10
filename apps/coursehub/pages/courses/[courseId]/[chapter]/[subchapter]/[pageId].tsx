@@ -1,7 +1,8 @@
 import { GetServerSideProps } from 'next';
-import { unstable_getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth/next';
 import { useContext } from 'react';
 import { useSession } from 'next-auth/react';
+import Head from 'next/head';
 import Protected from '../../../../../containers/Protected';
 import Layout from '../../../../../components/layout';
 import Navbar from '../../../../../components/ui/Navbar';
@@ -20,6 +21,8 @@ import { setAuthToken } from '../../../../../libs/axios';
 import Text_Code from '../../../../../components/layout/screens/Text_Code';
 import type { ErrorResponse } from '../../../../../types';
 import { createErrorString } from '../../../../../libs/errorHandler';
+import Blocks from '../../../../../components/layout/screens/Blocks';
+import Reflection from '../../../../../components/layout/screens/Reflection';
 
 type CoursePageProps = {
     title?: string;
@@ -29,7 +32,7 @@ type CoursePageProps = {
     current: CurrentLocation;
 };
 export default function CoursePage({ title, type, content, links, current }: CoursePageProps) {
-    const { menuData, chapterName, subChapterName, loadingPage, nextPage, prevPage, markPage, showNext, showPrev } =
+    const { menuData, pageName, subChapterName, loadingPage, nextPage, prevPage, markPage, showNext, showPrev } =
         useContext(NavContext);
 
     const { data: session } = useSession();
@@ -37,10 +40,10 @@ export default function CoursePage({ title, type, content, links, current }: Cou
 
     const { id, code, text, image, video, image_alt } = content[0];
     let contentLayout = null;
+    const hasPageSteps = content && content.length > 1 && type !== 'blocks';
 
-    const hasPageSteps = content && content.length > 1;
-
-    if (hasPageSteps)
+    if (type === 'blocks') contentLayout = <Blocks blocks={content} id={id} links={links} heading={title} />;
+    else if (hasPageSteps)
         contentLayout = (
             <PageStepsController
                 loadingPage={loadingPage}
@@ -52,6 +55,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
             />
         );
     else if (type === 'text') contentLayout = <Text text={text} heading={title} id={id} links={links} />;
+    else if (type === 'reflection') contentLayout = <Reflection id={id} image={image} imageAlt={image_alt} />;
     else if (type === 'text_image_code')
         contentLayout = (
             <Text_Image_Code
@@ -74,10 +78,13 @@ export default function CoursePage({ title, type, content, links, current }: Cou
 
     return (
         <Protected>
+            <Head>
+                <title>{title}</title>
+            </Head>
             <Layout>
                 <Navbar
                     current={current}
-                    chapterTitle={chapterName || ''}
+                    pageTitle={pageName || ''}
                     subChapterTitle={subChapterName || ''}
                     menuData={menuData}
                     markPage={markPage}
@@ -98,7 +105,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const session = await unstable_getServerSession(context.req, context.res, authOptions);
+    const session = await getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     if (session.jwt) setAuthToken(session.jwt as string);
 

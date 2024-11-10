@@ -3,7 +3,7 @@ import { Allotment } from 'allotment';
 import { useEffect, useState } from 'react';
 import Block from '../Block';
 import ContentBlock from '../ContentBlock';
-import { ImageComp, ResourceLink } from '../../../types';
+import { ImageComp, ImageData, ResourceLink } from '../../../types';
 import useResponsivePanes from '../../../hooks/useResponsivePanes';
 import PaneTabs from '../PaneTabs';
 import CopyButton from '../../ui/CopyButton';
@@ -28,14 +28,16 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
         setHydrated(true);
     }, []);
 
-    if (isSSR() || !image?.data?.attributes || !hydrated)
+    const imageData = image.data as ImageData;
+
+    if (isSSR() || !imageData?.attributes || !hydrated)
         return (
             <div className="w-full h-screen flex flex-col justify-center items-center">
                 <Spinner />
             </div>
         );
 
-    const { url, placeholder } = image.data.attributes;
+    const { url, placeholder } = imageData.attributes;
     if (isMobile) {
         return (
             <div className="p-4 pt-16 relative max-h-[85%] md:max-h-full">
@@ -58,11 +60,11 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
                             <Block
                                 hideBorder
                                 outerClasses=" h-full relative"
-                                key={`mobileimageblock:${image.data.id}-${id}`}
+                                key={`mobileimageblock:${imageData.id}-${id}`}
                             >
                                 <Image
-                                    id={`image:${image.data.id}`}
-                                    key={`image:${image.data.id}-${id}`}
+                                    id={`image:${imageData.id}`}
+                                    key={`image:${imageData.id}-${id}`}
                                     alt={imageAlt || ''}
                                     src={url}
                                     fill
@@ -100,9 +102,9 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
 
                 <Allotment.Pane minSize={200}>
                     <div id="two" className="h-full flex align-middle items-center ">
-                        <Block hideBorder outerClasses=" h-full relative" key={`imageblock:${image.data.id}-${id}`}>
+                        <Block hideBorder outerClasses=" h-full relative" key={`imageblock:${imageData.id}-${id}`}>
                             <Image
-                                key={`image:${image.data.id}-${id}`}
+                                key={`image:${imageData.id}-${id}`}
                                 id={`image:${id}`}
                                 alt={imageAlt || ''}
                                 src={url}

@@ -7,12 +7,13 @@ import { mapMenuChapters } from '../libs/helpers';
 import { MenuItem, UserCourseProgressResponse } from '../types';
 import { getChapters, getUserCompletions } from '../services/queries';
 import { DoublyLinkedList } from '../libs/doublyLinkedList';
-import { httpClient, setAuthToken } from '../libs/axios';
+import { setAuthToken } from '../libs/axios';
 import { completePage } from '../services/mutations';
 
 type NavProviderValues = {
     courseId?: string | number;
     subChapterName?: string;
+    pageName?: string;
     chapterName?: string;
     menuData?: MenuItem[];
     courseSequence?: DoublyLinkedList | null;
@@ -30,6 +31,7 @@ export const NavContext = React.createContext<NavProviderValues>({
     courseId: undefined,
     subChapterName: '',
     chapterName: '',
+    pageName: '',
     menuData: undefined,
     courseSequence: null,
     nextPage: () => {},
@@ -65,7 +67,6 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
     const [chapterLocation, setChapterLocation] = useState<{ chapter: string; subchapter: string } | null>();
     const lastCompletedPage = useRef<string | number>('');
 
-    console.log({ session, auth: httpClient.defaults.headers.common.Authorization, courseId });
     const { data, error } = useSWR(() => (session && courseId ? courseId : null), getChapters, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false,
@@ -141,7 +142,7 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
         if (
             courseId &&
             receivedCompletionData(usercompletion) &&
-            !usercompletion?.pages.find((cm) => cm.id === +pageId)?.completed &&
+            !usercompletion?.pages?.find((cm) => cm.id === +pageId)?.completed &&
             lastCompletedPage.current !== pageId
         ) {
             if (courseId && pageId) {
@@ -177,13 +178,12 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
 
     const courseCompletionStat = receivedCompletionData(usercompletion) && courseSequence ? completionStat() : null;
 
-    console.log({ courseCompletionStat, courseSequence, data, usercompletion });
-
     return (
         <NavContext.Provider
             value={{
                 chapterName: chapterLocation?.chapter || '',
                 subChapterName: chapterLocation?.subchapter || '',
+                pageName: courseSequence?.currentPageNode?.data?.name || '',
                 courseId,
                 menuData: menuChapters,
                 courseSequence,

@@ -3,6 +3,7 @@ import { ApiCourseCourse } from "./schemas";
 
 export type CustomPaddleData = {
     release_course_id: number | string; 
+    release_course_title: string; 
     release_enrolment_id: number | string; 
     email: string;
     customer_name: string;  
