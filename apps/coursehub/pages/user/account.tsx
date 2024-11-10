@@ -24,7 +24,7 @@ export default function Account() {
                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                 <dt className="text-md font-medium leading-6 text-white">Email address: </dt>
                                 <dd className="mt-1 text-md leading-6 sm:col-span-2 sm:mt-0 text-white">
-                                    {!session ? <Spinner /> : session?.user.email}
+                                    {!session ? <Spinner /> : session?.user?.email || ''}
                                 </dd>
                             </div>
                         </dl>
