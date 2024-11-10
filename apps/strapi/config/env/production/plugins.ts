@@ -18,26 +18,26 @@ module.exports = ({ env }) => ({
         },
       },
     },
-    backup: {
-      enabled: true,
-      cronSchedule: '0 0 * * *',
-      storageService: 'aws-s3',
-      awsAccessKeyId: env('AWS_ACCESS_KEY_ID'),
-      awsSecretAccessKey: env('AWS_SECRET_ACCESS_KEY'),
-      awsRegion: 'us-east-1',
-      awsS3Bucket: 'the-great-sync-backups',
-      databaseDriver: 'pg', // 'pg' for PostgreSQL
-      pgDumpExecutable: '/usr/bin/pg_dump', // Path for pg_dump
-      pgDumpOptions: [
-        '--no-owner',
-        '--clean'
-      ],
-      allowCleanup: true,
-      timeToKeepBackupsInSeconds: 172800, // 2 days
-      cleanupCronSchedule: '0 1 * * *', // Every day at 1 AM
-      errorHandler: (error, strapi) => {
-        console.error("Database Backup Error:", error);
-      },
-    }
+    // backup: {
+    //   enabled: true,
+    //   cronSchedule: '0 0 * * *',
+    //   storageService: 'aws-s3',
+    //   awsAccessKeyId: env('AWS_ACCESS_KEY_ID'),
+    //   awsSecretAccessKey: env('AWS_SECRET_ACCESS_KEY'),
+    //   awsRegion: 'us-east-1',
+    //   awsS3Bucket: 'the-great-sync-backups',
+    //   databaseDriver: 'pg', // 'pg' for PostgreSQL
+    //   pgDumpExecutable: '/usr/bin/pg_dump', // Path for pg_dump
+    //   pgDumpOptions: [
+    //     '--no-owner',
+    //     '--clean'
+    //   ],
+    //   allowCleanup: true,
+    //   timeToKeepBackupsInSeconds: 172800, // 2 days
+    //   cleanupCronSchedule: '0 1 * * *', // Every day at 1 AM
+    //   errorHandler: (error, strapi) => {
+    //     console.error("Database Backup Error:", error);
+    //   },
+    // }
 
 });
