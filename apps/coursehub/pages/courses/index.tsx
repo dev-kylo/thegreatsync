@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth/next';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
+import Head from 'next/head';
 import { serverRedirectObject } from '../../libs/helpers';
 import { getEnrolledCourses } from '../../services/queries';
 import { CourseByUser, ErrorResponse } from '../../types';
@@ -17,7 +18,14 @@ const UserCourses = ({ courses }: HomeProps) => {
 
     if (!session?.jwt || !courses) return <LoadingQuote />;
 
-    return <AllCourses courses={courses} />;
+    return (
+        <>
+            <Head>
+                <title>All Courses</title>
+            </Head>
+            <AllCourses courses={courses} />;
+        </>
+    );
 };
 
 export default UserCourses;

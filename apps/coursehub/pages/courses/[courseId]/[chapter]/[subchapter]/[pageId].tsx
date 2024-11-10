@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth/next';
 import { useContext } from 'react';
 import { useSession } from 'next-auth/react';
+import Head from 'next/head';
 import Protected from '../../../../../containers/Protected';
 import Layout from '../../../../../components/layout';
 import Navbar from '../../../../../components/ui/Navbar';
@@ -77,6 +78,9 @@ export default function CoursePage({ title, type, content, links, current }: Cou
 
     return (
         <Protected>
+            <Head>
+                <title>{title}</title>
+            </Head>
             <Layout>
                 <Navbar
                     current={current}
