@@ -2,14 +2,12 @@
  * A set of functions called "actions" for `purchase`
  */
 
-import {  CustomerService, Order, PaddleFulfillment, User } from "../../../../custom-types";
+import {  Course, CustomerService, Order, PaddleFulfillment, User } from "../../../../custom-types";
 import { getErrorString } from "../../../utils/getErrorString";
 import { mapPaddleOrder } from "../../../utils/orderMappings";
 // import { validateWebhook } from "../../../utils/verifyPadelWebook";
 
-
 // User will have a checkbox to use an existing account. Just has to supply an email address with orderId to look up, then must login
-// otherwise, provide name, email and password, anything else? Experience Level, Background
 
 export default {
   register: async (ctx, next) => {
@@ -86,7 +84,7 @@ export default {
         // Create new User
         // Get Enrollment from Order
         // Add enrollment to payload
-        console.log('--- USER NOT FOUND. CREATING NEW USER ---')
+        console.log('--- USER NOT FOUND. CREATING NEW USER ---', data?.username)
         user = await strapi.plugins['users-permissions'].services.user.add({
           blocked: false,
           confirmed: true, 
@@ -99,7 +97,7 @@ export default {
           role: 1, //role id
         });
 
-        console.log('--- NEW USER CREATED ---'); 
+        console.log('--- NEW USER CREATED ---', user?.id); 
         await strapi.entityService.update('api::order.order', order.id, {
           data: {
             user: user.id
@@ -118,7 +116,7 @@ export default {
       }
 
     } catch (err) {
-      console.log(' --- Unsuccessful registration attempt ----');
+      console.log(' --- Unsuccessful registration attempt ----', data?.orderId);
       await strapi.plugin('email').service('email').send({
         to: process.env.CONTACT_ADDRESS,
         subject: 'Error Registering Account',
@@ -137,9 +135,8 @@ export default {
   },
   	createOrder: async (ctx, next) => {
 
-      console.log('Create Order');
       const data = ctx.request.body as PaddleFulfillment;
-      let trackingOrderId;
+      let trackingOrderId, courseTitle;
       try {
         // Verify Order
         // if (!validateWebhook(data, process.env.PADDLE_PUBLIC_KEY)) return ctx.forbidden('Invalid webhook signature');
@@ -147,54 +144,86 @@ export default {
         console.log('--- WEBHOOK VERIFIED ---')
         // Extract values
         const payload = mapPaddleOrder(data);
-
-        console.log('payload', payload);
         
         // Create Order - No need to check for existing order, orderId must be unique anyway
         const order = await strapi.entityService.create('api::order.order', { data: payload }) as Order;
         trackingOrderId = order.id;
-        console.log('--- ORDER CREATED ---')
+        
+        courseTitle = data?.release_course_title;
+        
+        console.log('--- ORDER CREATED ---' + courseTitle)
        
         // Send welcome email
         await strapi.plugin('email').service('email').send({
           to: payload.email,
-          subject: 'Welcome to The Syncer Program',
+          subject: `Welcome${courseTitle ? ` to ${courseTitle}` : ''}`,
           text: '',
           html: `
-            <p>Amazing news!</p>
-            <p>Congratulations on joining <em>The Syncer Program - Level Up With Visual and Memorable JavaScript </em>. You are about to start an exciting journey into the realm of JavaScript and The Great Sync!</p>
-            <p> Click the link below to register and access the platform: </p>
-            <a href='${process.env.TGS_FE_URL}/register?orderid=${order.order_id}'>${process.env.TGS_FE_URL}/register?orderid=${order.order_id}</a>
-            <p>You can also bookmark the <a href='${process.env.TGS_FE_URL}'> homepage link.</a></p>
-            <p>Look out for an email containing the <strong>Discord Invitation to The Syncer Community </strong>. You can find this in the navigation menu on the platform too.</p>
-            <p>If you included 1:1 coaching sessions with me, I will contact you separately to arrange.</p>
-            <p>See you there!</p>
-            <p>Kylo</p>
+            <!DOCTYPE html>
+              <html lang="en">
+              <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <style>
+                        /* General reset for email styling */
+                      body, table, td, a { text-decoration: none; font-family: Arial, sans-serif; color: #333; }
+                      body { background-color: #f4f4f4; margin: 0; padding: 0; }
+                      table { border-collapse: collapse; width: 100%; }
+                      .email-container { max-width: 600px; width: 100%; margin: auto; }
+                      .header img { width: 100%; max-width: 600px; height: auto; }
+                      .content { padding: 20px; background-color: #ffffff; }
+                      .cta-button { display: inline-block; padding: 12px 20px; background-color: #031440; color: #ffffff; text-align: center; border-radius: 5px; text-decoration: none; }
+                      .footer { text-align: center; font-size: 12px; color: #777; padding: 20px; }
+                      
+                      /* Responsive adjustments */
+                      @media screen and (max-width: 600px) {
+                          .content { padding: 15px; }
+                          .header img { max-width: 100%; }
+                      }
+                  </style>
+              </head>
+              <body>
+                  <center>
+                      <table role="presentation" class="email-container">
+                          <!-- Header Section with Image -->
+                          <!-- Content Section -->
+                          <tr>
+                              <td class="content">
+                                  <h1 style="color: #038578; font-size: 24px;">Your mental model is about to grow!</h1>
+                                  <p>Congratulations ${courseTitle ? `on joining <em>${courseTitle}</em>.` : '!'} You are about to start an exciting journey into the realm of JavaScript and The Great Sync!</p>
+                                  <p>Click the link below to register and access the course platform:</p>
+                                  <p style="text-align: center;">
+                                      <a href="${process.env.TGS_FE_URL}/register?orderid=${order.order_id}" class="cta-button"> Access the course </a>
+                                  </p>
+                                  <p>You can also bookmark the <a href="${process.env.TGS_FE_URL}">homepage link</a>.</p>
+                                  <h2 style="color: #038578; font-size: 18px"> Join the Syncer Community </h2>
+                                  <p> Click the link below to gain access to The Syncer Community on Discord. If the link does not work, download the Discord application first</p>
+                                  <p style="text-align: center;">
+                                      <a href="${process.env.DISCORD_INVITE}/register?orderid=${order.order_id}" class="cta-button"> Join The Syncers</a>
+                                  </p>
+                                  <p> This is where you can post your exercises and receive feedback, as well as meet and support the other Syncer students. </p>
+                                  <p> Remember to introduce yourself 😉! </p>
+                                  <p>Kylo</p>
+                              </td>
+                          </tr>
+
+                          <!-- Footer Section -->
+                          <tr>
+                              <td class="footer">
+                                  <p>&copy; ${new Date().getFullYear()} The Great Sync. All rights reserved.</p>
+                              </td>
+                          </tr>
+                      </table>
+                  </center>
+              </body>
+              </html> 
           `,
           headers: {
-            'X-PM-Message-Stream': 'purchases'
+            'X-PM-Message-Stream': 'purchases',
           }
         });
-        console.log('--- EMAIL SENT TO CUSTOMER ---');
-
-        // Send Discord Invite
-        await strapi.plugin('email').service('email').send({
-          to: payload.email,
-          subject: 'Your Discord invitation to The Syncer Community',
-          text: '',
-          html: `
-          <p>Hi!</p>
-          <p> Click the link below to gain access to The Syncer Community on Discord. If the link does not work, download the Discord application first</p>
-          <a href='${process.env.DISCORD_INVITE}'>${process.env.DISCORD_INVITE}</a>
-          <p> This is where you can post your exercises and receive feedback, as well as meet and support the other Syncer students. </p>
-          <p> Remember to introduce yourself 😉! </p>
-          <p> Kylo </p>`,
-          headers: {
-            'X-PM-Message-Stream': 'purchases'
-          }
-        });
-        console.log('--- EMAIL SENT TO CUSTOMER ---');
-
+        console.log('--- EMAIL SENT TO CUSTOMER ---', order?.order_id);
+  
         // Return response
         ctx.body = {
           success: true,
@@ -213,8 +242,8 @@ export default {
             subject: 'There is a delay processing your order',
             text: '',
             html: `<h2>Hi! 👋</h2> 
-              <p>I received your order to join The Syncer Program, and super excited to have you on board.</p>
-              <p> Unfortunately, there is a system delay in processing your order and you might not yet have received the links to the course platform. </p>
+              <p>I received your order to join ${courseTitle? courseTitle : 'a Great Sync course'}, and super excited to have you on board.</p>
+              <p> Unfortunately, there is a system delay in processing your order, and you might not yet have received the links to the course platform. </p>
               <p> Apologies for this!<strong>You will receive the access emails within a few hours</strong></p>
               <p> In the meantime, join The Syncer Community on Discord and introduce yourself. If the link doesn't work, download the Discord application first.</p>
               <a href='${process.env.DISCORD_INVITE}'>${process.env.DISCORD_INVITE}</a>
@@ -234,6 +263,7 @@ export default {
           text: '',
           html: `<h2>Error Creating Order</h2> 
             <p> Provider Order: ${data?.p_order_id}</p>
+            <p> Course Title: ${courseTitle || 'none'} </p>
             <p> Created Order Id: ${trackingOrderId || 'none'} </p>
             <p> Date: ${data?.event_time}</p>
             <p> Error: ${getErrorString(err)}</p>
