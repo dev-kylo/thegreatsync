@@ -22,7 +22,6 @@ export const getChapters = async (courseId: string | number): Promise<ChaptersRe
             encodeValuesOnly: true, // prettify URL
         }
     );
-    console.log('Querying CHAPTERS data');
     const res = await httpClient.get<ChaptersResponse>(`/api/chapters?${query}`);
     return res && res?.data;
 };
