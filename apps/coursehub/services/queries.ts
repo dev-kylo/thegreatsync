@@ -9,7 +9,14 @@ export const getChapters = async (courseId: string | number): Promise<ChaptersRe
     if (!courseId) throw new Error('Missing course Id');
     const query = qs.stringify(
         {
-            populate: ['menu', 'subchapters', 'subchapters.menu', 'subchapters.pages', 'subchapters.pages.menu'],
+            populate: [
+                'menu',
+                'subchapters',
+                'subchapters.menu',
+                'subchapters.pages',
+                'subchapters.pages.menu',
+                'subchapters.pages.menu.course',
+            ],
             filters: {
                 courses: {
                     id: {
@@ -33,11 +40,14 @@ export const getPage = async (id: string | number): Promise<PageResponse> => {
                 'content',
                 'content.image',
                 'content.video',
+                'content.menu',
+                'content.menu.course',
                 'links',
                 'links.file',
                 'content.file',
                 'media.description',
                 'content.description',
+                'menu.course',
             ],
         },
         {

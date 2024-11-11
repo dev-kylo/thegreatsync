@@ -157,6 +157,11 @@ export interface MenuMenuInfo extends Schema.Component {
       ]
     >;
     orderNumber: Attribute.Integer & Attribute.Required;
+    course: Attribute.Relation<
+      'menu.menu-info',
+      'oneToOne',
+      'api::course.course'
+    >;
   };
 }
 

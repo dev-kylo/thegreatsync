@@ -26,7 +26,6 @@ const iconLookup: { [key: string]: React.ReactNode | IconType } = {
 };
 
 const MenuIcon = ({ type, completed, active }: { type: MenuType; completed: boolean; active: boolean }) => {
-    if (active) console.log(`${type} in menu is active`);
     let Icon = BookOpenIcon;
     if (completed) Icon = CheckCircleIcon;
     else if (iconLookup[type]) Icon = iconLookup[type] as IconType;

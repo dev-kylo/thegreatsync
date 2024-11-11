@@ -22,7 +22,6 @@ const HoverAction = ({
                     onClick={async (e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        console.log({ action, pageId });
                         setIsLoading(true);
                         await action(pageId, unMark);
                         setIsLoading(false);

@@ -1185,7 +1185,7 @@ export interface ApiPagePage extends Schema.CollectionType {
       ]
     > &
       Attribute.Required;
-    menu: Attribute.Component<'menu.menu-info'>;
+    menu: Attribute.Component<'menu.menu-info', true>;
     visible: Attribute.Boolean & Attribute.DefaultTo<true>;
     links: Attribute.Component<'media.link', true>;
     createdAt: Attribute.DateTime;

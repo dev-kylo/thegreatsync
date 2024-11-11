@@ -24,6 +24,11 @@
     "orderNumber": {
       "type": "integer",
       "required": true
+    },
+    "course": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::course.course"
     }
   }
 }

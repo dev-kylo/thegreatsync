@@ -255,6 +255,9 @@ export interface Menu {
     id: number;
     icon?: null | string;
     orderNumber: number;
+    course?: {
+        data: CourseData;
+    };
 }
 
 export interface Pages {
@@ -283,7 +286,7 @@ export interface PageAttributes extends StrapiResponseMetaData {
     title: string;
     type: PageType;
     visible: boolean;
-    menu: Menu;
+    menu: Menu[];
     content: PageContent[];
     links: ResourceLink[];
 }

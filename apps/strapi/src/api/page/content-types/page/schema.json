@@ -44,7 +44,7 @@
     },
     "menu": {
       "type": "component",
-      "repeatable": false,
+      "repeatable": true,
       "component": "menu.menu-info"
     },
     "visible": {

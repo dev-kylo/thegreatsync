@@ -8,6 +8,7 @@ import {
     UserCourseProgressResponse,
     MenuParentChapter,
     MenuParentSubchapter,
+    Menu,
 } from '../types';
 
 export function serverRedirectObject(url: string, permanent = true) {
@@ -37,28 +38,48 @@ function calculateSubchapterProgress(id: number | string, progressData?: UserCou
 
 type EntityWithMenuOrder = ChapterData | SubChapter | Page;
 
+function getMenuData(menu: Menu[] | null, courseId: string | number) {
+    if (!menu || menu.length === 0) return { id: 0, orderNumber: 1 } as Menu; // fallback if missing menu data
+    // If there is only 1 menu, it will use this one
+    if (menu.length === 1) return menu[0];
+    // otherwise it looks for the one with matching courseID
+    return menu.find((m) => m?.course?.data.id === courseId) || menu[0];
+}
+
 function sortByOrderNumber(a: EntityWithMenuOrder, b: EntityWithMenuOrder) {
-    return +a.attributes.menu!.orderNumber - b.attributes.menu!.orderNumber;
+    const aMenu = a.attributes.menu as Menu;
+    const bMenu = b.attributes.menu as Menu;
+    return +aMenu.orderNumber - bMenu.orderNumber;
+}
+
+function sortPagesWithMultipleMenusByOrderNumber(courseId: string | number) {
+    return (a: EntityWithMenuOrder, b: EntityWithMenuOrder) => {
+        const aMenu = getMenuData(a.attributes.menu as Menu[], courseId);
+        const bMenu = getMenuData(b.attributes.menu as Menu[], courseId);
+        return +aMenu.orderNumber - +bMenu.orderNumber;
+    };
 }
 
 function mapMenuPages(
     pages: Page[],
     parent: MenuParentSubchapter,
     prependLinkUrl: string,
+    courseId: string,
     completionData?: UserCourseProgressResponse
 ): MenuItem[] {
     if (!pages || pages.length === 0) return [];
     return pages
         .filter((page) => page.attributes.visible)
-        .sort(sortByOrderNumber)
+        .sort(sortPagesWithMultipleMenusByOrderNumber(courseId))
         .map((page) => {
             const mappedPage = {} as Partial<MenuItem>;
+            const menuData = getMenuData(page.attributes.menu, courseId);
             mappedPage.level = 3;
             mappedPage.id = page.id;
             mappedPage.name = page.attributes.title;
-            const icon = page.attributes.menu.icon as MenuType;
+            const icon = menuData.icon as MenuType;
             mappedPage.type = icon || 'read';
-            mappedPage.orderNumber = page.attributes.menu.orderNumber;
+            mappedPage.orderNumber = menuData.orderNumber;
             mappedPage.completed = completionData && completionData.pages.find((pg) => pg.id === page.id)?.completed;
             mappedPage.href = `${prependLinkUrl}/${page.id}`;
             mappedPage.parent = { ...parent };
@@ -70,6 +91,7 @@ function mapMenuSubChapters(
     subchapters: SubChapter[],
     parent: MenuParentChapter,
     prependLinkUrl: string,
+    courseId: string,
     completionData?: UserCourseProgressResponse
 ): MenuItem[] {
     if (!subchapters || subchapters.length === 0) return [];
@@ -88,6 +110,7 @@ function mapMenuSubChapters(
                     pages,
                     parentData,
                     `/${prependLinkUrl}/${subchapter.id}`,
+                    courseId,
                     completionData
                 );
             mappedSubChapter.name = subchapter.attributes.title;
@@ -107,8 +130,6 @@ export function mapMenuChapters(
 ): MenuItem[] {
     const chapters = chaptersResponse?.data?.data;
     if (!Array.isArray(chapters) || !chapters || chapters.length === 0) return [];
-
-    console.log(completionData);
     const completed = completionData && completionData.chapters ? completionData : undefined;
 
     return chapters
@@ -126,6 +147,7 @@ export function mapMenuChapters(
                 subchapters,
                 parentData,
                 `courses/${courseUid}/${chapterId}`,
+                courseUid,
                 completed
             );
             mappedChapter.progress = calculateChapterProgress(chapter.id, completed);
