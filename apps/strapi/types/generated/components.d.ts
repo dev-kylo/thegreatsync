@@ -26,7 +26,7 @@ export interface MediaCodeFile extends Schema.Component {
   };
   attributes: {
     fileExtension: Attribute.Enumeration<
-      ['.js', '.jsx', '.ts', '.tsx', '.css', '.html', '.scss']
+      ['.js', '.jsx', '.ts', '.tsx', '.css', '.html', '.scss', '.txt', '.md']
     > &
       Attribute.DefaultTo<'.js'>;
     code: Attribute.RichText & Attribute.Required;

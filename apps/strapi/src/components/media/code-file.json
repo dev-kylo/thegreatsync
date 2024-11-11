@@ -16,7 +16,9 @@
         ".tsx",
         ".css",
         ".html",
-        ".scss"
+        ".scss",
+        ".txt",
+        ".md"
       ],
       "default": ".js"
     },

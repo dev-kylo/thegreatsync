@@ -87,7 +87,7 @@ const CodeEditorBlock = ({ showLineNumbers, files, description, descriptionType 
                     options={{
                         autorun: false,
                     }}
-                    template="vanilla"
+                    // template="vanilla"
                     files={codeFiles}
                     theme={nightOwl}
                 >
