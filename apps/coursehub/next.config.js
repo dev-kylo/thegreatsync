@@ -23,6 +23,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'the-great-sync-bucket.s3.amazonaws.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'the-great-sync.s3.us-east-1.amazonaws.com',
+      },
     ],
   },
 }
