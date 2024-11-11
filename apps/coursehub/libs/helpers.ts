@@ -43,7 +43,7 @@ function getMenuData(menu: Menu[] | null, courseId: string | number) {
     // If there is only 1 menu, it will use this one
     if (menu.length === 1) return menu[0];
     // otherwise it looks for the one with matching courseID
-    return menu.find((m) => m?.course?.data.id === courseId) || menu[0];
+    return menu.find((m) => `${m?.course?.data.id}` === `${courseId}`) || menu[0];
 }
 
 function sortByOrderNumber(a: EntityWithMenuOrder, b: EntityWithMenuOrder) {
