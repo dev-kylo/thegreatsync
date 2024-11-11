@@ -188,8 +188,11 @@ export interface PageContent {
     showLineNumbers?: boolean;
     showPreview?: boolean;
     file?: CodeFile[];
-    explanation?: string;
-    explanationType?: string;
+    description?: {
+        id: string;
+        text: string;
+    };
+    descriptionType?: string;
 }
 
 export type PageStep = PageContent & {

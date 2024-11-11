@@ -17,14 +17,16 @@
         ".css",
         ".html",
         ".scss"
-      ]
+      ],
+      "default": ".js"
     },
     "code": {
       "type": "richtext",
       "required": true
     },
     "fileName": {
-      "type": "string"
+      "type": "string",
+      "default": "main"
     }
   }
 }

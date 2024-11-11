@@ -11,8 +11,9 @@ export interface MediaCodeEditor extends Schema.Component {
     file: Attribute.Component<'media.code-file', true>;
     showLineNumbers: Attribute.Boolean;
     showPreview: Attribute.Boolean;
-    explanation: Attribute.RichText;
-    explanationType: Attribute.Enumeration<['explanation', 'answer']>;
+    descriptionType: Attribute.Enumeration<['explanation', 'answer', 'note']> &
+      Attribute.DefaultTo<'note'>;
+    description: Attribute.Component<'media.text'>;
   };
 }
 
@@ -26,9 +27,10 @@ export interface MediaCodeFile extends Schema.Component {
   attributes: {
     fileExtension: Attribute.Enumeration<
       ['.js', '.jsx', '.ts', '.tsx', '.css', '.html', '.scss']
-    >;
+    > &
+      Attribute.DefaultTo<'.js'>;
     code: Attribute.RichText & Attribute.Required;
-    fileName: Attribute.String;
+    fileName: Attribute.String & Attribute.DefaultTo<'main'>;
   };
 }
 
@@ -142,7 +144,17 @@ export interface MenuMenuInfo extends Schema.Component {
   };
   attributes: {
     icon: Attribute.Enumeration<
-      ['code', 'read', 'watch', 'discover', 'imagine', 'share', 'draw']
+      [
+        'code',
+        'read',
+        'watch',
+        'discover',
+        'imagine',
+        'share',
+        'draw',
+        'reflect',
+        'peg'
+      ]
     >;
     orderNumber: Attribute.Integer & Attribute.Required;
   };

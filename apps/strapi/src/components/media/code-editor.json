@@ -18,15 +18,19 @@
     "showPreview": {
       "type": "boolean"
     },
-    "explanation": {
-      "type": "richtext"
-    },
-    "explanationType": {
+    "descriptionType": {
       "type": "enumeration",
       "enum": [
         "explanation",
-        "answer"
-      ]
+        "answer",
+        "note"
+      ],
+      "default": "note"
+    },
+    "description": {
+      "type": "component",
+      "repeatable": false,
+      "component": "media.text"
     }
   }
 }

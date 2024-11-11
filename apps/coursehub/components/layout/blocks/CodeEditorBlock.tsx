@@ -66,11 +66,11 @@ const Answer = ({ md }: { md: string }) => (
 type CodeEditorBlockProps = {
     showLineNumbers?: boolean;
     files: CodeFile[];
-    explanation?: string;
-    explanationType?: string;
+    description?: string;
+    descriptionType?: string;
 };
 
-const CodeEditorBlock = ({ showLineNumbers, files, explanation, explanationType = 'answer' }: CodeEditorBlockProps) => {
+const CodeEditorBlock = ({ showLineNumbers, files, description, descriptionType = 'answer' }: CodeEditorBlockProps) => {
     const [showAnswer, setShowAnswer] = React.useState(false);
 
     const codeFiles = files.reduce((final, curr) => {
@@ -102,12 +102,18 @@ const CodeEditorBlock = ({ showLineNumbers, files, explanation, explanationType 
                         />
                     </SandpackLayout>
                 </SandpackProvider>
-                {showAnswer && explanation && <Answer md={explanation} />}
+                {showAnswer && description && <Answer md={description} />}
             </div>
-            {explanation && (
+            {description && (
                 <div className="flex justify-center items-center">
                     <ShowAnswerButton
-                        customBtnText={explanationType === 'answer' ? 'Show Answer' : 'Apply Model'}
+                        customBtnText={
+                            descriptionType === 'answer'
+                                ? 'Show Answer'
+                                : descriptionType === 'description'
+                                ? 'Apply Model'
+                                : 'Notes'
+                        }
                         showAnswer={showAnswer}
                         clicked={() => setShowAnswer(!showAnswer)}
                     />
