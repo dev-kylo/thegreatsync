@@ -5,7 +5,7 @@ import Spinner from '../../ui/Spinner';
 import { reflect, ReflectionPayload } from '../../../services/reflect';
 import Alert from '../../ui/Alert';
 import ImageBlock from '../blocks/ImageBlock';
-import { ImageComp, ImageData } from '../../../types';
+import { ImageComp } from '../../../types';
 
 type ReflectionProps = {
     image: ImageComp;
