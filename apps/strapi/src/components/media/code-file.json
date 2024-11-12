@@ -28,7 +28,7 @@
     },
     "fileName": {
       "type": "string",
-      "default": "main"
+      "default": "index"
     }
   }
 }

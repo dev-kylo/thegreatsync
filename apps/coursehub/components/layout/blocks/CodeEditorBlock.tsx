@@ -68,9 +68,18 @@ type CodeEditorBlockProps = {
     files: CodeFile[];
     description?: string;
     descriptionType?: string;
+    hideRunButtons?: boolean | null;
+    wrapContent?: boolean | null;
 };
 
-const CodeEditorBlock = ({ showLineNumbers, files, description, descriptionType = 'answer' }: CodeEditorBlockProps) => {
+const CodeEditorBlock = ({
+    showLineNumbers,
+    files,
+    hideRunButtons,
+    description,
+    wrapContent,
+    descriptionType = 'answer',
+}: CodeEditorBlockProps) => {
     const [showAnswer, setShowAnswer] = React.useState(false);
 
     const codeFiles = files.reduce((final, curr) => {
@@ -85,19 +94,18 @@ const CodeEditorBlock = ({ showLineNumbers, files, description, descriptionType 
             <div className="w-[100%] m-auto relative">
                 <SandpackProvider
                     options={{
-                        autorun: false,
+                        autorun: !!hideRunButtons,
                     }}
-                    // template="vanilla"
                     files={codeFiles}
                     theme={nightOwl}
                 >
                     <SandpackLayout>
-                        <SandpackCodeEditor showLineNumbers={showLineNumbers} />
+                        <SandpackCodeEditor showLineNumbers={showLineNumbers} wrapContent={!!wrapContent} />
                         <SandpackConsole
                             showRestartButton
-                            showResetConsoleButton
+                            showResetConsoleButton={!hideRunButtons}
                             standalone
-                            actionsChildren={<CustomRefreshButton />}
+                            actionsChildren={!hideRunButtons ? <CustomRefreshButton /> : undefined}
                             style={{ position: 'relative' }}
                         />
                     </SandpackLayout>

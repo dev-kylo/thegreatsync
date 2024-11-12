@@ -105,10 +105,7 @@ const StepContextProvider = ({ children }: { children: ReactNode | ReactNode[] }
     const stepData = useMemo(() => {
         let finalSteps;
         try {
-            if (!steps) {
-                console.log('No step data');
-                return;
-            }
+            if (!steps) return;
             const cloned = [...steps];
             const mapped = cloned.map((content: PageContent, ind: number) => {
                 const clonedStep = { ...content } as Partial<PageStep>;

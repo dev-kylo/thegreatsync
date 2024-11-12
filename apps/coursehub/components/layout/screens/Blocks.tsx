@@ -9,6 +9,7 @@ type BlocksProps = { id: number; links: ResourceLink[]; heading?: string; blocks
 
 const Blocks = ({ blocks, id, links, heading }: BlocksProps) => {
     const blockCmps = blocks.map((block, index) => {
+        console.log(block);
         const key = `pageblock-${block.__component}-${index}`;
         switch (block.__component) {
             case 'media.text':
@@ -30,6 +31,8 @@ const Blocks = ({ blocks, id, links, heading }: BlocksProps) => {
                         showLineNumbers={block?.showLineNumbers}
                         description={block?.description?.text}
                         descriptionType={block?.descriptionType}
+                        hideRunButtons={block?.hideRunButtons}
+                        wrapContent={block?.wrapContent}
                     />
                 );
             default:

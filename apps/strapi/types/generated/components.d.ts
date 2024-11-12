@@ -14,6 +14,8 @@ export interface MediaCodeEditor extends Schema.Component {
     descriptionType: Attribute.Enumeration<['explanation', 'answer', 'note']> &
       Attribute.DefaultTo<'note'>;
     description: Attribute.Component<'media.text'>;
+    wrapContent: Attribute.Boolean;
+    hideRunButtons: Attribute.Boolean;
   };
 }
 
@@ -30,7 +32,7 @@ export interface MediaCodeFile extends Schema.Component {
     > &
       Attribute.DefaultTo<'.js'>;
     code: Attribute.RichText & Attribute.Required;
-    fileName: Attribute.String & Attribute.DefaultTo<'main'>;
+    fileName: Attribute.String & Attribute.DefaultTo<'index'>;
   };
 }
 

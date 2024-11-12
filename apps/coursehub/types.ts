@@ -193,6 +193,8 @@ export interface PageContent {
         text: string;
     };
     descriptionType?: string;
+    wrapContent?: boolean | null;
+    hideRunButtons?: boolean | null;
 }
 
 export type PageStep = PageContent & {
