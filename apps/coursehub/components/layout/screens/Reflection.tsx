@@ -61,12 +61,16 @@ export default function Reflection({ image, imageAlt, id }: ReflectionProps) {
 
                             <div className="px-2 relative ">
                                 {formState.submitted && !formState.error ? (
-                                    <ImageBlock
-                                        image={(image.data as ImageData[])[0]}
-                                        id={id}
-                                        imageAlt={imageAlt}
-                                        containerCss="relative"
-                                    />
+                                    image.data &&
+                                    Array.isArray(image.data) &&
+                                    image.data.length > 0 && (
+                                        <ImageBlock
+                                            image={image.data[0]}
+                                            id={id}
+                                            imageAlt={imageAlt}
+                                            containerCss="relative"
+                                        />
+                                    )
                                 ) : (
                                     <form onSubmit={handleSubmit} className="max-w-lg w-full mx-auto">
                                         <div className="mb-8">

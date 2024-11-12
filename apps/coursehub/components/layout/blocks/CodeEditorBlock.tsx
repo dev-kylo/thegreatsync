@@ -118,7 +118,7 @@ const CodeEditorBlock = ({
                         customBtnText={
                             descriptionType === 'answer'
                                 ? 'Show Answer'
-                                : descriptionType === 'description'
+                                : descriptionType === 'explanation'
                                 ? 'Apply Model'
                                 : 'Notes'
                         }

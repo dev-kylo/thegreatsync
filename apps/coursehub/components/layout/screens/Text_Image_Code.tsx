@@ -28,7 +28,7 @@ export default function Text_Image_Code({ text, code, image, imageAlt, id, headi
         setHydrated(true);
     }, []);
 
-    const imageData = image.data as ImageData;
+    const imageData = image?.data as ImageData;
 
     if (isSSR() || !imageData?.attributes || !hydrated)
         return (

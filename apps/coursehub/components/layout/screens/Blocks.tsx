@@ -9,7 +9,6 @@ type BlocksProps = { id: number; links: ResourceLink[]; heading?: string; blocks
 
 const Blocks = ({ blocks, id, links, heading }: BlocksProps) => {
     const blockCmps = blocks.map((block, index) => {
-        console.log(block);
         const key = `pageblock-${block.__component}-${index}`;
         switch (block.__component) {
             case 'media.text':

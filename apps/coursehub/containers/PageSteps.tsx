@@ -194,9 +194,12 @@ const PageSteps = ({
                 <div style={{ visibility: 'hidden', position: 'absolute', width: 0, height: 0 }} aria-hidden="true">
                     {pageSteps.map((step) => {
                         if (type === 'text_image_code' || type === 'text_image') {
-                            const imageData = step.image.data as ImageData;
+                            console.log(step.image);
+                            const imageData = step?.image?.data as ImageData;
+                            if (!imageData) return null;
                             return (
                                 <Image
+                                    key={`preload-${imageData.id}`}
                                     src={imageData.attributes.url}
                                     alt={step.image_alt}
                                     fill
