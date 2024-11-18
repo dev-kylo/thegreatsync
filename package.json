@@ -7,7 +7,9 @@
     "hub:dev": "pnpm --filter coursehub run dev",
     "strapi:dev": "pnpm --filter strapi run develop",
     "strapi": "pnpm --filter strapi",
-    "hub": "pnpm --filter coursehub"
+    "hub": "pnpm --filter coursehub",
+    "landing": "pnpm --filter landing",
+    "imagine": "pnpm --filter imagine"
   },
   "keywords": [],
   "author": "",
