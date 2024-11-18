@@ -24,7 +24,7 @@ function Plan({
   return (
     <div
       className={clsx(
-        'relative px-4 py-16 sm:rounded-5xl sm:px-10 md:py-12 lg:px-12',
+        'relative px-4 py-16 sm:rounded-5xl sm:px-10 md:py-4 lg:px-12',
         featured && 'bg-blue-600 sm:shadow-lg',
       )}
     >
@@ -97,7 +97,7 @@ function Plan({
           className="mt-8"
           aria-label={`Get started with the ${name} plan for $${price}`}
         >
-          Get started
+          GET INSTANT ACCESS
         </Button>
       </div>
     </div>
@@ -113,43 +113,32 @@ export function Pricing() {
     >
       <Container>
         <SectionHeading number="4" id="pricing-title">
-          Pricing
+          I'm Ready
         </SectionHeading>
         <p className="mt-8 font-display text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
-          Pick your package
+        It‘s time to level up!
         </p>
-        <p className="mt-4 max-w-xl text-lg tracking-tight text-slate-600">
-          “Everything Starts as a Square” is available in two different packages
-          so you can pick the one that’s right for you.
+        <p className="mt-4 text-lg tracking-tight text-slate-600">
+        Have you decided that a career spent blindly copy-pasting and never being able to build anything with confidence is not for you?
         </p>
+        <p className="mt-4 text-lg tracking-tight text-slate-600">This is your opportunity to transform your understanding of JavaScript.</p>
       </Container>
       <div className="mx-auto mt-16 max-w-5xl lg:px-6">
-        <div className="grid bg-slate-50 sm:px-6 sm:pb-16 md:grid-cols-2 md:rounded-6xl md:px-8 md:pt-16 lg:p-20">
+        <div className="grid bg-slate-50 sm:px-6 sm:pb-16 md:grid-cols-1 md:rounded-6xl md:px-8 md:pt-12  max-w-xl m-auto">
           <Plan
-            name="Essential"
-            description="The perfect starting point if you’re on a budget."
-            price="15"
+            name="Imagine JavaScript"
+            description="Get instant access and start building your mental model"
+            price="97.00"
             href="#"
             features={[
-              'The 240-page ebook',
-              'Figma icon templates',
-              'Community access',
+              '30+ videos',
+              '80+ pages',
+              '50+ illustrations',
+              'interactive code editor and exercises',
+              'Access to The Syncer Student community'
             ]}
           />
-          <Plan
-            featured
-            name="Complete"
-            description="Everything icon resource you could ever ask for."
-            price="229"
-            href="#"
-            features={[
-              'The 240-page ebook',
-              'Figma icon templates',
-              'Over an hour of screencasts',
-              'Weekly icon teardowns',
-              'Community access',
-            ]}
-          />
+ 
         </div>
       </div>
     </section>

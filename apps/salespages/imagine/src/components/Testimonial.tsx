@@ -33,7 +33,7 @@ export function Testimonial({
           <figcaption className="mt-10 flex items-center sm:justify-center">
             <div className="overflow-hidden rounded-full bg-slate-200">
               <Image
-                className="h-12 w-12 object-cover"
+                className="h-24 w-24 object-cover"
                 src={author.image}
                 alt=""
                 width={48}

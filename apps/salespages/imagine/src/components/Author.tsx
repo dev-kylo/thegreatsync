@@ -38,7 +38,7 @@ export function Author() {
               Senior JavaScript Developer
             </SectionHeading>
             <p className="mt-8 font-display text-5xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-              <span className="block text-blue-600 sm:text-6xl">Hi, I'm Kylo</span>I don‘t have a background in computer science. I studied media... But it turns out a different way of thinking is my greatest asset. 
+              <span className="block mb-6 text-blue-600 sm:text-6xl">Hi, I'm Kylo</span>I don‘t have a background in computer science. I studied media... But it turns out a different way of thinking is my greatest asset. 
             </p>
             <p className="mt-4 text-lg tracking-tight text-slate-700">
            My journey began by learning on the

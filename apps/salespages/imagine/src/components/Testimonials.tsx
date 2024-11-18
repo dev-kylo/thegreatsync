@@ -15,34 +15,27 @@ import avatarImage7 from '@/images/avatars/avatar-7.png'
 import avatarImage8 from '@/images/avatars/avatar-8.png'
 import avatarImage9 from '@/images/avatars/avatar-9.png'
 import avatarImage10 from '@/images/avatars/avatar-10.png'
-import avatarImage11 from '@/images/avatars/avatar-11.png'
+import avatarNik from '@/images/Nik.jpg'
+import avatarEmma from '@/images/Emma.jpg'
+import avatarAnnie from '@/images/Annie.jpg'
 
 const testimonials = [
   [
     {
       content:
-        'Mira’s teaching style is second to none. Everything was easy to follow every step of the way.',
+        'Kylos teaching style with the amazing illustrations really helped me understand the confusing JS concepts. These illustrations and the story behind them are so creative and memorable. I will never forget the Genie who is going to sit on the island for every variable that I create!',
       author: {
-        name: 'Antonio Littel',
-        role: 'Frontend Developer',
-        image: avatarImage3,
+        name: 'Emma Wain',
+        role: 'Junior developer',
+        image: avatarEmma,
       },
     },
     {
       content:
-        'Even though I was excited to learn, I was pessimistic that I wouldn’t actually ever get good enough to design my own icons. I was wrong — this book is all I needed.',
+        'As a visual learner, I was captivated by how the course weaves together JavaScript concepts and memory techniques, forming a systematic yet vivid mental models for learning JavaScript. It‘s a transformative experience.',
       author: {
-        name: 'Lynn Nolan',
-        role: 'Growth Marketer',
-        image: avatarImage4,
-      },
-    },
-    {
-      content:
-        'I’ve been employed as a professional icon designer for years and still learned tons of new tricks that have made my work even better',
-      author: {
-        name: 'Krista Prosacco',
-        role: 'Professional Designer',
+        name: 'Shanis',
+        role: 'Student web developer',
         image: avatarImage9,
       },
     },
@@ -50,28 +43,28 @@ const testimonials = [
   [
     {
       content:
-        'I run an ecommerce store selling rare vintage gummy bears and could never find a good gummy bear icon. Now I can design my own in minutes.',
+        "With The Great Sync, you won't just learn the basics; you'll develop a deep, nuanced understanding of the language",
       author: {
-        name: 'Cameron Considine',
+        name: 'Miltiadis Bouchalakis',
         role: 'Entrepreneur',
         image: avatarImage7,
       },
     },
     {
       content:
-        'The complete package is worth it for the weekly teardown videos alone. I’ve learned so much watching Mira take apart other icons and recreate them from scratch.',
+        "As a person who prefers visuals to learn, I wish this course existed earlier. I've struggled for a while trying to understand javascript and Kylo has made it 10x easier.",
       author: {
-        name: 'Regina Wisoky',
-        role: 'Design Student',
-        image: avatarImage11,
+        name: 'Chelsea Roberts',
+        role: 'Junior Developer',
+        image: avatarNik,
       },
     },
     {
       content:
-        'I didn’t expect to find a lot of value in the community but now I’m in there for at least an hour every day picking up tips from other designers.',
+        'I constantly questioned my grasp of the language. The Great Sync emerged as a beacon of clarity. Though deliberately challenging at times, the course helped me fix this confusion.',
       author: {
-        name: 'Vernon Cummerata',
-        role: 'UI Engineer',
+        name: 'Matthew Higgins',
+        role: 'Career Transitioner',
         image: avatarImage8,
       },
     },
@@ -79,29 +72,20 @@ const testimonials = [
   [
     {
       content:
-        'I couldn’t believe how fast Mira moved in Figma compared to my own workflow. I’m designing icons more accurately in half the time with the shortcuts I learned from her videos.',
+        'Kylo is a great teacher and a lot of care and thought has gone into the JavaScript mental model in a fun and interesting way! If you struggle to understand some of the more complex JavaScript concepts, definitely give The Great Sync a go! - Annie🦄⚡️',
       author: {
-        name: 'Steven Hackett',
+        name: 'Annie Bombanie',
+        role: 'Front-End Engineering Lead',
+        image: avatarAnnie,
+      },
+    },
+    {
+      content:
+        'Kylo addressed every problem and had lots of tips and advice at the ready. Thanks again and again for the extra portion of motivation.',
+      author: {
+        name: 'Niklas Riebesell',
         role: 'Bootcamp Instructor',
-        image: avatarImage5,
-      },
-    },
-    {
-      content:
-        'I never thought I would enjoy designing icons but using the ideas in this book, it’s become a great way for me to relax while still being creative.',
-      author: {
-        name: 'Carla Schoen',
-        role: 'Startup Founder',
-        image: avatarImage10,
-      },
-    },
-    {
-      content:
-        'All I can say is wow — this is easily the best icon design resource I’ve ever encountered.',
-      author: {
-        name: 'Leah Kiehn',
-        role: 'Creative Director',
-        image: avatarImage6,
+        image: avatarNik,
       },
     },
   ],
@@ -147,13 +131,13 @@ export function Testimonials() {
     <section className="py-8 sm:py-10 lg:py-16">
       <Container className="text-center">
         <h2 className="font-display text-4xl font-bold tracking-tight text-slate-900">
-          Some kind words from early customers...
+          What Syncer Students have to say...
         </h2>
-        <p className="mt-4 text-lg tracking-tight text-slate-600">
+        {/* <p className="mt-4 text-lg tracking-tight text-slate-600">
           I worked with a small group of early access customers to make sure all
           of the content in the book was exactly what they needed. Hears what
           they had to say about the finished product.
-        </p>
+        </p> */}
       </Container>
       <Expandable className="group mt-16">
         <ul
