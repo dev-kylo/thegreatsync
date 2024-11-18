@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import clsx from 'clsx'
 
 import { Button } from '@/components/Button'

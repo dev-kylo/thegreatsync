@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Image, { type ImageProps } from 'next/image'
 import clsx from 'clsx'
 

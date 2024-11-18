@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { GridPattern } from '@/components/GridPattern'
 
 export function Footer() {
@@ -7,7 +8,7 @@ export function Footer() {
         <GridPattern x="50%" />
       </div>
       <div className="relative text-center text-sm text-slate-600">
-        <p>Copyright &copy; {new Date().getFullYear()} Lindehoff Design, LLC</p>
+        <p>Copyright &copy; {new Date().getFullYear()} Code Imagined - The Great Sync</p>
         <p>All rights reserved.</p>
       </div>
     </footer>
