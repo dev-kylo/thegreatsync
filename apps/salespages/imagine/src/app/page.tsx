@@ -18,7 +18,6 @@ export default function Home() {
       <Hero />
       <Introduction />
       <Author />
-      {/* <NavBar /> */}
       <Resources />
       <Testimonial
         id="testimonial-from-tommy-stroman"
