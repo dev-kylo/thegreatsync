@@ -151,7 +151,7 @@ export default {
         
         courseTitle = data?.release_course_title;
         
-        console.log('--- ORDER CREATED ---' + courseTitle)
+        console.log('--- ORDER CREATED ---' + courseTitle + ' ' + trackingOrderId);
        
         // Send welcome email
         await strapi.plugin('email').service('email').send({
@@ -165,7 +165,6 @@ export default {
                   <meta charset="UTF-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1.0">
                   <style>
-                        /* General reset for email styling */
                       body, table, td, a { text-decoration: none; font-family: Arial, sans-serif; color: #333; }
                       body { background-color: #f4f4f4; margin: 0; padding: 0; }
                       table { border-collapse: collapse; width: 100%; }
@@ -219,7 +218,7 @@ export default {
               </html> 
           `,
           headers: {
-            'X-PM-Message-Stream': 'purchases',
+            'X-PM-Message-Stream': 'outbound',
           }
         });
         console.log('--- EMAIL SENT TO CUSTOMER ---', order?.order_id);
@@ -251,7 +250,7 @@ export default {
               <p>Kylo</p>
               `,
             headers: {
-              'X-PM-Message-Stream': 'purchases'
+              'X-PM-Message-Stream': 'outbound'
             }
           });
         }
@@ -270,7 +269,7 @@ export default {
             <p> Webhook Data: ${data ? getErrorString(data) : 'None' }
             `,
           headers: {
-            'X-PM-Message-Stream': 'purchases'
+            'X-PM-Message-Stream': 'outbound'
           }
         });
           // ctx.status = 403;
