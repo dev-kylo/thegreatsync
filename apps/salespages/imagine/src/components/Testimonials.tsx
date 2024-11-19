@@ -117,7 +117,7 @@ function Testimonial({
   author,
   children,
 }: {
-  author: { name: string; role: string; image: ImageProps['src'] }
+  author: { name: string; role: string; image?: ImageProps['src'] }
   children: React.ReactNode
 }) {
   return (
