@@ -21,7 +21,7 @@ function Testimonial() {
       </blockquote>
       <figcaption className="mt-2 text-sm text-slate-500">
         <strong className="font-semibold text-blue-600 before:content-['—_']">
-          KarthiK
+          Karthik
         </strong>
         , Frontend Developer
       </figcaption>
@@ -63,7 +63,7 @@ export function Hero() {
          
             <div className="mt-8 flex gap-4">
 
-              <Button href="#pricing" color="blue">
+              <Button href="#pricing-title" color="blue">
                 I'm ready NOW
               </Button>
             </div>
