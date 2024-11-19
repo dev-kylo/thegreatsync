@@ -1,63 +1,81 @@
 /* eslint-disable react/no-unescaped-entities */
 import Image from 'next/image'
-
 import { Container } from '@/components/Container'
 import { SectionHeading } from '@/components/SectionHeading'
-import duotoneImage from '@/images/screencasts/duotone.svg'
-
-import one from '@/images/1.png'
-// import two from '@/images/two.jpg'
+import two from '@/images/screenshots/2.png'
+import three from '@/images/screenshots/3.png'
+import four from '@/images/screenshots/4.png'
+import five from '@/images/screenshots/5.png'
+import six from '@/images/screenshots/6.png'
+import seven from '@/images/screenshots/7.png'
+import eight from '@/images/screenshots/8.png'
+import nine from '@/images/screenshots/9.png'
+import prot from '@/images/screenshots/prot.png'
+import prom from '@/images/screenshots/prom.png'
+import eleven from '@/images/screenshots/11.png'
+import twelve from '@/images/screenshots/12.png'
+import learning from '@/images/screenshots/learning.png'
+import evt from '@/images/screenshots/evt.png'
+import thisImg from '@/images/screenshots/this.png'
+import universal from '@/images/screenshots/universal.png'
 
 const videos = [
   {
+    title: 'The learning system',
+    image: learning,
+  },
+  {
     title: 'Imagine the engine & environment',
-    description:
-      'Get familiar with the Figma UI, the different tools it offers, and the most important features.',
-    image: one,
-    runtime: { minutes: 16, seconds: 54 },
+    image: two,
   },
   {
     title: 'Imagine flow & operations',
-    image: one,
+    image: three,
   },
   {
     title: 'Imagine loops',
-    image: one,
+    image: four,
   },
   {
-    title: 'Imagine flow & operations',
-    image: one,
+    title: 'Imagine objects',
+    image: five,
   },
   {
-    title: 'Imagine loops',
-    image: one,
+    title: 'Imagine functions',
+    image: six,
   },
   {
-    title: 'Imagine flow & operations',
-    image: one,
+    title: 'Imagine scope',
+    image: eight,
   },
   {
-    title: 'Imagine loops',
-    image: one,
+    title: 'Imagine closures',
+    image: eleven,
   },
   {
-    title: 'Imagine flow & operations',
-    image: one,
+    title: 'Imagine this',
+    image: thisImg,
   },
   {
-    title: 'Imagine loops',
-    image: one,
+    title: 'Imagine prototypal inheritance',
+    image: prot,
   },
   {
-    title: 'Imagine flow & operations',
-    image: one,
+    title: 'Imagine the DOM',
+    image: twelve,
   },
   {
-    title: 'Imagine loops',
-    image: one,
+    title: 'Imagine the event loop',
+    image: evt,
   },
-
-
+  {
+    title: 'Imagine Promises',
+    image: prom,
+  },
+  {
+    title: 'Imagine building applications',
+    image: universal,
+  },
 ]
 
 

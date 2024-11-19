@@ -10,7 +10,7 @@ const Why = () => {
         <section
         id="why"
         aria-labelledby="resources-title"
-        className=" sm:py-20 mt-12 lg:pt-16 grid grid-cols-2 gap-2 max-w-7xl mx-auto"
+        className=" sm:py-20 mt-12 lg:pt-16 grid  md:grid-cols-2 gap-2 max-w-7xl mx-auto"
       >
         <Container>
           <SectionHeading number="3" id="resources-title">

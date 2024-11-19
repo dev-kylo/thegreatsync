@@ -19,6 +19,9 @@ import avatarImage10 from '@/images/avatars/avatar-10.png'
 import avatarNik from '@/images/Nik.jpg'
 import avatarEmma from '@/images/Emma.jpg'
 import avatarAnnie from '@/images/Annie.jpg'
+import miltiadis from '@/images/miltiadis.jpg'
+import erica from '@/images/erica.jpg'
+import karthik from '@/images/karthik.jpg'
 
 const testimonials = [
   [
@@ -33,11 +36,20 @@ const testimonials = [
     },
     {
       content:
+        'Kylo taught me some of the most critical concepts in JavaScript and my confidence just skyrocketed. I wasn‘t scared of the errors anymore; I could understand the errors better and debugging became fun!',
+      author: {
+        name: 'Karthik Raju',
+        role: 'Frontend developer',
+        image: karthik,
+      },
+    },
+    {
+      content:
         'As a visual learner, I was captivated by how the course weaves together JavaScript concepts and memory techniques, forming a systematic yet vivid mental models for learning JavaScript. It‘s a transformative experience.',
       author: {
         name: 'Shanis',
         role: 'Student web developer',
-        image: avatarImage9,
+     
       },
     },
   ],
@@ -47,8 +59,8 @@ const testimonials = [
         "With The Great Sync, you won't just learn the basics; you'll develop a deep, nuanced understanding of the language",
       author: {
         name: 'Miltiadis Bouchalakis',
-        role: 'Entrepreneur',
-        image: avatarImage7,
+        role: 'Senior Frontend Developer',
+        image: miltiadis,
       },
     },
     {
@@ -57,7 +69,7 @@ const testimonials = [
       author: {
         name: 'Chelsea Roberts',
         role: 'Junior Developer',
-        image: avatarNik,
+        // image: avatarNik,
       },
     },
     {
@@ -66,7 +78,7 @@ const testimonials = [
       author: {
         name: 'Matthew Higgins',
         role: 'Career Transitioner',
-        image: avatarImage8,
+       
       },
     },
   ],
@@ -85,8 +97,17 @@ const testimonials = [
         'Kylo addressed every problem and had lots of tips and advice at the ready. Thanks again and again for the extra portion of motivation.',
       author: {
         name: 'Niklas Riebesell',
-        role: 'Bootcamp Instructor',
+        role: 'Career transitioning',
         image: avatarNik,
+      },
+    },
+    {
+      content:
+        'Kylo does an amazing job breaking down complex JavaScript syntax so it is simple and easy to understand. The stories and illustrations really helped me',
+      author: {
+        name: 'Erica Lynn',
+        role: 'Mom learning JavaScript',
+        image: erica,
       },
     },
   ],
@@ -108,13 +129,13 @@ function Testimonial({
       </blockquote>
       <figcaption className="mt-6 flex items-center">
         <div className="overflow-hidden rounded-full bg-slate-50">
-          <Image
+{ author.image &&( <Image
             className="h-12 w-12 object-cover"
             src={author.image}
             alt=""
             width={48}
             height={48}
-          />
+          />) }
         </div>
         <div className="ml-4">
           <div className="text-base font-medium leading-6 tracking-tight text-slate-900">
@@ -160,7 +181,7 @@ export function Testimonials() {
               className="hidden group-data-[expanded]:list-item lg:list-item"
             >
               <ul role="list">
-                <ExpandableItems>
+                
                   {column.map((testimonial, testimonialIndex) => (
                     <li
                       key={testimonialIndex}
@@ -175,12 +196,12 @@ export function Testimonials() {
                       </Testimonial>
                     </li>
                   ))}
-                </ExpandableItems>
+             
               </ul>
             </li>
           ))}
         </ul>
-        <ExpandableButton>Read more testimonials</ExpandableButton>
+ 
       </Expandable>
     </section>
   )

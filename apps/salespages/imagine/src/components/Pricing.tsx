@@ -109,7 +109,7 @@ export function Pricing() {
     <section
       id="pricing"
       aria-labelledby="pricing-title"
-      className="scroll-mt-14 pb-8 pt-16 sm:scroll-mt-32 sm:pb-10 sm:pt-20 lg:pb-16 lg:pt-32"
+      className="scroll-mt-14 pb-8 pt-16 sm:scroll-mt-32 sm:pb-10 sm:pt-12 lg:pb-16"
     >
       <Container>
         <SectionHeading number="4" id="pricing-title">
