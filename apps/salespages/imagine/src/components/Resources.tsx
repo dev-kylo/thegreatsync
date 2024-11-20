@@ -3,12 +3,10 @@ import Image from 'next/image'
 
 import { Container } from '@/components/Container'
 import { SectionHeading } from '@/components/SectionHeading'
-import abstractBackgroundImage from '@/images/resources/abstract-background.png'
-import discordImage from '@/images/resources/discord.svg'
-import figmaImage from '@/images/resources/figma.svg'
 import executuonImage from '@/images/Execution.jpg'
-import videoPlayerImage from '@/images/resources/video-player.svg'
-import { CheckIcon } from './CheckIcon'
+import see from '@/images/see.png'
+import build from '@/images/build.png'
+import peg from '@/images/peg.png'
 
 const resources = [
   {
@@ -18,7 +16,7 @@ const resources = [
     image: function FigmaImage() {
       return (
         <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(#2C313D_35%,#000)]">
-          <Image src={figmaImage} alt="" unoptimized />
+          <Image src={see} alt="" unoptimized />
         </div>
       )
     },
@@ -27,24 +25,13 @@ const resources = [
     title: 'BUILD sandcastles',
     description:
       'Quizes and exercises inside an interactive code editor help us investigate & play with the concepts.',
-    image: function VideoPlayerImage() {
-      return (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Image
-            className="absolute inset-0 h-full w-full object-cover"
-            src={abstractBackgroundImage}
-            alt=""
-            sizes="(min-width: 1280px) 21rem, (min-width: 1024px) 33vw, (min-width: 768px) 19rem, (min-width: 640px) 50vw, 100vw"
-          />
-          <Image
-            className="relative"
-            src={videoPlayerImage}
-            alt=""
-            unoptimized
-          />
-        </div>
-      )
-    },
+      image: function DiscordImage() {
+        return (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#00676a]">
+            <Image src={build} alt="" unoptimized />
+          </div>
+        )
+      },
   },
   {
     title: 'PEG the knowledge',
@@ -53,7 +40,7 @@ const resources = [
     image: function DiscordImage() {
       return (
         <div className="absolute inset-0 flex items-center justify-center bg-[#6366F1]">
-          <Image src={discordImage} alt="" unoptimized />
+          <Image src={peg} alt="" unoptimized />
         </div>
       )
     },
@@ -72,7 +59,7 @@ export function Resources() {
           The Journey
         </SectionHeading>
         <p className="mt-8 font-display text-4xl font-bold tracking-tight text-slate-900 text-center">
-          Imagine JavaScript is more than just a course. It's a system for learning. It takes you on a journey.
+          The Great Sync takes you on a journey.
         </p>
         <p className="mt-4 text-lg tracking-tight text-slate-700">
         I often get asked by students to explain one of JavaScript’s more tricky concepts, like closures or prototypal inheritance. I reply by asking them to first explain something basic, like how objects can store other objects.
@@ -87,7 +74,7 @@ export function Resources() {
         </p>
         <p className="mt-4 text-lg tracking-tight text-slate-700"> We visualize each concept creatively, in a way that makes it memorable while also explaining its behaviour... We grow our mental model layer by layer.</p>
         <p className="mt-4 text-lg tracking-tight text-slate-700">It's a journey through JavaScript - exploring, visualizing and connecting as we go.</p>
-        <p className="mt-4 text-lg tracking-tight text-slate-700">This journey is structured on the See, Build & Peg Learning System:</p>
+        <p className="mt-4 text-lg tracking-tight text-slate-700">This Great Sync Mental Model is based on the See, Build & Peg Learning System:</p>
       
       </Container>
       <Container size="lg" className="mt-16">
@@ -117,11 +104,11 @@ export function Resources() {
       </Container>
       <Container>
       <SectionHeading number="2" id="model" className='mt-28'>
-          The Model
+          The Great Sync Model
       </SectionHeading>
       <p className="mt-8 text-lg tracking-tight text-slate-700">Code is not two dimensional. It occupies space and time. It is a physical, moving force..</p>
         <p className="mt-4 text-lg tracking-tight text-slate-700">Using the power of our imagination, we can paint a vivid picture of what each line of code does. We can construct a beautiful, memorable representation of JavaScript, and refer to it whenever we write or read code.</p>
-        <p className="mt-4 text-lg tracking-tight text-slate-700"> Take this model:</p>
+        <p className="mt-4 text-lg tracking-tight text-slate-700"> Take this scene from <span className="text-blue-600 ">The Great Sync Mental Model:</span></p>
           <Image 
             src={executuonImage}
             alt=""

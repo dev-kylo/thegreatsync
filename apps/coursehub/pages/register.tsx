@@ -121,7 +121,7 @@ export default function Enrollment() {
                                     {createNewAccount && (
                                         <div className="space-y-1">
                                             <label htmlFor="password" className="block text-sm font-medium text-white">
-                                                Password
+                                                Create Password
                                             </label>
                                             <div className="mt-1">
                                                 <input

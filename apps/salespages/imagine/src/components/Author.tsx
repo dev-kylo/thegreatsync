@@ -50,6 +50,9 @@ I also have the privilege of helping others, and over the years I have mentored 
             <p className="mt-4 mx-auto max-w-2xl text-center text-xl font-bold tracking-tight text-slate-700">
               I created a <span className='text-blue-600'>learning system</span> which transforms your experience with JavaScript.
             </p>
+            <p className="mt-4 mx-auto max-w-2xl text-center text-xl font-bold tracking-tight text-slate-700">
+              It's a universe called <span className='text-blue-600'>The Great Sync.</span>
+            </p>
           </div>
         </div>
       </div>

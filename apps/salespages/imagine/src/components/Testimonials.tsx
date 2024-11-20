@@ -5,23 +5,13 @@ import clsx from 'clsx'
 import { Container } from '@/components/Container'
 import {
   Expandable,
-  ExpandableButton,
-  ExpandableItems,
 } from '@/components/Expandable'
-import avatarImage3 from '@/images/avatars/avatar-3.png'
-import avatarImage4 from '@/images/avatars/avatar-4.png'
-import avatarImage5 from '@/images/avatars/avatar-5.png'
-import avatarImage6 from '@/images/avatars/avatar-6.png'
-import avatarImage7 from '@/images/avatars/avatar-7.png'
-import avatarImage8 from '@/images/avatars/avatar-8.png'
-import avatarImage9 from '@/images/avatars/avatar-9.png'
-import avatarImage10 from '@/images/avatars/avatar-10.png'
 import avatarNik from '@/images/Nik.jpg'
 import avatarEmma from '@/images/Emma.jpg'
 import avatarAnnie from '@/images/Annie.jpg'
-import miltiadis from '@/images/miltiadis.jpg'
 import erica from '@/images/erica.jpg'
 import karthik from '@/images/karthik.jpg'
+import carl from '@/images/CarlBebli.jpg'
 
 const testimonials = [
   [
@@ -56,11 +46,11 @@ const testimonials = [
   [
     {
       content:
-        "With The Great Sync, you won't just learn the basics; you'll develop a deep, nuanced understanding of the language",
+        "I would often have to go back to theory repeatedly, and it felt like I was making little progress. Then, I came across The Great Sync. It turned out to be everything I needed",
       author: {
-        name: 'Miltiadis Bouchalakis',
-        role: 'Senior Frontend Developer',
-        image: miltiadis,
+        name: 'Carl Bebli',
+        role: 'Software Developer',
+        image: carl
       },
     },
     {
@@ -103,11 +93,10 @@ const testimonials = [
     },
     {
       content:
-        'Kylo does an amazing job breaking down complex JavaScript syntax so it is simple and easy to understand. The stories and illustrations really helped me',
+        'The Great Sync has given me a huge confidence boost in my ability to read, write and reflect on code. I now have a much clearer, bigger picture understanding. Just don‘t rush through the content, it‘s worth it!',
       author: {
-        name: 'Erica Lynn',
-        role: 'Mom learning JavaScript',
-        image: erica,
+        name: 'Ethan Meyers',
+        role: 'Career Transitioned to Developer',
       },
     },
   ],

@@ -10,7 +10,7 @@ export function Testimonial({
   children,
 }: {
   id: string
-  author: { name: string; role: string; image: ImageProps['src'] }
+  author: { name: string; role: string; image?: ImageProps['src'] }
   children: React.ReactNode
 }) {
   return (
@@ -32,16 +32,17 @@ export function Testimonial({
           </blockquote>
           <figcaption className="mt-10 flex items-center sm:justify-center">
             <div className="overflow-hidden rounded-full bg-slate-200">
-              <Image
-                className="h-24 w-24 object-cover"
-                src={author.image}
-                alt=""
-                width={48}
-                height={48}
-              />
+            {author.image && ( <Image
+                  className="h-14 w-14 object-cover"
+                  src={author.image}
+                  alt=""
+                  width={48}
+                  height={48}
+              /> 
+              )}
             </div>
             <div className="ml-4">
-              <div className="text-base font-medium leading-6 tracking-tight text-slate-900">
+              <div className="text-base text-center font-medium leading-6 tracking-tight text-slate-900">
                 {author.name}
               </div>
               <div className="mt-1 text-sm text-slate-600">{author.role}</div>

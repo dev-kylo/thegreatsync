@@ -15,7 +15,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
       <script async src="https://cdn.paddle.com/paddle/paddle.js"></script>
-      <link rel="icon" href="/favicon.ico" sizes="any" />
 
       </head>
       <body>{children}</body>

@@ -39,6 +39,7 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700&display=swap"
         />
+       <link rel="icon" href="/favicon.ico" sizes="any" />
         <script async src="https://cdn.paddle.com/paddle/paddle.js"></script>
       </head>
       <body className="flex min-h-full flex-col">{children}</body>

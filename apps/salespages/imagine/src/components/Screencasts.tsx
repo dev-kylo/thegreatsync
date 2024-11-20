@@ -73,7 +73,7 @@ const videos = [
     image: prom,
   },
   {
-    title: 'Imagine building applications',
+    title: 'Start building applications',
     image: universal,
   },
 ]

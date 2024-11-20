@@ -22,7 +22,7 @@ const Purchase = () => {
     
         (window as any).Paddle.Checkout.open({
           method: 'overlay', // set to `inline`
-          product: 842496, // replace with a product ID or plan ID
+          product: 899581, // replace with a product ID or plan ID
           allowQuantity: false,
           disableLogout: true,
           closeCallback: () => {

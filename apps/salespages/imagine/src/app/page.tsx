@@ -2,15 +2,14 @@ import { Author } from '@/components/Author'
 import { Footer } from '@/components/Footer'
 import { Hero } from '@/components/Hero'
 import { Introduction } from '@/components/Introduction'
-import { NavBar } from '@/components/NavBar'
 import { Pricing } from '@/components/Pricing'
 import { Resources } from '@/components/Resources'
 import { Screencasts } from '@/components/Screencasts'
 import { Testimonial } from '@/components/Testimonial'
 import { Testimonials } from '@/components/Testimonials'
 import Why from '@/components/Why'
-import avatarImage1 from '@/images/avatars/avatar-1.png'
-import avatarImage2 from '@/images/CarlBebli.jpg'
+import miltiadis from '@/images/miltiadis.jpg'
+import erica from '@/images/erica.jpg'
 
 export default function Home() {
   return (
@@ -22,26 +21,27 @@ export default function Home() {
       <Testimonial
         id="testimonial-from-tommy-stroman"
         author={{
-          name: 'Ethan Meyers',
-          role: 'Career Transitioned to Developer',
-          image: avatarImage1,
+          name: 'Miltiadis Bouchalakis',
+          role: 'Senior Frontend Developer',
+          image: miltiadis,
         }}
       >
         <p>
-          “The Great Sync has given me a huge confidence boost in my ability to read, write and reflect on code. I now have a much clearer, bigger picture understanding. Just don‘t rush through the content, it‘s worth it!”
+        ”With this course and The Great Sync mental model, you will not just learn the basics. You&#39;ll quickly develop a deep, nuanced understanding of the language.”
         </p>
       </Testimonial>
       <Screencasts />
       <Testimonial
         id="testimonial-from-gerardo-stark"
         author={{
-          name: 'Carl Bebli',
-          role: 'Software Developer',
-          image: avatarImage2,
+          name: 'Erica Lynn',
+          role: 'Mom learning JavaScript',
+          image: erica,
         }}
       >
         <p>
-          “I would often have to go back to theory repeatedly, and it felt like I was making little progress. Then, I came across The Great Sync. It turned out to be everything I needed”
+        “Kylo does an amazing job breaking down complex JavaScript theory so it is simple and easy to understand. The stories and illustrations really helped me.”
+          {/* “I would often have to go back to theory repeatedly, and it felt like I was making little progress. Then, I came across The Great Sync. It turned out to be everything I needed” */}
         </p>
       </Testimonial>
       <Why />

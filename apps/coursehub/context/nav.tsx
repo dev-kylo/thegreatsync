@@ -178,8 +178,6 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
 
     const courseCompletionStat = receivedCompletionData(usercompletion) && courseSequence ? completionStat() : null;
 
-    console.log({ courseSequence });
-
     return (
         <NavContext.Provider
             value={{
