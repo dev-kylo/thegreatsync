@@ -194,7 +194,6 @@ const PageSteps = ({
                 <div style={{ visibility: 'hidden', position: 'absolute', width: 0, height: 0 }} aria-hidden="true">
                     {pageSteps.map((step) => {
                         if (type === 'text_image_code' || type === 'text_image') {
-                            console.log(step.image);
                             const imageData = step?.image?.data as ImageData;
                             if (!imageData) return null;
                             return (
