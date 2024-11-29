@@ -1,11 +1,9 @@
 // import Link from 'next/link';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
 import Layout from '../components/layout';
 import Navbar from '../components/ui/Navbar';
 import type { CourseByUser } from '../types';
-import Spinner from '../components/ui/Spinner';
 
 const bgMap: { [key: string]: string } = {
     1: 'https://res.cloudinary.com/the-great-sync/image/upload/c_scale,w_500/v1674395945/2000x2000/genie_assigned_zgdwyb.jpg',
