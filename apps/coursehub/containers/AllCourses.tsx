@@ -10,6 +10,7 @@ import Spinner from '../components/ui/Spinner';
 const bgMap: { [key: string]: string } = {
     1: 'https://res.cloudinary.com/the-great-sync/image/upload/c_scale,w_500/v1674395945/2000x2000/genie_assigned_zgdwyb.jpg',
     2: 'https://res.cloudinary.com/the-great-sync/image/upload/c_scale,w_500/v1667044950/2000x2000/Whirlpool_F_a_g1mm3x.jpg',
+    3: 'https://res.cloudinary.com/the-great-sync/image/upload/c_scale,w_500/v1674395945/2000x2000/genie_assigned_zgdwyb.jpg',
 };
 
 const AllCourses = ({ courses }: { courses: CourseByUser[] }) => {
