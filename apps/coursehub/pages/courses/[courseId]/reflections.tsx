@@ -13,13 +13,12 @@ import ReflectionsList from '../../../containers/Reflections';
 import Layout from '../../../components/layout';
 import Navbar from '../../../components/ui/Navbar';
 import { NavContext } from '../../../context/nav';
-import ControlBar from '../../../containers/ControlBar';
 
 type HomeProps = { reflections: ReflectionsResponse };
 
 const UserReflections = ({ reflections }: HomeProps) => {
     const { data: session } = useSession();
-    const { menuData, pageName, subChapterName, loadingPage, nextPage, prevPage, markPage, showNext, showPrev } =
+    const { menuData, nextPage, markPage } =
         useContext(NavContext);
 
     if (!session?.jwt || !reflections) return <LoadingQuote />;
@@ -50,7 +49,6 @@ const UserReflections = ({ reflections }: HomeProps) => {
 export default UserReflections;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    console.log('getServerSideProps');
     const session = await getServerSession(context.req, context.res, authOptions);
     if (!session) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
     if (session.jwt) setAuthToken(session.jwt as string);
@@ -59,13 +57,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const resp = await getReflections(courseId);
 
-    console.log(resp);
-
-    if (!resp || resp.error) {
-        const er = resp?.data as unknown as ErrorResponse;
-        if (!resp) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
-        if (resp.error?.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
-        if (resp.error?.status === 403)
+    if (!resp || 'error' in resp) {
+        const er = resp as unknown as ErrorResponse;
+        if (!er) return serverRedirectObject(`/error?redirect=${context.resolvedUrl}&error=500`);
+        if (er.error?.status === 401) return serverRedirectObject(`/signin?redirect=${context.resolvedUrl}`);
+        if (er.error?.status === 403)
             return serverRedirectObject(
                 `/error?redirect=${
                     context.resolvedUrl
@@ -73,7 +69,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     createErrorString(er?.error)
                 )}'`
             );
-        if (resp.error?.status === 500)
+        if (er.error?.status === 500)
             return serverRedirectObject(
                 `/error?redirect=${context.resolvedUrl}&error='Oh no, the server seems to be down! ${encodeURIComponent(
                     createErrorString(er?.error)

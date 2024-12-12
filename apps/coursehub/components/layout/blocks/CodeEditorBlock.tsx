@@ -8,7 +8,6 @@ import {
     SandpackCodeEditor,
     SandpackLayout,
     useSandpack,
-    SandpackPreview,
 } from '@codesandbox/sandpack-react';
 
 import { nightOwl } from '@codesandbox/sandpack-themes';

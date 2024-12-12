@@ -13,7 +13,7 @@ import ethan from '@/images/ethan.jpg'
 import erica from '@/images/erica.jpg'
 import karthik from '@/images/karthik.jpg'
 import { TestimonialGrid } from '@/components/TestimonialGrid'
-import Faqs from '@/components/faqs'
+import Faqs from '@/components/Faqs'
 
 export default function Home() {
   return (
