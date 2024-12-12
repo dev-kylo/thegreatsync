@@ -8,7 +8,6 @@ export default {
 
     async createNewReflection(ctx, next) {
 
-        console.log('Create Reflection')
         // Receive pageID and courseID
         const payload = ctx.request.body as {course: string; chapter: string, subchapter?: string, user: string};
 

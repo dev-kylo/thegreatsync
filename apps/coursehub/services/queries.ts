@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import qs from 'qs';
 import { AxiosResponse } from 'axios';
-import { ChaptersResponse, CourseData, CourseResponse, PageResponse, UserCourseProgressResponse } from '../types';
+import {
+    ChaptersResponse,
+    CourseData,
+    CourseResponse,
+    PageResponse,
+    ReflectionsResponse,
+    UserCourseProgressResponse,
+} from '../types';
 
 import { httpClient } from '../libs/axios';
 
@@ -83,5 +90,10 @@ export const getUserCompletions = async ({
     courseId: string | number;
 }): Promise<UserCourseProgressResponse> => {
     const res = await httpClient.get<UserCourseProgressResponse>(`/api/user-course-progress/?courseId=${courseId}`);
+    return res && res?.data;
+};
+
+export const getReflections = async (courseId: string | number): Promise<ReflectionsResponse> => {
+    const res = await httpClient.get<ReflectionsResponse>(`/api/reflectionsByUser/${courseId}`);
     return res && res?.data;
 };

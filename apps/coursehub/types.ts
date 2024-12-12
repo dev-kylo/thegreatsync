@@ -87,6 +87,8 @@ export interface CourseResponse {
     meta: Meta;
 }
 
+export type ReflectionsResponse = ReflectionsAttributes[];
+
 export interface CoursesByUserResponse {
     data?: CourseData[];
     error: ErrorData;
@@ -118,6 +120,11 @@ export interface PageResponse {
 export interface CourseData {
     id: number;
     attributes: CourseAttributes;
+}
+
+export interface ReflectionsData {
+    id: number;
+    attributes: ReflectionsAttributes;
 }
 
 export interface CourseByUser extends StrapiResponseMetaData {
@@ -224,6 +231,14 @@ export interface CourseAttributes extends StrapiResponseMetaData {
     description: { id: string; text?: string; __component: 'media.text' | 'media.video'; video?: VideoT }[];
     uid: string;
     title: string;
+}
+
+export interface ReflectionsAttributes extends StrapiResponseMetaData {
+    id: number;
+    reflection: string;
+    comment: string;
+    subchapter: SubChapterAttributes | null;
+    chapter: ChaptersAttributes | null;
 }
 
 export interface ChaptersAttributes extends StrapiResponseMetaData {

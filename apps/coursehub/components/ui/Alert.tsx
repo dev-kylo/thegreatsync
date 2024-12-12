@@ -1,7 +1,7 @@
 import { XCircleIcon, CheckCircleIcon } from '@heroicons/react/20/solid';
 
 type AlertProps = {
-    text: string;
+    text: string | React.ReactNode;
     type?: 'error' | 'success';
 };
 

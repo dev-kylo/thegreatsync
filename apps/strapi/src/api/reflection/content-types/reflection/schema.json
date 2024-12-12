@@ -12,9 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "reflection": {
-      "type": "text"
-    },
     "chapter": {
       "type": "relation",
       "relation": "oneToOne",
@@ -38,6 +35,9 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::course.course"
+    },
+    "reflection": {
+      "type": "richtext"
     }
   }
 }

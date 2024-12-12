@@ -36,14 +36,16 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
     return (
         <Menu as="div" className="relative flex-shrink-0">
             <div className="hover:scale-110">
-                <MenuButton className="flex rounded-full bg-indigo-700 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700">
+                <MenuButton className="flex rounded-full text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700">
                     <span className="sr-only">Open user menu</span>
-                    <Image
-                        src="https://res.cloudinary.com/the-great-sync/image/upload/c_fit,w_50/v1684818397/Scope_Sphere_rrzm5s.png"
-                        alt="profile"
-                        width="50"
-                        height="50"
-                    />
+                    <div className="w-10 p-1 pt-2">
+                        <Image
+                            src="https://res.cloudinary.com/the-great-sync/image/upload/c_fit,w_50/v1684818397/Scope_Sphere_rrzm5s.png"
+                            alt="profile"
+                            width="50"
+                            height="50"
+                        />
+                    </div>
                 </MenuButton>
             </div>
             <Transition
@@ -66,6 +68,22 @@ const ProfileDropDown = ({ mobile }: { mobile?: boolean }) => {
                                         } block px-4 py-2 text-sm text-gray-700`}
                                     >
                                         Dashboard
+                                    </span>
+                                )}
+                            </MenuItem>
+                        </Link>
+                    )}
+
+                    {courseId && (
+                        <Link href={`/courses/${courseId}/reflections`}>
+                            <MenuItem>
+                                {({ focus }) => (
+                                    <span
+                                        className={`${
+                                            focus ? 'bg-gray-100' : ''
+                                        } block px-4 py-2 text-sm text-gray-700`}
+                                    >
+                                        Reflections
                                     </span>
                                 )}
                             </MenuItem>

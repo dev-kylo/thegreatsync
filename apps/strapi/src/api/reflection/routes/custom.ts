@@ -9,6 +9,15 @@ export default {
          middlewares: [],
        },
       },
+      {
+        method: 'GET',
+        path: '/reflectionsByUser/:courseId',
+        handler: 'get-user-reflection.getUserReflection',
+        config: {
+          policies: [],
+          middlewares: [],
+        },
+       },
     ],
   };
   

@@ -9,13 +9,39 @@ import { Testimonial } from '@/components/Testimonial'
 import { Testimonials } from '@/components/Testimonials'
 import Why from '@/components/Why'
 import miltiadis from '@/images/miltiadis.jpg'
+import ethan from '@/images/ethan.jpg'
 import erica from '@/images/erica.jpg'
+import karthik from '@/images/karthik.jpg'
+import { TestimonialGrid } from '@/components/TestimonialGrid'
+import Faqs from '@/components/faqs'
 
 export default function Home() {
   return (
     <>
-      <Hero />
+      <Hero /> 
       <Introduction />
+      <TestimonialGrid
+        testimonials={[
+          {
+            id: "testimonial-1",
+            author: {
+              name: "Ethan Meyers",
+              role: "Career Transitioning",
+              image: ethan,
+            },
+            children: "This course has given me a huge confidence boost in my ability to read, write and reflect on code. I now have a much clearer, bigger picture understanding."
+          },
+          {
+            id: "testimonial-2",
+            author: {
+              name: "Karthik Raju",
+              role: "Frontend Developer",
+              image: karthik,
+            },
+            children: "Kylo taught me some of the most critical concepts in JavaScript and my confidence just skyrocketed. I wasn‘t scared of errors anymore. Debugging became fun!"
+          }
+        ]}
+      />
       <Author />
       <Resources />
       <Testimonial
@@ -47,6 +73,7 @@ export default function Home() {
       <Why />
       <Pricing />
       <Testimonials />
+      <Faqs />
       <Footer />
     </>
   )

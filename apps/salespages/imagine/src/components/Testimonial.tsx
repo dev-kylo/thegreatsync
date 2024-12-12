@@ -8,32 +8,36 @@ export function Testimonial({
   id,
   author,
   children,
+  hidePattern = false,
 }: {
   id: string
   author: { name: string; role: string; image?: ImageProps['src'] }
   children: React.ReactNode
+  hidePattern?: boolean
 }) {
   return (
     <aside
       id={id}
       aria-label={`Testimonial from ${author.name}`}
-      className="relative bg-slate-100 py-16 sm:py-32"
+      className="relative py-16 sm:py-32"
     >
-      <div className="text-slate-900/10">
-        <GridPattern x="50%" patternTransform="translate(0 80)" />
-      </div>
+      {!hidePattern && (
+        <div className="text-slate-900/10">
+          <GridPattern x="50%" patternTransform="translate(0 80)" />
+        </div>
+      )}
       <Container size="xs" className="relative">
         <figure>
-          <div className="flex text-slate-900 sm:justify-center">
+          <div className="flex text-blue-600 sm:justify-center">
             <StarRating />
           </div>
-          <blockquote className="mt-10 font-display text-4xl font-medium tracking-tight text-slate-900 sm:text-center">
+          <blockquote className="mt-10 font-display text-2xl font-medium tracking-tight text-slate-900 sm:text-center">
             {children}
           </blockquote>
           <figcaption className="mt-10 flex items-center sm:justify-center">
             <div className="overflow-hidden rounded-full bg-slate-200">
             {author.image && ( <Image
-                  className="h-14 w-14 object-cover"
+                  className="h-20 w-20 object-cover"
                   src={author.image}
                   alt=""
                   width={48}

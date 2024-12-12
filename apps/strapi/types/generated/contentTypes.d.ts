@@ -1210,7 +1210,6 @@ export interface ApiReflectionReflection extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    reflection: Attribute.Text;
     chapter: Attribute.Relation<
       'api::reflection.reflection',
       'oneToOne',
@@ -1232,6 +1231,7 @@ export interface ApiReflectionReflection extends Schema.CollectionType {
       'oneToOne',
       'api::course.course'
     >;
+    reflection: Attribute.RichText;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

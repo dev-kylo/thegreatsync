@@ -8,6 +8,7 @@ import {
     SandpackCodeEditor,
     SandpackLayout,
     useSandpack,
+    SandpackPreview,
 } from '@codesandbox/sandpack-react';
 
 import { nightOwl } from '@codesandbox/sandpack-themes';
@@ -98,9 +99,11 @@ const CodeEditorBlock = ({
                     }}
                     files={codeFiles}
                     theme={nightOwl}
+                    // template="vanilla"
                 >
                     <SandpackLayout>
                         <SandpackCodeEditor showLineNumbers={showLineNumbers} wrapContent={!!wrapContent} />
+                        {/* <SandpackPreview /> */}
                         <SandpackConsole
                             showRestartButton
                             showResetConsoleButton={!hideRunButtons}

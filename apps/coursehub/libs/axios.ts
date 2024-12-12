@@ -11,6 +11,8 @@ httpClient.interceptors.response.use(
         return response;
     },
     (error) => {
+        console.log('interceptor');
+        console.log(error);
         const isAxiosEr = axios.isAxiosError(error);
         logError(isAxiosEr ? error.message : (error as string));
         if (isAxiosEr && error?.response?.status === 403) signOut();
