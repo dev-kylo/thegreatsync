@@ -43,7 +43,7 @@ function Plan({
         >
           {name}
         </h3>
-        <span className="text-slate-600 text-sm"> Including a LIMITED special offer: a <span className="text-blue-600 font-bold">1.5 hour personal coaching session</span> with Kylo</span>
+        <span className="text-slate-600 text-sm"> Since you're a new subscriber, you get a <span className="text-blue-600 font-bold">40% discount</span></span>
         <p
           className={clsx(
             'mt-2 text-lg tracking-tight',
@@ -61,15 +61,24 @@ function Plan({
           >
             $
           </span>
-          <span
-            className={clsx(
-              'ml-1 mt-1 text-7xl tracking-tight',
-              featured ? 'text-white' : 'text-slate-900',
-            )}
-          >
-            {price}
-          </span>
-    
+          <div className="flex flex-col">
+            <span
+              className={clsx(
+                'ml-1 line-through text-3xl tracking-tight opacity-50',
+                featured ? 'text-white' : 'text-slate-900',
+              )}
+            >
+              97.00
+            </span>
+            <span
+              className={clsx(
+                'ml-1 -mt-1 text-7xl tracking-tight',
+                featured ? 'text-white' : 'text-slate-900',
+              )}
+            >
+              57.00
+            </span>
+          </div>
         </p>
         <div className="order-last mt-8">
           <ul
@@ -134,7 +143,6 @@ export function Pricing() {
             price="97.00"
             href="#"
             features={[
-              '1.5 hour online coaching session',
               '30+ videos',
               '80+ pages',
               '50+ illustrations',
@@ -142,7 +150,7 @@ export function Pricing() {
               'Access to The Syncer Student community'
             ]}
           />
-        <span className="text-slate-600 text-center text-sm mx-auto mt-4 max-w-sm"> * Coaching sessions available from mid January 2025, and valid for 1 year.</span>
+        
         </div>
       </div>
     </section>
