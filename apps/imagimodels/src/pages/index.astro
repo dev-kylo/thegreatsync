@@ -60,10 +60,10 @@ const zones = [
 		position: {
 			x: 167,
 			y: 77,
-			width: 241,
-			height: 203,
+			width: 41,
+			height: 803,
 		},
-		zoom: 2.5,
+		zoom: 1.5,
 	},
 	{
 		id: "islands-zone",
@@ -105,16 +105,30 @@ const zones = [
 	import { LayerViewer } from "/src/scripts/viewer";
 
 	document.addEventListener("DOMContentLoaded", () => {
-		const viewer = new LayerViewer("layerViewer", layers, zones);
+		const viewer = new LayerViewer(
+			"layerViewer",
+			layers,
+			zones,
+			1080,
+			1920,
+			90,
+			"center",
+		);
 	});
 </script>
 
 <style>
 	.viewer-container {
 		position: relative;
-		width: 100%;
+
 		max-width: 1920px;
 		margin: 0 auto;
+		border: 10px solid red;
+
+		canvas {
+			width: 100%;
+			border: 10px solid blue;
+		}
 	}
 
 	.layer-info {
@@ -124,7 +138,6 @@ const zones = [
 		width: 300px;
 		height: 100%;
 		background: white;
-		padding: 20px;
 		box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
 		transform: translateX(100%);
 		transition: transform 0.3s ease;
@@ -136,7 +149,7 @@ const zones = [
 
 	.zones-menu {
 		position: fixed;
-		left: 20px;
+		left: 1rem;
 		top: 20px;
 		display: flex;
 		flex-direction: column;
@@ -144,12 +157,15 @@ const zones = [
 	}
 
 	.zone-button {
-		padding: 8px 16px;
+		padding: 4px 8px;
 		background: white;
 		border: 1px solid #ccc;
 		border-radius: 4px;
 		cursor: pointer;
 		transition: background-color 0.2s;
+		border-radius: 2rem;
+		width: 150px;
+		font-size: 14px;
 	}
 
 	.zone-button:hover {

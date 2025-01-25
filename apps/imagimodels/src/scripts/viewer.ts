@@ -1,5 +1,5 @@
 // src/scripts/viewer.ts
-import type { Layer, Zone } from '../types';
+import type { Layer, Zone, ImagiModel } from '../types';
 
 
 class DragController {
@@ -9,6 +9,7 @@ class DragController {
     private dragStartX = 0;
     private dragStartY = 0;
     private readonly DRAG_THRESHOLD = 5; // pixels
+    private readonly DRAG_SPEED = 2.5; // Increase this to make dragging faster
     private isPotentialDrag = false;
 
     constructor(
@@ -44,9 +45,9 @@ class DragController {
             const deltaX = e.clientX - this.lastMouseX;
             const deltaY = e.clientY - this.lastMouseY;
 
-            // Adjust movement by current scale
-            this.transform.x += deltaX / this.transform.scale;
-            this.transform.y += deltaY / this.transform.scale;
+            // Apply speed multiplier to the movement
+            this.transform.x += (deltaX * this.DRAG_SPEED) / this.transform.scale;
+            this.transform.y += (deltaY * this.DRAG_SPEED) / this.transform.scale;
 
             this.lastMouseX = e.clientX;
             this.lastMouseY = e.clientY;
@@ -88,7 +89,7 @@ export class LayerViewer {
     private ctx: CanvasRenderingContext2D;
     private layers: Layer[];
     private scale: number = 1;
-    private activeLayers: Set<string> = new Set(['reference', 'islands', 'execution', 'functionship']);
+    private activeLayers: Set<string> = new Set([]);
     private greyscaleCache = new Map<string, HTMLCanvasElement>();
     private zones: Zone[];
     private currentTransform = { //  transform that is applied to the canvas (zones)
@@ -98,12 +99,20 @@ export class LayerViewer {
     };
     private baseScale: number = 1;
     private dragController: DragController;
+    private originalWidth: number;
+    private originalHeight: number;
+    private containerHeightPercent: number;
+    private alignment: 'left' | 'center' | 'right';
 
-    constructor(canvasId: string, initialLayers: Layer[], zones: Zone[]) {
+    constructor(canvasId: string, initialLayers: Layer[], zones: Zone[], width: number = 1080, height: number = 1920, containerHeightPercent: number = 100, alignment: 'left' | 'center' | 'right' = 'center') {
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
         this.ctx = this.canvas.getContext('2d')!;
         this.layers = initialLayers;
         this.zones = zones;
+        this.originalWidth = width;
+        this.originalHeight = height;
+        this.containerHeightPercent = containerHeightPercent;
+        this.alignment = alignment;
 
         this.dragController = new DragController(
             this.canvas,
@@ -140,6 +149,8 @@ export class LayerViewer {
     private zoomToZone(zoneId: string) {
         const zone = this.zones.find(z => z.id === zoneId);
         if (!zone) return;
+        
+        console.log('Zoom to zone - before:', { ...this.currentTransform });
 
         // Calculate center of zone
         const centerX = zone.position.x + zone.position.width / 2;
@@ -149,20 +160,58 @@ export class LayerViewer {
         const canvasWidth = this.canvas.width / this.baseScale;
         const canvasHeight = this.canvas.height / this.baseScale;
 
-        // Update existing transform object
-        this.currentTransform.x = (canvasWidth / 2) - (centerX * zone.zoom);
-        this.currentTransform.y = (canvasHeight / 2) - (centerY * zone.zoom);
+        // Set scale
         this.currentTransform.scale = zone.zoom;
 
+        // Calculate base position for centering on the zone
+        const baseX = (canvasWidth / 2) - (centerX * zone.zoom);
+
+        // Apply alignment offset
+        switch (this.alignment) {
+            case 'left':
+                this.currentTransform.x = baseX - (canvasWidth / 2);
+                break;
+            case 'right':
+                this.currentTransform.x = baseX + (canvasWidth / 2);
+                break;
+            case 'center':
+            default:
+                this.currentTransform.x = baseX;
+                break;
+        }
+
+        this.currentTransform.y = (canvasHeight / 2) - (centerY * zone.zoom);
+
+        console.log('Zoom to zone - after:', { ...this.currentTransform });
         this.draw();
     }
 
     private resetView() {
-        this.currentTransform = {
-            x: 0,
-            y: 0,
-            scale: 1
-        };
+        console.log('Reset view - before:', { ...this.currentTransform });
+    
+        const containerWidth = this.canvas.width;
+        const scaledContentWidth = this.originalWidth * this.scale;
+        const emptySpace = containerWidth - scaledContentWidth;
+    
+        // Reset scale
+        this.currentTransform.scale = 1;
+        
+        // Reset position based on alignment
+        switch (this.alignment) {
+            case 'left':
+                this.currentTransform.x = 0;
+                break;
+            case 'right':
+                this.currentTransform.x = emptySpace / this.scale;
+                break;
+            case 'center':
+            default:
+                this.currentTransform.x = emptySpace / (2 * this.scale);
+                break;
+        }
+        this.currentTransform.y = 0;
+        
+        console.log('Reset view - after:', { ...this.currentTransform });
         this.draw();
     }
 
@@ -184,26 +233,46 @@ export class LayerViewer {
         const resize = () => {
             const container = this.canvas.parentElement!;
             const containerWidth = container.clientWidth;
-            const viewportHeight = window.innerHeight;
+            // Calculate available height based on viewport and container percentage
+            const availableHeight = (window.innerHeight * this.containerHeightPercent) / 100;
             
-            // Calculate scales for both dimensions
-            const scaleWidth = containerWidth / 1080;    // Original width is 1080
-            const scaleHeight = viewportHeight / 1920;   // Original height is 1920
+            // Set canvas to container width
+            this.canvas.width = containerWidth;
+            this.canvas.height = availableHeight;
             
-            // Use the smaller scale to ensure it fits both width and height
+            // Calculate scale based on original dimensions
+            const scaleWidth = containerWidth / this.originalWidth;    
+            const scaleHeight = availableHeight / this.originalHeight;   
             this.scale = Math.min(scaleWidth, scaleHeight);
+
+            const scaledContentWidth = this.originalWidth * this.scale;
+            const emptySpace = containerWidth - scaledContentWidth;
+
+            // Set transform.x based on alignment
+            switch (this.alignment) {
+                case 'left':
+                    this.currentTransform.x = 0;
+                    break;
+                case 'right':
+                    this.currentTransform.x = emptySpace / this.scale;
+                    break;
+                case 'center':
+                default:
+                    this.currentTransform.x = emptySpace / (2 * this.scale);
+                    break;
+            }
             
-            // Set canvas dimensions
-            this.canvas.width = 1080 * this.scale;      // Scale from 1080
-            this.canvas.height = 1920 * this.scale;     // Scale from 1920
-            
-            // Set canvas style
-            this.canvas.style.width = `${this.canvas.width}px`;
-            this.canvas.style.height = `${this.canvas.height}px`;
+            this.currentTransform.y = 0;
             
             this.ctx.scale(this.scale, this.scale);
             this.baseScale = this.scale;
             this.draw();
+            console.log('Debug centering:', {
+                containerWidth,
+                originalWidth: this.originalWidth,
+                scale: this.scale,
+                transformX: this.currentTransform.x
+            });
         };
 
         window.addEventListener('resize', resize);

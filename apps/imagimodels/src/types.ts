@@ -23,3 +23,11 @@ export interface Zone {
   };
   zoom: number;
 }
+
+export interface ImagiModel {
+  id: string;
+  width: number;
+  height: number;
+  layers: Layer[];
+  zones: Zone[];
+}
