@@ -104,7 +104,18 @@ export class LayerViewer {
     private containerHeightPercent: number;
     private alignment: 'left' | 'center' | 'right';
 
-    constructor(canvasId: string, initialLayers: Layer[], zones: Zone[], width: number = 1080, height: number = 1920, containerHeightPercent: number = 100, alignment: 'left' | 'center' | 'right' = 'center') {
+
+    /**
+     * Creates a new LayerViewer instance
+     * @param canvasId - ID of the canvas element
+     * @param initialLayers - Array of initial layers
+     * @param zones - Array of zones for zooming
+     * @param width - Original width of the content
+     * @param height - Original height of the content
+     * @param containerHeightPercent - Percentage of viewport height to use
+     * @param alignment - Horizontal alignment ('left', 'center', 'right')
+     */
+    constructor(canvasId: string, initialLayers: Layer[], zones: Zone[], width: number = 1080, height: number = 1920, containerHeightPercent: number = 100, alignment: 'left' | 'center' | 'right' = 'center' ) {
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
         this.ctx = this.canvas.getContext('2d')!;
         this.layers = initialLayers;
@@ -150,39 +161,78 @@ export class LayerViewer {
         const zone = this.zones.find(z => z.id === zoneId);
         if (!zone) return;
         
-        console.log('Zoom to zone - before:', { ...this.currentTransform });
-
-        // Calculate center of zone
-        const centerX = zone.position.x + zone.position.width / 2;
-        const centerY = zone.position.y + zone.position.height / 2;
-
-        // Calculate canvas center
-        const canvasWidth = this.canvas.width / this.baseScale;
-        const canvasHeight = this.canvas.height / this.baseScale;
+        // Calculate container dimensions
+        const containerWidth = this.canvas.width;
+        const containerHeight = this.canvas.height;
+        const scaledWidth = this.originalWidth * this.scale * zone.zoom;
+        const scaledHeight = this.originalHeight * this.scale * zone.zoom;
+        
+        // Calculate the vertical center point based on percentage
+        const centerY = (zone.centerPosition / 100) * this.originalHeight;
 
         // Set scale
         this.currentTransform.scale = zone.zoom;
 
-        // Calculate base position for centering on the zone
-        const baseX = (canvasWidth / 2) - (centerX * zone.zoom);
-
-        // Apply alignment offset
-        switch (this.alignment) {
+        // Calculate base positions based on focus point
+        let baseX: number;
+        let baseY: number;
+        
+        switch (zone.focusPoint) {
             case 'left':
-                this.currentTransform.x = baseX - (canvasWidth / 2);
+                baseX = 0;
+                baseY = (containerHeight / 2) - (centerY * zone.zoom);
                 break;
             case 'right':
-                this.currentTransform.x = baseX + (canvasWidth / 2);
+                baseX = containerWidth - scaledWidth;
+                baseY = (containerHeight / 2) - (centerY * zone.zoom);
+                break;
+            case 'top-left':
+                baseX = 0;
+                baseY = 0;
+                break;
+            case 'top-right':
+                baseX = containerWidth - scaledWidth;
+                baseY = 0;
+                break;
+            case 'bottom-left':
+                baseX = 0;
+                baseY = containerHeight - scaledHeight;
+                break;
+            case 'bottom-right':
+                baseX = containerWidth - scaledWidth;
+                baseY = containerHeight - scaledHeight;
                 break;
             case 'center':
             default:
-                this.currentTransform.x = baseX;
+                baseX = (containerWidth - scaledWidth) / 2;
+                baseY = (containerHeight / 2) - (centerY * zone.zoom);
                 break;
         }
 
-        this.currentTransform.y = (canvasHeight / 2) - (centerY * zone.zoom);
+    // Apply alignment offset
+    switch (this.alignment) {
+        case 'left':
+            this.currentTransform.x = baseX / this.scale;
+            break;
+        case 'right':
+            this.currentTransform.x = baseX / this.scale;
+            break;
+        case 'center':
+        default:
+            this.currentTransform.x = baseX / this.scale;
+            break;
+    }
 
-        console.log('Zoom to zone - after:', { ...this.currentTransform });
+        // Always calculate Y based on centerPosition
+        this.currentTransform.y = baseY / this.scale;
+
+        console.log('Zoom to zone:', {
+            centerY,
+            containerHeight,
+            zoom: zone.zoom,
+            baseY,
+            transformY: this.currentTransform.y
+        });
         this.draw();
     }
 

@@ -15,12 +15,8 @@ export interface Layer {
 export interface Zone {
   id: string;
   name: string;
-  position: {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-  };
+  centerPosition: number;  // percentage from top (0-100)
+  focusPoint: 'center' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'left' | 'right';
   zoom: number;
 }
 

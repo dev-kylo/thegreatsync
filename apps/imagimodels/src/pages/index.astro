@@ -57,24 +57,16 @@ const zones = [
 	{
 		id: "functionship-zone",
 		name: "Functionship",
-		position: {
-			x: 167,
-			y: 77,
-			width: 41,
-			height: 803,
-		},
-		zoom: 1.5,
+		centerPosition: 1,
+		focusPoint: "center", // or "right"
+		zoom: 3,
 	},
 	{
 		id: "islands-zone",
 		name: "Islands",
-		position: {
-			x: 146,
-			y: 280,
-			width: 788,
-			height: 715,
-		},
-		zoom: 1.5,
+		centerPosition: 10,
+		focusPoint: "center", // or "right"
+		zoom: 2.5,
 	},
 ];
 ---
@@ -112,7 +104,7 @@ const zones = [
 			1080,
 			1920,
 			90,
-			"center",
+			"left",
 		);
 	});
 </script>
