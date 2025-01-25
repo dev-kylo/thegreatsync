@@ -1,0 +1,158 @@
+---
+// src/pages/index.astro
+import Layout from "../layouts/Layout.astro";
+
+// You could fetch initial layer data here
+// const layers = await fetch("http://your-cms/api/layers").then((r) => r.json());
+
+const layers = [
+	{
+		id: "reference",
+		name: "Reference",
+		imagePath: "/src/assets/reference.png",
+		position: {
+			x: 488,
+			y: 1621,
+			width: 300,
+			height: 207,
+		},
+	},
+	{
+		id: "islands",
+		name: "Island",
+		imagePath: "/src/assets/island.png",
+		position: {
+			x: 146,
+			y: 280,
+			width: 788,
+			height: 715,
+		},
+	},
+	{
+		id: "execution",
+		name: "Execution",
+		imagePath: "/src/assets/execution.png",
+		position: {
+			x: 146,
+			y: 1101,
+			width: 688,
+			height: 407,
+		},
+	},
+	{
+		id: "functionship",
+		name: "Functionship",
+		imagePath: "/src/assets/functionship.png",
+		position: {
+			x: 167,
+			y: 77,
+			width: 241,
+			height: 203,
+		},
+	},
+];
+
+// Add zones data
+const zones = [
+	{
+		id: "functionship-zone",
+		name: "Functionship",
+		position: {
+			x: 167,
+			y: 77,
+			width: 241,
+			height: 203,
+		},
+		zoom: 2.5,
+	},
+	{
+		id: "islands-zone",
+		name: "Islands",
+		position: {
+			x: 146,
+			y: 280,
+			width: 788,
+			height: 715,
+		},
+		zoom: 1.5,
+	},
+];
+---
+
+<Layout title="Interactive Layer Viewer">
+	<main>
+		<div class="viewer-container">
+			<canvas id="layerViewer"></canvas>
+			<div id="layerInfo" class="layer-info"></div>
+			<div class="zones-menu">
+				<button class="zone-button" data-zone="reset">Reset View</button
+				>
+				{
+					zones.map((zone) => (
+						<button class="zone-button" data-zone={zone.id}>
+							{zone.name}
+						</button>
+					))
+				}
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<!-- Use a separate script tag -->
+<script type="module" define:vars={{ layers, zones }}>
+	// Your script will be processed, bundled and optimized automatically
+	import { LayerViewer } from "/src/scripts/viewer";
+
+	document.addEventListener("DOMContentLoaded", () => {
+		const viewer = new LayerViewer("layerViewer", layers, zones);
+	});
+</script>
+
+<style>
+	.viewer-container {
+		position: relative;
+		width: 100%;
+		max-width: 1920px;
+		margin: 0 auto;
+	}
+
+	.layer-info {
+		position: fixed;
+		right: 0;
+		top: 0;
+		width: 300px;
+		height: 100%;
+		background: white;
+		padding: 20px;
+		box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+		transform: translateX(100%);
+		transition: transform 0.3s ease;
+	}
+
+	.layer-info.active {
+		transform: translateX(0);
+	}
+
+	.zones-menu {
+		position: fixed;
+		left: 20px;
+		top: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.zone-button {
+		padding: 8px 16px;
+		background: white;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: background-color 0.2s;
+	}
+
+	.zone-button:hover {
+		background: #f0f0f0;
+	}
+</style>

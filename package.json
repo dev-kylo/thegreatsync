@@ -9,7 +9,8 @@
     "strapi": "pnpm --filter strapi",
     "hub": "pnpm --filter coursehub",
     "landing": "pnpm --filter landing",
-    "imagine": "pnpm --filter imagine"
+    "imagine": "pnpm --filter imagine",
+    "imagimodels": "pnpm --filter imagimodels"
   },
   "keywords": [],
   "author": "",

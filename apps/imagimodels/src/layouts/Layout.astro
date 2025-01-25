@@ -1,0 +1,26 @@
+---
+// src/layouts/Layout.astro
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Layer Viewer</title>
+	</head>
+	<body>
+		<slot />
+		<style is:global>
+			:root {
+				--accent: 124, 58, 237;
+			}
+			html {
+				font-family: system-ui, sans-serif;
+			}
+			body {
+				margin: 0;
+			}
+		</style>
+	</body>
+</html>
