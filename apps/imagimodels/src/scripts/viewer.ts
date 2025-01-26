@@ -89,7 +89,8 @@ export class LayerViewer {
     private ctx: CanvasRenderingContext2D;
     private layers: Layer[];
     private scale: number = 1;
-    private activeLayers: Set<string> = new Set([]);
+    private enabledLayers: Set<string> = new Set(['reference', 'islands', 'execution', 'functionship']);
+    private activeLayer: string | null = null;
     private greyscaleCache = new Map<string, HTMLCanvasElement>();
     private zones: Zone[];
     private currentTransform = { //  transform that is applied to the canvas (zones)
@@ -140,7 +141,7 @@ export class LayerViewer {
         await this.loadImages();
         this.setupCanvas();
         this.setupEventListeners();
-        if (this.activeLayers.size > 0) this.setActiveLayers(Array.from(this.activeLayers));
+        if (this.enabledLayers.size > 0) this.setEnabledLayers(Array.from(this.enabledLayers));
         else this.draw();
     }
 
@@ -382,9 +383,9 @@ export class LayerViewer {
                 const { type, layerIds } = event.data;
                 
                 switch (type) {
-                    case 'SET_ACTIVE_LAYERS':
+                    case 'SET_ENABLED_LAYERS':
                         if (Array.isArray(layerIds)) {
-                            this.setActiveLayers(layerIds);
+                            this.setEnabledLayers(layerIds);
                         }
                         break;
                         
@@ -393,11 +394,6 @@ export class LayerViewer {
                             this.toggleLayers(layerIds);
                         }
                         break;
-
-                    case 'GET_ACTIVE_LAYERS':
-                        // Send active layers back to parent
-                        this.sendActiveLayersToParent(event.source as Window);
-                        break;
                 }
             } catch (error) {
                 console.error('Error processing message:', error);
@@ -405,25 +401,31 @@ export class LayerViewer {
         });
     }
 
-    private setActiveLayers(layerIds: string[]) {
-        // Clear current active layers and set new ones
-        this.activeLayers.clear();
+    private setEnabledLayers(layerIds: string[]) {
+        // Clear current enabled layers and set new ones
+        this.enabledLayers.clear();
         layerIds.forEach(id => {
             if (this.layers.some(layer => layer.id === id)) {
-                this.activeLayers.add(id);
+                this.enabledLayers.add(id);
             }
         });
         this.draw();
         this.updateLayerInfo();
     }
 
+    private setActiveLayer(layerId: string) {
+        // Clear current active layers and set new ones
+        this.activeLayer = layerId;
+        this.updateLayerInfo();
+    }
+
     private toggleLayers(layerIds: string[]) {
         layerIds.forEach(id => {
             if (this.layers.some(layer => layer.id === id)) {
-                if (this.activeLayers.has(id)) {
-                    this.activeLayers.delete(id);
+                if (this.enabledLayers.has(id)) {
+                    this.enabledLayers.delete(id);
                 } else {
-                    this.activeLayers.add(id);
+                    this.enabledLayers.add(id);
                 }
             }
         });
@@ -431,36 +433,30 @@ export class LayerViewer {
         this.updateLayerInfo();
     }
 
-    private sendActiveLayersToParent(source: Window) {
+    private sendActiveLayerToParent(source: Window) {
         source.postMessage({
-            type: 'ACTIVE_LAYERS_UPDATE',
-            layerIds: Array.from(this.activeLayers)
+            type: 'ACTIVE_LAYER_UPDATE',
+            layerId: this.activeLayer
         }, '*');  // Consider restricting this to specific origin
     }
 
     private handleLayerClick(layer: Layer) {
-        if (this.activeLayers.has(layer.id)) {
-            this.activeLayers.delete(layer.id);
-        } else {
-            this.activeLayers.add(layer.id);
-        }
-        this.draw();
-        this.updateLayerInfo();
-
+       
+        this.setActiveLayer(layer.id);
         // Notify parent of change
         window.parent.postMessage({
-            type: 'ACTIVE_LAYERS_UPDATE',
-            layerIds: Array.from(this.activeLayers)
+            type: 'ACTIVE_LAYER_UPDATE',
+            layerId: this.activeLayer
         }, '*');
     }
 
     private updateLayerInfo() {
         const infoElement = document.getElementById('layerInfo')!;
         
-        if (this.activeLayers.size > 0) {
+        if (this.activeLayer) {
             infoElement.innerHTML = `
                 <h2>Active Layers</h2>
-                <pre>${JSON.stringify(Array.from(this.activeLayers), null, 2)}</pre>
+                <pre>${this.activeLayer}</pre>
             `;
             infoElement.classList.add('active');
         } else {
@@ -477,7 +473,7 @@ export class LayerViewer {
         this.ctx.scale(this.currentTransform.scale, this.currentTransform.scale);
 
         this.layers.forEach(layer => {
-            if (this.activeLayers.has(layer.id)) {
+            if (this.enabledLayers.has(layer.id)) {
                 this.ctx.globalAlpha = 1;
                 // Draw the original color image
                 this.ctx.drawImage(
