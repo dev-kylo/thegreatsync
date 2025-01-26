@@ -9,7 +9,7 @@ class DragController {
     private dragStartX = 0;
     private dragStartY = 0;
     private readonly DRAG_THRESHOLD = 5; // pixels
-    private readonly DRAG_SPEED = 2.5; // Increase this to make dragging faster
+    private readonly DRAG_SPEED = 3.5; // Increase this to make dragging faster
     private isPotentialDrag = false;
     private hadDragActivity = false; 
 
@@ -99,7 +99,7 @@ export class LayerViewer {
         scale: 1
     };
     private readonly MIN_ZOOM = 0.1;
-    private readonly MAX_ZOOM = 5;
+    private readonly MAX_ZOOM = 3;
     private readonly ZOOM_SPEED = 0.001;
     private baseScale: number = 1;
     private dragController: DragController;
