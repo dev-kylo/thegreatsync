@@ -10,6 +10,7 @@ export interface Layer {
       width: number;
       height: number;
     };
+    zIndex?: number;  
     data?: Record<string, any>;
 }
 export interface Zone {

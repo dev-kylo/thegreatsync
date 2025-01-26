@@ -83,13 +83,12 @@ class DragController {
 }
 
 
-
 export class LayerViewer {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
     private layers: Layer[];
     private scale: number = 1;
-    private enabledLayers: Set<string> = new Set(['reference', 'islands', 'execution', 'functionship']);
+    private enabledLayers: Set<string> = new Set(['reference', 'islands', 'functionship']);
     private activeLayer: string | null = null;
     private greyscaleCache = new Map<string, HTMLCanvasElement>();
     private zones: Zone[];
@@ -98,6 +97,9 @@ export class LayerViewer {
         y: 0,
         scale: 1
     };
+    private readonly MIN_ZOOM = 0.1;
+    private readonly MAX_ZOOM = 5;
+    private readonly ZOOM_SPEED = 0.001;
     private baseScale: number = 1;
     private dragController: DragController;
     private originalWidth: number;
@@ -262,7 +264,6 @@ export class LayerViewer {
         }
         this.currentTransform.y = 0;
         
-        console.log('Reset view - after:', { ...this.currentTransform });
         this.draw();
     }
 
@@ -356,6 +357,34 @@ export class LayerViewer {
             const hoveredLayer = this.getLayerAtPoint(x, y);
             this.canvas.style.cursor = hoveredLayer ? 'pointer' : 'default';
         });
+
+        // Add wheel event listener for zooming
+        this.canvas.addEventListener('wheel', (e) => {
+            e.preventDefault(); // Prevent page scrolling
+
+            // Get mouse position relative to canvas
+            const rect = this.canvas.getBoundingClientRect();
+            const mouseX = (e.clientX - rect.left) / this.scale;
+            const mouseY = (e.clientY - rect.top) / this.scale;
+
+            // Calculate zoom factor based on wheel delta
+            const zoomFactor = 1 - e.deltaY * this.ZOOM_SPEED;
+            const newScale = Math.min(
+                Math.max(
+                    this.currentTransform.scale * zoomFactor,
+                    this.MIN_ZOOM
+                ),
+                this.MAX_ZOOM
+            );
+
+            // Calculate position adjustment to zoom towards mouse cursor
+            const scaleDiff = newScale - this.currentTransform.scale;
+            this.currentTransform.x -= (mouseX - this.currentTransform.x) * (scaleDiff / newScale);
+            this.currentTransform.y -= (mouseY - this.currentTransform.y) * (scaleDiff / newScale);
+            
+            this.currentTransform.scale = newScale;
+            this.draw();
+        }, { passive: false });
     }
 
     private getLayerAtPoint(x: number, y: number): Layer | null {
@@ -387,6 +416,9 @@ export class LayerViewer {
                         if (Array.isArray(layerIds)) {
                             this.setEnabledLayers(layerIds);
                         }
+                        break;
+                    case 'CLEAR_ACTIVE_LAYER':
+                        this.activeLayer = null;
                         break;
                         
                     case 'TOGGLE_LAYERS':
@@ -433,16 +465,11 @@ export class LayerViewer {
         this.updateLayerInfo();
     }
 
-    private sendActiveLayerToParent(source: Window) {
-        source.postMessage({
-            type: 'ACTIVE_LAYER_UPDATE',
-            layerId: this.activeLayer
-        }, '*');  // Consider restricting this to specific origin
-    }
-
     private handleLayerClick(layer: Layer) {
        
-        this.setActiveLayer(layer.id);
+        if (this.enabledLayers.has(layer.id)) {
+            this.setActiveLayer(layer.id);
+        }
         // Notify parent of change
         window.parent.postMessage({
             type: 'ACTIVE_LAYER_UPDATE',
@@ -472,12 +499,20 @@ export class LayerViewer {
         this.ctx.translate(this.currentTransform.x, this.currentTransform.y);
         this.ctx.scale(this.currentTransform.scale, this.currentTransform.scale);
 
-        this.layers.forEach(layer => {
+        // Sort layers by zIndex before drawing
+        const sortedLayers = [...this.layers].sort((a, b) => {
+            // Default to 0 if zIndex is not specified
+            const zIndexA = a.zIndex ?? 0;
+            const zIndexB = b.zIndex ?? 0;
+            return zIndexA - zIndexB;
+        });
+
+        sortedLayers.forEach(layer => {
             if (this.enabledLayers.has(layer.id)) {
                 this.ctx.globalAlpha = 1;
                 // Draw the original color image
                 this.ctx.drawImage(
-                    layer.image, 
+                    layer.image as HTMLImageElement, 
                     layer.position.x, 
                     layer.position.y, 
                     layer.position.width, 
@@ -502,7 +537,7 @@ export class LayerViewer {
             tempCanvas.width = layer.position.width;
             tempCanvas.height = layer.position.height;
             
-            tempCtx.drawImage(layer.image, 0, 0);
+            tempCtx.drawImage(layer.image as HTMLImageElement, 0, 0);
             
             const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
             const data = imageData.data;
