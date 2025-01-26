@@ -11,6 +11,7 @@ class DragController {
     private readonly DRAG_THRESHOLD = 5; // pixels
     private readonly DRAG_SPEED = 2.5; // Increase this to make dragging faster
     private isPotentialDrag = false;
+    private hadDragActivity = false; 
 
     constructor(
         private canvas: HTMLCanvasElement,
@@ -23,7 +24,6 @@ class DragController {
     private setupEventListeners() {
         // Start potential drag
         this.canvas.addEventListener('mousedown', (e) => {
-            console.log('mousedown');
             this.lastMouseX = e.clientX;
             this.lastMouseY = e.clientY;
             this.dragStartX = e.clientX;
@@ -38,10 +38,8 @@ class DragController {
     }
 
     private handleMouseMove = (e: MouseEvent) => {
-        console.log('mousemove');
-        console.log('Initial transform', this.transform);
         if (this.isDragging) {
-            console.log('We are Dragging');
+            this.hadDragActivity = true;
             const deltaX = e.clientX - this.lastMouseX;
             const deltaY = e.clientY - this.lastMouseY;
 
@@ -52,17 +50,15 @@ class DragController {
             this.lastMouseX = e.clientX;
             this.lastMouseY = e.clientY;
 
-            console.log('Transform after dragging', this.transform);
-
             this.onTransformChange();
         } else if (this.isPotentialDrag) {
-            console.log('We are potential dragging');
             const deltaX = e.clientX - this.dragStartX;
             const deltaY = e.clientY - this.dragStartY;
             const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
             
             if (distance > this.DRAG_THRESHOLD) {
                 this.isDragging = true;
+                this.hadDragActivity = true;
             }
         }
     }
@@ -72,13 +68,18 @@ class DragController {
         this.isDragging = false;
         this.isPotentialDrag = false;
         this.canvas.style.cursor = 'default';
+
+        // Clear the flag after a short delay to ensure click event processes it
+        setTimeout(() => {
+            this.hadDragActivity = false;
+        }, 0);
         
         window.removeEventListener('mousemove', this.handleMouseMove);
         window.removeEventListener('mouseup', this.handleMouseUp);
     }
 
     public isDraggingActive() {
-        return this.isDragging || this.isPotentialDrag;
+        return this.isDragging || this.isPotentialDrag || this.hadDragActivity;;
     }
 }
 
