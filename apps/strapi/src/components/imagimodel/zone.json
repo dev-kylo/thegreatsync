@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_imagimodel_zones",
+  "info": {
+    "displayName": "Zone",
+    "icon": "expand",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "centerPosition": {
+      "type": "integer",
+      "max": 100
+    },
+    "zoom": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5
+    },
+    "focusPoint": {
+      "type": "enumeration",
+      "enum": [
+        "center",
+        "left",
+        "right",
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right"
+      ]
+    }
+  }
+}

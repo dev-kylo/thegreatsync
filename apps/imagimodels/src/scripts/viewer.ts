@@ -1,5 +1,5 @@
 // src/scripts/viewer.ts
-import type { Layer, Zone, ImagiModel } from '../types';
+import type { Layer, Zone } from '../types';
 
 
 class DragController {
@@ -89,7 +89,7 @@ export class LayerViewer {
     private ctx: CanvasRenderingContext2D;
     private layers: Layer[];
     private scale: number = 1;
-    private enabledLayers: Set<string> = new Set(['reference', 'islands', 'functionship']);
+    private enabledLayers: Set<string> = new Set();
     private activeLayer: string | null = null;
     private greyscaleCache = new Map<string, HTMLCanvasElement>();
     private zones: Zone[];
@@ -100,7 +100,7 @@ export class LayerViewer {
     };
     private readonly MIN_ZOOM = 0.1;
     private readonly MAX_ZOOM = 3;
-    private readonly ZOOM_SPEED = 0.001;
+    private ZOOM_SPEED: number = 0.001;
     private baseScale: number = 1;
     private dragController: DragController;
     private originalWidth: number;
@@ -112,23 +112,28 @@ export class LayerViewer {
     /**
      * Creates a new LayerViewer instance
      * @param canvasId - ID of the canvas element
-     * @param initialLayers - Array of initial layers
+     * @param layers - Array of initial layers
      * @param zones - Array of zones for zooming
      * @param width - Original width of the content
-     * @param height - Original height of the content
+     * @param height - Original height of the content   
      * @param containerHeightPercent - Percentage of viewport height to use
      * @param alignment - Horizontal alignment ('left', 'center', 'right')
      */
-    constructor(canvasId: string, initialLayers: Layer[], zones: Zone[], width: number = 1080, height: number = 1920, containerHeightPercent: number = 100, alignment: 'left' | 'center' | 'right' = 'center' ) {
+    constructor(canvasId: string, layers: Layer[], zones: Zone[], width: number = 1080, height: number = 1920, containerHeightPercent: number = 100, alignment: 'left' | 'center' | 'right' = 'center', zoomSpeed: number = 0.001 ) {
+        
+        console.log("LAYERS");
+        console.log(layers);
+        
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
         this.ctx = this.canvas.getContext('2d')!;
-        this.layers = initialLayers;
+        this.layers = layers;
+        this.enabledLayers = new Set(layers.filter(layer => layer.enabled).map(layer => layer.id));
         this.zones = zones;
         this.originalWidth = width;
         this.originalHeight = height;
         this.containerHeightPercent = containerHeightPercent;
         this.alignment = alignment;
-
+        this.ZOOM_SPEED = zoomSpeed;
         this.dragController = new DragController(
             this.canvas,
             this.currentTransform,
@@ -162,7 +167,8 @@ export class LayerViewer {
     }
 
     private zoomToZone(zoneId: string) {
-        const zone = this.zones.find(z => z.id === zoneId);
+        const zone = this.zones.find(z => +z.id === +zoneId!);
+        console.log("ZONE", zone);
         if (!zone) return;
         
         // Calculate container dimensions
@@ -230,19 +236,10 @@ export class LayerViewer {
         // Always calculate Y based on centerPosition
         this.currentTransform.y = baseY / this.scale;
 
-        console.log('Zoom to zone:', {
-            centerY,
-            containerHeight,
-            zoom: zone.zoom,
-            baseY,
-            transformY: this.currentTransform.y
-        });
         this.draw();
     }
 
-    private resetView() {
-        console.log('Reset view - before:', { ...this.currentTransform });
-    
+    private resetView() {    
         const containerWidth = this.canvas.width;
         const scaledContentWidth = this.originalWidth * this.scale;
         const emptySpace = containerWidth - scaledContentWidth;
@@ -273,11 +270,14 @@ export class LayerViewer {
         await Promise.all(
             this.layers.map(async (layer) => {
                 const img = new Image();
-                img.src = layer.imagePath;
+                img.crossOrigin = "anonymous";
+                img.src = layer.image.image.data[0].attributes.url;
+                console.log("IMAGE");
+                console.log(layer.image.image.data[0].attributes.url);
                 await new Promise((resolve) => {
                     img.onload = resolve;
                 });
-                layer.image = img;
+                layer.imageElement = img;
             })
         );
     }
@@ -407,7 +407,7 @@ export class LayerViewer {
     private setupMessageListener() {
         window.addEventListener('message', (event) => {
             // Optional: Add origin checking for security
-            // if (event.origin !== "https://trusted-parent-site.com") return;
+            if (event.origin !== "https://learn.thegreatsync.com" && event.origin !== "http://localhost:3000" && event.origin !== "https://thegreatsync.com/") return;
 
             try {
                 const { type, layerIds } = event.data;
@@ -513,7 +513,7 @@ export class LayerViewer {
                 this.ctx.globalAlpha = 1;
                 // Draw the original color image
                 this.ctx.drawImage(
-                    layer.image as HTMLImageElement, 
+                    layer.imageElement as HTMLImageElement, 
                     layer.position.x, 
                     layer.position.y, 
                     layer.position.width, 
@@ -534,11 +534,15 @@ export class LayerViewer {
             // Create temporary canvas for greyscale conversion
             const tempCanvas = document.createElement('canvas');
             const tempCtx = tempCanvas.getContext('2d')!;
+
+            console.log("G LAYER");
+            console.log(layer);
             
             tempCanvas.width = layer.position.width;
             tempCanvas.height = layer.position.height;
+
             
-            tempCtx.drawImage(layer.image as HTMLImageElement, 0, 0);
+            tempCtx.drawImage(layer.imageElement as HTMLImageElement, 0, 0);
             
             const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
             const data = imageData.data;

@@ -1073,6 +1073,60 @@ export interface ApiEnrollmentEnrollment extends Schema.CollectionType {
   };
 }
 
+export interface ApiImagimodelImagimodel extends Schema.CollectionType {
+  collectionName: 'imagimodels';
+  info: {
+    singularName: 'imagimodel';
+    pluralName: 'imagimodels';
+    displayName: 'ImagiModel';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    width: Attribute.Integer;
+    height: Attribute.Integer;
+    layers: Attribute.Component<'imagimodel.layer', true>;
+    zones: Attribute.Component<'imagimodel.zone', true>;
+    containerHeightPercent: Attribute.Integer &
+      Attribute.SetMinMax<
+        {
+          min: 10;
+          max: 100;
+        },
+        number
+      > &
+      Attribute.DefaultTo<100>;
+    alignment: Attribute.Enumeration<['left', 'right', 'center']> &
+      Attribute.DefaultTo<'center'>;
+    title: Attribute.String;
+    zoomSpeed: Attribute.Decimal &
+      Attribute.SetMinMax<
+        {
+          min: 0.001;
+        },
+        number
+      > &
+      Attribute.DefaultTo<0.001>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::imagimodel.imagimodel',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::imagimodel.imagimodel',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiMenuMenu extends Schema.SingleType {
   collectionName: 'menus';
   info: {
@@ -1356,6 +1410,7 @@ declare module '@strapi/types' {
       'api::course.course': ApiCourseCourse;
       'api::customer.customer': ApiCustomerCustomer;
       'api::enrollment.enrollment': ApiEnrollmentEnrollment;
+      'api::imagimodel.imagimodel': ApiImagimodelImagimodel;
       'api::menu.menu': ApiMenuMenu;
       'api::order.order': ApiOrderOrder;
       'api::page.page': ApiPagePage;

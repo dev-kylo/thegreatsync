@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_imagimodel_positions",
+  "info": {
+    "displayName": "Position",
+    "icon": "pinMap"
+  },
+  "options": {},
+  "attributes": {
+    "x": {
+      "type": "integer"
+    },
+    "y": {
+      "type": "integer"
+    },
+    "width": {
+      "type": "integer"
+    },
+    "height": {
+      "type": "integer"
+    }
+  }
+}

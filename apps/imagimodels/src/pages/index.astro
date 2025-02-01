@@ -1,74 +1,66 @@
 ---
 // src/pages/index.astro
 import Layout from "../layouts/Layout.astro";
+import type { FetchImagimodelResponse, Layer } from "../types";
 
-// You could fetch initial layer data here
-// const layers = await fetch("http://your-cms/api/layers").then((r) => r.json());
+// Fetch imagimodel data from Strapi
+async function fetchImagimodel(id: string) {
+	const response = await fetch(
+		`${import.meta.env.PUBLIC_STRAPI_URL}/api/imagimodels/${id}?populate[layers][populate][image][populate][image]=*&populate[layers][populate][position]=*&populate[zones][populate]=*`,
+		{
+			headers: {
+				Authorization: `Bearer ${import.meta.env.PUBLIC_STRAPI_API_TOKEN}`,
+			},
+		},
+	);
 
-const layers = [
-	{
-		id: "reference",
-		name: "Reference",
-		imagePath: "/src/assets/reference.png",
-		position: {
-			x: 488,
-			y: 1621,
-			width: 300,
-			height: 207,
-		},
-	},
-	{
-		id: "islands",
-		name: "Island",
-		imagePath: "/src/assets/island.png",
-		position: {
-			x: 146,
-			y: 280,
-			width: 788,
-			height: 715,
-		},
-	},
-	{
-		id: "execution",
-		name: "Execution",
-		imagePath: "/src/assets/execution.png",
-		position: {
-			x: 146,
-			y: 1101,
-			width: 688,
-			height: 407,
-		},
-	},
-	{
-		id: "functionship",
-		name: "Functionship",
-		imagePath: "/src/assets/functionship.png",
-		position: {
-			x: 167,
-			y: 77,
-			width: 241,
-			height: 203,
-		},
-	},
-];
+	if (!response.ok) {
+		throw new Error(`Failed to fetch imagimodel: ${response.statusText}`);
+	}
+
+	const data = (await response.json()) as FetchImagimodelResponse;
+
+	console.log(data);
+
+	return {
+		layers: data.data.attributes.layers,
+		zones: data.data.attributes.zones,
+		width: data.data.attributes.width,
+		height: data.data.attributes.height,
+		containerHeightPercent: data.data.attributes.containerHeightPercent,
+		alignment: data.data.attributes.alignment,
+	};
+}
+
+// Get the imagimodel ID from URL params or use a default
+const imagimodelId = Astro.url.searchParams.get("id") || "1";
+const { layers, zones, width, height, containerHeightPercent, alignment } =
+	await fetchImagimodel(imagimodelId);
+
+// const layers = [
+// 	{
+// 		id: "reference",
+// 		name: "Reference",
+// 		imagePath: "/src/assets/reference.png",
+// 		position: {
+// 			x: 488,
+// 			y: 1621,
+// 			width: 300,
+// 			height: 207,
+// 		},
+// 	},
+// ];
 
 // Add zones data
-const zones = [
-	{
-		id: "functionship-zone",
-		name: "Functionship",
-		centerPosition: 1,
-		focusPoint: "center", // or "right"
-		zoom: 3,
-	},
-	{
-		id: "islands-zone",
-		name: "Islands",
-		centerPosition: 10,
-		focusPoint: "center", // or "right"
-		zoom: 2.5,
-	},
-];
+// const zones = [
+// 	{
+// 		id: "functionship-zone",
+// 		name: "Functionship",
+// 		centerPosition: 1,
+// 		focusPoint: "center", // or "right"
+// 		zoom: 3,
+// 	},
+// ];
 ---
 
 <Layout title="Interactive Layer Viewer">
@@ -92,7 +84,17 @@ const zones = [
 </Layout>
 
 <!-- Use a separate script tag -->
-<script type="module" define:vars={{ layers, zones }}>
+<script
+	type="module"
+	define:vars={{
+		layers,
+		zones,
+		width,
+		height,
+		containerHeightPercent,
+		alignment,
+	}}
+>
 	// Your script will be processed, bundled and optimized automatically
 	import { LayerViewer } from "/src/scripts/viewer";
 
@@ -101,10 +103,10 @@ const zones = [
 			"layerViewer",
 			layers,
 			zones,
-			1080,
-			1920,
-			90,
-			"left",
+			width,
+			height,
+			containerHeightPercent,
+			alignment,
 		);
 	});
 </script>
@@ -112,14 +114,9 @@ const zones = [
 <style>
 	.viewer-container {
 		position: relative;
-
-		max-width: 1920px;
 		margin: 0 auto;
-		border: 10px solid red;
-
 		canvas {
 			width: 100%;
-			border: 10px solid blue;
 		}
 	}
 

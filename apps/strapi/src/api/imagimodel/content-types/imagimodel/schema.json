@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "imagimodels",
+  "info": {
+    "singularName": "imagimodel",
+    "pluralName": "imagimodels",
+    "displayName": "ImagiModel",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "width": {
+      "type": "integer"
+    },
+    "height": {
+      "type": "integer"
+    },
+    "layers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "imagimodel.layer"
+    },
+    "zones": {
+      "type": "component",
+      "repeatable": true,
+      "component": "imagimodel.zone"
+    },
+    "containerHeightPercent": {
+      "type": "integer",
+      "default": 100,
+      "max": 100,
+      "min": 10
+    },
+    "alignment": {
+      "type": "enumeration",
+      "enum": [
+        "left",
+        "right",
+        "center"
+      ],
+      "default": "center"
+    },
+    "title": {
+      "type": "string"
+    },
+    "zoomSpeed": {
+      "type": "decimal",
+      "default": 0.001,
+      "min": 0.001
+    }
+  }
+}

@@ -1,10 +1,32 @@
 // src/types/index.ts
+
+
+export interface ImageData {
+  id: number;
+  attributes: ImageAttributes;
+}
+
+export interface ImageAttributes {
+  width: number;
+  height: number;
+  url: string;
+  title: string;
+  placeholder: string;
+  size: number;
+  hash: string;
+}
 export interface Layer {
     id: string;
     name: string;
-    image?: HTMLImageElement;
-    imagePath: string;
+    imageElement?: HTMLImageElement;
+    enabled: boolean;
+    image: {
+      image: {
+        data: ImageData[];
+      };
+    };
     position: {
+      id: number;
       x: number;
       y: number;
       width: number;
@@ -28,3 +50,17 @@ export interface ImagiModel {
   layers: Layer[];
   zones: Zone[];
 }
+
+export type FetchImagimodelResponse = {
+  data: {
+    id: number,
+    attributes: {
+      layers: Layer[];
+      zones: Zone[];
+      width: number;
+      height: number;
+      containerHeightPercent: number;
+      alignment: 'left' | 'center' | 'right';
+    }
+  }
+};

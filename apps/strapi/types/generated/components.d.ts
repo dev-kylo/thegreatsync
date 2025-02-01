@@ -1,5 +1,73 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
+export interface ImagimodelLayer extends Schema.Component {
+  collectionName: 'components_imagimodel_layers';
+  info: {
+    displayName: 'Layer';
+    icon: 'landscape';
+    description: '';
+  };
+  attributes: {
+    name: Attribute.String;
+    zIndex: Attribute.Integer;
+    position: Attribute.Component<'imagimodel.position'>;
+    image: Attribute.Component<'media.image'>;
+    enabled: Attribute.Boolean & Attribute.DefaultTo<true>;
+  };
+}
+
+export interface ImagimodelPosition extends Schema.Component {
+  collectionName: 'components_imagimodel_positions';
+  info: {
+    displayName: 'Position';
+    icon: 'pinMap';
+  };
+  attributes: {
+    x: Attribute.Integer;
+    y: Attribute.Integer;
+    width: Attribute.Integer;
+    height: Attribute.Integer;
+  };
+}
+
+export interface ImagimodelZone extends Schema.Component {
+  collectionName: 'components_imagimodel_zones';
+  info: {
+    displayName: 'Zone';
+    icon: 'expand';
+    description: '';
+  };
+  attributes: {
+    name: Attribute.String;
+    centerPosition: Attribute.Integer &
+      Attribute.SetMinMax<
+        {
+          max: 100;
+        },
+        number
+      >;
+    zoom: Attribute.Decimal &
+      Attribute.SetMinMax<
+        {
+          min: 0;
+          max: 5;
+        },
+        number
+      >;
+    focusPoint: Attribute.Enumeration<
+      [
+        'center',
+        'left',
+        'right',
+        'top-left',
+        'top-right',
+        'bottom-left',
+        'bottom-right'
+      ]
+    >;
+  };
+}
+
 export interface MediaCodeEditor extends Schema.Component {
   collectionName: 'components_media_code_editors';
   info: {
@@ -170,6 +238,9 @@ export interface MenuMenuInfo extends Schema.Component {
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
+      'imagimodel.layer': ImagimodelLayer;
+      'imagimodel.position': ImagimodelPosition;
+      'imagimodel.zone': ImagimodelZone;
       'media.code-editor': MediaCodeEditor;
       'media.code-file': MediaCodeFile;
       'media.image': MediaImage;
