@@ -29,13 +29,23 @@ async function fetchImagimodel(id: string) {
 		height: data.data.attributes.height,
 		containerHeightPercent: data.data.attributes.containerHeightPercent,
 		alignment: data.data.attributes.alignment,
+		zoomSpeed: data.data.attributes.overrideZoomSpeed,
+		tiltEnabled: data.data.attributes.tiltEnabled,
 	};
 }
 
 // Get the imagimodel ID from URL params or use a default
 const imagimodelId = Astro.url.searchParams.get("id") || "1";
-const { layers, zones, width, height, containerHeightPercent, alignment } =
-	await fetchImagimodel(imagimodelId);
+const {
+	layers,
+	zones,
+	width,
+	height,
+	containerHeightPercent,
+	alignment,
+	zoomSpeed,
+	tiltEnabled,
+} = await fetchImagimodel(imagimodelId);
 
 // const layers = [
 // 	{
@@ -93,6 +103,8 @@ const { layers, zones, width, height, containerHeightPercent, alignment } =
 		height,
 		containerHeightPercent,
 		alignment,
+		zoomSpeed,
+		tiltEnabled,
 	}}
 >
 	// Your script will be processed, bundled and optimized automatically
@@ -107,6 +119,8 @@ const { layers, zones, width, height, containerHeightPercent, alignment } =
 			height,
 			containerHeightPercent,
 			alignment,
+			zoomSpeed || 0.001,
+			tiltEnabled,
 		);
 	});
 </script>

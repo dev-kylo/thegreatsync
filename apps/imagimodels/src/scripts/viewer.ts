@@ -107,6 +107,17 @@ export class LayerViewer {
     private originalHeight: number;
     private containerHeightPercent: number;
     private alignment: 'left' | 'center' | 'right';
+    private hoveredLayer: Layer | null = null;
+    private mouseX: number = 0;
+    private mouseY: number = 0;
+    private readonly TILT_INTENSITY = 5; // Maximum tilt angle in degrees
+    private readonly TILT_ANIMATION_SPEED = 0.5; // Animation speed
+    private currentTiltX: number = 0;
+    private currentTiltY: number = 0;
+    private targetTiltX: number = 0;
+    private targetTiltY: number = 0;
+    private isAnimating: boolean = false;
+    private readonly tiltEnabled: boolean;  // Global tilt control
 
 
     /**
@@ -118,11 +129,10 @@ export class LayerViewer {
      * @param height - Original height of the content   
      * @param containerHeightPercent - Percentage of viewport height to use
      * @param alignment - Horizontal alignment ('left', 'center', 'right')
+     * @param zoomSpeed - Zoom speed
+     * @param tiltEnabled - Global tilt control
      */
-    constructor(canvasId: string, layers: Layer[], zones: Zone[], width: number = 1080, height: number = 1920, containerHeightPercent: number = 100, alignment: 'left' | 'center' | 'right' = 'center', zoomSpeed: number = 0.001 ) {
-        
-        console.log("LAYERS");
-        console.log(layers);
+    constructor(canvasId: string, layers: Layer[], zones: Zone[], width: number = 1080, height: number = 1920, containerHeightPercent: number = 100, alignment: 'left' | 'center' | 'right' = 'center', zoomSpeed: number = 0.001, tiltEnabled: boolean = true) {
         
         this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
         this.ctx = this.canvas.getContext('2d')!;
@@ -139,6 +149,7 @@ export class LayerViewer {
             this.currentTransform,
             () => this.draw()
         );
+        this.tiltEnabled = tiltEnabled;
         
         this.init();
         this.setupMessageListener();
@@ -351,12 +362,49 @@ export class LayerViewer {
             if (this.dragController.isDraggingActive()) return;
             
             const rect = this.canvas.getBoundingClientRect();
-            // Apply same transform to hover detection
             const x = ((e.clientX - rect.left) / this.scale - this.currentTransform.x) / this.currentTransform.scale;
             const y = ((e.clientY - rect.top) / this.scale - this.currentTransform.y) / this.currentTransform.scale;
             
             const hoveredLayer = this.getLayerAtPoint(x, y);
+            
+            if (hoveredLayer) {
+                // Calculate relative mouse position within the layer
+                const relativeX = (x - hoveredLayer.position.x) / hoveredLayer.position.width;
+                const relativeY = (y - hoveredLayer.position.y) / hoveredLayer.position.height;
+                
+                // Convert to tilt angles (-1 to 1, then scaled by TILT_INTENSITY)
+                this.targetTiltX = (relativeY - 0.5) * 2 * this.TILT_INTENSITY;
+                this.targetTiltY = (relativeX - 0.5) * -2 * this.TILT_INTENSITY;
+            } else {
+                this.targetTiltX = 0;
+                this.targetTiltY = 0;
+            }
+            
+            // Update hover state
+            if (hoveredLayer !== this.hoveredLayer) {
+                this.hoveredLayer = hoveredLayer;
+                if (!hoveredLayer) {
+                    this.targetTiltX = 0;
+                    this.targetTiltY = 0;
+                }
+            }
+            
             this.canvas.style.cursor = hoveredLayer ? 'pointer' : 'default';
+            
+            // Start animation if not already running
+            if (!this.isAnimating) {
+                this.animateTilt();
+            }
+        });
+
+        // Add mouseout handler
+        this.canvas.addEventListener('mouseout', () => {
+            this.hoveredLayer = null;
+            this.targetTiltX = 0;
+            this.targetTiltY = 0;
+            if (!this.isAnimating) {
+                this.animateTilt();
+            }
         });
 
         // Add wheel event listener for zooming
@@ -493,39 +541,71 @@ export class LayerViewer {
     }
 
     private draw() {
-        this.ctx.save(); // Save the clean state
+        this.ctx.save();
         this.ctx.clearRect(0, 0, this.canvas.width / this.scale, this.canvas.height / this.scale);
         
-        // Apply current transform
         this.ctx.translate(this.currentTransform.x, this.currentTransform.y);
         this.ctx.scale(this.currentTransform.scale, this.currentTransform.scale);
 
-        // Sort layers by zIndex before drawing
         const sortedLayers = [...this.layers].sort((a, b) => {
-            // Default to 0 if zIndex is not specified
             const zIndexA = a.zIndex ?? 0;
             const zIndexB = b.zIndex ?? 0;
             return zIndexA - zIndexB;
         });
 
         sortedLayers.forEach(layer => {
+            this.ctx.save();
+            
+            // Check both global and layer-specific tilt settings
+            const layerTiltEnabled = layer.tiltEnabled ?? true;
+            const shouldTilt = this.tiltEnabled && layerTiltEnabled;
+            
+            // Apply 3D tilt effect if this is the hovered layer and tilt is enabled
+            if (layer === this.hoveredLayer && shouldTilt) {
+                const centerX = layer.position.x + layer.position.width / 2;
+                const centerY = layer.position.y + layer.position.height / 2;
+                
+                // Move to center point
+                this.ctx.translate(centerX, centerY);
+                
+                // Apply perspective transform
+                const transform = new DOMMatrix()
+                    .translate(0, 0, 0)
+                    .rotate(this.currentTiltX, this.currentTiltY, 0)
+                    .translate(0, 0, 50);
+                
+                // Convert the 3D matrix to a 2D context transform
+                const { a, b, c, d, e, f } = transform;
+                this.ctx.transform(a, b, c, d, e, f);
+                
+                // Move back to original position
+                this.ctx.translate(-centerX, -centerY);
+                
+                // Add subtle shadow for depth
+                this.ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+                this.ctx.shadowBlur = 10;
+                this.ctx.shadowOffsetX = this.currentTiltY * 0.5;
+                this.ctx.shadowOffsetY = this.currentTiltX * 0.5;
+            }
+
             if (this.enabledLayers.has(layer.id)) {
                 this.ctx.globalAlpha = 1;
-                // Draw the original color image
                 this.ctx.drawImage(
-                    layer.imageElement as HTMLImageElement, 
-                    layer.position.x, 
-                    layer.position.y, 
-                    layer.position.width, 
+                    layer.imageElement as HTMLImageElement,
+                    layer.position.x,
+                    layer.position.y,
+                    layer.position.width,
                     layer.position.height
                 );
             } else {
                 this.ctx.globalAlpha = 0.5;
                 this.drawGreyscale(layer);
             }
+            
+            this.ctx.restore();
         });
 
-        this.ctx.restore(); // Reset for next draw, preventing accumulation
+        this.ctx.restore();
     }
 
     private drawGreyscale(layer: Layer) {
@@ -558,9 +638,30 @@ export class LayerViewer {
         }
         
         
-    // Use cached version
-    const cachedCanvas = this.greyscaleCache.get(layer.id)!;
-    this.ctx.drawImage(cachedCanvas, layer.position.x, layer.position.y);
+        // Use cached version
+        const cachedCanvas = this.greyscaleCache.get(layer.id)!;
+        this.ctx.drawImage(cachedCanvas, layer.position.x, layer.position.y);
+    }
+
+    private animateTilt() {
+        this.isAnimating = true;
+
+        // Smoothly interpolate current tilt towards target tilt
+        this.currentTiltX += (this.targetTiltX - this.currentTiltX) * this.TILT_ANIMATION_SPEED;
+        this.currentTiltY += (this.targetTiltY - this.currentTiltY) * this.TILT_ANIMATION_SPEED;
+
+        // Draw the updated state
+        this.draw();
+
+        // Continue animation if there's still significant movement
+        if (
+            Math.abs(this.targetTiltX - this.currentTiltX) > 0.01 ||
+            Math.abs(this.targetTiltY - this.currentTiltY) > 0.01
+        ) {
+            requestAnimationFrame(() => this.animateTilt());
+        } else {
+            this.isAnimating = false;
+        }
     }
 }
 

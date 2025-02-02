@@ -46,10 +46,13 @@
     "title": {
       "type": "string"
     },
-    "zoomSpeed": {
+    "overrideZoomSpeed": {
       "type": "decimal",
       "default": 0.001,
       "min": 0.001
+    },
+    "tiltEnabled": {
+      "type": "boolean"
     }
   }
 }

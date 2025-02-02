@@ -1101,7 +1101,7 @@ export interface ApiImagimodelImagimodel extends Schema.CollectionType {
     alignment: Attribute.Enumeration<['left', 'right', 'center']> &
       Attribute.DefaultTo<'center'>;
     title: Attribute.String;
-    zoomSpeed: Attribute.Decimal &
+    overrideZoomSpeed: Attribute.Decimal &
       Attribute.SetMinMax<
         {
           min: 0.001;
@@ -1109,6 +1109,7 @@ export interface ApiImagimodelImagimodel extends Schema.CollectionType {
         number
       > &
       Attribute.DefaultTo<0.001>;
+    tiltEnabled: Attribute.Boolean;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

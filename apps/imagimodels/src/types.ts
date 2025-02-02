@@ -20,6 +20,7 @@ export interface Layer {
     name: string;
     imageElement?: HTMLImageElement;
     enabled: boolean;
+    tiltEnabled: boolean;
     image: {
       image: {
         data: ImageData[];
@@ -61,6 +62,8 @@ export type FetchImagimodelResponse = {
       height: number;
       containerHeightPercent: number;
       alignment: 'left' | 'center' | 'right';
+      overrideZoomSpeed?: number;
+      tiltEnabled: boolean;
     }
   }
 };
