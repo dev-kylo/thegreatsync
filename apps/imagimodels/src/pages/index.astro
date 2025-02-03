@@ -5,33 +5,43 @@ import type { FetchImagimodelResponse, Layer } from "../types";
 
 // Fetch imagimodel data from Strapi
 async function fetchImagimodel(id: string) {
-	const response = await fetch(
-		`${import.meta.env.PUBLIC_STRAPI_URL}/api/imagimodels/${id}?populate[layers][populate][image][populate][image]=*&populate[layers][populate][position]=*&populate[zones][populate]=*`,
-		{
-			headers: {
-				Authorization: `Bearer ${import.meta.env.PUBLIC_STRAPI_API_TOKEN}`,
+	try {
+		const response = await fetch(
+			`${import.meta.env.PUBLIC_STRAPI_URL}/api/imagimodels/${id}?populate[layers][populate][image][populate][image]=*&populate[layers][populate][position]=*&populate[zones][populate]=*`,
+			{
+				headers: {
+					Authorization: `Bearer ${import.meta.env.PUBLIC_STRAPI_API_TOKEN}`,
+				},
 			},
-		},
-	);
+		);
 
-	if (!response.ok) {
-		throw new Error(`Failed to fetch imagimodel: ${response.statusText}`);
+		if (!response.ok) {
+			throw new Error(
+				`Failed to fetch imagimodel: ${response.statusText}`,
+			);
+		}
+
+		const data = (await response.json()) as FetchImagimodelResponse;
+
+		console.log(data);
+
+		return {
+			layers: data.data.attributes.layers,
+			zones: data.data.attributes.zones,
+			width: data.data.attributes.width,
+			height: data.data.attributes.height,
+			containerHeightPercent: data.data.attributes.containerHeightPercent,
+			alignment: data.data.attributes.alignment,
+			zoomSpeed: data.data.attributes.overrideZoomSpeed,
+			tiltEnabled: data.data.attributes.tiltEnabled,
+		};
+	} catch (error) {
+		console.error("Error fetching imagimodel:", error);
+		return {
+			error: true,
+			message: "Error fetching imagimodel",
+		};
 	}
-
-	const data = (await response.json()) as FetchImagimodelResponse;
-
-	console.log(data);
-
-	return {
-		layers: data.data.attributes.layers,
-		zones: data.data.attributes.zones,
-		width: data.data.attributes.width,
-		height: data.data.attributes.height,
-		containerHeightPercent: data.data.attributes.containerHeightPercent,
-		alignment: data.data.attributes.alignment,
-		zoomSpeed: data.data.attributes.overrideZoomSpeed,
-		tiltEnabled: data.data.attributes.tiltEnabled,
-	};
 }
 
 // Get the imagimodel ID from URL params or use a default
@@ -45,6 +55,8 @@ const {
 	alignment,
 	zoomSpeed,
 	tiltEnabled,
+	error,
+	message,
 } = await fetchImagimodel(imagimodelId);
 
 // const layers = [
@@ -82,7 +94,7 @@ const {
 				<button class="zone-button" data-zone="reset">Reset View</button
 				>
 				{
-					zones.map((zone) => (
+					zones?.map((zone) => (
 						<button class="zone-button" data-zone={zone.id}>
 							{zone.name}
 						</button>
@@ -111,6 +123,18 @@ const {
 	import { LayerViewer } from "/src/scripts/viewer";
 
 	document.addEventListener("DOMContentLoaded", () => {
+		if (error) {
+			console.error(message);
+			window.parent.postMessage(
+				{
+					type: "ERROR",
+					message: message,
+				},
+				"*",
+			);
+			return;
+		}
+
 		const viewer = new LayerViewer(
 			"layerViewer",
 			layers,
