@@ -7,6 +7,7 @@
     "hub:dev": "pnpm --filter coursehub run dev",
     "strapi:dev": "pnpm --filter strapi run develop",
     "strapi": "pnpm --filter strapi",
+    "server": "pnpm --filter server",
     "hub": "pnpm --filter coursehub",
     "landing": "pnpm --filter landing",
     "imagine": "pnpm --filter imagine",
