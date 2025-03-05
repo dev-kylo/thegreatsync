@@ -1,5 +1,4 @@
 const { gitService } = require('../services/git');
-const { verify } = require('../utils/verify');
 
 /**
  * @module gitController
@@ -15,13 +14,13 @@ const gitController = {
      * @returns {Promise<void>}
      * @throws {Error} When webhook processing fails
      */
-    async handleWebhook(req, res) {
+    async handleWebhook(req, res, next) {
          /** @type {{ref: string, commits: Array<{modified: string[]}>}} */
         const payload = req.body;
 
         try {
             const result = await gitService.processWebhook(payload);
-            res.status(200).send(result.message);
+            res.status(200).send(result.message)
         } catch (error) {
             console.error('Webhook processing error:', error);
             error.statusCode = 500;
