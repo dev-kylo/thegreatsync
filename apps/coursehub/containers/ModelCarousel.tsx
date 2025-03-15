@@ -1,7 +1,6 @@
 // @refresh reset
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { ChevronDoubleRightIcon, ChevronDoubleLeftIcon } from '@heroicons/react/20/solid';
-import Image from 'next/image';
 
 import type { ImageData, PageStep } from '../types';
 import Step from '../components/ui/Step';
