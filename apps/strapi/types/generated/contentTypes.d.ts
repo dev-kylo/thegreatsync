@@ -1343,6 +1343,48 @@ export interface ApiSubchapterSubchapter extends Schema.CollectionType {
   };
 }
 
+export interface ApiSummarySummary extends Schema.CollectionType {
+  collectionName: 'summaries';
+  info: {
+    singularName: 'summary';
+    pluralName: 'summaries';
+    displayName: 'Summary';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    content: Attribute.DynamicZone<
+      [
+        'media.code-editor',
+        'media.image',
+        'media.link',
+        'media.text',
+        'media.video'
+      ]
+    >;
+    links: Attribute.Component<'media.link', true>;
+    image: Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::summary.summary',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::summary.summary',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiUserCourseProgressUserCourseProgress
   extends Schema.CollectionType {
   collectionName: 'user_course_progresses';
@@ -1417,6 +1459,7 @@ declare module '@strapi/types' {
       'api::page.page': ApiPagePage;
       'api::reflection.reflection': ApiReflectionReflection;
       'api::subchapter.subchapter': ApiSubchapterSubchapter;
+      'api::summary.summary': ApiSummarySummary;
       'api::user-course-progress.user-course-progress': ApiUserCourseProgressUserCourseProgress;
     }
   }

@@ -26,6 +26,11 @@
     "enabled": {
       "type": "boolean",
       "default": true
+    },
+    "summaries": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::summary.summary"
     }
   }
 }

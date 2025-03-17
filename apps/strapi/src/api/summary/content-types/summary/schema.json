@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "summaries",
+  "info": {
+    "singularName": "summary",
+    "pluralName": "summaries",
+    "displayName": "Summary",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "dynamiczone",
+      "components": [
+        "media.code-editor",
+        "media.image",
+        "media.link",
+        "media.text",
+        "media.video"
+      ]
+    },
+    "links": {
+      "type": "component",
+      "repeatable": true,
+      "component": "media.link"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

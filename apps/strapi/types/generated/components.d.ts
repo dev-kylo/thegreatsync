@@ -13,6 +13,11 @@ export interface ImagimodelLayer extends Schema.Component {
     position: Attribute.Component<'imagimodel.position'>;
     image: Attribute.Component<'media.image'>;
     enabled: Attribute.Boolean & Attribute.DefaultTo<true>;
+    summaries: Attribute.Relation<
+      'imagimodel.layer',
+      'oneToMany',
+      'api::summary.summary'
+    >;
   };
 }
 
