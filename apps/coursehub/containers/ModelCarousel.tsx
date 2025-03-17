@@ -2,7 +2,7 @@
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { ChevronDoubleRightIcon, ChevronDoubleLeftIcon } from '@heroicons/react/20/solid';
 
-import type { ImageData, PageStep } from '../types';
+import type { ImageData, PageContent } from '../types';
 import Step from '../components/ui/Step';
 
 import BlurEdge from '../components/ui/BlurEdge';
@@ -10,10 +10,11 @@ import BlurEdge from '../components/ui/BlurEdge';
 import ImageBlock from '../components/layout/blocks/ImageBlock';
 import ContentBlock from '../components/layout/ContentBlock';
 import TitleStrip from '../components/ui/TitleStrip';
+import Blocks from '../components/layout/screens/Blocks';
 
-type PageStepsProps = {
+type ModelStepsProps = {
     currIndex: number;
-    pageSteps: PageStep[];
+    modelSteps: PageContent[];
     heading?: string;
     loadingPage: boolean;
 };
@@ -22,14 +23,14 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
-const ModelCarousel = ({ pageSteps }: PageStepsProps) => {
+const ModelCarousel = ({ modelSteps }: ModelStepsProps) => {
     const stepsContainer = useRef<HTMLOListElement>(null);
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [direction, setDirection] = useState('next');
 
-    const currentTopicStep = pageSteps[activeIndex];
-    const isLastStep = activeIndex === pageSteps.length - 1;
-    const isSecondLastStep = activeIndex === pageSteps.length - 2;
+    const currentTopicStep = modelSteps[activeIndex];
+    const isLastStep = activeIndex === modelSteps.length - 1;
+    const isSecondLastStep = activeIndex === modelSteps.length - 2;
 
     useEffect(() => {
         function scrollIntoView(indx: number) {
@@ -97,14 +98,14 @@ const ModelCarousel = ({ pageSteps }: PageStepsProps) => {
                     <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
                 </button>
                 <div className=" relative  overflow-x-auto scrollbar-none">
-                    {pageSteps.length > 4 && activeIndex > 2 && <BlurEdge position="left" />}
+                    {modelSteps.length > 4 && activeIndex > 2 && <BlurEdge position="left" />}
                     <ol ref={stepsContainer} className="flex items-center ">
-                        {pageSteps.map((step: PageStep, stepIdx: number) => (
+                        {modelSteps.map((step: PageContent, stepIdx: number) => (
                             <li
                                 key={`step_${step.id}`}
                                 id={`step_${stepIdx}`}
                                 className={classNames(
-                                    stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-10' : '',
+                                    stepIdx !== modelSteps.length - 1 ? 'pr-8 sm:pr-10' : '',
                                     'relative',
                                     'cursor-pointer'
                                 )}
@@ -113,14 +114,14 @@ const ModelCarousel = ({ pageSteps }: PageStepsProps) => {
                                     {...step}
                                     orderNumber={stepIdx + 1}
                                     setCurrent={() => handleGoToStep(stepIdx)}
-                                    status={stepIdx === activeIndex ? 'current' : step?.status}
+                                    status={stepIdx === activeIndex ? 'current' : 'default'}
                                     image={step?.image}
                                     size="large"
                                 />
                             </li>
                         ))}
                     </ol>
-                    {!isSecondLastStep && !isLastStep && pageSteps.length > 4 && <BlurEdge position="right" />}
+                    {!isSecondLastStep && !isLastStep && modelSteps.length > 4 && <BlurEdge position="right" />}
                 </div>
                 <button
                     type="button"
@@ -145,10 +146,11 @@ const ModelCarousel = ({ pageSteps }: PageStepsProps) => {
                     />
                 </div>
                 <ContentBlock id={currentTopicStep?.id} md={currentTopicStep?.text} />
+                <Blocks blocks={currentTopicStep} id={id} links={links} heading={title} />
             </div>
             {/* To preload images */}
             {/* <div style={{ visibility: 'hidden', position: 'absolute', width: 0, height: 0 }} aria-hidden="true">
-                {pageSteps.map((step) => {
+                {modelSteps.map((step) => {
                     const imageData = step?.image?.data as ImageData;
                     if (!imageData) return null;
                     return (

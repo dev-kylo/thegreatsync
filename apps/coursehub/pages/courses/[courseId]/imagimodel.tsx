@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth/next';
 import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { serverRedirectObject } from '../../../libs/helpers';
 import { getReflections } from '../../../services/queries';
 import { ErrorResponse } from '../../../types';
@@ -13,12 +13,15 @@ import Layout from '../../../components/layout';
 import Navbar from '../../../components/ui/Navbar';
 import { NavContext } from '../../../context/nav';
 import ModelCarousel from '../../../containers/ModelCarousel';
+import Modal from '../../../components/ui/Modal';
 
 type HomeProps = { courseId: string };
 
 const CourseImageModel = ({ courseId }: HomeProps) => {
     const { data: session } = useSession();
     const { menuData, nextPage, markPage } = useContext(NavContext);
+    const [openModal, setOpenModal] = useState(true);
+    const [activeLayerId, setActiveLayerId] = useState(null);
 
     if (!session?.jwt || !courseId) return <LoadingQuote />;
 
@@ -34,10 +37,10 @@ const CourseImageModel = ({ courseId }: HomeProps) => {
 
             <iframe title="imagimodel" src={`https://imagimodel.com/course/${courseId}`} className="w-full h-full" />
 
-            <Modal open setOpen={() => {}}>
+            <Modal open={openModal} setOpen={() => setOpenModal(true)}>
                 <ModelCarousel
                     heading="Imagimodel"
-                    pageSteps={[
+                    layerSteps={[
                         {
                             id: 123323,
                             __component: 'media.text_image',
@@ -107,7 +110,7 @@ const CourseImageModel = ({ courseId }: HomeProps) => {
                         {
                             id: 4321321334,
                             __component: 'media.text_image',
-                            text: 'Pointing at island',
+                            text: 's',
                             image_alt: 'Pointing',
                             orderNumber: 4,
                             image: {

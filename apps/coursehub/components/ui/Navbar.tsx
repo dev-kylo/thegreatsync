@@ -9,6 +9,7 @@ import { CurrentLocation, MenuItem } from '../../types';
 import Spinner from './Spinner';
 import PegIcon from './PegIcon';
 import NavIcon from './NavIcon';
+import ModelIcon from './ModelIcon';
 
 export default function Navbar({
     pageTitle,
@@ -43,6 +44,10 @@ export default function Navbar({
                         <TitleStrip primaryTitle={subChapterTitle} secondaryTitle={pageTitle} pageType={pageType} />
                         <div className="hidden md:block">
                             <div className="flex items-center justify-end">
+                                <NavIcon title="Model">
+                                    <ModelIcon />
+                                </NavIcon>
+
                                 <NavIcon title="Pegs">
                                     <PegIcon />
                                 </NavIcon>
