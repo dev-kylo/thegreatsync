@@ -8,6 +8,7 @@ import {
     PageResponse,
     ReflectionsResponse,
     UserCourseProgressResponse,
+    FetchImagimodelResponse,
 } from '../types';
 
 import { httpClient } from '../libs/axios';
@@ -95,5 +96,32 @@ export const getUserCompletions = async ({
 
 export const getReflections = async (courseId: string | number): Promise<ReflectionsResponse> => {
     const res = await httpClient.get<ReflectionsResponse>(`/api/reflectionsByUser/${courseId}`);
+    return res && res?.data;
+};
+
+export const getImagimodel = async (courseId: string | number): Promise<FetchImagimodelResponse> => {
+    const query = qs.stringify(
+        {
+            populate: [
+                'layers',
+                'layers.summaries',
+                'layers.summaries.content',
+                'layers.summaries.content.image',
+                'layers.image',
+                'zones',
+            ],
+            filters: {
+                course: {
+                    id: {
+                        $eq: courseId,
+                    },
+                },
+            },
+        },
+        {
+            encodeValuesOnly: true, // prettify URL
+        }
+    );
+    const res = await httpClient.get<FetchImagimodelResponse>(`/api/imagimodels?${query}`);
     return res && res?.data;
 };

@@ -2,7 +2,7 @@
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { ChevronDoubleRightIcon, ChevronDoubleLeftIcon } from '@heroicons/react/20/solid';
 
-import type { ImageData, PageContent } from '../types';
+import type { ImageData, Summary } from '../types';
 import Step from '../components/ui/Step';
 
 import BlurEdge from '../components/ui/BlurEdge';
@@ -13,24 +13,28 @@ import TitleStrip from '../components/ui/TitleStrip';
 import Blocks from '../components/layout/screens/Blocks';
 
 type ModelStepsProps = {
-    currIndex: number;
-    modelSteps: PageContent[];
-    heading?: string;
-    loadingPage: boolean;
+    layerSummaries: Summary[];
+    layerImage: ImageData;
+    layerDescription: string;
+    layerTitle: string;
 };
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
-const ModelCarousel = ({ modelSteps }: ModelStepsProps) => {
+// Clicking on the step image with existing id should set activeIndex to null
+// If no activeIndex, then show the list of summaries
+// If activeIndex, then show the current summary
+
+const ModelCarousel = ({ layerSummaries, layerImage, layerTitle, layerDescription }: ModelStepsProps) => {
     const stepsContainer = useRef<HTMLOListElement>(null);
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [direction, setDirection] = useState('next');
 
-    const currentTopicStep = modelSteps[activeIndex];
-    const isLastStep = activeIndex === modelSteps.length - 1;
-    const isSecondLastStep = activeIndex === modelSteps.length - 2;
+    const currentTopicStep = layerSummaries[activeIndex] ?? null;
+    const isLastStep = activeIndex === layerSummaries.length - 1;
+    const isSecondLastStep = activeIndex === layerSummaries.length - 2;
 
     useEffect(() => {
         function scrollIntoView(indx: number) {
@@ -80,7 +84,7 @@ const ModelCarousel = ({ modelSteps }: ModelStepsProps) => {
         setActiveIndex(index);
     };
 
-    console.log({ activeIndex, isLastStep });
+    console.log({ activeIndex, isLastStep, currentTopicStep });
 
     return (
         <div className="relative">
@@ -98,30 +102,33 @@ const ModelCarousel = ({ modelSteps }: ModelStepsProps) => {
                     <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
                 </button>
                 <div className=" relative  overflow-x-auto scrollbar-none">
-                    {modelSteps.length > 4 && activeIndex > 2 && <BlurEdge position="left" />}
+                    {layerSummaries.length > 4 && activeIndex > 2 && <BlurEdge position="left" />}
                     <ol ref={stepsContainer} className="flex items-center ">
-                        {modelSteps.map((step: PageContent, stepIdx: number) => (
+                        {layerSummaries.map((summary: Summary, stepIdx: number) => (
                             <li
-                                key={`step_${step.id}`}
+                                key={`step_${summary.id}`}
                                 id={`step_${stepIdx}`}
                                 className={classNames(
-                                    stepIdx !== modelSteps.length - 1 ? 'pr-8 sm:pr-10' : '',
+                                    stepIdx !== layerSummaries.length - 1 ? 'pr-8 sm:pr-10' : '',
                                     'relative',
                                     'cursor-pointer'
                                 )}
                             >
                                 <Step
-                                    {...step}
+                                    id={Number(summary.id)}
+                                    text=""
+                                    image_alt={summary.title}
+                                    __component="media.text"
                                     orderNumber={stepIdx + 1}
                                     setCurrent={() => handleGoToStep(stepIdx)}
                                     status={stepIdx === activeIndex ? 'current' : 'default'}
-                                    image={step?.image}
+                                    image={summary?.image}
                                     size="large"
                                 />
                             </li>
                         ))}
                     </ol>
-                    {!isSecondLastStep && !isLastStep && modelSteps.length > 4 && <BlurEdge position="right" />}
+                    {!isSecondLastStep && !isLastStep && layerSummaries.length > 4 && <BlurEdge position="right" />}
                 </div>
                 <button
                     type="button"
@@ -137,16 +144,25 @@ const ModelCarousel = ({ modelSteps }: ModelStepsProps) => {
             <div className="px-8 ">
                 <div className="max-w-[16rem] relative md:max-w-[28rem] mx-auto overflow-x-auto scrollbar-none">
                     <div className="mt-4">
-                        <TitleStrip primaryTitle="The Layer Title " secondaryTitle="The Summary Title" />
+                        <TitleStrip primaryTitle={layerTitle} secondaryTitle={currentTopicStep?.title || ''} />
                     </div>
-                    <ImageBlock
-                        image={currentTopicStep?.image?.data as ImageData}
-                        id={currentTopicStep?.id}
-                        imageAlt={currentTopicStep?.image_alt}
-                    />
+                    {!currentTopicStep && (
+                        <>
+                            <ImageBlock image={layerImage} id={Number(layerImage.id)} imageAlt="" />
+
+                            <ContentBlock id={Number(layerImage.id)} heading={layerTitle} md={layerDescription} />
+                        </>
+                    )}
                 </div>
-                <ContentBlock id={currentTopicStep?.id} md={currentTopicStep?.text} />
-                <Blocks blocks={currentTopicStep} id={id} links={links} heading={title} />
+
+                {currentTopicStep && (
+                    <Blocks
+                        blocks={currentTopicStep.content}
+                        id={Number(currentTopicStep?.id)}
+                        links={[]}
+                        heading={currentTopicStep?.title}
+                    />
+                )}
             </div>
             {/* To preload images */}
             {/* <div style={{ visibility: 'hidden', position: 'absolute', width: 0, height: 0 }} aria-hidden="true">

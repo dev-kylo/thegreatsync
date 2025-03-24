@@ -334,3 +334,56 @@ export type UserCourseProgressResponse = {
     id: number;
     user: number;
 } & StrapiResponseMetaData;
+
+export interface Summary {
+    id: string;
+    title: string;
+    content: PageContent[];
+    image: {
+        data: ImageData;
+    };
+}
+
+export interface Layer {
+    id: string;
+    name: string;
+    imageElement?: HTMLImageElement;
+    enabled: boolean;
+    tiltEnabled: boolean;
+    image: {
+        data: ImageData;
+    };
+    position: {
+        id: number;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+    };
+    zIndex?: number;
+    summaries: Summary[];
+    description: string;
+}
+export interface Zone {
+    id: string;
+    name: string;
+    centerPosition: number; // percentage from top (0-100)
+    focusPoint: 'center' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'left' | 'right';
+    zoom: number;
+}
+
+export type FetchImagimodelResponse = {
+    data: {
+        id: number;
+        attributes: {
+            layers: Layer[];
+            zones: Zone[];
+            width: number;
+            height: number;
+            containerHeightPercent: number;
+            alignment: 'left' | 'center' | 'right';
+            overrideZoomSpeed?: number;
+            tiltEnabled: boolean;
+        };
+    };
+};

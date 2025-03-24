@@ -983,6 +983,11 @@ export interface ApiCourseCourse extends Schema.CollectionType {
     >;
     description: Attribute.DynamicZone<['media.text', 'media.video']> &
       Attribute.Required;
+    imagimodel: Attribute.Relation<
+      'api::course.course',
+      'oneToOne',
+      'api::imagimodel.imagimodel'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1110,6 +1115,11 @@ export interface ApiImagimodelImagimodel extends Schema.CollectionType {
       > &
       Attribute.DefaultTo<0.001>;
     tiltEnabled: Attribute.Boolean;
+    course: Attribute.Relation<
+      'api::imagimodel.imagimodel',
+      'oneToOne',
+      'api::course.course'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

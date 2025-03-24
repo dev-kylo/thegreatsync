@@ -110,6 +110,7 @@ coverage
 .env.supabase
 .env.prod
 .env.legacy
+.env.local
 
 license.txt
 exports

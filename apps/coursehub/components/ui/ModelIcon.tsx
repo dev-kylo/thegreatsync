@@ -10,7 +10,7 @@ const ModelIcon = () => {
     return (
         <Link
             className="w-10 pt-1 mx-4 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-indigo-700"
-            href={`/courses/${courseId}/model`}
+            href={`/courses/${courseId}/imagimodel`}
         >
             <Image src={pegIcon} alt="" width="500" height="500" />
         </Link>

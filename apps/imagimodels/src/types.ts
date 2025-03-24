@@ -15,6 +15,12 @@ export interface ImageAttributes {
   size: number;
   hash: string;
 }
+
+export interface Summary {
+  id: string;
+  text: string;
+}
+
 export interface Layer {
     id: string;
     name: string;
@@ -34,7 +40,7 @@ export interface Layer {
       height: number;
     };
     zIndex?: number;  
-    data?: Record<string, any>;
+    summaries: Summary[]
 }
 export interface Zone {
   id: string;
@@ -44,13 +50,13 @@ export interface Zone {
   zoom: number;
 }
 
-export interface ImagiModel {
-  id: string;
-  width: number;
-  height: number;
-  layers: Layer[];
-  zones: Zone[];
-}
+// export interface ImagiModel {
+//   id: string;
+//   width: number;
+//   height: number;
+//   layers: Layer[];
+//   zones: Zone[];
+// }
 
 export type FetchImagimodelResponse = {
   data: {
