@@ -10,13 +10,15 @@ import BlurEdge from '../components/ui/BlurEdge';
 import ImageBlock from '../components/layout/blocks/ImageBlock';
 import ContentBlock from '../components/layout/ContentBlock';
 import TitleStrip from '../components/ui/TitleStrip';
-import Blocks from '../components/layout/screens/Blocks';
+import Blocks from '../components/layout/screens/PageOfBlocks';
+import BlockRenderer from '../components/layout/blocks/BlockRenderer';
 
 type ModelStepsProps = {
     layerSummaries: Summary[];
     layerImage: ImageData;
     layerDescription: string;
     layerTitle: string;
+    layerId: string | number;
 };
 
 function classNames(...classes: string[]) {
@@ -27,14 +29,14 @@ function classNames(...classes: string[]) {
 // If no activeIndex, then show the list of summaries
 // If activeIndex, then show the current summary
 
-const ModelCarousel = ({ layerSummaries, layerImage, layerTitle, layerDescription }: ModelStepsProps) => {
+const ModelCarousel = ({ layerSummaries, layerImage, layerTitle, layerDescription, layerId }: ModelStepsProps) => {
     const stepsContainer = useRef<HTMLOListElement>(null);
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [direction, setDirection] = useState('next');
 
     const currentTopicStep = layerSummaries[activeIndex] ?? null;
-    const isLastStep = activeIndex === layerSummaries.length - 1;
-    const isSecondLastStep = activeIndex === layerSummaries.length - 2;
+    const isLastStep = activeIndex === (layerSummaries?.length ?? 0) - 1;
+    const isSecondLastStep = activeIndex === (layerSummaries?.length ?? 0) - 2;
 
     useEffect(() => {
         function scrollIntoView(indx: number) {
@@ -52,8 +54,8 @@ const ModelCarousel = ({ layerSummaries, layerImage, layerTitle, layerDescriptio
                 });
         }
 
-        scrollIntoView(activeIndex);
-    }, [activeIndex, isLastStep, direction]);
+        if (layerSummaries && layerSummaries.length > 0) scrollIntoView(activeIndex);
+    }, [activeIndex, isLastStep, direction, layerSummaries]);
 
     useEffect(() => {
         function handleKeyPress(e: KeyboardEvent) {
@@ -84,84 +86,106 @@ const ModelCarousel = ({ layerSummaries, layerImage, layerTitle, layerDescriptio
         setActiveIndex(index);
     };
 
-    console.log({ activeIndex, isLastStep, currentTopicStep });
+    console.log({
+        activeIndex,
+        isLastStep,
+        currentTopicStep,
+        layerSummaries,
+        layerDescription,
+        layerTitle,
+        layerImage,
+    });
 
     return (
         <div className="relative">
-            <nav
-                aria-label="Progress"
-                className="flex items-center justify-center relative z-50 py-2 w-full max-w-4xl mx-auto"
-            >
-                <button
-                    type="button"
-                    className="text-white px-0 enabled:hover:text-primary_green disabled:hover:text-gray-400 shrink-0 h-[4rem] bg-primary_green hover:bg-secondary_pink"
-                    onClick={handlePrev}
-                    aria-label="Previous Slide"
-                    disabled={activeIndex === 0}
+            {layerSummaries && layerSummaries.length > 0 && (
+                <nav
+                    aria-label="Progress"
+                    className="flex items-center justify-center relative z-50 py-2 w-full max-w-4xl mx-auto mb-6"
                 >
-                    <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
-                </button>
-                <div className=" relative  overflow-x-auto scrollbar-none">
-                    {layerSummaries.length > 4 && activeIndex > 2 && <BlurEdge position="left" />}
-                    <ol ref={stepsContainer} className="flex items-center ">
-                        {layerSummaries.map((summary: Summary, stepIdx: number) => (
-                            <li
-                                key={`step_${summary.id}`}
-                                id={`step_${stepIdx}`}
-                                className={classNames(
-                                    stepIdx !== layerSummaries.length - 1 ? 'pr-8 sm:pr-10' : '',
-                                    'relative',
-                                    'cursor-pointer'
-                                )}
-                            >
-                                <Step
-                                    id={Number(summary.id)}
-                                    text=""
-                                    image_alt={summary.title}
-                                    __component="media.text"
-                                    orderNumber={stepIdx + 1}
-                                    setCurrent={() => handleGoToStep(stepIdx)}
-                                    status={stepIdx === activeIndex ? 'current' : 'default'}
-                                    image={summary?.image}
-                                    size="large"
-                                />
-                            </li>
-                        ))}
-                    </ol>
-                    {!isSecondLastStep && !isLastStep && layerSummaries.length > 4 && <BlurEdge position="right" />}
-                </div>
-                <button
-                    type="button"
-                    className="text-white px-0 enabled:hover:text-primary_green disabled:hover:text-gray-400 h-[4rem] bg-primary_green hover:bg-secondary_pink"
-                    onClick={handleNext}
-                    aria-label="Next Slide"
-                    disabled={isLastStep}
-                >
-                    <ChevronDoubleRightIcon className="m-auto h-8 w-8" aria-hidden="true" />
-                </button>
-            </nav>
+                    {layerSummaries.length > 1 && (
+                        <button
+                            type="button"
+                            className="text-white px-0 enabled:hover:text-primary_green disabled:hover:text-gray-400 shrink-0 h-[4rem] bg-primary_green hover:bg-secondary_pink"
+                            onClick={handlePrev}
+                            aria-label="Previous Slide"
+                            disabled={activeIndex === 0}
+                        >
+                            <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
+                        </button>
+                    )}
+                    <div className=" relative  overflow-x-auto scrollbar-none">
+                        {layerSummaries.length > 4 && activeIndex > 2 && <BlurEdge position="left" />}
+                        <ol ref={stepsContainer} className="flex items-center ">
+                            {layerSummaries?.length > 0 &&
+                                layerSummaries.map((summary: Summary, stepIdx: number) => (
+                                    <li
+                                        key={`step_${summary.id}`}
+                                        id={`step_${stepIdx}`}
+                                        className={classNames(
+                                            stepIdx !== layerSummaries.length - 1 ? 'pr-8 sm:pr-10' : '',
+                                            'relative',
+                                            'cursor-pointer'
+                                        )}
+                                    >
+                                        <Step
+                                            id={Number(summary.id)}
+                                            text=""
+                                            image_alt={summary.attributes.title}
+                                            __component="media.text"
+                                            orderNumber={stepIdx + 1}
+                                            setCurrent={() => handleGoToStep(stepIdx)}
+                                            status={stepIdx === activeIndex ? 'current' : 'default'}
+                                            image={summary?.attributes.image}
+                                            size="large"
+                                        />
+                                    </li>
+                                ))}
+                        </ol>
+                        {!isSecondLastStep && !isLastStep && layerSummaries.length > 4 && <BlurEdge position="right" />}
+                    </div>
+                    {layerSummaries.length > 1 && (
+                        <button
+                            type="button"
+                            className="text-white px-0 enabled:hover:text-primary_green disabled:hover:text-gray-400 h-[4rem] bg-primary_green hover:bg-secondary_pink"
+                            onClick={handleNext}
+                            aria-label="Next Slide"
+                            disabled={isLastStep}
+                        >
+                            <ChevronDoubleRightIcon className="m-auto h-8 w-8" aria-hidden="true" />
+                        </button>
+                    )}
+                </nav>
+            )}
 
-            <div className="px-8 ">
-                <div className="max-w-[16rem] relative md:max-w-[28rem] mx-auto overflow-x-auto scrollbar-none">
+            <div className="px-16">
+                <div className="relative  mx-auto overflow-x-auto scrollbar-none">
                     <div className="mt-4">
-                        <TitleStrip primaryTitle={layerTitle} secondaryTitle={currentTopicStep?.title || ''} />
+                        <TitleStrip primaryTitle="The Great Sync Imagimodel" secondaryTitle={layerTitle} />
+                        <ContentBlock id={Number(layerId)} heading={layerTitle} className="[&>h1]:text-center" />
                     </div>
                     {!currentTopicStep && (
-                        <>
-                            <ImageBlock image={layerImage} id={Number(layerImage.id)} imageAlt="" />
-
-                            <ContentBlock id={Number(layerImage.id)} heading={layerTitle} md={layerDescription} />
-                        </>
+                        <div className="mx-auto mt-8">
+                            <ContentBlock
+                                id={Number(layerId)}
+                                heading=""
+                                md={layerDescription}
+                                className="[&>h1]:text-center"
+                            />
+                        </div>
                     )}
                 </div>
 
                 {currentTopicStep && (
-                    <Blocks
-                        blocks={currentTopicStep.content}
-                        id={Number(currentTopicStep?.id)}
-                        links={[]}
-                        heading={currentTopicStep?.title}
-                    />
+                    <div className="mt-8">
+                        <h3 className="text-2xl font-bold text-white">{currentTopicStep.attributes.title}</h3>
+                        <BlockRenderer
+                            blocks={currentTopicStep.attributes.content}
+                            id={Number(currentTopicStep?.id)}
+                            links={[]}
+                            heading=""
+                        />
+                    </div>
                 )}
             </div>
             {/* To preload images */}

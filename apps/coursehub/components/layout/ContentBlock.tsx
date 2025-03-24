@@ -47,6 +47,7 @@ const ContentBlock = ({
     links,
     textType,
     blocks,
+    className,
 }: {
     md?: string;
     id: number;
@@ -54,6 +55,7 @@ const ContentBlock = ({
     blocks?: React.ReactNode[];
     textType?: 'page' | 'block';
     links?: ResourceLink[];
+    className?: string;
 }) => {
     const [rendered, setRendered] = useState(false);
 
@@ -65,7 +67,7 @@ const ContentBlock = ({
         <article
             id={`md-${textType ? 'carticle' : 'code'}-block`}
             key={`md-${textType ? 'article' : 'code'}-block:${id}`}
-            className={`prose ${
+            className={`prose ${className} ${
                 !textType
                     ? 'h-full max-w-full prose-lg'
                     : textType === 'page'

@@ -45,7 +45,12 @@ async function fetchImagimodel(id: string) {
 }
 
 // Get the imagimodel ID from URL params or use a default
-const imagimodelId = Astro.url.searchParams.get("id") || "1";
+const imagimodelId = Astro.url.searchParams.get("id");
+
+if (!imagimodelId) {
+	throw new Error("No imagimodel ID provided");
+}
+
 const {
 	layers,
 	zones,

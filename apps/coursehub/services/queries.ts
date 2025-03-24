@@ -102,14 +102,19 @@ export const getReflections = async (courseId: string | number): Promise<Reflect
 export const getImagimodel = async (courseId: string | number): Promise<FetchImagimodelResponse> => {
     const query = qs.stringify(
         {
-            populate: [
-                'layers',
-                'layers.summaries',
-                'layers.summaries.content',
-                'layers.summaries.content.image',
-                'layers.image',
-                'zones',
-            ],
+            populate: {
+                layers: {
+                    populate: {
+                        image: {
+                            populate: ['image'],
+                        },
+                        summaries: {
+                            populate: ['content', 'image', 'content.image'],
+                        },
+                    },
+                },
+                zones: true,
+            },
             filters: {
                 course: {
                     id: {
@@ -119,7 +124,7 @@ export const getImagimodel = async (courseId: string | number): Promise<FetchIma
             },
         },
         {
-            encodeValuesOnly: true, // prettify URL
+            encodeValuesOnly: true,
         }
     );
     const res = await httpClient.get<FetchImagimodelResponse>(`/api/imagimodels?${query}`);

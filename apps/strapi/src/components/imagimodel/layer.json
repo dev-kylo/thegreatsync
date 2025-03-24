@@ -31,6 +31,9 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::summary.summary"
+    },
+    "description": {
+      "type": "richtext"
     }
   }
 }

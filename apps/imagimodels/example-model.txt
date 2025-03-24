@@ -1,0 +1,45 @@
+
+width: 1080
+height: 1920
+containerHeight: 100
+
+zones:
+name functionShip
+centerPosition: 1
+Zoom: 3
+focusPoint: 3
+
+name: islands
+centerPosition: 10
+zoom: 2.5
+focusPoint: center
+
+layers:
+name: Reference
+x: 488
+y: 1,621
+width: 300
+height: 207
+image: https://dev-the-great-sync.s3.us-east-1.amazonaws.com/demo_0000_reference_c4a9071ec1.png
+
+name: island
+x:146
+y:280
+width: 788
+height: 715
+image: https://dev-the-great-sync.s3.us-east-1.amazonaws.com/island_1b01941bc3.png
+
+name: execution
+x: 146
+y: 1,101
+width: 688
+height: 407
+image: https://dev-the-great-sync.s3.us-east-1.amazonaws.com/execution_11f9ba77ae.png
+
+
+name: Function functionShi
+x: 167
+y: 77
+width: 241
+height: 203
+image: https://dev-the-great-sync.s3.us-east-1.amazonaws.com/functionship_76c7b159c4.png

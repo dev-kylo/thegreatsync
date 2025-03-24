@@ -528,16 +528,18 @@ export class LayerViewer {
 
     private updateLayerInfo() {
         const infoElement = document.getElementById('layerInfo')!;
+
+        console.log('DO Nothing')
         
-        if (this.activeLayer) {
-            infoElement.innerHTML = `
-                <h2>Active Layers</h2>
-                <pre>${this.activeLayer}</pre>
-            `;
-            infoElement.classList.add('active');
-        } else {
-            infoElement.classList.remove('active');
-        }
+        // if (this.activeLayer) {
+        //     infoElement.innerHTML = `
+        //         <h2>Active Layers</h2>
+        //         <pre>${this.activeLayer}</pre>
+        //     `;
+        //     infoElement.classList.add('active');
+        // } else {
+        //     infoElement.classList.remove('active');
+        // }
     }
 
     private draw() {

@@ -336,11 +336,13 @@ export type UserCourseProgressResponse = {
 } & StrapiResponseMetaData;
 
 export interface Summary {
-    id: string;
-    title: string;
-    content: PageContent[];
-    image: {
-        data: ImageData;
+    id: number;
+    attributes: {
+        title: string;
+        content: PageContent[];
+        image: {
+            data: ImageData;
+        };
     };
 }
 
@@ -351,7 +353,11 @@ export interface Layer {
     enabled: boolean;
     tiltEnabled: boolean;
     image: {
-        data: ImageData;
+        id: number;
+        image_alt: string | null;
+        image: {
+            data: ImageData[];
+        };
     };
     position: {
         id: number;
@@ -361,7 +367,9 @@ export interface Layer {
         height: number;
     };
     zIndex?: number;
-    summaries: Summary[];
+    summaries?: {
+        data: Summary[];
+    };
     description: string;
 }
 export interface Zone {
@@ -373,17 +381,19 @@ export interface Zone {
 }
 
 export type FetchImagimodelResponse = {
-    data: {
-        id: number;
-        attributes: {
-            layers: Layer[];
-            zones: Zone[];
-            width: number;
-            height: number;
-            containerHeightPercent: number;
-            alignment: 'left' | 'center' | 'right';
-            overrideZoomSpeed?: number;
-            tiltEnabled: boolean;
-        };
-    };
+    data: [
+        {
+            id: number;
+            attributes: {
+                layers: Layer[];
+                zones: Zone[];
+                width: number;
+                height: number;
+                containerHeightPercent: number;
+                alignment: 'left' | 'center' | 'right';
+                overrideZoomSpeed?: number;
+                tiltEnabled: boolean;
+            };
+        }
+    ];
 };

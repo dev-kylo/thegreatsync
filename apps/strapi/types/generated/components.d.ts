@@ -18,6 +18,7 @@ export interface ImagimodelLayer extends Schema.Component {
       'oneToMany',
       'api::summary.summary'
     >;
+    description: Attribute.RichText;
   };
 }
 
