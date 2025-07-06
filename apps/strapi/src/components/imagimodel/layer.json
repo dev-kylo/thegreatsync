@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_imagimodel_layers",
+  "info": {
+    "displayName": "Layer",
+    "icon": "landscape",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "zIndex": {
+      "type": "integer"
+    },
+    "position": {
+      "type": "component",
+      "repeatable": false,
+      "component": "imagimodel.position"
+    },
+    "image": {
+      "type": "component",
+      "repeatable": false,
+      "component": "media.image"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "summaries": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::summary.summary"
+    },
+    "description": {
+      "type": "richtext"
+    }
+  }
+}

@@ -21,7 +21,7 @@ import { setAuthToken } from '../../../../../libs/axios';
 import Text_Code from '../../../../../components/layout/screens/Text_Code';
 import type { ErrorResponse } from '../../../../../types';
 import { createErrorString } from '../../../../../libs/errorHandler';
-import Blocks from '../../../../../components/layout/screens/Blocks';
+import PageOfBlocks from '../../../../../components/layout/screens/PageOfBlocks';
 import Reflection from '../../../../../components/layout/screens/Reflection';
 
 type CoursePageProps = {
@@ -42,7 +42,7 @@ export default function CoursePage({ title, type, content, links, current }: Cou
     let contentLayout = null;
     const hasPageSteps = content && content.length > 1 && type !== 'blocks';
 
-    if (type === 'blocks') contentLayout = <Blocks blocks={content} id={id} links={links} heading={title} />;
+    if (type === 'blocks') contentLayout = <PageOfBlocks blocks={content} id={id} links={links} heading={title} />;
     else if (hasPageSteps)
         contentLayout = (
             <PageStepsController

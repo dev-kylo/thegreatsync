@@ -15,7 +15,8 @@ export default [
             'the-great-sync-bucket.s3.amazonaws.com',
             'the-great-sync.s3.us-east-1.amazonaws.com',
             'the-great-sync.s3.amazonaws.com',
-
+            'dev-the-great-sync.s3.us-east-1.amazonaws.com',
+            'dev-the-great-sync.s3.amazonaws.com',
           ],
           'media-src': [
             "'self'",
@@ -25,6 +26,8 @@ export default [
             'the-great-sync-bucket.s3.amazonaws.com',
             'the-great-sync.s3.us-east-1.amazonaws.com',
             'the-great-sync.s3.amazonaws.com',
+            'dev-the-great-sync.s3.us-east-1.amazonaws.com',
+            'dev-the-great-sync.s3.amazonaws.com',
           ],
           upgradeInsecureRequests: null,
         },

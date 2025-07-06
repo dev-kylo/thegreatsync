@@ -986,7 +986,6 @@ export interface MediaTextImageCode extends ComponentSchema {
     image_alt: TextAttribute & RequiredAttribute;
     image: MediaAttribute & RequiredAttribute;
     code: RichTextAttribute & RequiredAttribute;
-    transparent_image: BooleanAttribute;
   };
 }
 
@@ -1000,7 +999,6 @@ export interface MediaTextImage extends ComponentSchema {
     text: RichTextAttribute & RequiredAttribute;
     image: MediaAttribute & RequiredAttribute;
     image_alt: TextAttribute & RequiredAttribute;
-    transparent_image: BooleanAttribute;
   };
 }
 

@@ -1,0 +1,65 @@
+{
+  "collectionName": "components_metadata_image_classifications",
+  "info": {
+    "displayName": "Classification",
+    "icon": "brush",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "actor": {
+      "type": "enumeration",
+      "enum": [
+        "engine",
+        "genie",
+        "genie-crewmember",
+        "genie-argonaut",
+        "loo",
+        "ship-captain",
+        "ship",
+        "promise-ship",
+        "submarine-ship",
+        "array-like-submarine-ship",
+        "argonaut-ship",
+        "function-ship",
+        "container-ship",
+        "pure-ship",
+        "global-ship",
+        "document-root-ship",
+        "constructor-function-ship",
+        "alien-queue-ship",
+        "function-invoker",
+        "surgeon-operator",
+        "rainy-island",
+        "desert-island",
+        "volcano-island",
+        "ice-island",
+        "boolean-island",
+        "reference-island-with-telescope",
+        "statesman",
+        "statesman-declaration",
+        "statesman-evil-return-statesman",
+        "wormhole-expression",
+        "wormhole-invocation",
+        "turtle",
+        "executioner-got-hex",
+        "glob",
+        "scientist-observer",
+        "scope-house",
+        "block",
+        "levitating-lexical-orb",
+        "execution-isle",
+        "waterfall",
+        "whirlpool-the-great-sync"
+      ]
+    },
+    "action": {
+      "type": "text"
+    },
+    "concepts": {
+      "type": "component",
+      "repeatable": true,
+      "component": "metadata.concept"
+    }
+  }
+}

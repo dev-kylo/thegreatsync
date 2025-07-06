@@ -55,6 +55,11 @@
       "type": "component",
       "repeatable": true,
       "component": "media.link"
+    },
+    "concepts": {
+      "type": "component",
+      "repeatable": true,
+      "component": "metadata.concept"
     }
   }
 }

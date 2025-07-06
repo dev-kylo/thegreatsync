@@ -1,0 +1,208 @@
+---
+// src/pages/index.astro
+import Layout from "../layouts/Layout.astro";
+import type { FetchImagimodelResponse, Layer } from "../types";
+
+// Fetch imagimodel data from Strapi
+async function fetchImagimodel(id: string) {
+	try {
+		const response = await fetch(
+			`${import.meta.env.PUBLIC_STRAPI_URL}/api/imagimodels/${id}?populate[layers][populate][image][populate][image]=*&populate[layers][populate][position]=*&populate[zones][populate]=*`,
+			{
+				headers: {
+					Authorization: `Bearer ${import.meta.env.PUBLIC_STRAPI_API_TOKEN}`,
+				},
+			},
+		);
+
+		if (!response.ok) {
+			throw new Error(
+				`Failed to fetch imagimodel: ${response.statusText}`,
+			);
+		}
+
+		const data = (await response.json()) as FetchImagimodelResponse;
+
+		console.log(data);
+
+		return {
+			layers: data.data.attributes.layers,
+			zones: data.data.attributes.zones,
+			width: data.data.attributes.width,
+			height: data.data.attributes.height,
+			containerHeightPercent: data.data.attributes.containerHeightPercent,
+			alignment: data.data.attributes.alignment,
+			zoomSpeed: data.data.attributes.overrideZoomSpeed,
+			tiltEnabled: data.data.attributes.tiltEnabled,
+		};
+	} catch (error) {
+		console.error("Error fetching imagimodel:", error);
+		return {
+			error: true,
+			message: "Error fetching imagimodel",
+		};
+	}
+}
+
+// Get the imagimodel ID from URL params or use a default
+const imagimodelId = Astro.url.searchParams.get("id");
+
+if (!imagimodelId) {
+	throw new Error("No imagimodel ID provided");
+}
+
+const {
+	layers,
+	zones,
+	width,
+	height,
+	containerHeightPercent,
+	alignment,
+	zoomSpeed,
+	tiltEnabled,
+	error,
+	message,
+} = await fetchImagimodel(imagimodelId);
+
+// const layers = [
+// 	{
+// 		id: "reference",
+// 		name: "Reference",
+// 		imagePath: "/src/assets/reference.png",
+// 		position: {
+// 			x: 488,
+// 			y: 1621,
+// 			width: 300,
+// 			height: 207,
+// 		},
+// 	},
+// ];
+
+// Add zones data
+// const zones = [
+// 	{
+// 		id: "functionship-zone",
+// 		name: "Functionship",
+// 		centerPosition: 1,
+// 		focusPoint: "center", // or "right"
+// 		zoom: 3,
+// 	},
+// ];
+---
+
+<Layout title="Interactive Layer Viewer">
+	<main>
+		<div class="viewer-container">
+			<canvas id="layerViewer"></canvas>
+			<div id="layerInfo" class="layer-info"></div>
+			<div class="zones-menu">
+				<button class="zone-button" data-zone="reset">Reset View</button
+				>
+				{
+					zones?.map((zone) => (
+						<button class="zone-button" data-zone={zone.id}>
+							{zone.name}
+						</button>
+					))
+				}
+			</div>
+		</div>
+	</main>
+</Layout>
+
+<!-- Use a separate script tag -->
+<script
+	type="module"
+	define:vars={{
+		layers,
+		zones,
+		width,
+		height,
+		containerHeightPercent,
+		alignment,
+		zoomSpeed,
+		tiltEnabled,
+		error,
+		message,
+	}}
+>
+	// Your script will be processed, bundled and optimized automatically
+	import { LayerViewer } from "/src/scripts/viewer";
+
+	document.addEventListener("DOMContentLoaded", () => {
+		if (error) {
+			console.error(message);
+			window.parent.postMessage(
+				{
+					type: "ERROR",
+					message: message,
+				},
+				"*",
+			);
+			return;
+		}
+
+		new LayerViewer(
+			"layerViewer",
+			layers,
+			zones,
+			width,
+			height,
+			containerHeightPercent,
+			alignment,
+			zoomSpeed || 0.001,
+			tiltEnabled,
+		);
+	});
+</script>
+
+<style>
+	.viewer-container {
+		position: relative;
+		margin: 0 auto;
+		canvas {
+			width: 100%;
+		}
+	}
+
+	.layer-info {
+		position: fixed;
+		right: 0;
+		top: 0;
+		width: 300px;
+		height: 100%;
+		background: white;
+		box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+		transform: translateX(100%);
+		transition: transform 0.3s ease;
+	}
+
+	.layer-info.active {
+		transform: translateX(0);
+	}
+
+	.zones-menu {
+		position: fixed;
+		left: 1rem;
+		top: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.zone-button {
+		padding: 4px 8px;
+		background: white;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: background-color 0.2s;
+		border-radius: 2rem;
+		width: 150px;
+		font-size: 14px;
+	}
+
+	.zone-button:hover {
+		background: #f0f0f0;
+	}
+</style>

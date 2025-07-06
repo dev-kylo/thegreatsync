@@ -18,8 +18,7 @@ type HomeProps = { reflections: ReflectionsResponse };
 
 const UserReflections = ({ reflections }: HomeProps) => {
     const { data: session } = useSession();
-    const { menuData, nextPage, markPage } =
-        useContext(NavContext);
+    const { menuData, nextPage, markPage } = useContext(NavContext);
 
     if (!session?.jwt || !reflections) return <LoadingQuote />;
 

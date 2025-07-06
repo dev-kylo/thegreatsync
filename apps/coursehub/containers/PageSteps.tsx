@@ -152,7 +152,7 @@ const PageSteps = ({
                             >
                                 <ChevronDoubleLeftIcon className="m-auto h-8 w-8" aria-hidden="true" />
                             </button>
-                            <div className="max-w-[16rem] relative overflow-hidden md:max-w-[28rem]">
+                            <div className="max-w-[16rem] relative overflow-x-hidden md:max-w-[28rem]">
                                 {pageSteps.length > 6 && currIndex > 2 && <BlurEdge position="left" />}
                                 <ol ref={stepsContainer} className="flex items-center ">
                                     {pageSteps.map((step: PageStep, stepIdx: number) => (
@@ -160,7 +160,7 @@ const PageSteps = ({
                                             key={`step_${step.id}`}
                                             id={`step_${stepIdx}`}
                                             className={classNames(
-                                                stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-10' : '',
+                                                stepIdx !== pageSteps.length - 1 ? 'pr-8 sm:pr-6' : '',
                                                 'relative',
                                                 'cursor-pointer'
                                             )}

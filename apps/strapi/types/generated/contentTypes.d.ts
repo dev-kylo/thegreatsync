@@ -983,6 +983,11 @@ export interface ApiCourseCourse extends Schema.CollectionType {
     >;
     description: Attribute.DynamicZone<['media.text', 'media.video']> &
       Attribute.Required;
+    imagimodel: Attribute.Relation<
+      'api::course.course',
+      'oneToOne',
+      'api::imagimodel.imagimodel'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1066,6 +1071,66 @@ export interface ApiEnrollmentEnrollment extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::enrollment.enrollment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiImagimodelImagimodel extends Schema.CollectionType {
+  collectionName: 'imagimodels';
+  info: {
+    singularName: 'imagimodel';
+    pluralName: 'imagimodels';
+    displayName: 'ImagiModel';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    width: Attribute.Integer;
+    height: Attribute.Integer;
+    layers: Attribute.Component<'imagimodel.layer', true>;
+    zones: Attribute.Component<'imagimodel.zone', true>;
+    containerHeightPercent: Attribute.Integer &
+      Attribute.SetMinMax<
+        {
+          min: 10;
+          max: 100;
+        },
+        number
+      > &
+      Attribute.DefaultTo<100>;
+    alignment: Attribute.Enumeration<['left', 'right', 'center']> &
+      Attribute.DefaultTo<'center'>;
+    title: Attribute.String;
+    overrideZoomSpeed: Attribute.Decimal &
+      Attribute.SetMinMax<
+        {
+          min: 0.001;
+        },
+        number
+      > &
+      Attribute.DefaultTo<0.001>;
+    tiltEnabled: Attribute.Boolean;
+    course: Attribute.Relation<
+      'api::imagimodel.imagimodel',
+      'oneToOne',
+      'api::course.course'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::imagimodel.imagimodel',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::imagimodel.imagimodel',
       'oneToOne',
       'admin::user'
     > &
@@ -1188,6 +1253,7 @@ export interface ApiPagePage extends Schema.CollectionType {
     menu: Attribute.Component<'menu.menu-info', true>;
     visible: Attribute.Boolean & Attribute.DefaultTo<true>;
     links: Attribute.Component<'media.link', true>;
+    concepts: Attribute.Component<'metadata.concept', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1288,6 +1354,48 @@ export interface ApiSubchapterSubchapter extends Schema.CollectionType {
   };
 }
 
+export interface ApiSummarySummary extends Schema.CollectionType {
+  collectionName: 'summaries';
+  info: {
+    singularName: 'summary';
+    pluralName: 'summaries';
+    displayName: 'Summary';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    content: Attribute.DynamicZone<
+      [
+        'media.code-editor',
+        'media.image',
+        'media.link',
+        'media.text',
+        'media.video'
+      ]
+    >;
+    links: Attribute.Component<'media.link', true>;
+    image: Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::summary.summary',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::summary.summary',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiUserCourseProgressUserCourseProgress
   extends Schema.CollectionType {
   collectionName: 'user_course_progresses';
@@ -1356,11 +1464,13 @@ declare module '@strapi/types' {
       'api::course.course': ApiCourseCourse;
       'api::customer.customer': ApiCustomerCustomer;
       'api::enrollment.enrollment': ApiEnrollmentEnrollment;
+      'api::imagimodel.imagimodel': ApiImagimodelImagimodel;
       'api::menu.menu': ApiMenuMenu;
       'api::order.order': ApiOrderOrder;
       'api::page.page': ApiPagePage;
       'api::reflection.reflection': ApiReflectionReflection;
       'api::subchapter.subchapter': ApiSubchapterSubchapter;
+      'api::summary.summary': ApiSummarySummary;
       'api::user-course-progress.user-course-progress': ApiUserCourseProgressUserCourseProgress;
     }
   }
