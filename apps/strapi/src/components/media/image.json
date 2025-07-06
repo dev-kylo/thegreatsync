@@ -2,22 +2,32 @@
   "collectionName": "components_media_images",
   "info": {
     "displayName": "Image",
-    "icon": "picture"
+    "icon": "picture",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": true
+      ]
     },
     "image_alt": {
       "type": "string"
+    },
+    "caption": {
+      "type": "text"
+    },
+    "image_classification": {
+      "type": "component",
+      "repeatable": true,
+      "component": "metadata.image-classification"
     }
   }
 }

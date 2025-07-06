@@ -52,7 +52,6 @@ const CourseImageModel = ({ imagimodelData }: { imagimodelData: FetchImagimodelR
     const layerSummaries = [firstLayer, ...(activeLayer?.summaries?.data || [])];
 
     console.log({ activeLayer, layerSummaries, imagimodelData });
-    console.log(layerSummaries);
 
     return (
         <Layout>
@@ -66,7 +65,7 @@ const CourseImageModel = ({ imagimodelData }: { imagimodelData: FetchImagimodelR
 
             <iframe
                 title="imagimodel"
-                src={`http://localhost:4321/?id=${imagimodelData.id}`}
+                src={`${process.env.NEXT_PUBLIC_IMAGIMODEL_URL}?id=${imagimodelData.id}`}
                 className="w-full h-full"
             />
 
@@ -74,8 +73,6 @@ const CourseImageModel = ({ imagimodelData }: { imagimodelData: FetchImagimodelR
                 {activeLayer && (
                     <ModelCarousel
                         layerSummaries={layerSummaries}
-                        layerImage={activeLayer.image.data}
-                        layerDescription={activeLayer.description}
                         layerTitle={activeLayer?.name}
                         layerId={activeLayer?.id}
                     />

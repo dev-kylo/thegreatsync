@@ -115,10 +115,16 @@ export interface MediaImage extends Schema.Component {
   info: {
     displayName: 'Image';
     icon: 'picture';
+    description: '';
   };
   attributes: {
     image: Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
     image_alt: Attribute.String;
+    caption: Attribute.Text;
+    image_classification: Attribute.Component<
+      'metadata.image-classification',
+      true
+    >;
   };
 }
 
@@ -163,7 +169,11 @@ export interface MediaTextImageCode extends Schema.Component {
     image_alt: Attribute.Text & Attribute.Required;
     image: Attribute.Media<'images'> & Attribute.Required;
     code: Attribute.RichText & Attribute.Required;
-    transparent_image: Attribute.Boolean;
+    image_caption: Attribute.Text;
+    image_classification: Attribute.Component<
+      'metadata.image-classification',
+      true
+    >;
   };
 }
 
@@ -176,10 +186,13 @@ export interface MediaTextImage extends Schema.Component {
   };
   attributes: {
     text: Attribute.RichText & Attribute.Required;
-    image: Attribute.Media<'images' | 'files' | 'videos' | 'audios'> &
-      Attribute.Required;
+    image: Attribute.Media<'images' | 'files'> & Attribute.Required;
     image_alt: Attribute.Text & Attribute.Required;
-    transparent_image: Attribute.Boolean;
+    image_caption: Attribute.Text;
+    image_classification: Attribute.Component<
+      'metadata.image-classification',
+      true
+    >;
   };
 }
 
@@ -241,6 +254,152 @@ export interface MenuMenuInfo extends Schema.Component {
   };
 }
 
+export interface MetadataConcept extends Schema.Component {
+  collectionName: 'components_metadata_concepts';
+  info: {
+    displayName: 'Concept';
+    icon: 'crown';
+  };
+  attributes: {
+    concept: Attribute.Enumeration<
+      [
+        'function-declaration  ',
+        'function-execution  ',
+        'function-return  ',
+        'function-expression  ',
+        'function-iife  ',
+        'function-constructor  ',
+        'function-pure  ',
+        'function-container  ',
+        'function-callback  ',
+        'function-controller  ',
+        'execution-context  ',
+        'execution-stack  ',
+        'execution-hoisting  ',
+        'control-conditionals  ',
+        'control-loops  ',
+        'control-try-catch  ',
+        'control-error-handling  ',
+        'scope  ',
+        'scope-global  ',
+        'scope-lexical  ',
+        'scope-block  ',
+        'scope-function  ',
+        'scope-temporal-dead-zone  ',
+        'expression  ',
+        'operator-coercion  ',
+        'operator-assignment  ',
+        'operator-return  ',
+        'operator-dot-notation  ',
+        'operator-square-bracket  ',
+        'operator-getters-setters  ',
+        'this-pointer',
+        'object  ',
+        'object-instance  ',
+        'object-global  ',
+        'object-property  ',
+        'object-cloning  ',
+        'object-inheritance  ',
+        'object-prototype  ',
+        'object-class  ',
+        'object-array  ',
+        'object-array-like  ',
+        'object-array-index  ',
+        'object-array-methods  ',
+        'primitive  ',
+        'primitive-string  ',
+        'primitive-number  ',
+        'primitive-boolean  ',
+        'primitive-null  ',
+        'primitive-undefined  ',
+        'reference-value  ',
+        'reference-shared  ',
+        'memory-pointer  ',
+        'memory-stack  ',
+        'memory-heap  ',
+        'memory-pass-by-reference  ',
+        'memory-pass-by-value  ',
+        'memory-garbage-collection  ',
+        'async-promises  ',
+        'async-async-await  ',
+        'async-promise-chain  ',
+        'async-chaining-promises  ',
+        'async-event-loop  ',
+        'async-synchronous  ',
+        'async-asynchronous  ',
+        'event  ',
+        'event-listener  ',
+        'event-dom  ',
+        'event-dom-api  ',
+        'variable  ',
+        'variable-assignment  ',
+        'variable-temporal-dead-zone  ',
+        'dom  ',
+        'dom-api  ',
+        'dom-manipulation'
+      ]
+    >;
+  };
+}
+
+export interface MetadataImageClassification extends Schema.Component {
+  collectionName: 'components_metadata_image_classifications';
+  info: {
+    displayName: 'Classification';
+    icon: 'brush';
+    description: '';
+  };
+  attributes: {
+    actor: Attribute.Enumeration<
+      [
+        'engine',
+        'genie',
+        'genie-crewmember',
+        'genie-argonaut',
+        'loo',
+        'ship-captain',
+        'ship',
+        'promise-ship',
+        'submarine-ship',
+        'array-like-submarine-ship',
+        'argonaut-ship',
+        'function-ship',
+        'container-ship',
+        'pure-ship',
+        'global-ship',
+        'document-root-ship',
+        'constructor-function-ship',
+        'alien-queue-ship',
+        'function-invoker',
+        'surgeon-operator',
+        'rainy-island',
+        'desert-island',
+        'volcano-island',
+        'ice-island',
+        'boolean-island',
+        'reference-island-with-telescope',
+        'statesman',
+        'statesman-declaration',
+        'statesman-evil-return-statesman',
+        'wormhole-expression',
+        'wormhole-invocation',
+        'turtle',
+        'executioner-got-hex',
+        'glob',
+        'scientist-observer',
+        'scope-house',
+        'block',
+        'levitating-lexical-orb',
+        'execution-isle',
+        'waterfall',
+        'whirlpool-the-great-sync'
+      ]
+    >;
+    action: Attribute.Text;
+    concepts: Attribute.Component<'metadata.concept', true>;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
@@ -257,6 +416,8 @@ declare module '@strapi/types' {
       'media.text': MediaText;
       'media.video': MediaVideo;
       'menu.menu-info': MenuMenuInfo;
+      'metadata.concept': MetadataConcept;
+      'metadata.image-classification': MetadataImageClassification;
     }
   }
 }

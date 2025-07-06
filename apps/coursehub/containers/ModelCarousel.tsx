@@ -2,21 +2,17 @@
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { ChevronDoubleRightIcon, ChevronDoubleLeftIcon } from '@heroicons/react/20/solid';
 
-import type { ImageData, Summary } from '../types';
+import type { Summary } from '../types';
 import Step from '../components/ui/Step';
 
 import BlurEdge from '../components/ui/BlurEdge';
 
-import ImageBlock from '../components/layout/blocks/ImageBlock';
 import ContentBlock from '../components/layout/ContentBlock';
 import TitleStrip from '../components/ui/TitleStrip';
-import Blocks from '../components/layout/screens/PageOfBlocks';
 import BlockRenderer from '../components/layout/blocks/BlockRenderer';
 
 type ModelStepsProps = {
     layerSummaries: Summary[];
-    layerImage: ImageData;
-    layerDescription: string;
     layerTitle: string;
     layerId: string | number;
 };
@@ -29,7 +25,7 @@ function classNames(...classes: string[]) {
 // If no activeIndex, then show the list of summaries
 // If activeIndex, then show the current summary
 
-const ModelCarousel = ({ layerSummaries, layerImage, layerTitle, layerDescription, layerId }: ModelStepsProps) => {
+const ModelCarousel = ({ layerSummaries, layerTitle, layerId }: ModelStepsProps) => {
     const stepsContainer = useRef<HTMLOListElement>(null);
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [direction, setDirection] = useState('next');
@@ -85,16 +81,6 @@ const ModelCarousel = ({ layerSummaries, layerImage, layerTitle, layerDescriptio
     const handleGoToStep = (index: number) => {
         setActiveIndex(index);
     };
-
-    console.log({
-        activeIndex,
-        isLastStep,
-        currentTopicStep,
-        layerSummaries,
-        layerDescription,
-        layerTitle,
-        layerImage,
-    });
 
     return (
         <div className="relative">
@@ -164,7 +150,7 @@ const ModelCarousel = ({ layerSummaries, layerImage, layerTitle, layerDescriptio
                         <TitleStrip primaryTitle="The Great Sync Imagimodel" secondaryTitle={layerTitle} />
                         <ContentBlock id={Number(layerId)} heading={layerTitle} className="[&>h1]:text-center" />
                     </div>
-                    {!currentTopicStep && (
+                    {/* {!currentTopicStep && (
                         <div className="mx-auto mt-8">
                             <ContentBlock
                                 id={Number(layerId)}
@@ -173,7 +159,7 @@ const ModelCarousel = ({ layerSummaries, layerImage, layerTitle, layerDescriptio
                                 className="[&>h1]:text-center"
                             />
                         </div>
-                    )}
+                    )} */}
                 </div>
 
                 {currentTopicStep && (

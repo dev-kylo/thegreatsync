@@ -187,7 +187,6 @@ export interface PageContent {
         | 'media.code-editor';
     code?: string;
     image_alt: string;
-    transparent_image?: boolean;
     text: string;
     orderNumber?: number;
     image: ImageComp;

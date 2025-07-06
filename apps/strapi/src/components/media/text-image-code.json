@@ -27,8 +27,13 @@
       "type": "richtext",
       "required": true
     },
-    "transparent_image": {
-      "type": "boolean"
+    "image_caption": {
+      "type": "text"
+    },
+    "image_classification": {
+      "type": "component",
+      "repeatable": true,
+      "component": "metadata.image-classification"
     }
   }
 }

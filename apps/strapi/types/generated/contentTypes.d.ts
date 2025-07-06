@@ -1253,6 +1253,7 @@ export interface ApiPagePage extends Schema.CollectionType {
     menu: Attribute.Component<'menu.menu-info', true>;
     visible: Attribute.Boolean & Attribute.DefaultTo<true>;
     links: Attribute.Component<'media.link', true>;
+    concepts: Attribute.Component<'metadata.concept', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
