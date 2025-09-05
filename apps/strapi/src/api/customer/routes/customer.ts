@@ -18,5 +18,23 @@ export default {
         middlewares: [],
       },
      },
+    {
+      method: 'GET',
+      path: '/customer/check-email',
+      handler: 'customer.checkEmail',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: 'POST',
+      path: '/customer/register-authenticated',
+      handler: 'customer.registerAuthenticated',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 };

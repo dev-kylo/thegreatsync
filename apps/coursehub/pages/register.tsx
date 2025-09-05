@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import axios from 'axios';
 import Link from 'next/link';
@@ -8,6 +9,7 @@ import Logo from '../assets/logo.webp';
 import Alert from '../components/ui/Alert';
 import Spinner from '../components/ui/Spinner';
 import { RegisterPayload, register } from '../services/register';
+import { checkEmailForOrder, registerAuthenticatedUser } from '../services/customer';
 import type { RegisterResponse, ServerResponse } from '../types';
 import useHoneypot from '../hooks/useHoneypot';
 
@@ -35,10 +37,67 @@ function getErrorMessage(result: RegisterResponse | ValidationError) {
 
 export default function Enrollment() {
     const [formState, setFormState] = useState({ loading: false, error: false, message: '' });
-    const [createNewAccount] = useState(true);
+    const [createNewAccount, setCreateNewAccount] = useState(true);
+    const [orderEmail, setOrderEmail] = useState('');
+    const [checkingEmail, setCheckingEmail] = useState(false);
+    const [processingAuth, setProcessingAuth] = useState(false);
     const router = useRouter();
+    const { data: session } = useSession();
     const { orderid } = router.query as { orderid: string };
     const { checkForHoney, honeypot } = useHoneypot();
+
+    // Check if user is authenticated and auto-register
+    useEffect(() => {
+        const handleAuthenticatedRegistration = async () => {
+            if (!session?.jwt || !orderid || processingAuth) return;
+            
+            setProcessingAuth(true);
+            setFormState({ loading: true, error: false, message: 'Setting up your course access...' });
+            
+            try {
+                const result = await registerAuthenticatedUser(orderid, session.jwt as string);
+                if (result.success) {
+                    setFormState({ 
+                        loading: false, 
+                        error: false, 
+                        message: result.message + ' Redirecting to your courses...' 
+                    });
+                    setTimeout(() => {
+                        router.push('/courses');
+                    }, 2000);
+                }
+            } catch (err) {
+                const error = err as any;
+                const message = error?.response?.data?.error?.message || 
+                               error?.response?.data?.message || 
+                               'Failed to register course';
+                setFormState({ loading: false, error: true, message });
+                setProcessingAuth(false);
+            }
+        };
+
+        handleAuthenticatedRegistration();
+    }, [session, orderid, processingAuth, router]);
+
+    // Check order email for non-authenticated users
+    useEffect(() => {
+        const checkOrderEmail = async () => {
+            if (!orderid || session || checkingEmail) return;
+            
+            setCheckingEmail(true);
+            try {
+                const result = await checkEmailForOrder(orderid);
+                setOrderEmail(result.email);
+                setCreateNewAccount(!result.hasAccount);
+            } catch (err) {
+                console.error('Failed to check order email:', err);
+            } finally {
+                setCheckingEmail(false);
+            }
+        };
+
+        checkOrderEmail();
+    }, [orderid, session, checkingEmail]);
 
     const sendCredentials = async (payload: RegisterPayload) => {
         try {
@@ -73,6 +132,34 @@ export default function Enrollment() {
         sendCredentials(payload);
     };
 
+    // Show loading state if checking auth or processing
+    if (processingAuth || (session && orderid)) {
+        return (
+            <div className="bg-primary_blue h-screen px-8 md:px-0">
+                <div className="flex min-h-full items-center justify-center">
+                    <div className="text-center">
+                        <div className="relative w-full h-32 mb-8">
+                            <Image
+                                alt="The Great Sync Logo"
+                                src={Logo}
+                                fill
+                                className="aspect-square object-contain h-auto w-full top-0 left-1/2"
+                            />
+                        </div>
+                        {formState.message ? (
+                            <Alert type={formState.error ? 'error' : 'success'} text={formState.message} />
+                        ) : (
+                            <>
+                                <Spinner />
+                                <p className="text-white mt-4">Setting up your course access...</p>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="bg-primary_blue h-screen px-8 md:px-0">
             <div className="flex min-h-full ">
@@ -99,6 +186,31 @@ export default function Enrollment() {
 
                         <div className="mt-8">
                             <div className="mt-6">
+                                {/* Account type selection */}
+                                {orderEmail && (
+                                    <div className="mb-6 p-4 bg-blue-900 rounded-md">
+                                        <p className="text-sm text-white mb-3">
+                                            {!createNewAccount ? 
+                                                "Welcome back! Use your existing password to link this course" :
+                                                "Create a new account to access your course"
+                                            }
+                                        </p>
+                                        <div className="flex items-center">
+                                            <input
+                                                id="use-existing"
+                                                name="use-existing"
+                                                type="checkbox"
+                                                checked={!createNewAccount}
+                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                onChange={() => setCreateNewAccount(!createNewAccount)}
+                                            />
+                                            <label htmlFor="use-existing" className="ml-2 block text-sm text-white">
+                                                I already have an account
+                                            </label>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <form action="#" method="POST" className="space-y-6" onSubmit={onSubmit}>
                                     <div>
                                         <label htmlFor="email" className="block text-sm font-medium text-white">
@@ -111,47 +223,40 @@ export default function Enrollment() {
                                                 type="email"
                                                 autoComplete="email"
                                                 required
-                                                className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                                defaultValue={orderEmail}
+                                                readOnly={!createNewAccount && orderEmail !== ''}
+                                                className={`block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm ${
+                                                    !createNewAccount && orderEmail ? 'bg-gray-100' : ''
+                                                }`}
                                             />
                                         </div>
                                     </div>
 
                                     {honeypot}
 
-                                    {createNewAccount && (
-                                        <div className="space-y-1">
-                                            <label htmlFor="password" className="block text-sm font-medium text-white">
-                                                Create Password
-                                            </label>
-                                            <div className="mt-1">
-                                                <input
-                                                    id="password"
-                                                    name="password"
-                                                    type="password"
-                                                    autoComplete="current-password"
-                                                    required
-                                                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                                />
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* CHECKBOX FOR USERS WHO ALREADY HAVE AN ACCOUNT */}
-                                    {/* <div className="flex items-center justify-between">
-                                        <div className="flex items-center">
+                                    <div className="space-y-1">
+                                        <label htmlFor="password" className="block text-sm font-medium text-white">
+                                            {createNewAccount ? 'Create Password' : 'Enter Your Password'}
+                                        </label>
+                                        <div className="mt-1">
                                             <input
-                                                id="remember-me"
-                                                name="remember-me"
-                                                type="checkbox"
-                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                onChange={() => setCreateNewAccount(!createNewAccount)}
+                                                id="password"
+                                                name="password"
+                                                type="password"
+                                                autoComplete={createNewAccount ? 'new-password' : 'current-password'}
+                                                required
+                                                className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                             />
-                                            <label htmlFor="remember-me" className="ml-4 block text-sm text-white">
-                                                I already have an account with this email address and would like to use
-                                                the same one.
-                                            </label>
                                         </div>
-                                    </div> */}
+                                        {!createNewAccount && (
+                                            <div className="text-sm text-right mt-2">
+                                                <Link href="/user/forgottenpassword" className="text-green-400 hover:text-green-300">
+                                                    Forgot your password?
+                                                </Link>
+                                            </div>
+                                        )}
+                                    </div>
+
 
                                     {!formState.message && (
                                         <button
@@ -164,7 +269,7 @@ export default function Enrollment() {
                                             ) : createNewAccount ? (
                                                 'Create my account'
                                             ) : (
-                                                'Use my existing account'
+                                                'Link to my existing account'
                                             )}
                                         </button>
                                     )}
