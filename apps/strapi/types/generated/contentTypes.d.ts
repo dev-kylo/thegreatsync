@@ -1060,6 +1060,11 @@ export interface ApiEnrollmentEnrollment extends Schema.CollectionType {
       'api::course.course'
     >;
     price: Attribute.String;
+    tier: Attribute.Relation<
+      'api::enrollment.enrollment',
+      'manyToOne',
+      'api::tier.tier'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1396,6 +1401,41 @@ export interface ApiSummarySummary extends Schema.CollectionType {
   };
 }
 
+export interface ApiTierTier extends Schema.CollectionType {
+  collectionName: 'tiers';
+  info: {
+    singularName: 'tier';
+    pluralName: 'tiers';
+    displayName: 'Tier';
+    description: 'Course access tiers for enrollment';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
+    description: Attribute.Text;
+    allowedChapters: Attribute.Relation<
+      'api::tier.tier',
+      'manyToMany',
+      'api::chapter.chapter'
+    >;
+    courses: Attribute.Relation<
+      'api::tier.tier',
+      'manyToMany',
+      'api::course.course'
+    >;
+    identifier: Attribute.String & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::tier.tier', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::tier.tier', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface ApiUserCourseProgressUserCourseProgress
   extends Schema.CollectionType {
   collectionName: 'user_course_progresses';
@@ -1471,6 +1511,7 @@ declare module '@strapi/types' {
       'api::reflection.reflection': ApiReflectionReflection;
       'api::subchapter.subchapter': ApiSubchapterSubchapter;
       'api::summary.summary': ApiSummarySummary;
+      'api::tier.tier': ApiTierTier;
       'api::user-course-progress.user-course-progress': ApiUserCourseProgressUserCourseProgress;
     }
   }

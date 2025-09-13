@@ -143,14 +143,11 @@ export function mapMenuChapters(
             const mappedChapter = {} as Partial<MenuItem>;
             mappedChapter.name = chapterTitle;
             mappedChapter.completed = completed && completed.chapters.find((chp) => chp.id === chapter.id)?.completed;
-            mappedChapter.children = mapMenuSubChapters(
-                subchapters,
-                parentData,
-                `courses/${courseUid}/${chapterId}`,
-                courseUid,
-                completed
-            );
-            mappedChapter.progress = calculateChapterProgress(chapter.id, completed);
+            mappedChapter.isLocked = attributes.isLocked || false;
+            mappedChapter.children = !attributes.isLocked
+                ? mapMenuSubChapters(subchapters, parentData, `courses/${courseUid}/${chapterId}`, courseUid, completed)
+                : [];
+            mappedChapter.progress = !attributes.isLocked ? calculateChapterProgress(chapter.id, completed) : 0;
             mappedChapter.id = chapter.id;
             mappedChapter.level = 1;
             return mappedChapter as MenuItem;

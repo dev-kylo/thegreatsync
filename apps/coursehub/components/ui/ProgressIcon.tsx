@@ -1,15 +1,25 @@
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
+import { CheckCircleIcon, LockClosedIcon } from '@heroicons/react/24/solid';
 
 const ProgressIcon = ({
     amount,
     completed,
     size,
+    isLocked,
 }: {
     amount?: number | string;
     completed?: boolean;
     size?: string;
+    isLocked?: boolean;
 }) => {
     // if (!amount && !completed) return null;
+    if (isLocked)
+        return (
+            <LockClosedIcon
+                className={`text-gray-400 mr-3 ${size ? `w-${size} h-${size}` : 'w-7 h-7'} `}
+                aria-hidden="true"
+            />
+        );
+
     if (completed)
         return (
             <CheckCircleIcon
