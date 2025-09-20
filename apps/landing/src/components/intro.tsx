@@ -57,19 +57,19 @@ export default function Intro() {
             <li className="mt-6 text-xl leading-8 text-gray-700">
  
               <span >
-                <strong className="font-semibold text-gray-900 ">Even if...</strong> you struggle to code without a tutorial.
+                <strong className="font-semibold text-gray-900 w-10">Even if...</strong> you struggle to code without a tutorial.
               </span>
             </li>
             <li className="mt-6 text-xl leading-8 text-gray-700">
  
               <span>
-                <strong className="font-semibold text-gray-900">Even if...</strong> you are career transitioning and only have limited time to code.
+                <strong className="font-semibold text-gray-900 w-10">Even if...</strong> you are career transitioning and only have limited time to code.
               </span>
             </li>
             <li className="mt-6 text-xl leading-8 text-gray-700">
  
               <span>
-                <strong className="font-semibold text-gray-900">Even if....</strong> you have been completely stuck for months.
+                <strong className="font-semibold text-gray-900 w-10">Even if....</strong> you have been completely stuck for months.
               </span>
             </li>            
           </ul>

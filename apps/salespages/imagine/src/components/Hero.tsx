@@ -1,10 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
+'use client'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
 import { Button } from '@/components/Button'
 import { GridPattern } from '@/components/GridPattern'
 import { StarRating } from '@/components/StarRating'
-import coverImage from '@/images/model2.png'
+import coverImage from '@/images/model/full.png'
+import { shouldShowDiscount, getPrices } from '@/utils/pricing'
 
 function Testimonial() {
   return (
@@ -32,53 +35,272 @@ function Testimonial() {
 }
 
 export function Hero() {
+  const [showDiscount, setShowDiscount] = useState(false)
+  const [prices, setPrices] = useState(getPrices(false))
+  
+  useEffect(() => {
+    // Check discount eligibility on mount
+    const eligible = shouldShowDiscount()
+    setShowDiscount(eligible)
+    setPrices(getPrices(eligible))
+  }, [])
+  
   return (
     <header className="overflow-hidden bg-slate-100 lg:bg-transparent lg:px-5">
-      <div className="mx-auto grid max-w-6xl grid-cols-1 grid-rows-[auto_1fr] gap-y-16 pt-16 md:pt-20 lg:grid-cols-12 lg:gap-y-12 lg:px-3 lg:pb-36 lg:pt-10 xl:py-22">
-        <div className="relative flex items-end lg:col-span-5 lg:row-span-2">
-          <div className="absolute -bottom-12 -top-20 left-0 right-1/2 z-10 rounded-br-6xl bg-blue-600 text-white/10 md:bottom-8 lg:-inset-y-32 lg:left-[-100vw] lg:right-full lg:-mr-40">
-            <GridPattern
-              x="100%"
-              y="100%"
-              patternTransform="translate(112 64)"
-            />
-          </div>
-          <div className="relative z-10 mx-auto flex w-64 rounded-xl  shadow-xl md:w-80 lg:w-auto">
-            <Image className="w-full" src={coverImage} alt="" priority />
-          </div>
-        </div>
-        <div className="hidden md:block relative px-4 sm:px-6 lg:col-span-7 lg:pb-14 lg:pl-16 lg:pr-0 xl:pl-20">
-          <div className="hidden lg:absolute lg:-top-32 lg:bottom-0 lg:left-[-100vw] lg:right-[-100vw] lg:block lg:bg-slate-100" />
-          <div className="hidden 2xl:block"><Testimonial /></div>
-        </div>
-        <div className="bg-white pt-16 lg:col-span-7 lg:bg-transparent lg:pl-16 lg:pt-0 xl:pl-20">
-          <div className="mx-auto px-4 sm:px-6 md:max-w-2xl md:px-4 lg:px-0">
-            <h1 className="font-display text-6xl font-extrabold text-slate-900 sm:text-8xl">
-              <span className="text-blue-600"> Imagine</span> JavaScript
+      {/* Mobile-First Hero Design */}
+      <div className="lg:hidden">
+        <div className="relative min-h-[100vh] bg-white">
+          {/* Clean white header with visual learning focus */}
+          <div className="px-6 pt-8 pb-6">
+            {/* Main Question - Conversational */}
+            <h1 className="font-display text-4xl font-extrabold text-slate-900 leading-tight ">
+              Are you a <span className="text-blue-600">visual learner</span> struggling with JavaScript?
             </h1>
-            <p className="mt-2 text-3xl text-slate-600"> ~ Master the Fundamentals</p>
-             <p className="mt-6 text-slate-600">Perhaps you're ...</p>
-              <ul className="mt-4 list-disc list-inside text-slate-600">
-                <li>blindly <span className="font-bold">copy-pasting</span> from Chat GPT</li>
-                <li><span className="font-bold">re-learning</span> concepts over and over again</li>
-                <li>getting <span className="font-bold">overwhelmed</span> when reading code or documentation</li>
-              </ul>
-            <p className="mt-2  text-slate-600">
-              Instead, create an <span className="relative">
-                <span className="relative z-10 text-xl">unforgettable</span>
-                <span className="absolute bottom-0 left-0 right-0 h-6 bg-yellow-200/50 -rotate-2" aria-hidden="true"></span>
-              </span>, long-lasting <span className="text-blue-600 font-bold text-xl relative">
-                <span className="relative z-10">visual mental model </span>
-                <span className="absolute bottom-0 left-0 right-0 h-6 bg-blue-200/50 rotate-5" aria-hidden="true"></span>
-              </span>
-              <span className="block">of how JavaScript works.</span>
+            
+            {/* Empathetic sub-message */}
+            <p className="mt-4 text-base text-slate-600 leading-relaxed">
+              You're not alone. Abstract concepts like closures and prototypes feel impossible when explained with just text and code.
             </p>
-            <p className="mt-2  text-slate-600"> And gain <span className="font-bold text-blue-600">complete confidence</span> in your fundamentals.</p>
-            <div className="mt-8 flex justify-start gap-4">
-
-              <Button href="#pricing-title" color="blue">
-                I'm ready NOW
+            
+            {/* Core Value Proposition - Educational Focus */}
+            <div className="mt-6 bg-gradient-to-br from-blue-100 to-white rounded-2xl p-5 border border-blue-100">
+              <p className="text-lg font-semibold text-slate-900 leading-snug">
+                What if you could build an <span className="text-blue-600">unforgettable visual mental model</span> of how JavaScript actually works?
+              </p>
+              <p className="mt-3 text-sm text-slate-600">
+                Not just memorizing syntax, but truly understanding the environment, flow and patterns in the code.
+              </p>
+            </div>
+          </div>
+          
+          {/* Visual Model Preview */}
+          <div className="px-6 pb-6">
+            <div className="relative">
+              <p className="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-3">
+                 Every concept can be imagined →
+              </p>
+              <div className="relative rounded-2xl overflow-hidden shadow-lg bg-gradient-to-br from-blue-100 to-white p-4">
+                <Image 
+                  className="w-full h-auto object-contain" 
+                  src={coverImage} 
+                  alt="Visual JavaScript Learning Model" 
+                  priority 
+                />
+              </div>
+            </div>
+          </div>
+          
+          {/* Learning Approach */}
+          <div className="px-6 pb-6">
+            <div className="space-y-4">
+              <div>
+                <h2 className="text-xl font-bold text-slate-900 mb-3">
+                  Learn through imagination, not memorization
+                </h2>
+                <div className="space-y-3">
+                  <div className="flex items-start">
+                    <span className="text-blue-500 mr-3 mt-0.5">✓</span>
+                    <div>
+                      <p className="text-sm font-medium text-slate-700">Visual mental models that stick</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Picture JavaScript concepts as interactive worlds</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-blue-500 mr-3 mt-0.5">✓</span>
+                    <div>
+                      <p className="text-sm font-medium text-slate-700">Understand, don't just copy</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Know why your code works, not just that it works</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-blue-500 mr-3 mt-0.5">✓</span>
+                    <div>
+                      <p className="text-sm font-medium text-slate-700">Build lasting confidence</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Debug fearlessly with deep understanding</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Course Introduction */}
+          <div className="px-6 pb-6">
+            <div className="border-t border-slate-200 pt-6">
+              <p className="text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                The Course
+              </p>
+              <h3 className="text-2xl font-bold text-slate-900 mt-2">
+                Imagine JavaScript
+              </h3>
+              <p className="text-sm text-slate-600 mt-2">
+                A complete visual journey through JavaScript fundamentals. From basic concepts to advanced patterns, all explained through memorable visual models.
+              </p>
+            </div>
+          </div>
+          
+          {/* Testimonial */}
+          <div className="px-6 pb-6">
+            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <div className="flex text-yellow-500 text-sm">
+                {'★'.repeat(5)}
+              </div>
+              <p className="text-sm text-slate-700 mt-2 italic">
+                "I wasn't scared of errors anymore. Debugging became fun because I could visualize what was happening."
+              </p>
+              <p className="text-xs text-slate-500 mt-2">
+                — Karthik R., Frontend Developer
+              </p>
+            </div>
+          </div>
+          
+          {/* CTA Section */}
+          <div className="px-6 pb-8">
+            <div className="space-y-4">
+              <Button href="#pricing-title" className="w-full text-base py-4 bg-slate-900 text-white hover:bg-slate-800 transition-all font-medium rounded-xl">
+                Start Your Visual Learning Journey
               </Button>
+              <div className="text-center">
+                <div className="flex items-baseline justify-center gap-3">
+                  {showDiscount ? (
+                    <>
+                      <span className="text-sm text-slate-500 line-through">${prices.originalBase}</span>
+                      <span className="text-2xl text-slate-900 font-bold">${prices.base}</span>
+                      <span className="text-xs text-green-600 font-medium bg-green-50 px-2 py-1 rounded">Limited time offer</span>
+                    </>
+                  ) : (
+                    <span className="text-2xl text-slate-900 font-bold">${prices.base}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Layout - Educational Focus */}
+      <div className="hidden lg:block">
+        <div className="mx-auto max-w-7xl px-6 pt-16 pb-24">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* Left Column - Content */}
+            <div className="order-2 lg:order-1">
+              {/* Main Question */}
+              <h1 className="font-display text-5xl font-extrabold text-slate-900 leading-tight">
+                Are you a <span className="text-blue-600">visual learner</span> struggling with JavaScript?
+              </h1>
+              
+              {/* Empathetic message */}
+              <p className="mt-6 text-lg text-slate-600 leading-relaxed">
+                You're not alone. Abstract concepts like closures, prototypes, and the event loop feel impossible when explained with just text and code.
+              </p>
+              
+              {/* Core Value Proposition */}
+              <div className="mt-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+                <p className="text-xl font-semibold text-slate-900 leading-snug">
+                  What if you could build an <span className="text-blue-600">unforgettable visual mental model</span> of how JavaScript actually works?
+                </p>
+                <p className="mt-3 text-base text-slate-600">
+                Not just memorizing syntax, but truly understanding the environment, flow and patterns in the code through imaginative visual models.
+                </p>
+              </div>
+              
+              {/* Learning Benefits */}
+              <div className="mt-8 space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">
+                  Learn through imagination, not memorization
+                </h2>
+                <div className="space-y-3">
+                  <div className="flex items-start">
+                    <span className="text-blue-500 mr-3 mt-1">✓</span>
+                    <div>
+                      <p className="font-medium text-slate-700">Visual mental models that stick forever</p>
+                      <p className="text-sm text-slate-500 mt-1">Picture JavaScript concepts as interactive worlds you can explore</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-blue-500 mr-3 mt-1">✓</span>
+                    <div>
+                      <p className="font-medium text-slate-700">Understand deeply, don't just copy</p>
+                      <p className="text-sm text-slate-500 mt-1">Know why your code works, not just that it works</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-blue-500 mr-3 mt-1">✓</span>
+                    <div>
+                      <p className="font-medium text-slate-700">Build lasting confidence</p>
+                      <p className="text-sm text-slate-500 mt-1">Debug fearlessly when you can visualize what's happening</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Course Introduction */}
+              <div className="mt-10 border-t border-slate-200 pt-8">
+                <p className="text-sm uppercase tracking-wider text-slate-500 font-semibold">
+                  Introducing
+                </p>
+                <h3 className="text-3xl font-bold text-slate-900 mt-2">
+                  Imagine JavaScript
+                </h3>
+                <p className="text-base text-slate-600 mt-3">
+                  A complete visual journey through JavaScript fundamentals. From basic concepts to advanced patterns, all explained through memorable visual metaphors that make complex ideas simple.
+                </p>
+              </div>
+              
+              {/* CTA Section */}
+              <div className="mt-8 flex items-center gap-6">
+                <Button href="#pricing-title" className="px-6 py-3 bg-slate-900 text-white hover:bg-slate-800 transition-all font-medium rounded-xl">
+                  Start Your Visual Learning Journey
+                </Button>
+                <div>
+                  {showDiscount ? (
+                    <>
+                      <p className="text-sm text-slate-500">
+                        <span className="line-through">${prices.originalBase}</span>
+                        <span className="ml-2 text-xl text-slate-900 font-bold">${prices.base}</span>
+                      </p>
+                      <p className="text-xs text-green-600 font-medium">Limited time offer</p>
+                    </>
+                  ) : (
+                    <p className="text-xl text-slate-900 font-bold">${prices.base}</p>
+                  )}
+                </div>
+              </div>
+              
+              {/* Testimonial */}
+              <div className="mt-10 bg-slate-50 rounded-xl p-5 border border-slate-200">
+                <div className="flex text-yellow-500">
+                  {'★'.repeat(5)}
+                </div>
+                <p className="text-base text-slate-700 mt-3 italic">
+                  "I wasn't scared of errors anymore. Debugging became fun because I could visualize what was happening in my code."
+                </p>
+                <p className="text-sm text-slate-500 mt-2">
+                  — Karthik Raju, Frontend Developer
+                </p>
+              </div>
+            </div>
+            
+            {/* Right Column - Visual Model */}
+            <div className="order-1 lg:order-2 lg:sticky lg:top-8">
+              <div className="relative">
+                <p className="text-sm uppercase tracking-wider text-slate-500 font-semibold mb-4">
+                  A glimpse into the visual world →
+                </p>
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-blue-100 to-white p-6">
+                  <Image 
+                    className="w-full h-auto object-contain" 
+                    src={coverImage} 
+                    alt="Visual JavaScript Learning Model - Interactive 3D representation of JavaScript concepts" 
+                    priority 
+                  />
+                </div>
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-slate-600 italic">
+                    Every JavaScript concept can be imagined
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

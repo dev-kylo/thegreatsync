@@ -37,20 +37,22 @@ export function Author() {
             <SectionHeading id="author-title">
               Senior JavaScript Developer
             </SectionHeading>
-            <p className="mt-8 font-display text-5xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-              <span className="block mb-6 text-blue-600 sm:text-6xl">Hi, I'm Kylo</span>I don‘t have a background in computer science. I studied media... But it turns out a different way of thinking is my greatest asset. 
+            <p className="mt-8 font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+              <span className="block mb-4 sm:mb-6 text-blue-600 text-3xl sm:text-5xl lg:text-6xl">Hi, I'm Kylo</span>
+              <span className="text-xl sm:text-3xl lg:text-4xl">I don't have a background in computer science. I studied media... But it turns out a different way of thinking is my greatest asset.</span>
             </p>
-            <p className="mt-4 text-lg tracking-tight text-slate-700">
+            <p className="mt-4 text-base sm:text-lg tracking-tight text-slate-700 leading-relaxed">
            My journey began by learning on the
              side of a day-job and giving every spare hour to coding. 
-             I went on to build a career I love. It has allowed me to work in 3 different countries, and develop many applications I‘m proud of.
-
-I also have the privilege of helping others, and over the years I have mentored and coached dozens of students into professional developers.
+             I went on to build a career I love. It has allowed me to work in 3 different countries, and develop many applications I'm proud of.
             </p>
-            <p className="mt-4 mx-auto max-w-2xl text-center text-xl font-bold tracking-tight text-slate-700">
-              I created a <span className='text-blue-600'>learning system</span> which transforms your experience with JavaScript.
+            <p className="mt-3 text-base sm:text-lg tracking-tight text-slate-700 leading-relaxed">
+             I also have the privilege of helping others, and over the years I have mentored and coached dozens of students into professional developers.
             </p>
-            <p className="mt-4 mx-auto max-w-2xl text-center text-xl font-bold tracking-tight text-slate-700">
+            <p className="mt-6 sm:mt-8 mx-auto max-w-2xl text-center text-lg sm:text-xl font-bold tracking-tight text-slate-700">
+              I created a <span className='text-blue-600'>visual learning system</span> which transforms your experience with JavaScript.
+            </p>
+            <p className="mt-3 sm:mt-4 mx-auto max-w-2xl text-center text-lg sm:text-xl font-bold tracking-tight text-slate-700">
               It's a universe called <span className='text-blue-600'>The Great Sync.</span>
             </p>
           </div>

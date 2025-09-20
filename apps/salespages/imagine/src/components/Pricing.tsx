@@ -1,4 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
+'use client'
+import { useState, useEffect } from 'react'
 import clsx from 'clsx'
 
 import { Button } from '@/components/Button'
@@ -7,6 +9,14 @@ import { Container } from '@/components/Container'
 import { GridPattern } from '@/components/GridPattern'
 import { SectionHeading } from '@/components/SectionHeading'
 import { HighlightedText } from './HighlightedText'
+import { shouldShowDiscount, getProductIds, getPrices, getDiscountPercentage } from '@/utils/pricing'
+
+// Declare Paddle type to avoid TypeScript errors
+declare global {
+  interface Window {
+    Paddle: any
+  }
+}
 
 function Plan({
   name,
@@ -22,6 +32,91 @@ function Plan({
   href: string
   featured?: boolean
 }) {
+  const [includeBooster, setIncludeBooster] = useState(false)
+  const [paddleReady, setPaddleReady] = useState(false)
+  const [showDiscount, setShowDiscount] = useState(false)
+  const [prices, setPrices] = useState(getPrices(false))
+  const [productIds, setProductIds] = useState(getProductIds(false))
+  
+  // Calculate dynamic pricing
+  const basePrice = prices.base
+  const boosterPrice = prices.booster
+  const totalPrice = includeBooster ? prices.bundle : prices.base
+  
+  const baseOriginalPrice = prices.originalBase
+  const boosterOriginalPrice = prices.originalBooster
+  const totalOriginalPrice = includeBooster ? prices.originalBundle : prices.originalBase
+  
+  // Calculate discount percentage
+  const discountPercentage = showDiscount ? 
+    getDiscountPercentage(totalOriginalPrice, totalPrice) : 0
+  
+  useEffect(() => {
+    // Check discount eligibility
+    const eligible = shouldShowDiscount()
+    setShowDiscount(eligible)
+    setPrices(getPrices(eligible))
+    setProductIds(getProductIds(eligible))
+    
+    // Initialize Paddle when component mounts
+    const initPaddle = () => {
+      if (typeof window !== 'undefined' && window.Paddle) {
+        const vendorId = process.env.NEXT_PUBLIC_VENDORID || '173591'
+        window.Paddle.Setup({ vendor: +vendorId })
+        setPaddleReady(true)
+      }
+    }
+    
+    // Check if Paddle is already loaded
+    if (window.Paddle) {
+      initPaddle()
+    } else {
+      // Wait for Paddle to load
+      const checkPaddle = setInterval(() => {
+        if (window.Paddle) {
+          initPaddle()
+          clearInterval(checkPaddle)
+        }
+      }, 100)
+      
+      // Cleanup interval on unmount
+      return () => clearInterval(checkPaddle)
+    }
+  }, [])
+  
+  const handleCheckout = () => {
+    if (!paddleReady || !window.Paddle) {
+      console.error('Paddle not ready')
+      return
+    }
+    
+    // Determine which product to use based on checkbox selection and discount eligibility
+    const productId = includeBooster ? productIds.bundle : productIds.base
+    
+    // Open Paddle checkout overlay
+    window.Paddle.Checkout.open({
+      method: 'overlay',
+      product: productId,
+      allowQuantity: false,
+      disableLogout: true,
+      passthrough: JSON.stringify({
+        includesBooster: includeBooster,
+        source: 'landing_page',
+        hasDiscount: showDiscount
+      }),
+      successCallback: (data: any) => {
+        // Handle successful purchase
+        console.log('Purchase successful:', data)
+        // Redirect to success page
+        window.location.href = '/success'
+      },
+      closeCallback: () => {
+        // Handle when user closes the checkout (optional)
+        console.log('Checkout closed by user')
+      }
+    })
+  }
+  
   return (
     <div
       className={clsx(
@@ -43,7 +138,11 @@ function Plan({
         >
           {name}
         </h3>
-        <span className="text-slate-600 text-sm"> Since you're a new subscriber, you get a <span className="text-blue-600 font-bold">40% discount</span></span>
+        {showDiscount && (
+          <span className="text-slate-600 text-sm"> 
+            Limited time offer: <span className="text-blue-600 font-bold">{discountPercentage}% discount</span>
+          </span>
+        )}
         <p
           className={clsx(
             'mt-2 text-lg tracking-tight',
@@ -62,21 +161,24 @@ function Plan({
             $
           </span>
           <div className="flex flex-col">
+            {showDiscount && (
+              <span
+                className={clsx(
+                  'ml-1 line-through text-3xl tracking-tight opacity-50',
+                  featured ? 'text-white' : 'text-slate-900',
+                )}
+              >
+                {totalOriginalPrice.toFixed(2)}
+              </span>
+            )}
             <span
               className={clsx(
-                'ml-1 line-through text-3xl tracking-tight opacity-50',
+                showDiscount ? 'ml-1 -mt-1' : 'ml-1',
+                'text-7xl tracking-tight',
                 featured ? 'text-white' : 'text-slate-900',
               )}
             >
-              97.00
-            </span>
-            <span
-              className={clsx(
-                'ml-1 -mt-1 text-7xl tracking-tight',
-                featured ? 'text-white' : 'text-slate-900',
-              )}
-            >
-              57.00
+              {totalPrice}.00
             </span>
           </div>
         </p>
@@ -103,13 +205,62 @@ function Plan({
             ))}
           </ul>
         </div>
+        
+        {/* Booster Upsell Checkbox */}
+        <div className="mt-6 p-4 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl border border-purple-200">
+          <label className="flex items-start cursor-pointer">
+            <input
+              type="checkbox"
+              checked={includeBooster}
+              onChange={(e) => setIncludeBooster(e.target.checked)}
+              className="mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <div className="ml-3 flex-1">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-slate-900">
+                  ⚡ Master JavaScript's Quirks
+                </span>
+                <div className="text-right">
+                  {showDiscount && (
+                    <span className="text-xs text-slate-500 line-through">${boosterOriginalPrice}</span>
+                  )}
+                  <span className="ml-2 font-bold text-purple-600">+${boosterPrice}</span>
+                </div>
+              </div>
+              <p className="mt-1 text-sm text-slate-600">
+                Add 3 advanced "Booster" lessons that demystify the tricky parts:
+              </p>
+              <ul className="mt-2 space-y-1 text-xs text-slate-600">
+                <li className="flex items-center">
+                  <span className="mr-1 text-purple-500">→</span>
+                  <span className="font-medium">The "this" keyword</span> - Never be confused by this again
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-1 text-purple-500">→</span>
+                  <span className="font-medium">Prototypal Inheritance</span> - The beating heart of JavaScript
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-1 text-purple-500">→</span>
+                  <span className="font-medium">The DOM</span> - Visualize and learn exactly what this is
+                </li>
+              </ul>
+              {showDiscount && (
+                <p className="mt-2 text-xs font-semibold text-green-600">
+                  Save ${boosterOriginalPrice - boosterPrice} today ({getDiscountPercentage(boosterOriginalPrice, boosterPrice)}% off)
+                </p>
+              )}
+            </div>
+          </label>
+        </div>
+        
         <Button
-          href='/purchase'
+          onClick={handleCheckout}
           color='blue'
           className="mt-8"
-          aria-label={`Get started with the ${name} plan for $${price}`}
+          disabled={!paddleReady}
+          aria-label={`Get started with the ${name} plan for $${totalPrice}`}
         >
-          GET INSTANT ACCESS
+          {paddleReady ? 'GET INSTANT ACCESS' : 'LOADING...'}
         </Button>
       </div>
     </div>
@@ -130,12 +281,12 @@ export function Pricing() {
         <p className="mt-8 font-display text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
         Time to level up!
         </p>
-        <p className="mt-4 text-lg tracking-tight text-slate-600">
-        Have you decided that a <HighlightedText>career spent blindly copy-pasting </HighlightedText> and never being able to build anything with confidence is not for you?
+        <p className="mt-4 text-md md:text-lg tracking-tight text-slate-600">
+        Have you decided that a career spent blindly copy-pasting is not for you? <span className="font-bold">This is your chance...</span>
         </p>
-        <p className="mt-4 text-lg tracking-tight text-slate-600">This is your opportunity to transform your understanding of JavaScript.</p>
+
       </Container>
-      <div className="mx-auto mt-16 max-w-5xl lg:px-6">
+      <div className="mx-auto mt-8 md:mt-16 max-w-5xl lg:px-6">
         <div className="grid bg-slate-50 sm:px-6 sm:pb-16 md:grid-cols-1 md:rounded-6xl md:px-8 md:pt-12  max-w-xl m-auto">
           <Plan
             name="Imagine JavaScript"

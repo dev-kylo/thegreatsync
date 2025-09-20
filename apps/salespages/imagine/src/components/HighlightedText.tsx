@@ -13,7 +13,7 @@ export function HighlightedText({
 
   return (
     <span className="relative">
-      <span className="relative z-10 text-xl">{children}</span>
+      <span className="relative z-10 text-md">{children}</span>
       <span 
         className={`absolute bottom-0 left-0 right-0 h-6 ${bgColor}`}
         style={{ transform: `rotate(${rotate}deg)` }}
