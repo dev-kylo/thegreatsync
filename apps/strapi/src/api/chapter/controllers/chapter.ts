@@ -10,8 +10,6 @@ module.exports = factories.createCoreController('api::chapter.chapter', ({ strap
 
     async find(ctx) {
 
-        console.log('-------- USER DATA ----------');
-        // console.log(ctx.state)
 
         const { data, meta } = await super.find(ctx);
 

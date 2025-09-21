@@ -10,10 +10,16 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
     async createUserEnrollment(order: Order, userId: string|number) {
 
     
-        if (!order || !order?.release_enrolment_id) throw new Error('Attempted completion data failed: No custom data attached to this order');
+        if (!order || !order?.release_enrolment_id) {
+            console.error(`[customer.createUserEnrollment]--- Attempted completion data failed: No custom data attached to this order --- order: ${order}`)
+            throw new Error('Attempted completion data failed: No custom data attached to this order');
+        };
 
         //The order must already have an attached user record
-        if (!userId) throw new Error('Attempted completion data failed: No user is linked to this order');
+        if (!userId) {
+            console.error(`[customer.createUserEnrollment]--- Attempted completion data failed: No user is linked to this order --- order: ${order}`)
+            throw new Error('Attempted completion data failed: No user is linked to this order');
+        }
 
         const enrolmentId = order.release_enrolment_id;
 
@@ -26,7 +32,7 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
         });
         
         if (enrolment) {
-            console.log('---- Enrolment found ----', enrolmentId);
+            console.log(`[customer.createUserEnrollment]--- Enrolment found ---- enrolmentId: ${enrolmentId}`)
             // Append the userId to the users array
             enrolment.users.push(userId);
 
@@ -36,8 +42,7 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
                     users: enrolment.users
                 } as Enrollment
             });
-
-            console.log('---- Enrolment updated ----', enrolmentId);
+            console.log(`[customer.createUserEnrollment]--- Enrolment updated ---- enrolmentId: ${enrolmentId}, userId: ${userId}`)
 
         }   
 
@@ -55,7 +60,10 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
             where: {  course: order.release_course_id, user: userId },
         }) as User;
 
-        if (existing) throw new Error('Attempted completion data failed: a user-course-progress record already exists for this user and course.');
+        if (existing) {
+            console.error(`[customer.createUserEnrollment]--- Attempted completion data failed: a user-course-progress record already exists for this user and course. --- order: ${order}`)
+            throw new Error('Attempted completion data failed: a user-course-progress record already exists for this user and course.');
+        }
         
         console.log('--- Service: Preparing User Completion ----')
 
@@ -82,7 +90,7 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
             pages: pageCourseCompletion
         }});
 
-        console.log(`--- User Completion Stats Successful, userID: ${userId} ---`)
+        console.log(`[customer.createUserEnrollment]--- User Completion Stats Successful, userID: ${userId} ---`)
 
     },
 

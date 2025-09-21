@@ -7,13 +7,15 @@ module.exports = {
 
       const qry = ctx.request.query as {courseId: string};
       const { courseId } = qry;
-      console.log('Updating all user completion records for courseID: '+ courseId)
+      console.log(`[synchronise.updateAll] --- Updating all user completion records for courseID: ${courseId}`)
 
     // Fetch the course and associated pages, subchapters, and chapters
     const course= await strapi.db.query('api::course.course').findOne({
         where: { id: courseId },
         populate: ['chapters', 'chapters.subchapters', 'chapters.subchapters.pages']
     });
+
+    console.warn(`[synchronise.updateAll] --- Course not found for courseID: ${courseId}`)
 
     if (!course) return ctx.response.notFound('Course not found')
     
@@ -78,8 +80,10 @@ module.exports = {
                 data: userCourseProgress
             })
         });
+        console.log(`[synchronise.updateAll] --- UserCourseProgress records updated successfully for courseID: ${courseId}`)
 
     } catch(err){
+        console.error(`[synchronise.updateAll]--- Error updating all user completion records for courseID: ${courseId}`, err)
         ctx.body = err;
     }
 

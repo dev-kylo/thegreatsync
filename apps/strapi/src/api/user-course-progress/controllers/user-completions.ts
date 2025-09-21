@@ -13,53 +13,76 @@ export default {
         // Get User's completion data for that course
         const { id: userId } = ctx.state.user;
         // Exit if these are not here
-        if (!courseId || !userId) return ctx.badRequest('Invalid query paramaters');
+        if (!courseId || !userId) {
+            console.warn(`[user-completions.getUserCompletionData] --- Invalid query paramaters --- courseId: ${courseId}, userId: ${userId}`)
+            return ctx.badRequest('Invalid query paramaters');
+        }
         
+        console.log(`[user-completions.getUserCompletionData] --- Getting user completion data for courseID: ${courseId}, userId: ${userId}`)
+
         const userCompletion =  await strapi.db.query('api::user-course-progress.user-course-progress').findOne({
             where: {  user: userId, course: courseId },
         }) as UserCourseProgress
 
         // Exit if no user completion data found
-        if (!userCompletion) return ctx.response.notFound('No user course progress data found')
+        if (!userCompletion) {
+            console.warn(`[user-completions.getUserCompletionData] --- No user course progress data found for courseID: ${courseId}, userId: ${userId}`)
+            return ctx.response.notFound('No user course progress data found')
+        }
 
         ctx.body = userCompletion;
         next();
     },
 
     async updateUserCompletionData(ctx, next) {
-        let foundUserId;
+        let foundUserId, foundCourseId, foundPageId;
         try {
 
-        console.log('Updating User-Course-Progress')
         // Receive completed pageID and courseID
         const qry = ctx.request.query as {courseId: string; pageId: string, unMarkPage?: string};
         const { courseId, pageId, unMarkPage } = qry;
 
-        // Exit if these are not here
-        if (!courseId || !pageId) return ctx.badRequest('Invalid query paramaters');
-
+  
+        if (!courseId || !pageId) {
+            console.warn(`[user-completions.updateUserCompletionData] --- Invalid query paramaters --- courseId: ${courseId}, pageId: ${pageId}`)
+            return ctx.badRequest('Invalid query paramaters');
+        }
         // Get User's completion data for that course
         const { id: userId } = ctx.state.user;
         foundUserId = userId;
+        foundCourseId = courseId;
+        foundPageId = pageId;
+        console.log(`[user-completions.updateUserCompletionData] --- Updating User-Course-Progress --- courseID: ${courseId}, userId: ${userId}`)
+
         const userCompletion =  await strapi.db.query('api::user-course-progress.user-course-progress').findOne({
             where: {  user: userId, course: courseId },
         }) as UserCourseProgress
 
         // Exit if no user completion data found
         if (!userCompletion || !userCompletion?.pages || !userCompletion?.chapters || !userCompletion?.subchapters){
+            
+            console.warn(`[user-completions.updateUserCompletionData] --- No user course progress data found for courseID: ${courseId}, userId: ${userId}`)
             return ctx.response.notFound('No user course progress data found')
         }
+
+        console.log(`[user-completions.updateUserCompletionData] --- User course progress data found for courseID: ${courseId}, userId: ${userId}`)
 
         // Set page completion to true
         const pageCompletion = userCompletion.pages;
         const targetPageIndex = userCompletion.pages.findIndex((page: PageCompletion) => page.id === +pageId);
         
         const completedPage = pageCompletion[targetPageIndex];
-        if (!completedPage) return ctx.response.notFound('This page does not exist in completion data')
+        if (!completedPage){
+            console.warn(`[user-completions.updateUserCompletionData] --- This page does not exist in completion data --- courseID: ${courseId}, userId: ${userId}, pageId: ${pageId}`)
+            return ctx.response.notFound('This page does not exist in completion data')
+        }
 
         const markIncompleted = unMarkPage && unMarkPage === 'true'
         // If page is already completed, early exit
-        if (completedPage?.completed && !markIncompleted) return ctx.body = { success: true }
+        if (completedPage?.completed && !markIncompleted) {
+            console.warn(`[user-completions.updateUserCompletionData] --- Page already completed --- courseID: ${courseId}, userId: ${userId}, pageId: ${pageId}`)
+            return ctx.body = { success: true }
+        }
         completedPage.completed = !markIncompleted 
         
         // For each subchapter
@@ -98,6 +121,8 @@ export default {
         next();
       
         } catch(err){
+
+            console.error(`[user-completions.updateUserCompletionData]--- Error updating user completion data --- courseID: ${foundCourseId}, userId: ${foundUserId}, pageId: ${foundPageId}`, err)
             await strapi.plugin('email').service('email').send({
                 to: process.env.CONTACT_ADDRESS,
                 subject: 'Error Updating Course Progress',

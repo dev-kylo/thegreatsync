@@ -22,6 +22,7 @@ export default {
       }) as Order;
 
       if (!order){ 
+        console.warn(`[customer.register] --- ORDER NOT FOUND --- orderId: ${data.orderId}`)
         return ctx.response.forbidden('This is an invalid registration url.'); 
       }
 
@@ -31,7 +32,7 @@ export default {
         where: { email: data.username }
       }) as User;
 
-      if (user) console.log('--- USER FOUND. UPDATING ORDER ---')
+      if (user) console.log(`[customer.register] --- USER FOUND. UPDATING ORDER --- orderId: ${order?.order_id}, email: ${order?.user?.email}, newEmail: ${user?.email}`)
 
       // Check if order already has a user assigned to it
       if (order?.user) {
@@ -44,6 +45,7 @@ export default {
           await next();
         }
         // There is a different email already attached to this order than the one supplied
+        console.log(`[customer.register] --- COURSE ALREADY REGISTERED FOR THIS ORDER --- orderId: ${order.order_id}, email: ${order?.user?.email}, newEmail: ${user?.email}`)
         return ctx.forbidden('The account has already been registered for this order. You can proceed to login')
       }
 
@@ -71,7 +73,7 @@ export default {
           // Enroll User In Course 
         await strapi.service('api::customer.customer').createUserEnrollment(order, user.id);
         
-        console.log('--- USER ENROLLED IN COURSE ---')
+        console.log(`[customer.register] --- USER ENROLLED IN COURSE --- orderId: ${order.order_id}, userId: ${user.id}, email: ${order?.user?.email}`)
 
         ctx.body = {
           success: true,
@@ -84,7 +86,7 @@ export default {
         // Create new User
         // Get Enrollment from Order
         // Add enrollment to payload
-        console.log('--- USER NOT FOUND. CREATING NEW USER ---', data?.username)
+        console.log(`[customer.register]--- CREATING NEW USER --- email: ${data?.username}`)
         user = await strapi.plugins['users-permissions'].services.user.add({
           blocked: false,
           confirmed: true, 
@@ -97,7 +99,7 @@ export default {
           role: 1, //role id
         });
 
-        console.log('--- NEW USER CREATED ---', user?.id); 
+        console.log(`[customer.register]--- NEW USER CREATED --- userId: ${user?.id}, orderId: ${order.order_id}, email: ${order?.user?.email}`)
         await strapi.entityService.update('api::order.order', order.id, {
           data: {
             user: user.id
@@ -106,7 +108,7 @@ export default {
 
           // Enroll User In Course 
         await strapi.service('api::customer.customer').createUserEnrollment(order, user.id);
-        console.log('--- USER ENROLLED IN COURSE ---')
+        console.log(`[customer.register]--- USER ENROLLED IN COURSE --- orderId: ${order.order_id}, userId: ${user.id}, email: ${order?.user?.email}`)
 
         ctx.body = {
           success: true,
@@ -116,7 +118,7 @@ export default {
       }
 
     } catch (err) {
-      console.log(' --- Unsuccessful registration attempt ----', data?.orderId);
+      console.log(`[customer.register]--- Unsuccessful registration attempt ---- orderId: ${data?.orderId}`);
       await strapi.plugin('email').service('email').send({
         to: process.env.CONTACT_ADDRESS,
         subject: 'Error Registering Account',
@@ -137,25 +139,87 @@ export default {
 
       const data = ctx.request.body as PaddleFulfillment;
       let trackingOrderId, courseTitle;
+      let order, payload;
       try {
         // Verify Order
         // if (!validateWebhook(data, process.env.PADDLE_PUBLIC_KEY)) return ctx.forbidden('Invalid webhook signature');
 
-        console.log('--- WEBHOOK VERIFIED ---')
+        console.log('[customer.createOrder] --- WEBHOOK VERIFIED ---')
         // Extract values
-        const payload = mapPaddleOrder(data);
+        payload = mapPaddleOrder(data);
         
         // Create Order - No need to check for existing order, orderId must be unique anyway
-        const order = await strapi.entityService.create('api::order.order', { data: payload }) as Order;
+        order = await strapi.entityService.create('api::order.order', { data: payload }) as Order;
         trackingOrderId = order.id;
         
         courseTitle = data?.release_course_title;
         
-        console.log('--- ORDER CREATED ---' + courseTitle + ' ' + trackingOrderId);
-       
-        // Send welcome email
+        console.log(`[customer.createOrder] --- ORDER CREATED --- orderId: ${trackingOrderId}, email: ${payload?.email}, courseTitle: ${courseTitle}`);
+      } catch(err){
+
+        // Notify Customer of Failure
+        if (data?.email){
+          try {
+            console.log(`[customer.createOrder]--- Sending Email To Notify Customer of Processing Error --- ${data.email}`)
+            await strapi.plugin('email').service('email').send({
+              to: data.email,
+              subject: 'There is a delay processing your order',
+              text: '',
+              html: `<h2>Hi! 👋</h2> 
+                <p>I received your order to join ${courseTitle? courseTitle : 'a Great Sync course'}, and super excited to have you on board.</p>
+                <p> Unfortunately, there is a system delay in processing your order, and you might not yet have received the links to the course platform. </p>
+                <p> Apologies for this!<strong>You will receive the access emails within a few hours</strong></p>
+                <p> In the meantime, join The Syncer Community on Discord and introduce yourself. If the link doesn't work, download the Discord application first.</p>
+                <a href='${process.env.DISCORD_INVITE}'>${process.env.DISCORD_INVITE}</a>
+                <p> You will be hearing from me very soon.  Reply to this email if you need to contact me.</p>
+                <p>Kylo</p>
+                `,
+              headers: {
+                'X-PM-Message-Stream': 'outbound'
+              }
+            });
+          } catch(err){
+            console.error(`[customer.createOrder]--- Error Sending Email To Notify Customer of Processing Error --- email: ${data?.email}`, err)
+          }
+        }
+        
+        // Notify Admin of Error
         await strapi.plugin('email').service('email').send({
-          to: payload.email,
+          to: process.env.CONTACT_ADDRESS,
+          subject: 'Error Creating Order',
+          text: '',
+          html: `<h2>Error Creating Order</h2> 
+            <p> Provider Order: ${data?.p_order_id}</p>
+            <p> Course Title: ${courseTitle || 'none'} </p>
+            <p> Created Order Id: ${trackingOrderId || 'none'} </p>
+            <p> Date: ${data?.event_time}</p>
+            <p> Error: ${getErrorString(err)}</p>
+            <p> Webhook Data: ${data ? getErrorString(data) : 'None' }
+            `,
+          headers: {
+            'X-PM-Message-Stream': 'outbound'
+          }
+        });
+
+        return ctx.body = err;
+      }
+       
+       try {
+
+        const emailHeaders = {
+          'X-PM-Message-Stream': 'outbound',
+        }
+        const emailTo: string = payload?.email;
+       // Send welcome email
+        console.log(`[customer.createOrder] --- SENDING WELCOME EMAIL ---`, {
+          order: order.order_id,
+          courseTitle: courseTitle,
+          email: emailTo,
+          headers: emailHeaders
+        })
+  
+        await strapi.plugin('email').service('email').send({
+          to: emailTo,
           subject: `Welcome${courseTitle ? ` to ${courseTitle}` : ''}`,
           text: '',
           html: `
@@ -217,63 +281,21 @@ export default {
               </body>
               </html> 
           `,
-          headers: {
-            'X-PM-Message-Stream': 'outbound',
-          }
+          headers: emailHeaders
         });
-        console.log('--- EMAIL SENT TO CUSTOMER ---', order?.order_id);
-  
+        console.log(`[customer.createOrder] --- EMAIL SENT TO CUSTOMER ---, order: ${order?.order_id}, email: ${data?.email}`);
         // Return response
         ctx.body = {
           success: true,
           orderId: order.order_id,
           message: `You have been emailed a link to complete the registration and access the course.`
         };
+
           
       } catch(err){
-
-        console.log(`--- Error Creating Order: Provider Order: ${data.p_order_id}. Created Order Id: ${trackingOrderId || 'none'}. Date: ${data.event_time} ---`)
-        
-        // Notify Customer of Failure
-        if (data?.email){
-          await strapi.plugin('email').service('email').send({
-            to: data.email,
-            subject: 'There is a delay processing your order',
-            text: '',
-            html: `<h2>Hi! 👋</h2> 
-              <p>I received your order to join ${courseTitle? courseTitle : 'a Great Sync course'}, and super excited to have you on board.</p>
-              <p> Unfortunately, there is a system delay in processing your order, and you might not yet have received the links to the course platform. </p>
-              <p> Apologies for this!<strong>You will receive the access emails within a few hours</strong></p>
-              <p> In the meantime, join The Syncer Community on Discord and introduce yourself. If the link doesn't work, download the Discord application first.</p>
-              <a href='${process.env.DISCORD_INVITE}'>${process.env.DISCORD_INVITE}</a>
-              <p> You will be hearing from me very soon.  Reply to this email if you need to contact me.</p>
-              <p>Kylo</p>
-              `,
-            headers: {
-              'X-PM-Message-Stream': 'outbound'
-            }
-          });
-        }
-        
-        // Log Error by Email
-        await strapi.plugin('email').service('email').send({
-          to: process.env.CONTACT_ADDRESS,
-          subject: 'Error Creating Order',
-          text: '',
-          html: `<h2>Error Creating Order</h2> 
-            <p> Provider Order: ${data?.p_order_id}</p>
-            <p> Course Title: ${courseTitle || 'none'} </p>
-            <p> Created Order Id: ${trackingOrderId || 'none'} </p>
-            <p> Date: ${data?.event_time}</p>
-            <p> Error: ${getErrorString(err)}</p>
-            <p> Webhook Data: ${data ? getErrorString(data) : 'None' }
-            `,
-          headers: {
-            'X-PM-Message-Stream': 'outbound'
-          }
-        });
+        console.error(`[customer.createOrder]--- Error Sending Welcome Email --- Provider Order: ${data.p_order_id}. Created Order Id: ${trackingOrderId || 'none'}. Date: ${data.event_time} ---, email: ${data?.email}`, err)
           // ctx.status = 403;
-          ctx.body = err;
+        ctx.body = err;
       }
 	} 
 };
