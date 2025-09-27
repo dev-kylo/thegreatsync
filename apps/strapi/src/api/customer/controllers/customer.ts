@@ -128,7 +128,7 @@ export default {
           <p> Error: ${getErrorString(err)}</p>
           `,
         headers: {
-          'X-PM-Message-Stream': 'purchases'
+          'X-PM-Message-Stream': 'errors'
         }
       });
       console.log(err)
@@ -175,7 +175,7 @@ export default {
                 <p>Kylo</p>
                 `,
               headers: {
-                'X-PM-Message-Stream': 'outbound'
+                'X-PM-Message-Stream': 'errors'
               }
             });
           } catch(err){
@@ -197,7 +197,7 @@ export default {
             <p> Webhook Data: ${data ? getErrorString(data) : 'None' }
             `,
           headers: {
-            'X-PM-Message-Stream': 'outbound'
+            'X-PM-Message-Stream': 'errors'
           }
         });
 
@@ -207,7 +207,7 @@ export default {
        try {
 
         const emailHeaders = {
-          'X-PM-Message-Stream': 'outbound',
+          'X-PM-Message-Stream': 'purchases',
         }
         const emailTo: string = payload?.email;
        // Send welcome email

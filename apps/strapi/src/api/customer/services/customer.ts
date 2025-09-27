@@ -23,9 +23,6 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
 
         const enrolmentId = order.release_enrolment_id;
 
-        // Get the current enrollment
-
-        
         const enrolment = await strapi.db.query('api::enrollment.enrollment').findOne({
             where: {  id: +enrolmentId },
             populate: ['users']
