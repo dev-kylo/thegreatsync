@@ -8,6 +8,7 @@ import { GridPattern } from '@/components/GridPattern'
 import { StarRating } from '@/components/StarRating'
 import coverImage from '@/images/model/full.png'
 import { shouldShowDiscount, getPrices } from '@/utils/pricing'
+import { HighlightedText } from './HighlightedText'
 
 function Testimonial() {
   return (
@@ -65,10 +66,10 @@ export function Hero() {
             {/* Core Value Proposition - Educational Focus */}
             <div className="mt-6 bg-gradient-to-br from-blue-100 to-white rounded-2xl p-5 border border-blue-100">
               <p className="text-lg font-semibold text-slate-900 leading-snug">
-                What if you could build an <span className="text-blue-600">unforgettable visual mental model</span> of how JavaScript actually works?
+              What if you could build an unforgettable <span className="text-blue-600">mental model?</span> 
               </p>
               <p className="mt-3 text-sm text-slate-600">
-                Not just memorizing syntax, but truly understanding the environment, flow and patterns in the code.
+                Not just by memorizing syntax, but truly understanding the patterns in the code.
               </p>
             </div>
           </div>
@@ -101,7 +102,7 @@ export function Hero() {
                   <div className="flex items-start">
                     <span className="text-blue-500 mr-3 mt-0.5">✓</span>
                     <div>
-                      <p className="text-sm font-medium text-slate-700">Visual mental models that stick</p>
+                      <p className="text-sm font-medium text-slate-700">A visual mental model that sticks</p>
                       <p className="text-xs text-slate-500 mt-0.5">Picture JavaScript concepts as interactive worlds</p>
                     </div>
                   </div>
@@ -131,10 +132,11 @@ export function Hero() {
                 The Course
               </p>
               <h3 className="text-2xl font-bold text-slate-900 mt-2">
-                Imagine JavaScript
+              <HighlightedText color="yellow">Imagine JavaScript</HighlightedText>
               </h3>
+              <p className="text-sm text-slate-800 italic">Master the fundamentals in 30 days</p>
               <p className="text-sm text-slate-600 mt-2">
-                A complete visual journey through JavaScript fundamentals. From basic concepts to advanced patterns, all explained through memorable visual models.
+                A complete visual journey through JavaScript fundamentals. From basic concepts to advanced patterns, all explained through fantasy illustrations.
               </p>
             </div>
           </div>
@@ -157,8 +159,8 @@ export function Hero() {
           {/* CTA Section */}
           <div className="px-6 pb-8">
             <div className="space-y-4">
-              <Button href="#pricing-title" className="w-full text-base py-4 bg-slate-900 text-white hover:bg-slate-800 transition-all font-medium rounded-xl">
-                Start Your Visual Learning Journey
+              <Button href="#pricing-title" className="w-full text-base py-2 bg-slate-900 text-white hover:bg-slate-800 transition-all font-medium rounded-xl">
+                Get the course
               </Button>
               <div className="text-center">
                 <div className="flex items-baseline justify-center gap-3">
@@ -197,10 +199,10 @@ export function Hero() {
               {/* Core Value Proposition */}
               <div className="mt-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
                 <p className="text-xl font-semibold text-slate-900 leading-snug">
-                  What if you could build an <span className="text-blue-600">unforgettable visual mental model</span> of how JavaScript actually works?
+                  What if in 30 days you could build an <span className="text-blue-600">unforgettable visual mental model</span> of how JavaScript actually works?
                 </p>
                 <p className="mt-3 text-base text-slate-600">
-                Not just memorizing syntax, but truly understanding the environment, flow and patterns in the code through imaginative visual models.
+                Not just by memorizing syntax, but truly understanding the environment, flow and patterns in the code through imaginative visual models.
                 </p>
               </div>
               

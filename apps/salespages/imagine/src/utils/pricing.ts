@@ -4,8 +4,8 @@
 export const PRODUCT_IDS = {
   // Discounted products (for mobile + Instagram users)
   discounted: {
-    base: 899581, // $37 - Current base course
-    bundle: 899581, // $56 - TODO: Replace with actual discounted bundle ID
+    base: 916417, // $37 - Current base course
+    bundle: 899581, // $57
   },
   // Regular price products
   regular: {
@@ -130,7 +130,7 @@ export function shouldShowDiscount(): boolean {
   }
   
   // Normal production logic: BOTH mobile AND Instagram required
-  return isMobileDevice() && isFromInstagram()
+  return isFromInstagram()
 }
 
 /**

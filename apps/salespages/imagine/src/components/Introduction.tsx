@@ -35,10 +35,10 @@ export function Introduction() {
         </ul>
         <p className="mt-6 sm:mt-8 font-bold text-base sm:text-base">I've once felt like this... </p>
         <p className="mt-3 sm:mt-4 text-base sm:text-base leading-relaxed">
-           The overwhelming self-doubt went deeper than imposter syndrome. It wasn't only the fear of being exposed as a fraud. It was worse... it was the <HighlightedText color="yellow">fear that I was incapable.</HighlightedText>
+           The overwhelming self-doubt went deeper than imposter syndrome. It was the   fear that I wasn't cut out for this.
         </p>
-        <p className="mt-3 sm:mt-4 text-base sm:text-base leading-relaxed"> As a senior JavaScript developer who has coached and mentored beginners and juniors for YEARS, I can tell you with certainty you <span className="font-bold">are</span> capable. </p>
-        <p className="mt-3 sm:mt-4 text-base sm:text-base"> I did it. I've helped over a hundred students do it. <span className="font-bold text-xl sm:text-2xl">You can do it too!</span></p>
+        <p className="mt-3 sm:mt-4 text-base sm:text-base leading-relaxed"> You can continue like this <HighlightedText color="yellow">FOR YEARS.</HighlightedText> Or, you can take the time to actually understand your craft.</p>
+        <p className="mt-3 sm:mt-4 text-base sm:text-base"> I did it. I've helped over a hundred students do it. <span className="font-bold text-lg sm:text-2xl">You can do it too!</span></p>
         <ul role="list" className="mt-4 space-y-3">
           {[
             'you are career transitioning and have limited time',
@@ -48,7 +48,7 @@ export function Introduction() {
           ].map((feature) => (
             <li key={feature} className="flex text-sm flex-col md:flex-row items-start md:items-start">
               <CheckIcon className="h-6 w-6 hidden md:block sm:h-8 sm:w-8 flex-none fill-blue-500" />
-              <span className="sm:ml-4 font-bold w-16">Even if</span>
+              <span className="sm:ml-4 w-16 text-blue-500 font-bold">Even if</span>
               <span className="ml-1 sm:ml-2 text-left  text-base"> {feature}</span>
             </li>
           ))}

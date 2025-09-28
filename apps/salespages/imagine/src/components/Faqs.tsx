@@ -1,30 +1,50 @@
+import { Button } from "./Button"
+
 const faqs = [
-    {
-      id: 1,
-      question: "Is this course aimed at beginners or intermediates?",
+  {
+    id: 1,
+    question: "Is it self-paced?",
+    answer:
+      "Yes, it is designed to be taken on the side of a full time job, at your own space. ",
+  },
+  {
+    id: 2,
+    question: "How long will it take me to complete it?",
+    answer:
+      "+-30 days part time (1-2 hours per day). If you want to apply the concepts to your own projects (as you should), it will take longer. ",
+  },
+  {
+    id: 3,
+    question: "Is this course aimed at beginners or intermediates?",
+    answer:
+      "For beginners and intermediates, but not for complete beginners who have never seen JavaScript. It is meant to help you 'level up' your skills, not to learn from scratch.",
+  },
+  {
+      id: 4,
+      question: "What if I am an absolute beginner?",
       answer:
-        "If you are brand new to JavaScript, or still learning the basic fundamentals for the first time, this course is not for you. It is meant to help anyone 'level up' their skills and not to learn from scratch. If you've started trying to build vanilla JS projects but currently stuck, or you possess basic knowledge and feel ready to advance, this course is perfect for you.",
+        "This course will still be super valuable to you, but not as your ONLY resource. Use things like Codecademy and freeCodeCamp, and cross reference what you learn with The Great Sync. ",
     },
     {
-        id: 2,
-        question: "What if I am an absolute beginner?",
-        answer:
-          " While the first few sections do explain the basics very well for a beginner, and provide a good foundation, the course moves into more advanced topics - to soon for a beginner, who rather spend time practising. Of course, you can purchase the course and use it as a reference, but you may need other resources to help you. ",
-      },
-      {
-        id: 2,
-        question: "Do I only look at pictures or do I do any coding?",
-        answer:
-          "The Great Sync is not a shortcut. It's an effective learning method, but nothing beats the hours you put in behind the code editor. I provide code exercises throughout, and every section has a 'Mental Model Applied' section.",
-      },
-      {
-        id: 5,
-        question: "How many projects will I build?",
-        answer:
-          "Imagine JavaScript is not about building projects. Its focus is on exploring, visualizing and connecting concepts. If you want to focus on building projects, contact Kylo about joining his coaching program: Break Through JavaScript ~ build without a tutorial in 40 days.",
-      },
+      id: 5,
+      question: "Do I only look at pictures or do I do any coding?",
+      answer:
+        "The Great Sync is not a shortcut. It's an effective learning method, but nothing beats the hours you put in behind the code editor. You can't learn JavaScript by looking at pictures. I provide code exercises throughout, and every section has a 'Mental Model Applied' section. But it is up to you to practice recognizing and applying the patterns in your own projects.",
+    },
+    {
+      id: 6,
+      question: "Can I get a refund?",
+      answer:
+        "As I am offering this course for a limited time at a highly reduced price, I am not offering refunds. As long as you commit to the course with an open mind, you won't be disappointed. ",
+    },
+    {
+      id: 7,
+      question: "Is this course for me?",
+      answer:
+        "If you find yourself copy pasting a lot of code and relying on AI, and you enjoy learning visually, this course is 100% for you! ",
+    },
 
-  ]
+]
   
   export default function Faqs() {
     return (
@@ -41,6 +61,11 @@ const faqs = [
               </div>
             ))}
           </dl>
+        </div>
+        <div className="my-8 flex justify-center mx-4">
+          <Button href="#pricing-title" className="w-full max-w-64 text-base py-2 bg-slate-900 text-white hover:bg-slate-800 transition-all font-medium rounded-xl">
+                Buy the course
+          </Button>
         </div>
       </div>
     )

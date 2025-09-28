@@ -8,7 +8,6 @@ import { CheckIcon } from '@/components/CheckIcon'
 import { Container } from '@/components/Container'
 import { GridPattern } from '@/components/GridPattern'
 import { SectionHeading } from '@/components/SectionHeading'
-import { HighlightedText } from './HighlightedText'
 import { shouldShowDiscount, getProductIds, getPrices, getDiscountPercentage } from '@/utils/pricing'
 
 // Declare Paddle type to avoid TypeScript errors
@@ -217,10 +216,10 @@ function Plan({
             />
             <div className="ml-3 flex-1">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-slate-900">
+                <span className="font-semibold text-slate-900 flex-1 pr-2">
                   ⚡ Master JavaScript's Quirks
                 </span>
-                <div className="text-right">
+                <div className="text-right flex-shrink-0 w-20 sm:w-24">
                   {showDiscount && (
                     <span className="text-xs text-slate-500 line-through">${boosterOriginalPrice}</span>
                   )}
@@ -228,20 +227,29 @@ function Plan({
                 </div>
               </div>
               <p className="mt-1 text-sm text-slate-600">
-                Add 3 advanced "Booster" lessons that demystify the tricky parts:
+                Add 3 advanced sections that demystify the tricky parts:
               </p>
               <ul className="mt-2 space-y-1 text-xs text-slate-600">
-                <li className="flex items-center">
-                  <span className="mr-1 text-purple-500">→</span>
-                  <span className="font-medium">The "this" keyword</span> - Never be confused by this again
+                <li className="flex">
+                  <div className="flex items-center w-32 sm:w-36 flex-shrink-0">
+                    <span className="mr-1 text-purple-500">→</span>
+                    <span className="font-medium">"this" variable</span>
+                  </div>
+                  <span className="flex-1">- Never be confused by this again</span>
                 </li>
-                <li className="flex items-center">
-                  <span className="mr-1 text-purple-500">→</span>
-                  <span className="font-medium">Prototypal Inheritance</span> - The beating heart of JavaScript
+                <li className="flex">
+                  <div className="flex items-center w-32 sm:w-36 flex-shrink-0">
+                    <span className="mr-1 text-purple-500">→</span>
+                    <span className="font-medium">Prototypal Inheritance</span>
+                  </div>
+                  <span className="flex-1">- The beating heart of JavaScript</span>
                 </li>
-                <li className="flex items-center">
-                  <span className="mr-1 text-purple-500">→</span>
-                  <span className="font-medium">The DOM</span> - Visualize and learn exactly what this is
+                <li className="flex">
+                  <div className="flex items-center w-32 sm:w-36 flex-shrink-0">
+                    <span className="mr-1 text-purple-500">→</span>
+                    <span className="font-medium">The DOM</span>
+                  </div>
+                  <span className="flex-1">- Visualize and learn exactly what this is</span>
                 </li>
               </ul>
               {showDiscount && (
@@ -275,19 +283,16 @@ export function Pricing() {
       className="scroll-mt-14 pb-8 pt-16 sm:scroll-mt-32 sm:pb-10 sm:pt-12 lg:pb-16"
     >
       <Container>
-        <SectionHeading number="4" id="pricing-title">
+        <SectionHeading number="4">
           I'm Ready
         </SectionHeading>
-        <p className="mt-8 font-display text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
-        Time to level up!
-        </p>
         <p className="mt-4 text-md md:text-lg tracking-tight text-slate-600">
         Have you decided that a career spent blindly copy-pasting is not for you? <span className="font-bold">This is your chance...</span>
         </p>
 
       </Container>
       <div className="mx-auto mt-8 md:mt-16 max-w-5xl lg:px-6">
-        <div className="grid bg-slate-50 sm:px-6 sm:pb-16 md:grid-cols-1 md:rounded-6xl md:px-8 md:pt-12  max-w-xl m-auto">
+        <div id="pricing-title" className="grid bg-slate-50 sm:px-6 sm:pb-16 md:grid-cols-1 md:rounded-6xl md:px-8 md:pt-12  max-w-xl m-auto">
           <Plan
             name="Imagine JavaScript"
             description="Get instant access and start building your mental model"
@@ -298,7 +303,7 @@ export function Pricing() {
               '80+ pages',
               '50+ illustrations',
               'interactive code editor and exercises',
-              'Access to The Syncer Student community'
+              'Access to The Syncer Student community - a direct line to Kylo and other students'
             ]}
           />
         

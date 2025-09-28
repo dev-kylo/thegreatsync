@@ -139,18 +139,20 @@ export function Screencasts() {
                     <h3 className="font-semibold text-slate-900 text-sm leading-tight">
                       {video.title}
                     </h3>
-                    {video.booster && (
-                      <span className="ml-2 bg-purple-600 text-xs px-2 py-0.5 rounded-full text-white font-semibold flex-shrink-0">
-                        BOOSTER
-                      </span>
-                    )}
                   </div>
                   {/* Optional duration or lesson count */}
-                  <div className="mt-2 flex items-center text-xs text-slate-500">
-                    <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Interactive lesson</span>
+                  <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
+                    <div className="flex items-center">
+                      <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>Interactive lesson</span>
+                    </div>
+                    {video.booster && (
+                      <span className="ml-2 bg-purple-600 text-xs px-2 py-0.5 rounded-full text-white font-semibold flex-shrink-0">
+                        Advanced Level
+                      </span>
+                    )}
                   </div>
                 </div>
                 
