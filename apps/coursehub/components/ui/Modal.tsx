@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import ModelCarousel from '../../containers/ModelCarousel';
 
 type SlideOverProps = {
     children: React.ReactNode;

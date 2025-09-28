@@ -26,6 +26,33 @@ function MenuDropDown({
         (current?.chapterId && item.level === 1 && +current.chapterId === +item.id) ||
         (current?.subchapterId && item.level === 2 && +current.subchapterId === +item.id);
 
+    // If chapter is locked, render non-clickable version
+    if (item.isLocked) {
+        return (
+            <div key={item.name} className="space-y-1">
+                <div
+                    className={classNames(
+                        'py-3 bg-transparent text-gray-500 cursor-not-allowed',
+                        'group w-full flex items-center pl-2 pr-1 py-2 text-left text-md font-medium rounded-md',
+                        `${item.level === 2 ? 'pl-8' : item.level === 3 ? 'pl-20' : 'pl-4'}`
+                    )}
+                >
+                    <div className="pl-2 mr-8 w-6" id={`menu-${item.level}-${item.id}`}>
+                        <ProgressIcon isLocked />
+                    </div>
+                    <span className="flex-1">{item.name}</span>
+                    <svg
+                        className="text-gray-300 ml-3 mr-4 h-6 w-6 flex-shrink-0"
+                        viewBox="0 0 20 20"
+                        aria-hidden="true"
+                    >
+                        <path d="M6 6L14 10L6 14V6Z" fill="currentColor" />
+                    </svg>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <Disclosure as="div" key={item.name} className="space-y-1" defaultOpen={!!isActive}>
             {({ open }) => (
@@ -40,7 +67,11 @@ function MenuDropDown({
                         )}
                     >
                         <div className="pl-2 mr-8 w-6" id={`menu-${item.level}-${item.id}`}>
-                            <ProgressIcon amount={item.progress} completed={!!item.completed} />
+                            <ProgressIcon
+                                amount={item.progress}
+                                completed={!!item.completed}
+                                isLocked={!!item.isLocked}
+                            />
                         </div>
                         <span className="flex-1">{item.name}</span>
                         <svg

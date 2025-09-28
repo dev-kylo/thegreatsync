@@ -7,18 +7,25 @@ interface HighlightedTextProps {
 export function HighlightedText({ 
   children, 
   color = 'yellow',
-  rotate = -2 
+  rotate = -1
 }: HighlightedTextProps) {
-  const bgColor = color === 'yellow' ? 'bg-yellow-200/50' : 'bg-blue-200/50';
+  const bgColor = color === 'yellow' ? 'bg-yellow-200/80' : 'bg-blue-200/80';
 
   return (
-    <span className="relative">
-      <span className="relative z-10 text-xl">{children}</span>
+    <span className="relative inline-block">
       <span 
-        className={`absolute bottom-0 left-0 right-0 h-6 ${bgColor}`}
-        style={{ transform: `rotate(${rotate}deg)` }}
+        className={`absolute inset-0 ${bgColor} rounded-sm`}
+        style={{ 
+          transform: `rotate(${rotate}deg)`,
+          transformOrigin: 'center',
+          zIndex: -1,
+          margin: '-2px'
+        }}
         aria-hidden="true"
       />
+      <span className="relative px-1 py-1" style={{ lineHeight: '1' }}>
+        {children}
+      </span>
     </span>
   );
 } 

@@ -25,7 +25,7 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
 
         const enrolment = await strapi.db.query('api::enrollment.enrollment').findOne({
             where: {  id: +enrolmentId },
-            populate: ['users']
+            populate: ['users', 'tier', 'tier.allowedChapters']
         });
         
         if (enrolment) {
@@ -64,12 +64,23 @@ export default factories.createCoreService('api::customer.customer', ({ strapi }
         
         console.log('--- Service: Preparing User Completion ----')
 
+        // Get allowed chapter IDs from tier (if tier exists)
+        let allowedChapterIds = null;
+        if (enrolment?.tier?.allowedChapters) {
+            allowedChapterIds = enrolment.tier.allowedChapters.map(ch => ch.id);
+        }
+
+        // Filter chapters based on tier (if tier exists, otherwise include all)
+        const chaptersToInclude = allowedChapterIds 
+            ? course.chapters.filter(ch => allowedChapterIds.includes(ch.id))
+            : course.chapters;
+
         // Preparing all of the completion data to be stored as data
-        const chapterCourseCompletion:ChapterCompletion[] = course.chapters.map(crs => {
+        const chapterCourseCompletion:ChapterCompletion[] = chaptersToInclude.map(crs => {
             return {id: crs.id, completed: false, course: +order.release_course_id}
         }) 
-        // flatten subchapters array and add the chapter ID to each chapter
-        const subchapters = course.chapters.reduce(((acc, curr) => { return acc = [...acc, ...(curr.subchapters.map(sb =>{ return {...sb, chapter: curr.id}}))]}), []);
+        // flatten subchapters array and add the chapter ID to each chapter (only for allowed chapters)
+        const subchapters = chaptersToInclude.reduce(((acc, curr) => { return acc = [...acc, ...(curr.subchapters.map(sb =>{ return {...sb, chapter: curr.id}}))]}), []);
         const subchapterCourseCompletion:SubchapterCompletion[] = subchapters.map(sub => createSubchapterCompletion(sub.id, sub.chapter))
         // flatten pages array and add the subchapter ID to each page
         const pages = subchapters.reduce(((acc, curr) => { 

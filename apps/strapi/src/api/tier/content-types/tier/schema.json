@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tiers",
+  "info": {
+    "singularName": "tier",
+    "pluralName": "tiers",
+    "displayName": "Tier",
+    "description": "Course access tiers for enrollment"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "allowedChapters": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::chapter.chapter"
+    },
+    "courses": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::course.course"
+    },
+    "identifier": {
+      "type": "string",
+      "unique": true,
+      "description": "Unique identifier for tier (e.g., 'basic', 'premium', 'full')"
+    }
+  }
+}

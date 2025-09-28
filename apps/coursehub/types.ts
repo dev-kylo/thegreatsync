@@ -28,6 +28,7 @@ export type MenuItem = {
     orderNumber: number;
     children?: MenuItem[];
     parent: MenuParentChapter & MenuParentSubchapter;
+    isLocked?: boolean;
 };
 
 export type CurrentLocation = { pageId: string | number; subchapterId: string | number; chapterId: string | number };
@@ -244,6 +245,7 @@ export interface ChaptersAttributes extends StrapiResponseMetaData {
     title: string;
     visible: boolean;
     menu: Menu;
+    isLocked?: boolean;
     subchapters: {
         data: SubChapter[];
     };

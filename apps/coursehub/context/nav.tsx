@@ -45,6 +45,9 @@ export const NavContext = React.createContext<NavProviderValues>({
 });
 
 function addToList(item: MenuItem, list: DoublyLinkedList) {
+    // Skip locked items entirely - they should not be in the navigation sequence
+    if (item.isLocked) return;
+
     if (item.children) item.children.forEach((itemChild) => addToList(itemChild, list));
     else list.addToTail(item);
 }
@@ -169,8 +172,23 @@ const NavContextProvider = ({ children }: { children: ReactNode | ReactNode[] })
 
     const completionStat = () => {
         if (!usercompletion || !usercompletion.pages || !courseSequence) return null;
-        const completed = usercompletion.pages.filter((pg) => pg.completed);
-        return Math.round((completed.length / courseSequence.getTotalNodes()) * 100);
+
+        // Get all page IDs that are in the navigation sequence (excludes locked chapters)
+        const navigablePageIds = new Set<number>();
+        let currentNode = courseSequence.head;
+        while (currentNode !== null) {
+            navigablePageIds.add(currentNode.data.id);
+            currentNode = currentNode.getNextNode();
+        }
+
+        // Only count completed pages that are actually navigable (not in locked chapters)
+        const completed = usercompletion.pages.filter((pg) => pg.completed && navigablePageIds.has(pg.id));
+
+        // Calculate percentage based on navigable pages only
+        const totalNavigablePages = navigablePageIds.size;
+        if (totalNavigablePages === 0) return 0;
+
+        return Math.round((completed.length / totalNavigablePages) * 100);
     };
 
     if (error) console.error(error);

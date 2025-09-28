@@ -40,8 +40,6 @@ export default function ForgottenPassword() {
         sendCredentials(emailVal);
     };
 
-    console.log(emailVal);
-
     return (
         <div className="bg-primary_blue h-screen px-8 md:px-0">
             <div className="flex min-h-full ">
@@ -52,8 +50,6 @@ export default function ForgottenPassword() {
                                 alt="The Great Sync Logo"
                                 src={Logo as unknown as string}
                                 fill
-                                width={3000}
-                                height={2000}
                                 className="aspect-square object-contain h-auto w-full top-0 left-1/2"
                             />
                         </div>

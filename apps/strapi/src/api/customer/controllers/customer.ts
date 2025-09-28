@@ -10,6 +10,103 @@ import { mapPaddleOrder } from "../../../utils/orderMappings";
 // User will have a checkbox to use an existing account. Just has to supply an email address with orderId to look up, then must login
 
 export default {
+  checkEmail: async (ctx, next) => {
+    try {
+      const { orderId } = ctx.request.query as { orderId: string };
+      
+      if (!orderId) {
+        return ctx.badRequest('Order ID is required');
+      }
+
+      // Find the order
+      const order = await strapi.db.query('api::order.order').findOne({
+        where: { order_id: orderId }
+      }) as Order;
+
+      if (!order) {
+        return ctx.notFound('Order not found');
+      }
+
+      // Check if a user exists with this email
+      const user = await strapi.db.query('plugin::users-permissions.user').findOne({
+        where: { email: order.email }
+      }) as User;
+
+      ctx.body = {
+        hasAccount: !!user,
+        email: order.email,
+        customerName: order.customer_name
+      };
+    } catch (err) {
+      console.error('Error checking email:', err);
+      ctx.badRequest('Failed to check email');
+    }
+  },
+
+  registerAuthenticated: async (ctx, next) => {
+    try {
+      // Check if user is authenticated
+      if (!ctx.state.user) {
+        return ctx.unauthorized('You must be logged in to use this endpoint');
+      }
+
+      const { orderId } = ctx.request.body as { orderId: string };
+      
+      if (!orderId) {
+        return ctx.badRequest('Order ID is required');
+      }
+
+      // Find the order
+      const order = await strapi.db.query('api::order.order').findOne({
+        where: { order_id: orderId },
+        populate: ['user']
+      }) as Order;
+
+      if (!order) {
+        return ctx.notFound('Order not found');
+      }
+
+      // Verify the order email matches the authenticated user's email
+      if (order.email !== ctx.state.user.email) {
+        return ctx.forbidden('This order is not associated with your email address');
+      }
+
+      // Check if order already has a user assigned
+      if (order.user) {
+        if (order.user.id === ctx.state.user.id) {
+          ctx.body = {
+            success: true,
+            message: 'This course is already linked to your account'
+          };
+          return next();
+        }
+        return ctx.forbidden('This order is already linked to another account');
+      }
+
+      // Link order to authenticated user
+      await strapi.entityService.update('api::order.order', order.id, {
+        data: {
+          user: ctx.state.user.id
+        } as Order,
+      });
+
+      console.log('--- ORDER LINKED TO AUTHENTICATED USER ---', ctx.state.user.id);
+
+      // Enroll user in course
+      await strapi.service('api::customer.customer').createUserEnrollment(order, ctx.state.user.id);
+      
+      console.log('--- AUTHENTICATED USER ENROLLED IN COURSE ---');
+
+      ctx.body = {
+        success: true,
+        message: 'Course successfully added to your account'
+      };
+    } catch (err) {
+      console.error('Error in authenticated registration:', err);
+      ctx.badRequest('Failed to register course');
+    }
+  },
+
   register: async (ctx, next) => {
     
     const data = ctx.request.body as { username: string, password?: string, orderId: string, existingAccount: boolean}
@@ -61,6 +158,15 @@ export default {
 
       // If there is a user, update User data
       if (user && data.existingAccount){
+        // Validate password for existing account
+        const validPassword = await strapi.plugins['users-permissions'].services.user.validatePassword(
+          data.password,
+          user.password
+        );
+
+        if (!validPassword) {
+          return ctx.badRequest('Invalid password. Please try again or reset your password.');
+        }
 
         // User is attached to the order
         await strapi.entityService.update('api::order.order', order.id, {

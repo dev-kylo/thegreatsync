@@ -29,6 +29,11 @@
     },
     "price": {
       "type": "string"
+    },
+    "tier": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tier.tier"
     }
   }
 }
