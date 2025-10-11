@@ -42,7 +42,7 @@ async function upsertChunks(rows: any[]) {
   const db = await getPg();
 
   const cols = [
-    'collection','source_type','source_id','source_url',
+    'chunk_uid','collection','source_type','source_id','source_url',
     'unit_kind','unit_type','order_idx','unit_idx','chunk_idx',
     'course_id','chapter_id','subchapter_id',
     'course_title','chapter_title','subchapter_title','page_title',
@@ -50,7 +50,7 @@ async function upsertChunks(rows: any[]) {
     'has_image','image_urls','code_languages',
     'concepts','mnemonic_tags','technique_tags',
     'author_label','user_hash','pii_level','sentiment','rating',
-    'urls','content','content_hash','embedding'
+    'content','content_hash','embedding'
   ];
 
   const values = rows
@@ -63,7 +63,7 @@ async function upsertChunks(rows: any[]) {
   const sql = `
     INSERT INTO rag.chunks (${cols.join(',')})
     VALUES ${values}
-    ON CONFLICT (content_hash) DO UPDATE SET
+    ON CONFLICT (chunk_uid) DO UPDATE SET
       content          = EXCLUDED.content,
       embedding        = EXCLUDED.embedding,
       source_url       = EXCLUDED.source_url,
@@ -93,7 +93,6 @@ async function upsertChunks(rows: any[]) {
       pii_level        = EXCLUDED.pii_level,
       sentiment        = EXCLUDED.sentiment,
       rating           = EXCLUDED.rating,
-      urls             = EXCLUDED.urls,
       updated_at       = now();
   `;
   await db.query(sql, params);
@@ -219,8 +218,8 @@ export default {
     const dryRun = Boolean(body.dryRun ?? false);
     const prunePages = Boolean(body.prunePages ?? false);
 
-    // exporter service (we wrote this in /src/plugins/rag/server/services/exporter.ts)
-    const exporter = strapi.plugin('rag').service('exporter');
+    // exporter service
+    const exporter = strapi.service('api::rag.exporter');
 
     let pagesProcessed = 0;
     let modelsProcessed = 0;
@@ -233,7 +232,8 @@ export default {
         pagesProcessed += 1;
 
         // double-check visibility/publish; if not, optionally prune
-        if (!page.attributes?.visible || !page.attributes?.publishedAt) {
+        const pageAttrs = page.attributes || page;
+        if (!pageAttrs.visible || !pageAttrs.publishedAt) {
           if (prunePages && !dryRun) await deleteChunksByPage(page.id);
           continue;
         }
@@ -260,6 +260,7 @@ export default {
               })
             );
             return {
+              chunk_uid: b.chunk_uid,
               source_url: (b.meta as any).source_url,
               ...b.meta,
               content: b.text,
@@ -298,6 +299,7 @@ export default {
               })
             );
             return {
+              chunk_uid: b.chunk_uid,
               source_url: (b.meta as any).source_url,
               ...b.meta,
               content: b.text,

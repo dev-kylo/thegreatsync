@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import crypto from 'node:crypto';
 
 // -----------------------------
 // Public types the indexer expects
@@ -6,6 +7,7 @@
 export interface UnitChunk {
     text: string;         // final text to embed
     meta: ChunkMeta;      // ready-to-insert metadata
+    chunk_uid: string;    // unique identifier for this chunk
   }
   
   export interface ChunkMeta {
@@ -97,6 +99,10 @@ export interface UnitChunk {
     return `\`\`\`${lang}\n${c}\n\`\`\``;
   }
   
+  function sha256(input: string): string {
+    return crypto.createHash('sha256').update(input).digest('hex');
+  }
+
   function normalizeConceptSlug(s: string): string {
     return s.trim().replace(/\s+/g, ' ').replace(/\s/g, '-').toLowerCase();
   }
@@ -279,17 +285,28 @@ export interface UnitChunk {
     const pushUnit = (unitText: string, meta: Partial<ChunkMeta>) => {
       const parts = chunkTextWithOverlap(unitText);
       parts.forEach((textPart, idx) => {
+        const finalMeta = {
+          collection: 'course_content' as const,
+          source_type: 'page_unit' as const,
+          source_id: String(pageId),
+          ...baseMeta,
+          ...meta,
+          unit_idx: meta.unit_idx ?? unitIdx,
+          chunk_idx: idx,
+        };
+
+        const chunk_uid = makeChunkUID({
+          collection: finalMeta.collection,
+          source_type: finalMeta.source_type,
+          source_id: finalMeta.source_id,
+          unit_anchor: `u_${finalMeta.unit_idx}`,
+          chunk_idx: idx,
+        });
+
         out.push({
           text: textPart,
-          meta: {
-            collection: 'course_content',
-            source_type: 'page_unit',
-            source_id: String(pageId),
-            ...baseMeta,
-            ...meta,
-            unit_idx: meta.unit_idx ?? unitIdx,
-            chunk_idx: idx,
-          },
+          meta: finalMeta,
+          chunk_uid,
         });
       });
       unitIdx += 1;
@@ -358,7 +375,7 @@ export interface UnitChunk {
         if (!k) continue;
   
         const isBoundary =
-          k === 'media.image' || k === 'media.text_image' || k === 'media.text_image_code' || k === 'media.code-editor';
+          k === 'media.image' || k === 'media.text-image' || k === 'media.text-image-code' || k === 'media.code-editor';
   
         if (isBoundary && section) flush();
         if (!section) section = { texts: [], codes: [], imgs: [] };
@@ -367,8 +384,17 @@ export interface UnitChunk {
           if (entry.text) section.texts.push(stripHtml(entry.text));
           if (k === 'media.text-code' && entry.code) section.codes.push(stripHtml(entry.code));
         } else if (k === 'media.code-editor') {
-          if (entry.code) section.codes.push(stripHtml(entry.code));
-        } else if (k === 'media.text_image' || k === 'media.text_image_code' || k === 'media.image') {
+          // code-editor has array of files
+          if (entry.file && Array.isArray(entry.file)) {
+            for (const f of entry.file) {
+              if (f.code) section.codes.push(stripHtml(f.code));
+            }
+          }
+          // Also capture description text if present
+          if (entry.description?.text) {
+            section.texts.push(stripHtml(entry.description.text));
+          }
+        } else if (k === 'media.text-image' || k === 'media.text-image-code' || k === 'media.image') {
           const urls = extractImageUrls(entry.image);
           section.imgs.push({
             urls,
@@ -558,21 +584,32 @@ export interface UnitChunk {
         paragraphs,
       });
   
+      const meta = {
+        collection: 'mnemonics' as const,
+        source_type: 'imagimodel_layer' as const,
+        source_id: String(imagimodelId),
+        unit_kind: 'block' as const,
+        unit_type: 'imagimodel_layer',
+        unit_idx: idx,
+        course_id: course?.id,
+        course_title: course?.title,
+        has_image: urls.length > 0,
+        image_urls: urls.length ? urls : undefined,
+        mnemonic_tags: layer.name ? [normalizeConceptSlug(layer.name)] : undefined,
+      };
+
+      const chunk_uid = makeChunkUID({
+        collection: meta.collection,
+        source_type: meta.source_type,
+        source_id: meta.source_id,
+        unit_anchor: `u_${idx}`,
+        chunk_idx: 0,
+      });
+
       out.push({
         text,
-        meta: {
-          collection: 'mnemonics',
-          source_type: 'imagimodel_layer',
-          source_id: String(imagimodelId),
-          unit_kind: 'block',
-          unit_type: 'imagimodel_layer',
-          unit_idx: idx,
-          course_id: course?.id,
-          course_title: course?.title,
-          has_image: urls.length > 0,
-          image_urls: urls.length ? urls : undefined,
-          mnemonic_tags: layer.name ? [normalizeConceptSlug(layer.name)] : undefined,
-        },
+        meta,
+        chunk_uid,
       });
     });
   
@@ -594,19 +631,30 @@ export interface UnitChunk {
         paragraphs,
       });
   
+      const meta = {
+        collection: 'mnemonics' as const,
+        source_type: 'imagimodel_zone' as const,
+        source_id: String(imagimodelId),
+        unit_kind: 'block' as const,
+        unit_type: 'imagimodel_zone',
+        unit_idx: idx,
+        course_id: course?.id,
+        course_title: course?.title,
+        mnemonic_tags: [normalizeConceptSlug(zone.name)],
+      };
+
+      const chunk_uid = makeChunkUID({
+        collection: meta.collection,
+        source_type: meta.source_type,
+        source_id: meta.source_id,
+        unit_anchor: `u_${idx}`,
+        chunk_idx: 0,
+      });
+
       out.push({
         text,
-        meta: {
-          collection: 'mnemonics',
-          source_type: 'imagimodel_zone',
-          source_id: String(imagimodelId),
-          unit_kind: 'block',
-          unit_type: 'imagimodel_zone',
-          unit_idx: idx,
-          course_id: course?.id,
-          course_title: course?.title,
-          mnemonic_tags: [normalizeConceptSlug(zone.name)],
-        },
+        meta,
+        chunk_uid,
       });
     });
   
@@ -652,7 +700,15 @@ export interface UnitChunk {
       pii_level: 2, // since reflections are user-generated
       concepts: [],
     };
-  
-    return [{ text, meta }];
+
+    const chunk_uid = makeChunkUID({
+      collection: meta.collection,
+      source_type: meta.source_type,
+      source_id: meta.source_id,
+      unit_anchor: 'u_0',
+      chunk_idx: 0,
+    });
+
+    return [{ text, meta, chunk_uid }];
   }
   
