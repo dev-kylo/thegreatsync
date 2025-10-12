@@ -26,44 +26,64 @@ const FeedbackSchema = z.object({
 });
 
 router.post('/rag/feedback', async (req, res) => {
-  const body = FeedbackSchema.parse(req.body);
+  try {
+    const body = FeedbackSchema.parse(req.body);
 
-  const interactionId = await withTx(async (c) => {
-    const r1 = await c.query(
-      `INSERT INTO rag.interactions
-       (user_id,intent,query,answer,retrieved_chunk_uids,selected_chunk_uids,selected_snippets,domain,outcome,notes)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-       RETURNING id`,
-      [
-        body.interaction.user_id ?? null,
-        body.interaction.intent ?? null,
-        body.interaction.query,
-        body.interaction.answer,
-        body.interaction.retrieved_chunk_uids ?? null,
-        body.interaction.selected_chunk_uids ?? null,
-        body.interaction.selected_snippets ?? null,
-        body.interaction.domain ?? null,
-        body.interaction.outcome ?? null,
-        body.interaction.notes ?? null,
-      ]
-    );
-    const id = r1.rows[0].id as number;
+    const interactionId = await withTx(async (c) => {
+      const r1 = await c.query(
+        `INSERT INTO rag.interactions
+         (user_id,intent,query,answer,retrieved_chunk_uids,selected_chunk_uids,selected_snippets,domain,outcome,notes)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+         RETURNING id`,
+        [
+          body.interaction.user_id ?? null,
+          body.interaction.intent ?? null,
+          body.interaction.query,
+          body.interaction.answer,
+          body.interaction.retrieved_chunk_uids ?? null,
+          body.interaction.selected_chunk_uids ?? null,
+          body.interaction.selected_snippets ?? null,
+          body.interaction.domain ?? null,
+          body.interaction.outcome ?? null,
+          body.interaction.notes ?? null,
+        ]
+      );
+      const id = r1.rows[0].id as number;
 
-    if (body.judgments?.length) {
-      const values = body.judgments.map((_, i) =>
-        `($1, $2, $${3+i*4}, $${4+i*4}, $${5+i*4}, $${6+i*4})`).join(',');
-      const params: any[] = [id, body.interaction.query];
-      body.judgments.forEach(j => {
-        params.push(j.pos_chunk_uid ?? null, j.neg_chunk_uid ?? null, j.label, j.reason ?? null);
+      if (body.judgments?.length) {
+        const values = body.judgments.map((_, i) =>
+          `($1, $2, $${3+i*4}, $${4+i*4}, $${5+i*4}, $${6+i*4})`).join(',');
+        const params: any[] = [id, body.interaction.query];
+        body.judgments.forEach(j => {
+          params.push(j.pos_chunk_uid ?? null, j.neg_chunk_uid ?? null, j.label, j.reason ?? null);
+        });
+        await c.query(
+          `INSERT INTO rag.judgments (interaction_id, query, pos_chunk_uid, neg_chunk_uid, label, reason)
+           VALUES ${values}`, params);
+      }
+      return id;
+    });
+
+    res.json({ ok: true, interactionId });
+  } catch (error) {
+    console.error('Feedback submission error:', error);
+
+    // Handle Zod validation errors
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        ok: false,
+        error: 'validation_error',
+        details: error.errors
       });
-      await c.query(
-        `INSERT INTO rag.judgments (interaction_id, query, pos_chunk_uid, neg_chunk_uid, label, reason)
-         VALUES ${values}`, params);
     }
-    return id;
-  });
 
-  res.json({ ok: true, interactionId });
+    // Generic error
+    res.status(500).json({
+      ok: false,
+      error: 'feedback_failed',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
 });
 
 export default router;

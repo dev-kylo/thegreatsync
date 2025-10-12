@@ -6,6 +6,7 @@ import { toReflection, toUnits, toMnemonics } from '../helpers/shapers';
 interface EntityRef {
   id?: string | number;
   title?: string;
+  uid?: string;
 }
 
 /**
@@ -36,7 +37,11 @@ async function resolveHierarchyForPage(strapi: Strapi, pageId: number) {
   const crsData = ch?.attributes?.courses?.data ?? [];
   const courseItem = crsData[0];
   const course: EntityRef | undefined = courseItem
-    ? { id: courseItem.id, title: courseItem.attributes?.title }
+    ? {
+        id: courseItem.id,
+        title: courseItem.attributes?.title,
+        uid: courseItem.attributes?.uid
+      }
     : undefined;
 
   return { subchapter, chapter, course };
@@ -140,17 +145,29 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         };
         const crsData = reflection.subchapter.chapter.courses?.data ?? [];
         const courseItem = crsData[0];
-        if (courseItem) course = { id: courseItem.id, title: courseItem.attributes?.title };
+        if (courseItem) course = {
+          id: courseItem.id,
+          title: courseItem.attributes?.title,
+          uid: courseItem.attributes?.uid
+        };
       }
     }
     if (reflection.chapter && !chapter) {
       chapter = { id: reflection.chapter.id, title: reflection.chapter.title };
       const crsData = reflection.chapter.courses?.data ?? [];
       const courseItem = crsData[0];
-      if (courseItem) course = { id: courseItem.id, title: courseItem.attributes?.title };
+      if (courseItem) course = {
+        id: courseItem.id,
+        title: courseItem.attributes?.title,
+        uid: courseItem.attributes?.uid
+      };
     }
     if (reflection.course && !course) {
-      course = { id: reflection.course.id, title: reflection.course.title };
+      course = {
+        id: reflection.course.id,
+        title: reflection.course.title,
+        uid: reflection.course.uid
+      };
     }
 
     const units = toReflection({

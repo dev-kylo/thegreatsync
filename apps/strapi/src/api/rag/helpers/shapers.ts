@@ -27,7 +27,7 @@ export interface UnitChunk {
       | 'notion_note';
     source_id: string;
     source_url?: string;
-  
+
     // hierarchy (when applicable)
     course_id?: string | number;
     chapter_id?: string | number;
@@ -39,6 +39,7 @@ export interface UnitChunk {
     slug?: string;
     locale?: string;
     visible?: boolean;
+    domain?: string;
   
     // ordering & identity
     order_idx?: number;          // page order in subchapter if you have it
@@ -101,6 +102,56 @@ export interface UnitChunk {
   
   function sha256(input: string): string {
     return crypto.createHash('sha256').update(input).digest('hex');
+  }
+
+  /**
+   * Slugify a string: lowercase, trim, replace spaces with hyphens
+   */
+  function slugify(s?: string): string {
+    return (s ?? '').trim().toLowerCase().replace(/\s+/g, '-');
+  }
+
+  /**
+   * Check if a course is the "Canon" course
+   * Canon course uses subchapters as domains (JavaScript, React, Node, etc.)
+   */
+  function isCanonCourse(course?: { id?: string | number; title?: string; uid?: string }): boolean {
+    if (!course) return false;
+    const uid = (course.uid ?? '').toLowerCase();
+    const title = (course.title ?? '').toLowerCase();
+    return uid === 'canon' || title.includes('canon');
+  }
+
+  /**
+   * Resolve domain based on content type and course structure
+   *
+   * Logic:
+   * - Canon course: domain = slugified subchapter title (JavaScript, React, Node, etc.)
+   * - Regular course: domain = course uid or slugified course title
+   * - Imagimodels: inherit course domain
+   * - Reflections: inherit course/subchapter domain
+   */
+  function resolveDomain(opts: {
+    course?: { id?: string | number; title?: string; uid?: string };
+    subchapter?: { id?: string | number; title?: string };
+    isImagimodel?: boolean;
+  }): string | undefined {
+    const { course, subchapter, isImagimodel } = opts;
+
+    if (!course) return undefined;
+
+    // Canon course: use subchapter title as domain
+    if (isCanonCourse(course) && subchapter?.title) {
+      return slugify(subchapter.title);
+    }
+
+    // Imagimodel or regular course: use course uid or title
+    if (isImagimodel || !subchapter) {
+      return slugify(course.uid ?? course.title);
+    }
+
+    // Regular course with subchapter: use course uid or title
+    return slugify(course.uid ?? course.title);
   }
 
   function normalizeConceptSlug(s: string): string {
@@ -248,7 +299,7 @@ export interface UnitChunk {
   export function toUnits(opts: {
     pageId: string | number;
     page: PageAttributes;
-    course?: { id?: string | number; title?: string };
+    course?: { id?: string | number; title?: string; uid?: string };
     chapter?: { id?: string | number; title?: string };
     subchapter?: { id?: string | number; title?: string };
     // optional page order in subchapter if you have it handy
@@ -276,6 +327,7 @@ export interface UnitChunk {
       locale: page.locale,
       visible: !!page.visible,
       order_idx: typeof orderIdx === 'number' ? orderIdx : undefined,
+      domain: resolveDomain({ course, subchapter, isImagimodel: false }),
     };
   
     const pageConcepts = conceptsFromPageConcepts(page.concepts);
@@ -554,12 +606,13 @@ export interface UnitChunk {
   export function toMnemonics(opts: {
     imagimodelId: string | number;
     model: ImagimodelAttributes;
-    course?: { id?: string | number; title?: string };
+    course?: { id?: string | number; title?: string; uid?: string };
   }): UnitChunk[] {
     const { imagimodelId, model, course } = opts;
     const out: UnitChunk[] = [];
-  
+
     const breadcrumb = `${course?.title ?? 'Course'} > Imagimodel`;
+    const domain = resolveDomain({ course, subchapter: undefined, isImagimodel: true });
   
     // Layers → one chunk each
     (model.layers ?? []).forEach((layer, idx) => {
@@ -593,6 +646,7 @@ export interface UnitChunk {
         unit_idx: idx,
         course_id: course?.id,
         course_title: course?.title,
+        domain,
         has_image: urls.length > 0,
         image_urls: urls.length ? urls : undefined,
         mnemonic_tags: layer.name ? [normalizeConceptSlug(layer.name)] : undefined,
@@ -640,6 +694,7 @@ export interface UnitChunk {
         unit_idx: idx,
         course_id: course?.id,
         course_title: course?.title,
+        domain,
         mnemonic_tags: [normalizeConceptSlug(zone.name)],
       };
 
@@ -664,7 +719,7 @@ export interface UnitChunk {
   export function toReflection(opts: {
     reflectionId: string | number;
     reflection: any;
-    course?: { id?: string|number; title?: string };
+    course?: { id?: string|number; title?: string; uid?: string };
     chapter?: { id?: string|number; title?: string };
     subchapter?: { id?: string|number; title?: string };
   }): UnitChunk[] {
@@ -695,6 +750,7 @@ export interface UnitChunk {
       course_title: course?.title,
       chapter_title: chapter?.title,
       subchapter_title: subchapter?.title,
+      domain: resolveDomain({ course, subchapter, isImagimodel: false }),
       author_label: 'student',
       user_hash: reflection.user ? sha256(String(reflection.user.id)) : undefined,
       pii_level: 2, // since reflections are user-generated
