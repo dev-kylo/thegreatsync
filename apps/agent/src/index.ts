@@ -4,6 +4,7 @@ import cors from 'cors';
 import ragQuery from './routes/rag-query';
 import ragFeedback from './routes/rag-feedback';
 import adminReindex from './routes/admin-reindex';
+import sessionRoutes from './routes/session';
 import { pool } from './db/pool';
 
 // Validate required environment variables at startup
@@ -30,6 +31,7 @@ app.use(express.json({ limit: '2mb' }));
 app.use(ragQuery);
 app.use(ragFeedback);
 app.use(adminReindex); // optional
+app.use(sessionRoutes); // realm-based learning sessions
 
 
 app.get('/health', async (_, res) => {

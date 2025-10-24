@@ -1,6 +1,7 @@
 import { pool } from './pool';
 import fs from 'fs';
 import path from 'path';
+import crypto from 'node:crypto';
 
 async function ensureMigrationsTable() {
   await pool.query(`
@@ -14,12 +15,13 @@ async function ensureMigrationsTable() {
 }
 
 function sha1(s: string) {
-  return require('node:crypto').createHash('sha1').update(s).digest('hex');
+  return crypto.createHash('sha1').update(s).digest('hex');
 }
 
 async function main() {
   await ensureMigrationsTable();
-  const dir = path.join(__dirname, 'sql');
+  // SQL files are in project root sql/ directory
+  const dir = path.join(__dirname, '../../sql');
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.sql')).sort();
 
   for (const file of files) {

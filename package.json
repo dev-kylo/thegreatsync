@@ -10,7 +10,8 @@
     "hub": "pnpm --filter coursehub",
     "landing": "pnpm --filter landing",
     "imagine": "pnpm --filter imagine",
-    "imagimodels": "pnpm --filter imagimodels"
+    "imagimodels": "pnpm --filter imagimodels",
+    "agent": "pnpm --filter agent",
   },
   "keywords": [],
   "author": "",

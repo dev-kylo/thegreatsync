@@ -1,0 +1,37 @@
+{
+  "id": "fantasy",
+  "name": "Fantasy Realm",
+  "symbol_inventory": [
+    "wizard",
+    "portal",
+    "village",
+    "traveler",
+    "key",
+    "storeroom",
+    "orb",
+    "map",
+    "treasure chest",
+    "spell",
+    "scroll",
+    "castle",
+    "guard",
+    "messenger",
+    "marketplace",
+    "ledger",
+    "workshop",
+    "apprentice",
+    "artifact",
+    "enchantment"
+  ],
+  "hints": [
+    "Use concrete, visual symbols that create clear mental images",
+    "Keep spatial relationships consistent throughout the metaphor",
+    "Travelers represent execution or runtime behavior",
+    "Villages, buildings, and rooms represent scopes or contexts",
+    "Keys and scrolls represent references or pointers to data",
+    "Orbs, artifacts, and treasure represent data or values",
+    "Portals and doorways represent function calls or transitions",
+    "Guards and rules represent constraints or validation",
+    "Maps and ledgers represent tracking or state management"
+  ]
+}
