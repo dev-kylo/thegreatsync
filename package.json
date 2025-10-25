@@ -11,7 +11,7 @@
     "landing": "pnpm --filter landing",
     "imagine": "pnpm --filter imagine",
     "imagimodels": "pnpm --filter imagimodels",
-    "agent": "pnpm --filter agent",
+    "agents": "pnpm --filter agents"
   },
   "keywords": [],
   "author": "",

@@ -10,6 +10,25 @@ interface EntityRef {
 }
 
 /**
+ * Normalize Strapi v4 response format
+ * Handles both { id, attributes } and flat { id, ...fields } formats
+ */
+function normalizeEntity(entity: any): any {
+  if (!entity) return null;
+
+  // If it already has attributes, extract them and merge with id
+  if (entity.attributes) {
+    return {
+      id: entity.id,
+      ...entity.attributes,
+    };
+  }
+
+  // Otherwise assume it's already flat format
+  return entity;
+}
+
+/**
  * Resolve Subchapter → Chapter → Course for a given Page id
  */
 async function resolveHierarchyForPage(strapi: Strapi, pageId: number) {
@@ -69,11 +88,19 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
     if (!page) return { page: null, units: [] };
 
+    // Normalize the page data format
+    const pageData = normalizeEntity(page);
+
+    if (!pageData || !pageData.title) {
+      console.warn(`Page ${pageId} has no title, skipping`);
+      return { page: null, units: [] };
+    }
+
     const { subchapter, chapter, course } = await resolveHierarchyForPage(strapi, pageId);
 
     const units = toUnits({
       pageId,
-      page: page.attributes,
+      page: pageData,
       course,
       chapter,
       subchapter,
@@ -101,9 +128,11 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
     if (!model) return { model: null, units: [] };
 
+    const modelData = normalizeEntity(model);
+
     const units = toMnemonics({
       imagimodelId: modelId,
-      model: model.attributes as any,
+      model: modelData,
       course,
     });
 
@@ -131,48 +160,57 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
     if (!reflection) return { reflection: null, units: [] };
 
+    const reflectionData = normalizeEntity(reflection);
+
     // Derive hierarchy
     let subchapter: EntityRef | undefined;
     let chapter: EntityRef | undefined;
     let course: EntityRef | undefined;
 
-    if (reflection.subchapter) {
-      subchapter = { id: reflection.subchapter.id, title: reflection.subchapter.title };
-      if (reflection.subchapter.chapter) {
-        chapter = {
-          id: reflection.subchapter.chapter.id,
-          title: reflection.subchapter.chapter.title,
-        };
-        const crsData = reflection.subchapter.chapter.courses?.data ?? [];
-        const courseItem = crsData[0];
-        if (courseItem) course = {
-          id: courseItem.id,
-          title: courseItem.attributes?.title,
-          uid: courseItem.attributes?.uid
+    if (reflectionData.subchapter) {
+      const subData = normalizeEntity(reflectionData.subchapter);
+      subchapter = { id: subData.id, title: subData.title };
+      if (subData.chapter) {
+        const chapData = normalizeEntity(subData.chapter);
+        chapter = { id: chapData.id, title: chapData.title };
+        const coursesData = chapData.courses?.data || chapData.courses || [];
+        const courseItem = Array.isArray(coursesData) ? coursesData[0] : coursesData;
+        if (courseItem) {
+          const courseData = normalizeEntity(courseItem);
+          course = {
+            id: courseData.id,
+            title: courseData.title,
+            uid: courseData.uid
+          };
+        }
+      }
+    }
+    if (reflectionData.chapter && !chapter) {
+      const chapData = normalizeEntity(reflectionData.chapter);
+      chapter = { id: chapData.id, title: chapData.title };
+      const coursesData = chapData.courses?.data || chapData.courses || [];
+      const courseItem = Array.isArray(coursesData) ? coursesData[0] : coursesData;
+      if (courseItem) {
+        const courseData = normalizeEntity(courseItem);
+        course = {
+          id: courseData.id,
+          title: courseData.title,
+          uid: courseData.uid
         };
       }
     }
-    if (reflection.chapter && !chapter) {
-      chapter = { id: reflection.chapter.id, title: reflection.chapter.title };
-      const crsData = reflection.chapter.courses?.data ?? [];
-      const courseItem = crsData[0];
-      if (courseItem) course = {
-        id: courseItem.id,
-        title: courseItem.attributes?.title,
-        uid: courseItem.attributes?.uid
-      };
-    }
-    if (reflection.course && !course) {
+    if (reflectionData.course && !course) {
+      const courseData = normalizeEntity(reflectionData.course);
       course = {
-        id: reflection.course.id,
-        title: reflection.course.title,
-        uid: reflection.course.uid
+        id: courseData.id,
+        title: courseData.title,
+        uid: courseData.uid
       };
     }
 
     const units = toReflection({
       reflectionId,
-      reflection,
+      reflection: reflectionData,
       course,
       chapter,
       subchapter,

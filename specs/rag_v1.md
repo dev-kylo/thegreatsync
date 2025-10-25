@@ -440,6 +440,68 @@ Create a Notion database with these properties:
 - `metadata.category`: Content category
 - `metadata.date`: Creation date
 
+## Technical Debt
+
+### Code Duplication Between Services
+
+**Issue**: Significant code duplication between Strapi and Agents services for RAG indexing operations.
+
+**Duplicated Code**:
+
+1. **Embedding Logic**
+   - Strapi: `apps/strapi/src/api/rag/controllers/rag.ts:35-38`
+   - Agents: `apps/agents/src/routes/notion-ingest.ts:79-82`
+   - Both call OpenAI embeddings API with `text-embedding-3-small`
+
+2. **Vector Formatting**
+   - Strapi: `apps/strapi/src/api/rag/controllers/rag.ts:276`
+   - Agents: `apps/agents/src/routes/notion-ingest.ts:149`
+   - Format: `[${embedding.join(',')}]`
+
+3. **Chunk UID Generation**
+   - Strapi: `apps/strapi/src/api/rag/helpers/shapers.ts` (makeChunkUID)
+   - Agents: `apps/agents/src/routes/notion-ingest.ts:88-94`
+
+4. **SHA-256 Hashing**
+   - Strapi: `apps/strapi/src/api/rag/controllers/rag.ts:30-32`
+   - Agents: `apps/agents/src/routes/notion-ingest.ts:59-61`
+
+5. **Text Chunking**
+   - Strapi: `apps/strapi/src/api/rag/helpers/shapers.ts:167-180`
+   - Agents: `apps/agents/src/routes/notion-ingest.ts:28-41`
+   - Algorithm: 1000 char target, 180 char overlap
+
+6. **Database Upsert**
+   - Strapi: `apps/strapi/src/api/rag/controllers/rag.ts:41-100`
+   - Agents: `apps/agents/src/routes/notion-ingest.ts:158-199`
+   - Nearly identical SQL, same column list
+
+**Why It Exists**:
+- Strapi service indexes CMS content (pages, imagimodels, reflections)
+- Agents service indexes external sources (Notion via n8n)
+- Both write to same `rag.chunks` table
+
+**Future Refactoring Options**:
+
+1. **Shared Package** (Recommended for scale)
+   - Create `packages/rag-indexer/` with reusable functions
+   - Import from both Strapi and Agents services
+   - Maintains service independence
+
+2. **Single Indexing Service**
+   - Move all indexing to Agents service
+   - Strapi triggers indexing via API calls
+   - Consolidates logic but adds dependency
+
+3. **Keep As-Is**
+   - Accept ~100 lines of duplication
+   - Services remain fully independent
+   - Simpler for current scope
+
+**Current Decision**: Keep as-is until adding more data sources justifies refactoring.
+
+---
+
 ## Future Ingestion Sources
 
 Based on schema types (`shapers.ts:15-27`), planned but not implemented:

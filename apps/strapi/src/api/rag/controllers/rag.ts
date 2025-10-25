@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Context } from 'koa';
+import { Strapi } from '@strapi/strapi';
 import OpenAI from 'openai';
 import crypto from 'node:crypto';
 import pg from 'pg';
@@ -109,11 +110,11 @@ async function deleteChunksByPage(pageId: number | string) {
 }
 
 // ---- iterators using entityService (inside Strapi) ----
-async function* iterPages(strapi: Strapi.Strapi, opts: { since?: string; pageSize?: number }) {
+async function* iterPages(strapi: Strapi, opts: { since?: string; pageSize?: number }) {
   const pageSize = Math.min(Math.max(opts.pageSize ?? 100, 1), 200);
   let start = 0;
   while (true) {
-    const rows: any[] = await strapi.entityService.findMany('api::page.page', {
+    const rows = await strapi.entityService.findMany('api::page.page', {
       filters: {
         publishedAt: { $notNull: true },
         visible: { $eq: true },
@@ -134,17 +135,18 @@ async function* iterPages(strapi: Strapi.Strapi, opts: { since?: string; pageSiz
       start,
       limit: pageSize,
     });
-    if (!rows?.length) break;
-    for (const r of rows) yield r;
+    const rowsArray = Array.isArray(rows) ? rows : [];
+    if (!rowsArray.length) break;
+    for (const r of rowsArray) yield r;
     start += pageSize;
   }
 }
 
-async function* iterImagimodels(strapi: Strapi.Strapi, opts: { since?: string; pageSize?: number }) {
+async function* iterImagimodels(strapi: Strapi, opts: { since?: string; pageSize?: number }) {
   const pageSize = Math.min(Math.max(opts.pageSize ?? 50, 1), 200);
   let start = 0;
   while (true) {
-    const rows: any[] = await strapi.entityService.findMany('api::imagimodel.imagimodel', {
+    const rows = await strapi.entityService.findMany('api::imagimodel.imagimodel', {
       filters: {
         ...(opts.since ? { updatedAt: { $gt: opts.since } } : {}),
       },
@@ -161,17 +163,18 @@ async function* iterImagimodels(strapi: Strapi.Strapi, opts: { since?: string; p
       start,
       limit: pageSize,
     });
-    if (!rows?.length) break;
-    for (const r of rows) yield r;
+    const rowsArray = Array.isArray(rows) ? rows : [];
+    if (!rowsArray.length) break;
+    for (const r of rowsArray) yield r;
     start += pageSize;
   }
 }
 
-async function* iterReflections(strapi: Strapi.Strapi, opts: { since?: string; pageSize?: number }) {
+async function* iterReflections(strapi: Strapi, opts: { since?: string; pageSize?: number }) {
   const pageSize = Math.min(Math.max(opts.pageSize ?? 200, 1), 500);
   let start = 0;
   while (true) {
-    const rows: any[] = await strapi.entityService.findMany('api::reflection.reflection', {
+    const rows = await strapi.entityService.findMany('api::reflection.reflection', {
       filters: {
         ...(opts.since ? { updatedAt: { $gt: opts.since } } : {}),
       },
@@ -185,8 +188,9 @@ async function* iterReflections(strapi: Strapi.Strapi, opts: { since?: string; p
       start,
       limit: pageSize,
     });
-    if (!rows?.length) break;
-    for (const r of rows) yield r;
+    const rowsArray = Array.isArray(rows) ? rows : [];
+    if (!rowsArray.length) break;
+    for (const r of rowsArray) yield r;
     start += pageSize;
   }
 }
@@ -205,9 +209,11 @@ export default {
    * }
    */
   async reindex(ctx: Context) {
-    if (!ctx.state?.user && !ctx.state?.admin) return ctx.unauthorized('Admin only');
+    // Check for authenticated admin or API token with admin privileges
+    const isAuthenticated = ctx.state?.user || ctx.state?.admin || ctx.state?.auth;
+    if (!isAuthenticated) return ctx.unauthorized('Admin only');
 
-    const body = (ctx.request.body ?? {}) as any;
+    const body = ((ctx.request as any).body ?? {}) as any;
     const normalizeTypes = (t: any) => {
       if (!t) return ['pages']; // default
       if (Array.isArray(t)) return t;
@@ -230,17 +236,20 @@ export default {
 
     // ---- PAGES ----
     if (types.includes('pages') || types.includes('all')) {
+      console.log(`[RAG] Starting page indexing...`);
       for await (const page of iterPages(strapi, { since, pageSize })) {
         pagesProcessed += 1;
 
         // double-check visibility/publish; if not, optionally prune
         const pageAttrs = page.attributes || page;
         if (!pageAttrs.visible || !pageAttrs.publishedAt) {
+          console.log(`[RAG] Skipping page ${page.id} (not visible/published)`);
           if (prunePages && !dryRun) await deleteChunksByPage(page.id);
           continue;
         }
 
         const { units } = await exporter.getPageUnits(page.id);
+        console.log(`[RAG] Page ${page.id} "${pageAttrs.title}": ${units?.length || 0} chunks`);
 
         if (!units?.length) continue;
 
@@ -267,7 +276,7 @@ export default {
               ...b.meta,
               content: b.text,
               content_hash,
-              embedding: vectors[j],
+              embedding: `[${vectors[j].join(',')}]`,
             };
           });
           await upsertChunks(rows);
@@ -278,6 +287,7 @@ export default {
 
     // ---- IMAGIMODELS ----
     if (types.includes('imagimodels') || types.includes('all')) {
+      console.log(`[RAG] Starting imagimodel indexing...`);
       for await (const model of iterImagimodels(strapi, { since, pageSize })) {
         modelsProcessed += 1;
         const { units } = await exporter.getImagimodelUnits(model.id);
@@ -306,7 +316,7 @@ export default {
               ...b.meta,
               content: b.text,
               content_hash,
-              embedding: vectors[j],
+              embedding: `[${vectors[j].join(',')}]`,
             };
           });
           await upsertChunks(rows);
@@ -317,6 +327,7 @@ export default {
 
     // ---- REFLECTIONS ----
     if (types.includes('reflections') || types.includes('all')) {
+      console.log(`[RAG] Starting reflection indexing...`);
       for await (const r of iterReflections(strapi, { since, pageSize })) {
         reflectionsProcessed += 1;
         const { units } = await exporter.getReflectionUnits(r.id);
@@ -344,7 +355,7 @@ export default {
               ...b.meta,
               content: b.text,
               content_hash,
-              embedding: vectors[j],
+              embedding: `[${vectors[j].join(',')}]`,
             };
           });
           await upsertChunks(rows);
@@ -352,6 +363,10 @@ export default {
         }
       }
     }
+
+    console.log(`[RAG] ✅ Indexing complete!`);
+    console.log(`[RAG] Pages: ${pagesProcessed}, Imagimodels: ${modelsProcessed}, Reflections: ${reflectionsProcessed}`);
+    console.log(`[RAG] Total chunks: ${chunksUpserted}`);
 
     ctx.body = {
       ok: true,
