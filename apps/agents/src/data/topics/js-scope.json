@@ -1,0 +1,51 @@
+{
+  "topic": "js_scope",
+  "domain": "javascript",
+  "entities": [
+    {
+      "id": "global_scope",
+      "name": "Global Scope",
+      "description": "The outermost scope accessible everywhere in the program"
+    },
+    {
+      "id": "function_scope",
+      "name": "Function Scope",
+      "description": "Scope created by a function, encapsulating its local variables"
+    },
+    {
+      "id": "block_scope",
+      "name": "Block Scope",
+      "description": "Scope created by curly braces with let/const"
+    },
+    {
+      "id": "scope_chain",
+      "name": "Scope Chain",
+      "description": "The hierarchy of scopes checked when resolving a variable"
+    },
+    {
+      "id": "lexical_scoping",
+      "name": "Lexical Scoping",
+      "description": "Scope determined by where code is written, not where it's executed"
+    }
+  ],
+  "truths": [
+    "JavaScript uses lexical scoping, where scope is determined at write-time, not run-time",
+    "Variables declared with var are function-scoped, not block-scoped",
+    "Variables declared with let and const are block-scoped",
+    "When a variable is accessed, JavaScript searches the scope chain from inner to outer",
+    "Inner scopes can access outer scope variables, but not vice versa",
+    "Each function creates its own execution context with its own scope"
+  ],
+  "misconceptions": [
+    "WRONG: All variables are block-scoped (only let/const are block-scoped)",
+    "WRONG: Variables are looked up where the function is called (lexical scope is where it's defined)",
+    "WRONG: Inner and outer scopes can freely access each other (only inner can access outer)",
+    "WRONG: Creating a new block with {} always creates a new scope (only with let/const)"
+  ],
+  "tests": [
+    "Can predict variable accessibility in nested function scopes",
+    "Can explain the difference between var and let in a for loop",
+    "Can trace how JavaScript resolves a variable through the scope chain",
+    "Can explain why a variable declared in an if block with var is accessible outside the block"
+  ]
+}

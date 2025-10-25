@@ -1,0 +1,56 @@
+{
+  "topic": "js_hoisting",
+  "domain": "javascript",
+  "entities": [
+    {
+      "id": "var_declaration",
+      "name": "var Declaration",
+      "description": "A variable declared with the var keyword"
+    },
+    {
+      "id": "let_const_declaration",
+      "name": "let/const Declaration",
+      "description": "Variables declared with let or const keywords"
+    },
+    {
+      "id": "function_declaration",
+      "name": "Function Declaration",
+      "description": "A function defined using the function keyword"
+    },
+    {
+      "id": "temporal_dead_zone",
+      "name": "Temporal Dead Zone (TDZ)",
+      "description": "The period between entering scope and the actual declaration being reached"
+    },
+    {
+      "id": "execution_context",
+      "name": "Execution Context",
+      "description": "The environment where code is executed"
+    },
+    {
+      "id": "creation_phase",
+      "name": "Creation Phase",
+      "description": "The phase before code execution where declarations are processed"
+    }
+  ],
+  "truths": [
+    "During creation phase, var declarations are hoisted and initialized to undefined",
+    "Function declarations are hoisted with their entire definition",
+    "let and const are hoisted but not initialized, creating a Temporal Dead Zone",
+    "Accessing a let or const variable in the TDZ throws a ReferenceError",
+    "Function expressions (assigned to variables) follow variable hoisting rules, not function declaration rules",
+    "Hoisting happens within the current scope only, not globally"
+  ],
+  "misconceptions": [
+    "WRONG: Hoisting physically moves declarations to the top of the file (it's a two-phase process)",
+    "WRONG: let and const are not hoisted (they are hoisted but remain uninitialized)",
+    "WRONG: Function expressions are hoisted like function declarations (they follow variable rules)",
+    "WRONG: Variables can be used anywhere before declaration with var (they are undefined, which can cause bugs)"
+  ],
+  "tests": [
+    "Can explain why console.log(x) before var x = 5 prints undefined instead of throwing an error",
+    "Can explain why console.log(y) before let y = 5 throws a ReferenceError",
+    "Can explain why a function declaration can be called before it appears in code",
+    "Can explain why a function expression assigned to var cannot be called before declaration"
+  ]
+}

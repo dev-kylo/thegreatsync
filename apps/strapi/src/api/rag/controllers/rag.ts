@@ -50,7 +50,7 @@ async function upsertChunks(rows: any[]) {
     'has_image','image_urls','code_languages',
     'concepts','mnemonic_tags','technique_tags',
     'author_label','user_hash','pii_level','sentiment','rating',
-    'content','content_hash','embedding'
+    'content','content_hash','embedding','metadata'
   ];
 
   const values = rows
@@ -94,6 +94,7 @@ async function upsertChunks(rows: any[]) {
       pii_level        = EXCLUDED.pii_level,
       sentiment        = EXCLUDED.sentiment,
       rating           = EXCLUDED.rating,
+      metadata         = EXCLUDED.metadata,
       updated_at       = now();
   `;
   await db.query(sql, params);

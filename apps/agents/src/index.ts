@@ -5,6 +5,7 @@ import ragQuery from './routes/rag-query';
 import ragFeedback from './routes/rag-feedback';
 import adminReindex from './routes/admin-reindex';
 import sessionRoutes from './routes/session';
+import notionIngest from './routes/notion-ingest';
 import { pool } from './db/pool';
 
 // Validate required environment variables at startup
@@ -32,6 +33,7 @@ app.use(ragQuery);
 app.use(ragFeedback);
 app.use(adminReindex); // optional
 app.use(sessionRoutes); // realm-based learning sessions
+app.use(notionIngest); // notion page ingestion from n8n
 
 
 app.get('/health', async (_, res) => {

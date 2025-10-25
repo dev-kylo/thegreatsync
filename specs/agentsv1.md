@@ -90,7 +90,7 @@ Each graph operates independently with dedicated endpoints, state management, an
 ### 2.1 Directory Structure
 
 ```
-apps/agent/src/lib/
+apps/agents/src/lib/
 ├── retriever.ts           # Hybrid vector + text search
 ├── indexer.ts             # Chunk upsert with embeddings
 ├── sql.ts                 # PostgreSQL query helpers

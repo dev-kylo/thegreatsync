@@ -65,6 +65,7 @@ export interface UnitChunk {
   
     // misc
     urls?: Record<string, unknown>;
+    metadata?: Record<string, unknown>;
   }
   
   // -----------------------------
