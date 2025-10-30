@@ -191,10 +191,28 @@ export interface UnitChunk {
     concepts?: ClassificationConcept[];
   } | undefined;
   
-  function extractImageUrls(img?: ImageComp): string[] {
-    if (!img?.data) return [];
-    const many = Array.isArray(img.data) ? img.data : [img.data];
-    return uniq(many.map(i => i?.attributes?.url).filter(Boolean) as string[]);
+  function extractImageUrls(img?: ImageComp | any): string[] {
+    // Handle case where img is undefined/null
+    if (!img) return [];
+
+    // Handle nested {data: ...} format (REST API)
+    if (img.data) {
+      const many = Array.isArray(img.data) ? img.data : [img.data];
+      return uniq(many.map((i: any) => i?.attributes?.url || i?.url).filter(Boolean) as string[]);
+    }
+
+    // Handle flat format (entityService)
+    // Image object has url directly (like {id: 23, url: "...", ...})
+    if (img.url) {
+      return [img.url];
+    }
+
+    // Handle array of image objects
+    if (Array.isArray(img)) {
+      return uniq(img.map(i => i?.url || i?.attributes?.url).filter(Boolean) as string[]);
+    }
+
+    return [];
   }
   
   function buildImageDescription(opts: {

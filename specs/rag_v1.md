@@ -18,6 +18,7 @@ Location: `apps/agents/sql/`
 - Full-text search via generated `tsv` column with GIN index
 - Stores content hierarchy (course → chapter → subchapter → page)
 - Metadata: `domain`, `concepts`, `mnemonic_tags`, `code_languages`, `has_image`, etc.
+- `technique_tags` describe teaching methods eg "imagimodel", "code_example", "quiz"
 - Unique constraint on `chunk_uid` for idempotent upserts
 - Domain column added in `002_add_domain_column.sql` for technology filtering (javascript, react, node, etc.)
 

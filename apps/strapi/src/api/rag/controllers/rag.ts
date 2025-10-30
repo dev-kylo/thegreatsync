@@ -351,6 +351,7 @@ export default {
               })
             );
             return {
+              chunk_uid: b.chunk_uid,
               source_url: (b.meta as any).source_url,
               ...b.meta,
               content: b.text,
@@ -366,7 +367,7 @@ export default {
 
     console.log(`[RAG] ✅ Indexing complete!`);
     console.log(`[RAG] Pages: ${pagesProcessed}, Imagimodels: ${modelsProcessed}, Reflections: ${reflectionsProcessed}`);
-    console.log(`[RAG] Total chunks: ${chunksUpserted}`);
+    console.log(`[RAG] Total chunks ${dryRun ? 'counted' : 'upserted'}: ${chunksUpserted}`);
 
     ctx.body = {
       ok: true,

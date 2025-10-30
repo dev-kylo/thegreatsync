@@ -212,7 +212,7 @@ router.post('/notion/ingest', async (req, res) => {
       return res.status(400).json({
         ok: false,
         error: 'validation_error',
-        details: error.errors
+        details: error.issues
       });
     }
 

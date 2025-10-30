@@ -56,7 +56,7 @@ router.post('/session/start', async (req, res) => {
       return res.status(400).json({
         ok: false,
         error: 'validation_error',
-        details: error.errors,
+        details: error.issues,
       });
     }
 
@@ -96,7 +96,7 @@ router.post('/session/chat', async (req, res) => {
       return res.status(400).json({
         ok: false,
         error: 'validation_error',
-        details: error.errors,
+        details: error.issues,
       });
     }
 
@@ -135,7 +135,7 @@ router.post('/session/finish', async (req, res) => {
       return res.status(400).json({
         ok: false,
         error: 'validation_error',
-        details: error.errors,
+        details: error.issues,
       });
     }
 

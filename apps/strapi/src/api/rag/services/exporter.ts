@@ -30,36 +30,53 @@ function normalizeEntity(entity: any): any {
 
 /**
  * Resolve Subchapter → Chapter → Course for a given Page id
+ *
+ * NOTE: Strapi schema has ONE-WAY relations:
+ * - subchapter does NOT have a "chapter" field
+ * - chapter → subchapters (oneToMany)
+ * - course ↔ chapters (manyToMany)
+ *
+ * So we must query:
+ * 1. Find subchapter by page
+ * 2. Find chapter that contains this subchapter
+ * 3. Find course that contains this chapter
  */
 async function resolveHierarchyForPage(strapi: Strapi, pageId: number) {
+  // Step 1: Find subchapter by page
   const subRes: any = await strapi.entityService.findMany('api::subchapter.subchapter', {
     filters: { pages: { id: { $eq: pageId } } },
-    populate: {
-      chapter: {
-        populate: {
-          courses: { fields: ['id', 'title', 'uid'] }, // adjust if it's `course` not `courses`
-        },
-      },
-    },
     limit: 1,
   });
 
   const sub = Array.isArray(subRes) ? subRes[0] : subRes;
   if (!sub) return { subchapter: undefined, chapter: undefined, course: undefined };
 
-  const subchapter: EntityRef = { id: sub.id, title: sub.attributes?.title };
-  const ch = sub.attributes?.chapter?.data;
-  const chapter: EntityRef | undefined = ch
-    ? { id: ch.id, title: ch.attributes?.title }
-    : undefined;
+  const subData = normalizeEntity(sub);
+  const subchapter: EntityRef = { id: subData.id, title: subData.title };
 
-  const crsData = ch?.attributes?.courses?.data ?? [];
-  const courseItem = crsData[0];
-  const course: EntityRef | undefined = courseItem
+  // Step 2: Find chapter that contains this subchapter
+  const chapterRes: any = await strapi.entityService.findMany('api::chapter.chapter', {
+    filters: { subchapters: { id: { $eq: subData.id } } },
+    populate: { courses: { fields: ['id', 'title', 'uid'] } },
+    limit: 1,
+  });
+
+  const chap = Array.isArray(chapterRes) ? chapterRes[0] : chapterRes;
+  if (!chap) return { subchapter, chapter: undefined, course: undefined };
+
+  const chapData = normalizeEntity(chap);
+  const chapter: EntityRef = { id: chapData.id, title: chapData.title };
+
+  // Step 3: Extract course from chapter
+  const coursesRaw = chapData.courses?.data || chapData.courses || [];
+  const courseItem = Array.isArray(coursesRaw) ? coursesRaw[0] : coursesRaw;
+  const courseData = normalizeEntity(courseItem);
+
+  const course: EntityRef | undefined = courseData
     ? {
-        id: courseItem.id,
-        title: courseItem.attributes?.title,
-        uid: courseItem.attributes?.uid
+        id: courseData.id,
+        title: courseData.title,
+        uid: courseData.uid
       }
     : undefined;
 
@@ -97,6 +114,33 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     }
 
     const { subchapter, chapter, course } = await resolveHierarchyForPage(strapi, pageId);
+
+    // Debug: log hierarchy resolution
+    const fs = require('fs');
+    const hierarchyDebug = {
+      pageId,
+      pageTitle: pageData.title,
+      subchapter: subchapter ? { id: subchapter.id, title: subchapter.title } : null,
+      chapter: chapter ? { id: chapter.id, title: chapter.title } : null,
+      course: course ? { id: course.id, title: course.title, uid: course.uid } : null,
+    };
+    fs.writeFileSync('/tmp/strapi-hierarchy-debug.json', JSON.stringify(hierarchyDebug, null, 2));
+    console.log(`[DEBUG] Hierarchy for page ${pageId}:`, JSON.stringify(hierarchyDebug, null, 2));
+
+    // Debug: log content structure for specific page
+    if (pageId === 85 && pageData.content && pageData.content.length > 0) {
+      const fs = require('fs');
+      const debugData = {
+        pageId,
+        pageTitle: pageData.title,
+        pageType: pageData.type,
+        contentLength: pageData.content.length,
+        allContentItems: pageData.content,
+        concepts: pageData.concepts,
+      };
+      fs.writeFileSync('/tmp/strapi-page85-full.json', JSON.stringify(debugData, null, 2));
+      console.log(`[DEBUG] Page 85 full data written to /tmp/strapi-page85-full.json`);
+    }
 
     const units = toUnits({
       pageId,
