@@ -1,8 +1,10 @@
 /**
  * Prompt generators for session-based learning
+ * Updated for multi-agent architecture
  */
 
 import { Realm, TopicPack, SessionEvent } from '../types/session';
+import { SessionMessage } from '../types/agent';
 
 /**
  * Build the system prompt for a learning session
@@ -90,18 +92,18 @@ Where would you like to start? Do you have any initial ideas for symbols, or wou
 }
 
 /**
- * Build the artifact extraction prompt
+ * Build the artifact extraction prompt (updated for multi-agent architecture)
  * This prompt is used to extract the final metaphor map from the conversation
  */
-export function buildArtifactExtractionPrompt(
+export function buildExtractionPrompt(
+  messages: SessionMessage[],
   realm: Realm,
-  topicPack: TopicPack,
-  events: SessionEvent[]
+  topicPack: TopicPack
 ): string {
-  // Convert events to conversation format
-  const conversation = events
-    .filter(e => e.role !== 'system')
-    .map(e => `${e.role.toUpperCase()}: ${e.content}`)
+  // Convert messages to conversation format
+  const conversation = messages
+    .filter(m => m.role !== 'system')
+    .map(m => `${m.role.toUpperCase()}: ${m.content}`)
     .join('\n\n');
 
   return `Based on the following conversation, extract the final metaphor map artifact.
@@ -152,6 +154,27 @@ IMPORTANT:
 - The script should be conversational and engaging
 - If no misconceptions were corrected, use an empty array for red_flags
 - Return ONLY the JSON, no additional text`;
+}
+
+/**
+ * Legacy function for backwards compatibility
+ * @deprecated Use buildExtractionPrompt instead
+ */
+export function buildArtifactExtractionPrompt(
+  realm: Realm,
+  topicPack: TopicPack,
+  events: SessionEvent[]
+): string {
+  // Convert SessionEvent[] to SessionMessage[] format
+  const messages: SessionMessage[] = events.map(e => ({
+    id: String(e.id),
+    session_id: String(e.session_id),
+    role: e.role,
+    content: e.content,
+    created_at: e.ts,
+  }));
+
+  return buildExtractionPrompt(messages, realm, topicPack);
 }
 
 /**

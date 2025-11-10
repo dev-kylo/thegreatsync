@@ -3,7 +3,7 @@
  */
 
 import { pool } from '../db/pool';
-import { ProgressRecord } from '../types/session';
+import { ProgressRecord } from '../types/agent';
 
 /**
  * Get all finished topics for a user in a realm

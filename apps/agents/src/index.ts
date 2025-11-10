@@ -4,12 +4,14 @@ import cors from 'cors';
 import ragQuery from './routes/rag-query';
 import ragFeedback from './routes/rag-feedback';
 import adminReindex from './routes/admin-reindex';
-import sessionRoutes from './routes/session';
 import notionIngest from './routes/notion-ingest';
+import chat from './routes/chat';
+import agentChat from './routes/agent-chat';
+import courseInstructor from './routes/course-instructor';
 import { pool } from './db/pool';
 
 // Validate required environment variables at startup
-const requiredEnvVars = ['DATABASE_URL', 'OPENAI_API_KEY'];
+const requiredEnvVars = ['DATABASE_URL', 'OPENAI_API_KEY', 'STRAPI_URL', 'STRAPI_ADMIN_TOKEN'];
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
     throw new Error(`Missing required environment variable: ${envVar}`);
@@ -32,8 +34,10 @@ app.use(express.json({ limit: '2mb' }));
 app.use(ragQuery);
 app.use(ragFeedback);
 app.use(adminReindex); // optional
-app.use(sessionRoutes); // realm-based learning sessions
 app.use(notionIngest); // notion page ingestion from n8n
+app.use(chat); // RAG-powered chat endpoint (legacy)
+app.use(agentChat); // Multi-agent chat system
+app.use(courseInstructor); // Course Instructor specialized endpoints
 
 
 app.get('/health', async (_, res) => {
