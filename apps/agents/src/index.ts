@@ -7,6 +7,7 @@ import adminReindex from './routes/admin-reindex';
 import notionIngest from './routes/notion-ingest';
 import chat from './routes/chat';
 import agentChat from './routes/agent-chat';
+import agentChatStream from './routes/agent-chat-stream';
 import courseInstructor from './routes/course-instructor';
 import { pool } from './db/pool';
 
@@ -36,7 +37,8 @@ app.use(ragFeedback);
 app.use(adminReindex); // optional
 app.use(notionIngest); // notion page ingestion from n8n
 app.use(chat); // RAG-powered chat endpoint (legacy)
-app.use(agentChat); // Multi-agent chat system
+app.use(agentChat); // Multi-agent chat system (non-streaming)
+app.use(agentChatStream); // Multi-agent chat system (streaming via SSE)
 app.use(courseInstructor); // Course Instructor specialized endpoints
 
 

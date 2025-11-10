@@ -177,3 +177,57 @@ export interface CreateProgressInput {
   topic: string;
   status: string;
 }
+
+// ============================================================================
+// Streaming Types (Server-Sent Events)
+// ============================================================================
+
+/**
+ * SSE Event Types for streaming endpoint
+ */
+export type StreamEventType = 'session' | 'sources' | 'token' | 'done' | 'error';
+
+/**
+ * Session event - sent first with session ID
+ */
+export interface StreamSessionEvent {
+  session_id: string;
+}
+
+/**
+ * Sources event - sent after session, before tokens
+ */
+export interface StreamSourcesEvent {
+  sources: SourceReference[];
+  chunks_retrieved: number;
+}
+
+/**
+ * Token event - sent for each token as it arrives
+ */
+export interface StreamTokenEvent {
+  token: string;
+}
+
+/**
+ * Done event - sent when stream completes
+ */
+export interface StreamDoneEvent {
+  metadata: {
+    agent: AgentId;
+    model: string;
+    chunks_retrieved: number;
+    temperature: number;
+    max_tokens: number;
+    messages_in_context: number;
+    tokens_streamed: number;
+  };
+}
+
+/**
+ * Error event - sent if stream fails
+ */
+export interface StreamErrorEvent {
+  error: string;
+  message: string;
+}
