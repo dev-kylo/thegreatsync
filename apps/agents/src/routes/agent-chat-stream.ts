@@ -36,7 +36,7 @@ const CHAT_MODEL = process.env.CHAT_MODEL ?? 'gpt-4o-mini';
 const ChatSchema = z.object({
   query: z.string().min(1),
   session_id: z.string().uuid().optional(),
-  user_id: z.string().uuid().optional(),
+  user_id: z.string().optional(),
   topic: z.string().optional(),
   domain: z.string().optional(),
   filters: z

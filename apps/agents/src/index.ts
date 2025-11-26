@@ -8,6 +8,7 @@ import notionIngest from './routes/notion-ingest';
 import chat from './routes/chat';
 import agentChat from './routes/agent-chat';
 import agentChatStream from './routes/agent-chat-stream';
+import agentSessions from './routes/agent-sessions';
 import courseInstructor from './routes/course-instructor';
 import { pool } from './db/pool';
 
@@ -39,6 +40,7 @@ app.use(notionIngest); // notion page ingestion from n8n
 app.use(chat); // RAG-powered chat endpoint (legacy)
 app.use(agentChat); // Multi-agent chat system (non-streaming)
 app.use(agentChatStream); // Multi-agent chat system (streaming via SSE)
+app.use(agentSessions); // Agent session management and history
 app.use(courseInstructor); // Course Instructor specialized endpoints
 
 
