@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import { requireAuth } from './middleware/auth';
 import ragQuery from './routes/rag-query';
 import ragFeedback from './routes/rag-feedback';
 import adminReindex from './routes/admin-reindex';
@@ -13,7 +14,7 @@ import courseInstructor from './routes/course-instructor';
 import { pool } from './db/pool';
 
 // Validate required environment variables at startup
-const requiredEnvVars = ['DATABASE_URL', 'OPENAI_API_KEY', 'STRAPI_URL', 'STRAPI_ADMIN_TOKEN'];
+const requiredEnvVars = ['DATABASE_URL', 'OPENAI_API_KEY', 'STRAPI_URL', 'STRAPI_ADMIN_TOKEN', 'ADMIN_TOKEN'];
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
     throw new Error(`Missing required environment variable: ${envVar}`);
@@ -31,19 +32,7 @@ app.use(cors({
 
 app.use(express.json({ limit: '2mb' }));
 
-
-
-app.use(ragQuery);
-app.use(ragFeedback);
-app.use(adminReindex); // optional
-app.use(notionIngest); // notion page ingestion from n8n
-app.use(chat); // RAG-powered chat endpoint (legacy)
-app.use(agentChat); // Multi-agent chat system (non-streaming)
-app.use(agentChatStream); // Multi-agent chat system (streaming via SSE)
-app.use(agentSessions); // Agent session management and history
-app.use(courseInstructor); // Course Instructor specialized endpoints
-
-
+// Health check (public, no auth required)
 app.get('/health', async (_, res) => {
   try {
     await pool.query('SELECT 1');
@@ -57,6 +46,19 @@ app.get('/health', async (_, res) => {
     });
   }
 });
+
+// All routes below require auth
+app.use(requireAuth);
+
+app.use(ragQuery);
+app.use(ragFeedback);
+app.use(adminReindex);
+app.use(notionIngest);
+app.use(chat);
+app.use(agentChat);
+app.use(agentChatStream);
+app.use(agentSessions);
+app.use(courseInstructor);
 
 const PORT = process.env.PORT ?? 8787;
 app.listen(PORT, () => {

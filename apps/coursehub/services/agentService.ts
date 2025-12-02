@@ -15,8 +15,8 @@ import type {
 } from '../types';
 import { streamSSE, StreamEvent } from '../utils/sseParser';
 
-// Base URL for agent service
-const AGENT_SERVICE_URL = process.env.NEXT_PUBLIC_AGENT_SERVICE_URL || 'http://localhost:8787';
+// Base URL - use local API proxy to keep auth token server-side
+const AGENT_SERVICE_URL = '/api';
 
 /**
  * Custom error class for agent service errors

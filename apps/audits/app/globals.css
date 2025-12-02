@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+/* Theme CSS Variables */
+:root {
+  /* Backgrounds */
+  --bg-primary: #fafafa;
+  --bg-surface: #ffffff;
+  --bg-surface-secondary: #f4f4f5;
+  --bg-surface-tertiary: #e4e4e7;
+
+  /* Text */
+  --text-primary: #18181b;
+  --text-secondary: #3f3f46;
+  --text-tertiary: #71717a;
+
+  /* Borders */
+  --border: #e4e4e7;
+  --border-hover: #d4d4d8;
+
+  /* Primary accent */
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+
+  /* Score colors */
+  --score-low: #6b7280;
+  --score-medium: #f59e0b;
+  --score-high: #10b981;
+
+  /* Business area colors */
+  --area-acquisition: #3b82f6;
+  --area-onboarding: #8b5cf6;
+  --area-delivery: #10b981;
+  --area-content: #f59e0b;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 20px -5px;
+
+  /* Font families */
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-primary: #0f0f11;
+  --bg-surface: #1a1a1f;
+  --bg-surface-secondary: #232329;
+  --bg-surface-tertiary: #2a2a30;
+
+  /* Text */
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #71717a;
+
+  /* Borders */
+  --border: #2a2a30;
+  --border-hover: #3f3f46;
+
+  /* Primary accent */
+  --primary: #60a5fa;
+  --primary-hover: #3b82f6;
+
+  /* Score colors (slightly brighter for dark mode) */
+  --score-low: #9ca3af;
+  --score-medium: #fbbf24;
+  --score-high: #34d399;
+
+  /* Business area colors (brighter for dark mode) */
+  --area-acquisition: #60a5fa;
+  --area-onboarding: #a78bfa;
+  --area-delivery: #34d399;
+  --area-content: #fbbf24;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+}
+
+/* Tailwind theme extensions via @theme */
+@theme inline {
+  /* Colors */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-surface: var(--bg-surface);
+  --color-surface-secondary: var(--bg-surface-secondary);
+  --color-surface-tertiary: var(--bg-surface-tertiary);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+
+  --color-score-low: var(--score-low);
+  --color-score-medium: var(--score-medium);
+  --color-score-high: var(--score-high);
+
+  --color-area-acquisition: var(--area-acquisition);
+  --color-area-onboarding: var(--area-onboarding);
+  --color-area-delivery: var(--area-delivery);
+  --color-area-content: var(--area-content);
+
+  /* Fonts */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+/* Base styles */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-surface-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
+}
+
+/* Disable transitions on page load to prevent flash */
+.preload * {
+  transition: none !important;
+}
+
+/* Node hover glow effect */
+.node-glow {
+  box-shadow: var(--shadow-glow) var(--glow-color, var(--primary));
+}
+
+/* Connection line styles */
+.connection-line {
+  stroke: var(--border);
+  stroke-width: 2;
+  fill: none;
+}
+
+[data-theme="dark"] .connection-line {
+  stroke: var(--border-hover);
+}
+
+/* Animated gradient for score badges */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.score-badge-animated {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Panel slide animation */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.panel-enter {
+  animation: slide-in-right 0.3s ease-out forwards;
+}
+
+.panel-exit {
+  animation: slide-out-right 0.3s ease-in forwards;
+}
+
+/* Focus visible styles */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--primary);
+  color: white;
+}
