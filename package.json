@@ -17,6 +17,6 @@
   "license": "ISC",
   "dependencies": {
     "@strapi/typescript-utils": "^4.25.2",
-    "next": "14.2.5"
+    "next": "15.1.9"
   }
 }
