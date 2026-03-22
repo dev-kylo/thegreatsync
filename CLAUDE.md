@@ -4,23 +4,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-The Great Sync is a multimedia learning platform built as a monorepo using pnpm workspaces. The project consists of multiple applications including a course hub (Next.js), Strapi CMS backend, landing pages, and a new agent service.
+This monorepo hosts multiple projects under the Memverse umbrella using pnpm workspaces:
+
+1. **The Great Sync (TGS)** - A multimedia learning platform for teaching JavaScript. Uses apps/coursehub as the frontend, apps/strapi for the backend content management, and apps/tgs for AI agent APIs
+2. **AI Workflows for Coaches** - A nextjs site for visualizing JSON data on coach SOPs as AI workflows
+3. **Future projects** - Coach workflow AI agents, etc.
+
+Shared utilities live in `packages/` under the `@memverse` namespace.
 
 ## Development Commands
 
-### Root-level Commands (run from project root)
+### Root-level Commands
 ```bash
-# Install dependencies across all workspaces
-pnpm install
+pnpm install         # Install all workspace dependencies
 
-# Run specific app from root
-pnpm hub:dev        # Runs CourseHub on port 1218
-pnpm strapi:dev     # Runs Strapi development server
-pnpm hub            # Access CourseHub package commands
-pnpm strapi         # Access Strapi package commands
-pnpm landing        # Access Landing package commands
-pnpm imagine        # Access Imagine package commands
-pnpm imagimodels    # Access Imagimodels package commands
+# App shortcuts
+pnpm hub:dev         # CourseHub on port 1218
+pnpm strapi:dev      # Strapi CMS
+pnpm tgs dev         # TGS agent service
+pnpm audits dev      # Audits app
+```
+
+### Shared Packages
+```bash
+# Build packages (required before apps can use them)
+pnpm --filter @memverse/db-utils build
+pnpm --filter @memverse/express-utils build
 ```
 
 ### App-Specific Commands
@@ -30,173 +39,131 @@ pnpm imagimodels    # Access Imagimodels package commands
 pnpm dev         # Start development server on port 1218
 pnpm build       # Build for production
 pnpm lint        # Run Next.js linter
-pnpm lint:fix    # Auto-fix linting issues
-pnpm test        # Run Jest tests in watch mode
+pnpm test        # Run Jest tests
 ```
 
 **Strapi CMS (apps/strapi)**
 ```bash
 pnpm develop     # Start development server
-pnpm build       # Build for production (NODE_ENV=production)
+pnpm build       # Build for production
 pnpm strapi ts:generate-types  # Generate TypeScript types
 ```
 
-**Agent Service (apps/agent)**
+**TGS Agent Service (apps/tgs)**
 ```bash
-pnpm dev         # Start with nodemon watching
+pnpm dev         # Start with nodemon
 pnpm build       # Compile TypeScript
 pnpm start       # Run compiled JavaScript
+pnpm migrate     # Run database migrations
 ```
 
-**Landing Pages (apps/landing)**
+**Property Management (apps/property)**
 ```bash
-pnpm dev         # Start Next.js development
-pnpm build       # Build for production
-pnpm lint        # Run linter
+pnpm dev         # Start with nodemon (port 3100)
+pnpm build       # Compile TypeScript
+pnpm start       # Run compiled JavaScript
+pnpm migrate     # Run database migrations
 ```
 
 ## Architecture Overview
 
+### Monorepo Structure
+```
+thegreatsync/
+├── apps/
+│   ├── coursehub/       # Next.js course platform
+│   ├── strapi/          # Strapi CMS backend for coursehub
+│   ├── tgs/             # TGS RAG agent service for coursehub
+│   ├── property/        # Property management API
+│   ├── audits/          # Audits Next.js app
+│   └── ...
+├── packages/
+│   ├── db-utils/        # @memverse/db-utils - PostgreSQL utilities
+│   └── express-utils/   # @memverse/express-utils - Express middleware
+└── pnpm-workspace.yaml
+```
+
+### Shared Packages (@memverse/*)
+
+**@memverse/db-utils**
+- `createPool(config)` - PostgreSQL connection pool factory
+- `withTransaction(pool, fn)` - Transaction wrapper
+- Extracted from TGS for reuse across projects
+
+**@memverse/express-utils**
+- `createAuthMiddleware(options)` - Timing-safe Bearer token auth
+- `createHealthCheck(options)` - Health check endpoint factory
+- `validateBody(schema)` - Zod validation middleware
+- `formatZodError(error)` - Consistent error formatting
+- `createSupabaseJwtMiddleware(options)` - Fast JWT verification via JWKS (recommended)
+- `createOptionalSupabaseJwtMiddleware(options)` - Optional auth for public/private routes
+- `createSupabaseClientMiddleware(options)` - Full session validation via getUser()
+
 ### Tech Stack
-- **Frontend**: Next.js (Pages Router) for CourseHub and Landing pages
+- **Frontend**: Next.js (Pages Router) for CourseHub
 - **Backend**: Strapi v4 CMS with PostgreSQL
-- **Agent Service**: Express.js with OpenAI integration for RAG functionality
-- **State Management**: React Context API, SWR for data fetching
+- **Agent Services**: Express.js with OpenAI integration
+- **State Management**: React Context API, SWR
 - **Authentication**: NextAuth.js integrated with Strapi
-- **Styling**: Tailwind CSS across all frontend apps
+- **Styling**: Tailwind CSS
 
-### Key Architectural Patterns
+### Database Strategy
+Each project uses its **own database**:
+- TGS: `thegreatsync_db` (shared with Strapi)
+- Property: `property_management_db`
 
-1. **Monorepo Structure**: Uses pnpm workspaces for dependency management across multiple applications
+### TGS Agent Service (apps/tgs)
+- RAG implementation with PostgreSQL vector storage
+- OpenAI embeddings for semantic search
+- 5 specialized agents (product_owner, model_builder, teacher_qa, realm_builder, course_instructor)
+- Session management and context building
 
-2. **CourseHub Architecture**:
-   - Pages Router with dynamic routing for course navigation (`/courses/[courseId]/[chapter]/[subchapter]/[pageId]`)
-   - Component-based architecture with reusable UI components and layout systems
-   - Context providers for navigation and step management
-   - Service layer pattern for API calls (see `services/` directory)
+### Property Management (apps/property)
+- Express API for n8n workflow integration
+- Email ingestion from Gmail via n8n webhooks
+- Property/tenant management
+- Uses @memverse shared packages
 
-3. **Strapi Backend**:
-   - Content types for courses, chapters, pages, users, enrollments, reflections
-   - Custom API endpoints for course progress, user completions, and RAG functionality
-   - Component-based content modeling for different page types (text, video, code blocks)
-
-4. **Agent Service (New)**:
-   - RAG (Retrieval-Augmented Generation) implementation with PostgreSQL vector storage
-   - OpenAI embeddings for semantic search
-   - Express routes for querying, feedback, and admin reindexing
-
-5. **Authentication Flow**:
-   - NextAuth.js handles authentication in CourseHub
-   - Sessions linked to Strapi user accounts
-   - Protected routes and API endpoints
-
-### Database Schema
-- PostgreSQL database shared between Strapi and Agent services
-- Strapi manages course content and user data
-- Agent service adds vector embeddings for RAG functionality
-
-## Strapi Content Types and Relationships
+## Strapi Content Types
 
 ### Content Hierarchy
-The course content follows a hierarchical structure:
 ```
-Course (collection)
-  └── Chapters (many-to-many relation)
-      └── Subchapters (one-to-many relation)
-          └── Pages (one-to-many relation)
+Course → Chapters → Subchapters → Pages
 ```
 
-### Core Content Types
+### Core Types
+- **Course**: uid, title, description, chapters, imagimodel
+- **Chapter**: title, menu, subchapters, visible
+- **Subchapter**: title, pages, menu, visible
+- **Page**: title, type, content (dynamic zone), menu, links, concepts
 
-**Course** (`api::course.course`)
-- `uid`: Unique identifier (required)
-- `title`: Course name (required)
-- `description`: Dynamic zone with text/video components
-- `chapters`: Many-to-many relation with chapters
-- `imagimodel`: One-to-one relation with visual model
-
-**Chapter** (`api::chapter.chapter`)
-- `title`: Chapter name
-- `menu`: Menu component for navigation
-- `subchapters`: One-to-many relation with subchapters
-- `visible`: Boolean visibility flag (default: true)
-- `courses`: Many-to-many inverse relation with courses
-
-**Subchapter** (`api::subchapter.subchapter`)
-- `title`: Subchapter name (required)
-- `pages`: One-to-many relation with pages
-- `menu`: Menu component for navigation (required)
-- `visible`: Boolean visibility flag (default: true)
-
-**Page** (`api::page.page`)
-- `title`: Page title (required)
-- `type`: Enumeration defining page layout (required)
-- `content`: Dynamic zone with media components
-- `menu`: Repeatable menu components
-- `visible`: Boolean visibility flag (default: true)
-- `links`: Repeatable link components
-- `concepts`: Repeatable concept metadata
-
-### Page Types (Layouts)
-Pages can have different layouts based on the `type` field:
-- `text`: Simple text content
-- `video`: Video player page
-- `text_code`: Text with code editor
-- `text_image`: Text with image
-- `text_image_code`: Three-column layout with text, image, and code
-- `blocks`: Flexible block-based content
-- `reflection`: Special reflection/quiz page
+### Page Types
+text, video, text_code, text_image, text_image_code, blocks, reflection
 
 ### Media Components
-Components used in dynamic zones for flexible content:
+text, video, text-image, text-image-code, code-editor, image
 
-**text** (`media.text`)
-- Rich text content
+## Environment Variables
 
-**video** (`media.video`)
-- Relation to Mux video asset
+**TGS (apps/tgs)**
+- `DATABASE_URL` - PostgreSQL connection
+- `OPENAI_API_KEY` - OpenAI API
+- `STRAPI_URL`, `STRAPI_ADMIN_TOKEN` - Strapi integration
+- `ADMIN_TOKEN` - API authentication
 
-**text-image** (`media.text-image`)
-- Text with image, alt text, and optional caption
+**Property (apps/property)**
+- `DATABASE_URL` - PostgreSQL connection (separate DB)
+- `SUPABASE_URL` - Supabase project URL (for auth)
+- `SUPABASE_ANON_KEY` - Supabase anon/public key
+- `PORT` - Server port (default 3100)
+- `ALLOWED_ORIGINS` - CORS origins
 
-**text-image-code** (`media.text-image-code`)
-- Combined text, image, and code content
-- Includes image classification metadata
+**CourseHub**
+- `STRAPI_URL` - Strapi backend URL
+- `NEXTAUTH_*` - Authentication config
+- `MUX_*` - Video streaming
 
-**code-editor** (`media.code-editor`)
-- Interactive code editor with:
-  - Multiple code files
-  - Line numbers toggle
-  - Preview toggle
-  - Description types (explanation/answer/note)
-  - Run button visibility control
-
-**image** (`media.image`)
-- Standalone image with metadata
-
-### Additional Content Types
-
-**Reflection** (`api::reflection.reflection`)
-- User-submitted reflections linked to pages
-
-**User Course Progress** (`api::user-course-progress.user-course-progress`)
-- Tracks user completion status per page
-
-**Enrollment** (`api::enrollment.enrollment`)
-- Links users to courses they have access to
-
-**Imagimodel** (`api::imagimodel.imagimodel`)
-- Visual learning models with layers and zones
-
-### Environment Variables
-Key environment variables needed:
-- `STRAPI_URL`: Strapi backend URL
-- `DATABASE_URL`: PostgreSQL connection string
-- `OPENAI_API_KEY`: For embeddings and AI features
-- `NEXTAUTH_*`: Authentication configuration
-- `MUX_*`: Video streaming credentials
-
-### Testing Strategy
+## Testing
 - Jest for unit tests in CourseHub
-- MSW (Mock Service Worker) for API mocking
-- Test files located alongside components
+- MSW for API mocking
+- Test files alongside components
