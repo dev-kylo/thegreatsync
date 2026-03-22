@@ -1,0 +1,29 @@
+# Compiled output
+dist/
+*.js
+*.js.map
+
+# But keep configuration files that are intentionally JS
+!*.config.js
+
+# Node modules
+node_modules/
+
+# Environment variables
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

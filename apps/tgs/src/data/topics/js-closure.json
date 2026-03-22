@@ -1,0 +1,56 @@
+{
+  "topic": "js_closure",
+  "domain": "javascript",
+  "entities": [
+    {
+      "id": "function",
+      "name": "Function",
+      "description": "An executable block of code that can be defined and invoked"
+    },
+    {
+      "id": "lexical_env",
+      "name": "Lexical Environment",
+      "description": "The scope where a function is defined, containing available variables"
+    },
+    {
+      "id": "variable",
+      "name": "Variable",
+      "description": "Named data stored in a scope that can be accessed or modified"
+    },
+    {
+      "id": "inner_function",
+      "name": "Inner Function",
+      "description": "A function defined inside another function"
+    },
+    {
+      "id": "outer_function",
+      "name": "Outer Function",
+      "description": "A function that contains other functions and defines their lexical scope"
+    },
+    {
+      "id": "reference",
+      "name": "Reference",
+      "description": "A link to a variable's location in memory, not a copy of its value"
+    }
+  ],
+  "truths": [
+    "A closure is formed when an inner function accesses variables from its outer function's lexical environment",
+    "Closures capture references to variables, not copies of their values",
+    "The inner function retains access to outer variables even after the outer function has returned",
+    "If the outer variable changes, the closure sees the updated value because it holds a reference",
+    "Each invocation of the outer function creates a new lexical environment with its own variables",
+    "Multiple inner functions from the same outer function share access to the same lexical environment"
+  ],
+  "misconceptions": [
+    "WRONG: The closure makes a copy of outer variables (it's a reference, not a copy)",
+    "WRONG: Outer function variables are frozen or immutable (they can change and the closure sees the change)",
+    "WRONG: Each inner function gets its own copy of outer variables (they share the same lexical environment)",
+    "WRONG: Closures only work with specific variable types (they work with all variable types in the lexical scope)"
+  ],
+  "tests": [
+    "Can explain why a counter function maintains its count across multiple calls",
+    "Can predict the output when an outer variable is modified after the inner function is created",
+    "Can explain why creating multiple inner functions from one outer invocation shares the same variables",
+    "Can explain why multiple invocations of the outer function create independent closures"
+  ]
+}

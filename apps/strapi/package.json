@@ -16,6 +16,8 @@
     "@strapi/provider-email-nodemailer": "^4.25.2",
     "@strapi/provider-upload-aws-s3": "^4.25.2",
     "@strapi/strapi": "4.25.2",
+    "@types/koa": "^3.0.1",
+    "openai": "^5.16.0",
     "pg": "8.12.0",
     "php-serialize": "^4.1.1",
     "qs": "^6.11.0",

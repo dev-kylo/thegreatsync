@@ -6,9 +6,10 @@ type SlideOverProps = {
     children: React.ReactNode;
     open: boolean;
     setOpen: (open: boolean) => void;
+    title?: string;
 };
 
-function SlideOver({ children, open, setOpen }: SlideOverProps) {
+function SlideOver({ children, open, setOpen, title = 'Course Outline' }: SlideOverProps) {
     return (
         <Transition show={open} as={Fragment}>
             <Dialog as="div" className="relative z-10 " onClose={() => setOpen(false)}>
@@ -41,7 +42,7 @@ function SlideOver({ children, open, setOpen }: SlideOverProps) {
                                         <div className="px-4 sm:px-6">
                                             <div className="flex items-start justify-between">
                                                 <DialogTitle className="text-lg font-medium  bg-green-400 text-primary_blue px-[2rem] py-[0.1rem]">
-                                                    Course Outline
+                                                    {title}
                                                 </DialogTitle>
                                                 <div className="ml-3 flex h-7 items-center">
                                                     <button

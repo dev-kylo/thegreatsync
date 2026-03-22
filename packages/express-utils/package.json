@@ -1,0 +1,38 @@
+{
+  "name": "@memverse/express-utils",
+  "version": "1.0.0",
+  "description": "Express utilities for Memverse projects",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["express", "middleware", "auth", "health", "supabase", "jwt"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jose": "^6.0.10",
+    "zod": "^3.23.8"
+  },
+  "peerDependencies": {
+    "express": "^4.0.0 || ^5.0.0",
+    "pg": "^8.0.0",
+    "@supabase/supabase-js": "^2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "pg": {
+      "optional": true
+    },
+    "@supabase/supabase-js": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.13",
+    "@types/pg": "^8.15.5",
+    "typescript": "^5.8.3"
+  }
+}

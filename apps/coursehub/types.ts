@@ -398,3 +398,169 @@ export type FetchImagimodelResponse = {
         }
     ];
 };
+
+// ============================================================================
+// Agent Types
+// ============================================================================
+
+/**
+ * Agent identifiers
+ */
+export type AgentId =
+    | 'product_owner'
+    | 'model_builder'
+    | 'teacher_qa'
+    | 'realm_builder'
+    | 'course_instructor';
+
+/**
+ * Session types for agents
+ */
+export type SessionType = 'improvement' | 'model_build' | 'qa' | 'lesson';
+
+/**
+ * Message role
+ */
+export type MessageRole = 'user' | 'assistant' | 'system';
+
+/**
+ * Chat message (frontend)
+ */
+export interface ChatMessage {
+    id: string;
+    role: MessageRole;
+    content: string;
+    timestamp: Date;
+    sources?: SourceReference[];
+    metadata?: Record<string, any>;
+}
+
+/**
+ * Source reference for RAG chunks
+ */
+export interface SourceReference {
+    chunk_uid: string;
+    collection: string;
+    page_title?: string;
+    course_title?: string;
+    chapter_title?: string;
+    subchapter_title?: string;
+    score: number;
+    has_image: boolean;
+    code_languages: string[];
+}
+
+/**
+ * Agent info (from backend)
+ */
+export interface AgentInfo {
+    id: AgentId;
+    name: string;
+    description: string;
+    session_type: SessionType;
+}
+
+/**
+ * API request for chat
+ */
+export interface AgentChatRequest {
+    query: string;
+    session_id?: string;
+    user_id?: string;
+    topic?: string;
+    domain?: string;
+    filters?: {
+        domain?: string;
+        concepts?: string[];
+        mnemonic_tags?: string[];
+        has_image?: boolean;
+        code?: boolean;
+    };
+    topK?: number;
+    temperature?: number;
+    maxTokens?: number;
+    context?: Record<string, any>;
+}
+
+/**
+ * API response for chat (non-streaming)
+ */
+export interface AgentChatResponse {
+    ok: boolean;
+    reply: string;
+    session_id: string;
+    sources: SourceReference[];
+    metadata: {
+        agent: AgentId;
+        model: string;
+        chunks_retrieved: number;
+        temperature: number;
+        max_tokens: number;
+        messages_in_context: number;
+    };
+}
+
+/**
+ * Error response from agent service
+ */
+export interface AgentErrorResponse {
+    ok: false;
+    error: string;
+    message: string;
+    details?: any;
+}
+
+/**
+ * Session message from backend
+ */
+export interface SessionMessage {
+    id: string;
+    session_id: string;
+    role: MessageRole;
+    content: string;
+    attachments?: Record<string, any>;
+    metadata?: Record<string, any>;
+    created_at: string;
+}
+
+/**
+ * Agent session metadata from backend
+ */
+export interface AgentSession {
+    id: string;
+    user_id?: string;
+    agent: AgentId;
+    session_type?: SessionType;
+    topic?: string;
+    domain?: string;
+    started_at: string;
+    ended_at?: string;
+}
+
+/**
+ * Session list response from backend
+ */
+export interface AgentSessionsResponse {
+    ok: boolean;
+    sessions: AgentSession[];
+    count: number;
+}
+
+/**
+ * Streaming event types
+ */
+export type StreamEventType = 'session' | 'sources' | 'token' | 'done' | 'error';
+
+/**
+ * Generic menu item for reusable menu component
+ */
+export interface GenericMenuItem<T = any> {
+    id: string | number;
+    name: string;
+    description?: string;
+    level: 1 | 2 | 3;
+    icon?: React.ReactNode;
+    data?: T;
+    children?: GenericMenuItem<T>[];
+    isDisabled?: boolean;
+}

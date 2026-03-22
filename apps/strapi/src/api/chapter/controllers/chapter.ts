@@ -12,13 +12,16 @@ module.exports = factories.createCoreController('api::chapter.chapter', ({ strap
 
 
         const { data, meta } = await super.find(ctx);
-        
+
         // Get user's enrollment for this course if user is authenticated and courseId is provided
         let allowedChapterIds = null;
-        
-        if (ctx.state.user && ctx.query.filters?.courses?.id?.$eq) {
+
+        // Type-safe access to query filters
+        const filters = ctx.query.filters as any;
+
+        if (ctx.state.user && filters?.courses?.id?.$eq) {
             const userId = ctx.state.user.id;
-            const courseId = ctx.query.filters.courses.id.$eq;
+            const courseId = filters.courses.id.$eq;
             
             // Find user's enrollment for this course
             const enrollment = await strapi.db.query('api::enrollment.enrollment').findOne({
