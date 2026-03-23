@@ -55,7 +55,7 @@ module.exports = factories.createCoreController('api::chapter.chapter', ({ strap
         const completedPages = await strapi.entityService.findMany('api::enrollment.enrollment', {
             fields: ['id'],
             sort: { createdAt: 'desc' },
-        });
+        }) as any[];
 
         data.enrollments = [];
         const resp = {
